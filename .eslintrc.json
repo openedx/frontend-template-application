@@ -1,0 +1,21 @@
+{
+  "extends": "eslint-config-edx",
+  "parser": "babel-eslint",
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "config/*.js",
+          "**/*.test.jsx"
+        ]
+      }
+    ],
+    "class-methods-use-this": [
+      "off"
+    ]
+  },
+  "env": {
+    "jest": true
+  }
+}
