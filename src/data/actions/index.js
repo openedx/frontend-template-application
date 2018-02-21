@@ -1,18 +1,21 @@
+import 'whatwg-fetch';
+
 import {
-  STARTED_FETCHING_COURSES,
-  UPDATE_COURSES,
+  STARTED_FETCHING_POSTS,
+  GET_POSTS,
 } from '../constants/ActionType';
 
-export const updateCourses = data => (
+export const getPosts = data => (
   {
-    type: UPDATE_COURSES,
-    courses: data.objects.results,
+    type: GET_POSTS,
+    posts: data,
   }
 );
 
-export const fetchCourses = () => (
+export const fetchPosts = () => (
   dispatch => (
-    fetch('https://www.edx.org/api/v1/catalog/search?selected_facets[]=organizations_exact%3AHarvardX%3A%20Harvard%20University')
-      .then(data => dispatch(updateCourses(data)))
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(response => response.json())
+      .then(data => dispatch(getPosts(data)))
   )
 );

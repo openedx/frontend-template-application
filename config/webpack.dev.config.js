@@ -3,15 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// const apiEndpoints = require('../src/data/api/endpoints.js');
-const apiEndpoints = [];
 const commonConfig = require('./webpack.common.config.js');
-
-let targetUrl = 'localhost';
-if (!process.env.RUNNING_ON_LINUX) {
-  targetUrl = `docker.for.mac.${targetUrl}`;
-}
-targetUrl = `http://${targetUrl}:18010`;
 
 module.exports = Merge.smart(commonConfig, {
   devtool: 'cheap-module-eval-source-map',
@@ -73,13 +65,6 @@ module.exports = Merge.smart(commonConfig, {
   ],
   devServer: {
     host: '0.0.0.0',
-    port: 18011,
-    proxy: Object.keys(apiEndpoints).reduce(
-      (map, endpoint) => {
-        map[apiEndpoints[endpoint]] = { // eslint-disable-line no-param-reassign
-          target: targetUrl,
-        };
-        return map;
-      }, {}),
+    port: 1991,
   },
 });

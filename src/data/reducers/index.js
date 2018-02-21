@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-import UpdateCourses from './UpdateCourses';
+import GetPosts from './GetPosts';
 
 const rootReducer = combineReducers({
-  UpdateCourses,
+  GetPosts,
 });
 
 export default rootReducer;
