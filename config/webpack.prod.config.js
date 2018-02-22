@@ -15,7 +15,6 @@ module.exports = Merge.smart(commonConfig, {
         test: /\.(js|jsx)$/,
         include: [
           path.resolve(__dirname, '../src'),
-          path.resolve(__dirname, '../node_modules/@edx/paragon'),
         ],
         loader: 'babel-loader',
       },
@@ -30,16 +29,16 @@ module.exports = Merge.smart(commonConfig, {
                 sourceMap: true,
                 modules: true,
                 minimize: true,
-                localIdentName: '[name]__[local]',
+                localIdentName: '[local]',
               },
             },
             {
               loader: 'sass-loader',
               options: {
                 sourceMap: true,
-                data: '@import "bootstrap/scss/bootstrap-reboot";',
                 includePaths: [
                   path.join(__dirname, '../node_modules'),
+                  path.join(__dirname, '../src'),
                 ],
               },
             },
@@ -53,6 +52,18 @@ module.exports = Merge.smart(commonConfig, {
     ],
   },
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: module => module.context && module.context.includes('node_modules'),
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity,
+    }),
+    new ExtractTextPlugin({
+      filename: '[name].min.css',
+      allChunks: true,
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),

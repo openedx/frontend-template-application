@@ -2,6 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CheckBox } from '@edx/paragon';
 
+const PostItem = ({ title, body }) => (
+  <div className="post">
+    <h3>{title}</h3>
+    <span>{body}</span>
+  </div>
+);
+
+const PostsList = ({ posts }) => (
+  <ul>
+    {
+      posts
+        .slice(10)
+        .map(post => (
+          <li key={post.id}>
+            <PostItem title={post.title} body={post.body} />
+          </li>
+        ))
+    }
+  </ul>
+);
+
 class PostsPage extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +57,7 @@ class PostsPage extends React.Component {
         <div>
           {
             this.state.checked
-            && this.props.posts.slice(10).map(post => <span>{post.title}</span>)
+            && <PostsList posts={this.props.posts} />
           }
         </div>
       </div>
@@ -44,13 +65,31 @@ class PostsPage extends React.Component {
   }
 }
 
+PostItem.defaultProps = {
+  title: '',
+  body: '',
+};
+
+PostItem.propTypes = {
+  title: PropTypes.string,
+  body: PropTypes.string,
+};
+
+PostsList.defaultProps = {
+  posts: [],
+};
+
+PostsList.propTypes = {
+  posts: PropTypes.arrayOf(PropTypes.object),
+};
+
 PostsPage.defaultProps = {
   posts: [],
   onChange: () => {},
 };
 
 PostsPage.propTypes = {
-  posts: PropTypes.array,
+  posts: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func,
 };
 

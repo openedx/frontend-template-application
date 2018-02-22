@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-import GetPosts from './GetPosts';
+import posts from './posts';
 
 const rootReducer = combineReducers({
-  GetPosts,
+  posts,
 });
 
 export default rootReducer;
