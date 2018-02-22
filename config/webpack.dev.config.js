@@ -64,5 +64,6 @@ module.exports = Merge.smart(commonConfig, {
   devServer: {
     host: '0.0.0.0',
     port: 1991,
+    historyApiFallback: true,
   },
 });

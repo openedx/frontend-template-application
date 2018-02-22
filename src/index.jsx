@@ -1,25 +1,35 @@
 import 'babel-polyfill'; // general ES2015 polyfill (e.g. promise)
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  Route,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import createHistory from 'history/createBrowserHistory';
 
 import CurrentPostsPage from './containers/CurrentPostsPage';
+import DisclosurePage from './components/DisclosurePage';
 import store from './data/store';
-
-const history = createHistory();
 
 const App = () => (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <main>
-        <Route exact path="/" component={CurrentPostsPage} />
-      </main>
-    </ConnectedRouter>
+    <Router>
+      <div>
+        <header>
+          <nav>
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/posts">Posts</Link></li>
+              <li><Link to="/disclosure">Disclosure</Link></li>
+            </ul>
+          </nav>
+        </header>
+        <main>
+          <Switch>
+            <Route exact path="/" component={() => <span>Hello World</span>} />
+            <Route path="/posts" component={CurrentPostsPage} />
+            <Route path="/disclosure" component={DisclosurePage} />
+          </Switch>
+        </main>
+      </div>
+    </Router>
   </Provider>
 );
 
