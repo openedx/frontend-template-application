@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+- 8
+- 6
+cache:
+  directories:
+  - "~/.npm"
+notifications:
+  email:
+    recipients:
+    - jbradley@edx.org
+    on_success: never
+    on_failure: always
+  hipchat:
+    rooms:
+      secure: mo7HtlCFqDnlpuiwJsRmLEoALyjovE0fGnX6GXCYHZ33MzULeohHKD12XM724iU/GiWApibv+5bB5BtmaGnQ/0ksFk/T+Aclczi5N0meYidexnf47hUMPvq6wrj2gogvmh+qwMj5+Xz4HTmgJUoUcBnRrDPIPBYAA5S1IT+pBZS6U24rVs3Hu/dOwKuTKDopGSnPOtZNUmq8/8DZzu5SXQdxLoBk2JjuiZvoKCuesDK15/MMEHBZj9vSIWHXlIE+5LzriGtzv13xsPLUpx0mBTs8oM/NFhIjRk7BrWlNjFMeG92M58yvilnJqJZNAQkNANfdO+F5AKYOnXurieRFGZ2eRVlh3qBt/zTgXNJ1xjKkknLXQu15xJ6YniE7AJ2Qsj3bU/UigPeYBl02I1c0lUaV74cvlxyAukyvuSKzrh2TuyoR7k7wU0sQHrJDRLawXvMXTmJLLY8EKVyCXk+fbQmgm4PXp0cc5DBt09dHtc89V2XPonkhn9jz/lS4i0a/WGh+IjRp7uyRwkRPm1r3ul8Itobpzj3WgXmRpCwTpURuGbkaGMe+PJBr6Hk0ZsVtz8V5+2TLovsODJb249cWpo1qfjpRcfhNhYyGaXMAgH1IR+Hr+foo07x++nW2ILkjruTdFGD782sCX+2nCP5M4yWbKZ4MtcLGcwIEIxw3++k=
+before_install:
+- npm install -g npm@5
+- npm install -g greenkeeper-lockfile@1
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload
+script:
+- npm run lint
+- npm run test
