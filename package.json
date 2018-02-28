@@ -26,6 +26,8 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "whatwg-fetch": "^2.0.3"
   },
@@ -53,8 +55,6 @@
     "node-sass": "^4.7.2",
     "react-dev-utils": "^5.0.0",
     "react-test-renderer": "^16.2.0",
-    "redux-devtools-extension": "^2.13.2",
-    "redux-logger": "^3.0.6",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.2",
     "webpack": "^3.11.0",
