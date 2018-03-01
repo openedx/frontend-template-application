@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import CurrentPostsPage from './containers/CurrentPostsPage';
 import DisclosurePage from './components/DisclosurePage';
 import store from './data/store';
+import styles from './App.scss';
 
 const App = () => (
   <Provider store={store}>
@@ -14,10 +15,10 @@ const App = () => (
       <div>
         <header>
           <nav>
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/posts">Posts</Link></li>
-              <li><Link to="/disclosure">Disclosure</Link></li>
+            <ul className="nav">
+              <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/posts">Posts</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/disclosure">Disclosure</Link></li>
             </ul>
           </nav>
         </header>
