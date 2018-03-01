@@ -8,7 +8,7 @@
     "lint": "eslint --ext .js --ext .jsx .",
     "prepublishOnly": "npm run build",
     "start": "NODE_ENV=development BABEL_ENV=development $(npm bin)/webpack-dev-server --config=config/webpack.dev.config.js --hot --inline --progress",
-    "test": "jest --coverage"
+    "test": "jest --coverage --passWithNoTests"
   },
   "license": "AGPL-3.0",
   "dependencies": {
