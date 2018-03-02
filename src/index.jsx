@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import CurrentPostsPage from './containers/CurrentPostsPage';
 import DisclosurePage from './components/DisclosurePage';
 import store from './data/store';
-import styles from './App.scss';
+import './App.scss';
 
 const App = () => (
   <Provider store={store}>
