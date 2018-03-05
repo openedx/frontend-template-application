@@ -4,10 +4,10 @@
   "description": "Starter app from the ground up",
   "repository": "https://github.com/jaebradley/edx-cookie-cutter",
   "scripts": {
-    "build": "NODE_ENV=production BABEL_ENV=production $(npm bin)/webpack --config=config/webpack.prod.config.js",
+    "build": "NODE_ENV=production BABEL_ENV=production webpack --config=config/webpack.prod.config.js",
     "lint": "eslint --ext .js --ext .jsx .",
     "prepublishOnly": "npm run build",
-    "start": "NODE_ENV=development BABEL_ENV=development $(npm bin)/webpack-dev-server --config=config/webpack.dev.config.js --hot --inline --progress",
+    "start": "NODE_ENV=development BABEL_ENV=development webpack-dev-server --config=config/webpack.dev.config.js --hot --inline --progress",
     "test": "jest --coverage --passWithNoTests"
   },
   "license": "AGPL-3.0",
@@ -58,6 +58,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.2",
     "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^3.1.0",
     "webpack-merge": "^4.1.1"
   },
