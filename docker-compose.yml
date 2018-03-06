@@ -1,0 +1,18 @@
+
+version: "2"
+services:
+  web:
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    volumes:
+      - .:/edx/app:delegated
+      - notused:/edx/app/node_modules
+    ports:
+      - "1991:1991"
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  notused:
