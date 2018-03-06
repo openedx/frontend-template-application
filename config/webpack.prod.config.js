@@ -3,13 +3,13 @@
 const Merge = require('webpack-merge');
 const commonConfig = require('./webpack.common.config.js');
 const path = require('path');
-const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = Merge.smart(commonConfig, {
+  mode: 'production',
   devtool: 'source-map',
   output: {
-    filename: '[name].min.js', // adds ".min" to filename since we are using UglifyJS
+    filename: '[name].min.js',
   },
   module: {
     // Specify file-by-file rules to Webpack. Some file-types need a particular kind of loader.
@@ -69,38 +69,20 @@ module.exports = Merge.smart(commonConfig, {
       },
     ],
   },
+  // New in Webpack 4. Replaces CommonChunksPlugin. Extract common modules among all chunks to one
+  // common chunk and extract the Webpack runtime to a single runtime chunk.
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   // Specify additional processing or side-effects done on the Webpack output bundles as a whole.
   plugins: [
-    // CommonsChunkPlugin creates separate files with common modules shared between multiple entry
-    // points.
-    //
-    // This extracts all modules from node_modules to a common bundle called "vendor". It can be
-    // cached by users' browsers long-term and will only change if we upgrade a package.
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: module => module.context && module.context.includes('node_modules'),
-    }),
-    // Extracts the webpack bootstrap logic to a separate file. The contents of this file can change
-    // after every build, but are small in size.
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      minChunks: Infinity,
-    }),
     // Writes the extracted CSS from each entry to a file in the output directory.
     new ExtractTextPlugin({
       filename: '[name].min.css',
       allChunks: true,
     }),
-    // Defines a global variable that all bundles can access.
-    new webpack.DefinePlugin({
-      'process.env': {
-        // Maps the env var NODE_ENV at compile time to a global var available to bundles at
-        // runtime.  Should be set to "production" so that JS code knows it is running in a
-        // production environment.
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
-    }),
-    // Minifies the JS.
-    new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
   ],
 });
