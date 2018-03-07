@@ -7,6 +7,7 @@
     "build": "NODE_ENV=production BABEL_ENV=production webpack --config=config/webpack.prod.config.js",
     "lint": "eslint --ext .js --ext .jsx .",
     "prepublishOnly": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "NODE_ENV=development BABEL_ENV=development webpack-dev-server --config=config/webpack.dev.config.js --hot --inline --progress",
     "test": "jest --coverage --passWithNoTests"
   },
@@ -47,6 +48,7 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "fetch-mock": "^6.0.0",
     "file-loader": "^1.1.9",
+    "gh-pages": "^1.1.0",
     "html-webpack-harddisk-plugin": "^0.1.0",
     "html-webpack-plugin": "^3.0.3",
     "husky": "^0.14.3",
