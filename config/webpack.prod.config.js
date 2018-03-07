@@ -4,7 +4,7 @@ const Merge = require('webpack-merge');
 const commonConfig = require('./webpack.common.config.js');
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = Merge.smart(commonConfig, {
   devtool: 'source-map',
@@ -23,6 +23,29 @@ module.exports = Merge.smart(commonConfig, {
         ],
         loader: 'babel-loader',
       },
+      {
+        test: /(.scss|.css)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader', // translates CSS into CommonJS
+            options: {
+              sourceMap: true,
+              minimize: true,
+            },
+          },
+          {
+            loader: 'sass-loader', // compiles Sass to CSS
+            options: {
+              sourceMap: true,
+              includePaths: [
+                path.join(__dirname, '../node_modules'),
+                path.join(__dirname, '../src'),
+              ],
+            },
+          },
+        ],
+      },
       // Webpack, by default, includes all CSS in the javascript bundles. Unfortunately, that means:
       // a) The CSS won't be cached by browsers separately (a javascript change will force CSS
       // re-download).  b) Since CSS is applied asyncronously, it causes an ugly
@@ -33,32 +56,37 @@ module.exports = Merge.smart(commonConfig, {
       //
       // We will not do this in development because it prevents hot-reloading from working and it
       // increases build time.
-      {
-        test: /(.scss|.css)$/,
-        use: ExtractTextPlugin.extract({
-          // creates style nodes from JS strings, only used if extracting fails
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader', // translates CSS into CommonJS
-              options: {
-                sourceMap: true,
-                minimize: true,
-              },
-            },
-            {
-              loader: 'sass-loader', // compiles Sass to CSS
-              options: {
-                sourceMap: true,
-                includePaths: [
-                  path.join(__dirname, '../node_modules'),
-                  path.join(__dirname, '../src'),
-                ],
-              },
-            },
-          ],
-        }),
-      },
+
+      // I've commented all of this out because ExtractTextPlugin seems to be completely incompatible with Webpack 4
+      // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/701
+      // I'm switching over to MiniCssExtractPlugin 🤞
+
+      // {
+      //   test: /(.scss|.css)$/,
+      //   use: ExtractTextPlugin.extract({
+      //     // creates style nodes from JS strings, only used if extracting fails
+      //     fallback: 'style-loader',
+      //     use: [
+      //       {
+      //         loader: 'css-loader', // translates CSS into CommonJS
+      //         options: {
+      //           sourceMap: true,
+      //           minimize: true,
+      //         },
+      //       },
+      //       {
+      //         loader: 'sass-loader', // compiles Sass to CSS
+      //         options: {
+      //           sourceMap: true,
+      //           includePaths: [
+      //             path.join(__dirname, '../node_modules'),
+      //             path.join(__dirname, '../src'),
+      //           ],
+      //         },
+      //       },
+      //     ],
+      //   }),
+      // },
       // Webpack, by default, uses the url-loader for images and fonts that are required/included by
       // files it processes, which just base64 encodes them and inlines them in the javascript
       // bundles. This makes the javascript bundles ginormous and defeats caching so we will use the
@@ -76,18 +104,12 @@ module.exports = Merge.smart(commonConfig, {
     //
     // This extracts all modules from node_modules to a common bundle called "vendor". It can be
     // cached by users' browsers long-term and will only change if we upgrade a package.
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: module => module.context && module.context.includes('node_modules'),
-    }),
-    // Extracts the webpack bootstrap logic to a separate file. The contents of this file can change
-    // after every build, but are small in size.
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      minChunks: Infinity,
-    }),
+    // This should be replaced by splitChunks in Webpack 4
+    // Error: webpack.optimize.CommonsChunkPlugin has been removed,
+    // please use config.optimization.splitChunks instead.
+
     // Writes the extracted CSS from each entry to a file in the output directory.
-    new ExtractTextPlugin({
+    new MiniCssExtractPlugin({
       filename: '[name].min.css',
       allChunks: true,
     }),
@@ -100,7 +122,5 @@ module.exports = Merge.smart(commonConfig, {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
-    // Minifies the JS.
-    new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
   ],
 });
