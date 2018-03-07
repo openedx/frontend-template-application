@@ -2,13 +2,12 @@
 // time at the expense of creating larger, unoptimized bundles.
 const Merge = require('webpack-merge');
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const commonConfig = require('./webpack.common.config.js');
 
 module.exports = Merge.smart(commonConfig, {
-  devtool: 'cheap-module-eval-source-map',
+  mode: 'development',
   entry: [
     // enable react's custom hot dev client so we get errors reported in the browser
     require.resolve('react-dev-utils/webpackHotDevClient'),
@@ -73,7 +72,6 @@ module.exports = Merge.smart(commonConfig, {
       inject: true, // Appends script tags linking to the webpack bundles at the end of the body
       template: path.resolve(__dirname, '../public/index.html'),
     }),
-    new webpack.HotModuleReplacementPlugin(),
   ],
   // This configures webpack-dev-server which serves bundles from memory and provides live
   // reloading.
