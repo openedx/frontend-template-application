@@ -6,6 +6,7 @@
   "scripts": {
     "build": "NODE_ENV=production BABEL_ENV=production webpack --config=config/webpack.prod.config.js",
     "lint": "eslint --ext .js --ext .jsx .",
+    "precommit": "npm run lint",
     "prepublishOnly": "npm run build",
     "start": "NODE_ENV=development BABEL_ENV=development webpack-dev-server --config=config/webpack.dev.config.js --hot --inline --progress",
     "test": "jest --coverage --passWithNoTests"
