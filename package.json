@@ -11,6 +11,7 @@
     "precommit": "npm run lint",
     "prepublishOnly": "npm run build",
     "start": "NODE_ENV=development BABEL_ENV=development webpack-dev-server --config=config/webpack.dev.config.js --hot --inline --progress",
+    "debug-test": "node --inspect-brk node_modules/.bin/jest --runInBand --coverage",
     "test": "jest --coverage --passWithNoTests"
   },
   "license": "AGPL-3.0",
