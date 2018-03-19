@@ -13,7 +13,7 @@ const PostsList = ({ posts }) => (
   <ul>
     {
       posts
-        .slice(10)
+        .slice(0, 10)
         .map(post => (
           <li key={post.id}>
             <PostItem title={post.title} body={post.body} />
@@ -35,11 +35,8 @@ class PostsPage extends React.Component {
   }
 
   onChange() {
-    this.setState({ checked: !this.state.checked }, () => {
-      if (this.state.checked) {
-        this.props.onChange();
-      }
-    });
+    this.setState({ checked: !this.state.checked });
+    this.props.onChange();
   }
 
   render() {
