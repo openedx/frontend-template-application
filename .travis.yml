@@ -22,3 +22,15 @@ script:
 - make validate-no-uncommitted-package-lock-changes
 - npm run lint
 - npm run test
+after_success:
+- npm run build:gh-pages
+deploy:
+  local-dir: ./dist
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  name: edx-semantic-release
+  email: edx-semantic-release@edx.org
+  on:
+    branch: master
