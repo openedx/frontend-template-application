@@ -7,7 +7,8 @@ module.exports = {
       {
         "devDependencies": [
           "config/*.js",
-          "**/*.test.jsx"
+          "**/*.test.jsx",
+          "**/*.test.js",
         ]
       }
     ],

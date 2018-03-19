@@ -28,7 +28,7 @@ export const getPosts = data => (
 export const fetchPosts = () => (
   (dispatch) => {
     dispatch(startedFetchingPosts());
-    fetch('https://jsonplaceholder.typicode.com/posts')
+    return fetch('https://jsonplaceholder.typicode.com/posts')
       // TODO: handle response error
       .then(response => response.json())
       .then((data) => {
