@@ -36,7 +36,7 @@ class PostsPage extends React.Component {
 
   onChange() {
     this.setState({ checked: !this.state.checked });
-    this.props.onChange();
+    this.props.getPosts();
   }
 
   render() {
@@ -82,12 +82,12 @@ PostsList.propTypes = {
 
 PostsPage.defaultProps = {
   posts: [],
-  onChange: () => {},
+  getPosts: () => {},
 };
 
 PostsPage.propTypes = {
   posts: PropTypes.arrayOf(PropTypes.object),
-  onChange: PropTypes.func,
+  getPosts: PropTypes.func,
 };
 
 export default PostsPage;

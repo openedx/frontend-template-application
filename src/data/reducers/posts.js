@@ -1,4 +1,8 @@
-import { GET_POSTS, STARTED_FETCHING_POSTS, FINISHED_FETCHING_POSTS } from '../constants/ActionType';
+import {
+  GET_POSTS,
+  STARTED_FETCHING_POSTS,
+  FINISHED_FETCHING_POSTS,
+} from '../constants/ActionType';
 
 const posts = (state = { posts: [], startedFetching: false, finishedFetching: false }, action) => {
   switch (action.type) {
