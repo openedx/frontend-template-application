@@ -57,7 +57,7 @@ We use [`eslint`](https://eslint.org/) for our `JavaScript` linting needs. The `
 
 While `eslint` automatically ignores `node_modules`, we like to add it to the `.eslintignore` just for the added explicitness. In addition, you probably want to add the directory for your compiled files (in our case, `./dist`) and your coverage directory (in our case, `./coverage`).
 
-### `.eslintrc.js`
+### `.eslintrc`
 
 This is where the actual `eslint` configuration is specified. All `edX` JavaScript projects should extend either the [`eslint-config-edx`](https://github.com/edx/eslint-config-edx/blob/master/packages/eslint-config-edx/README.md) or [`eslint-config-edx-es5`](https://github.com/edx/eslint-config-edx/blob/master/packages/eslint-config-edx-es5/README.md) configurations (for `ES2015+` and `ES5` JavaScript, respectively). Both configurations can be found in [the `eslint-config-edx` repository](https://github.com/edx/eslint-config-edx).
 
