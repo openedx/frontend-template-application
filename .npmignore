@@ -2,7 +2,6 @@
 .eslintrc.json
 .gitignore
 .travis.yml
-docker-compose.linux.yml
 docker-compose.yml
 Dockerfile
 Makefile

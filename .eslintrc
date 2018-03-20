@@ -1,4 +1,4 @@
-module.exports = {
+{
   "extends": "eslint-config-edx",
   "parser": "babel-eslint",
   "rules": {
@@ -8,12 +8,9 @@ module.exports = {
         "devDependencies": [
           "config/*.js",
           "**/*.test.jsx",
-          "**/*.test.js",
+          "**/*.test.js"
         ]
       }
-    ],
-    "class-methods-use-this": [
-      "off"
     ],
     // https://github.com/evcohen/eslint-plugin-jsx-a11y/issues/340#issuecomment-338424908
     "jsx-a11y/anchor-is-valid": [ "error", {
@@ -24,4 +21,4 @@ module.exports = {
   "env": {
     "jest": true
   }
-};
+}
