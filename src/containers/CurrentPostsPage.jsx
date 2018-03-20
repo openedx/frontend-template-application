@@ -10,9 +10,7 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = dispatch => (
   {
-    onChange: () => (
-      dispatch(fetchPosts())
-    ),
+    getPosts: () => dispatch(fetchPosts()),
   }
 );
 

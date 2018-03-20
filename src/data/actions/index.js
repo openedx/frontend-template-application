@@ -2,30 +2,30 @@ import 'whatwg-fetch';
 
 import {
   STARTED_FETCHING_POSTS,
-  GET_POSTS,
   FINISHED_FETCHING_POSTS,
+  GET_POSTS,
 } from '../constants/ActionType';
 
-export const startedFetchingPosts = () => (
+const startedFetchingPosts = () => (
   {
     type: STARTED_FETCHING_POSTS,
   }
 );
 
-export const finishedFetchingPosts = () => (
+const finishedFetchingPosts = () => (
   {
     type: FINISHED_FETCHING_POSTS,
   }
 );
 
-export const getPosts = data => (
+const getPosts = posts => (
   {
     type: GET_POSTS,
-    posts: data,
+    posts,
   }
 );
 
-export const fetchPosts = () => (
+const fetchPosts = () => (
   (dispatch) => {
     dispatch(startedFetchingPosts());
     return fetch('https://jsonplaceholder.typicode.com/posts')
@@ -37,3 +37,10 @@ export const fetchPosts = () => (
       });
   }
 );
+
+export {
+  startedFetchingPosts,
+  finishedFetchingPosts,
+  getPosts,
+  fetchPosts,
+};

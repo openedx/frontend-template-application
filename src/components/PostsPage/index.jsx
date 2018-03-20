@@ -27,16 +27,16 @@ class PostsPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onChange = this.onChange.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
 
     this.state = {
       checked: false,
     };
   }
 
-  onChange() {
+  handleCheck() {
     this.setState({ checked: !this.state.checked });
-    this.props.onChange();
+    this.props.getPosts();
   }
 
   render() {
@@ -48,7 +48,7 @@ class PostsPage extends React.Component {
             name="activate-posts"
             label="See Posts"
             checked={this.state.checked}
-            onChange={this.onChange}
+            onChange={this.handleCheck}
           />
         </div>
         <div>
@@ -82,12 +82,12 @@ PostsList.propTypes = {
 
 PostsPage.defaultProps = {
   posts: [],
-  onChange: () => {},
+  getPosts: () => {},
 };
 
 PostsPage.propTypes = {
   posts: PropTypes.arrayOf(PropTypes.object),
-  onChange: PropTypes.func,
+  getPosts: PropTypes.func,
 };
 
 export default PostsPage;
