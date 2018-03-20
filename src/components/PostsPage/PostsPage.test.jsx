@@ -44,18 +44,18 @@ describe('PostsPage', () => {
     expect(checkbox.prop('name')).toBe('activate-posts');
     expect(checkbox.prop('label')).toBe('See Posts');
     expect(checkbox.prop('checked')).toBe(false);
-    expect(checkbox.prop('onChange')).toBe(page.instance().onChange);
+    expect(checkbox.prop('onChange')).toBe(page.instance().handleCheck);
   });
 
-  it('sets checked from false to true and calls prop onChange', () => {
-    const mockedOnChange = jest.fn();
-    props.onChange = mockedOnChange;
+  it('sets checked from false to true and calls prop getPosts', () => {
+    const mockedGetPosts = jest.fn();
+    props.getPosts = mockedGetPosts;
 
     const page = postsPage();
-    page.instance().onChange();
+    page.instance().handleCheck();
 
     expect(page.state('checked')).toBe(true);
-    expect(mockedOnChange).toHaveBeenCalledTimes(1);
+    expect(mockedGetPosts).toHaveBeenCalledTimes(1);
   });
 
   it('does not render posts when unchecked', () => {

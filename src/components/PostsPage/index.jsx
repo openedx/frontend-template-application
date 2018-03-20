@@ -27,14 +27,14 @@ class PostsPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onChange = this.onChange.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
 
     this.state = {
       checked: false,
     };
   }
 
-  onChange() {
+  handleCheck() {
     this.setState({ checked: !this.state.checked });
     this.props.getPosts();
   }
@@ -48,7 +48,7 @@ class PostsPage extends React.Component {
             name="activate-posts"
             label="See Posts"
             checked={this.state.checked}
-            onChange={this.onChange}
+            onChange={this.handleCheck}
           />
         </div>
         <div>
