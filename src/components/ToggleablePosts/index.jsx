@@ -23,7 +23,7 @@ const PostsList = ({ posts }) => (
   </ul>
 );
 
-class PostsPage extends React.Component {
+class ToggleablePosts extends React.Component {
   constructor(props) {
     super(props);
 
@@ -80,14 +80,14 @@ PostsList.propTypes = {
   posts: PropTypes.arrayOf(PropTypes.object),
 };
 
-PostsPage.defaultProps = {
+ToggleablePosts.defaultProps = {
   posts: [],
   getPosts: () => {},
 };
 
-PostsPage.propTypes = {
+ToggleablePosts.propTypes = {
   posts: PropTypes.arrayOf(PropTypes.object),
   getPosts: PropTypes.func,
 };
 
-export default PostsPage;
+export default ToggleablePosts;
