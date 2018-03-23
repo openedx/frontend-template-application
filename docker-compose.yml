@@ -3,8 +3,11 @@ services:
   web:
     build:
       context: .
+      dockerfile: Dockerfile
       args:
         - NODE_ENV=development
+    container_name: edx.fecc
+    image: edxops/front-end-cookie-cutter:latest
     volumes:
       - .:/edx/app:delegated
       - notused:/edx/app/node_modules

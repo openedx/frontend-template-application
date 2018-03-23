@@ -26,4 +26,4 @@ ENV PATH /edx/app/node_modules/.bin:$PATH
 WORKDIR /edx/app
 COPY . /edx/app
 
-CMD [ "npm", "run", "start" ]
+ENTRYPOINT npm install && npm run start
