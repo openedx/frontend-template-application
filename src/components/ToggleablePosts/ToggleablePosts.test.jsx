@@ -2,18 +2,18 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { CheckBox } from '@edx/paragon';
 
-import PostsPage from './index';
+import ToggleablePosts from './index';
 
-describe('PostsPage', () => {
+describe('ToggleablePosts', () => {
   let props;
-  let mountedPostsPage;
+  let mountedPosts;
 
-  const postsPage = () => {
-    if (!mountedPostsPage) {
-      mountedPostsPage = mount(<PostsPage {...props} />);
+  const toggleablePosts = () => {
+    if (!mountedPosts) {
+      mountedPosts = mount(<ToggleablePosts {...props} />);
     }
 
-    return mountedPostsPage;
+    return mountedPosts;
   };
 
   beforeEach(() => {
@@ -21,22 +21,22 @@ describe('PostsPage', () => {
       posts: undefined,
       onChange: undefined,
     };
-    mountedPostsPage = undefined;
+    mountedPosts = undefined;
   });
 
   it('always renders a div', () => {
-    const divs = postsPage().find('div');
+    const divs = toggleablePosts().find('div');
     expect(divs.length).toBeGreaterThan(0);
   });
 
   it('always renders a single h1', () => {
-    const h1s = postsPage().find('h1');
+    const h1s = toggleablePosts().find('h1');
     expect(h1s.length).toBe(1);
   });
 
   it('always renders a CheckBox', () => {
-    const page = postsPage();
-    const checkboxes = page.find(CheckBox);
+    const component = toggleablePosts();
+    const checkboxes = component.find(CheckBox);
 
     expect(checkboxes.length).toBe(1);
 
@@ -44,25 +44,25 @@ describe('PostsPage', () => {
     expect(checkbox.prop('name')).toBe('activate-posts');
     expect(checkbox.prop('label')).toBe('See Posts');
     expect(checkbox.prop('checked')).toBe(false);
-    expect(checkbox.prop('onChange')).toBe(page.instance().handleCheck);
+    expect(checkbox.prop('onChange')).toBe(component.instance().handleCheck);
   });
 
   it('sets checked from false to true and calls prop getPosts', () => {
     const mockedGetPosts = jest.fn();
     props.getPosts = mockedGetPosts;
 
-    const page = postsPage();
-    page.instance().handleCheck();
+    const component = toggleablePosts();
+    component.instance().handleCheck();
 
-    expect(page.state('checked')).toBe(true);
+    expect(component.state('checked')).toBe(true);
     expect(mockedGetPosts).toHaveBeenCalledTimes(1);
   });
 
   it('does not render posts when unchecked', () => {
-    const page = postsPage();
+    const component = toggleablePosts();
 
-    expect(page.state('checked')).toBe(false);
-    expect(page.find('li').length).toBe(0);
+    expect(component.state('checked')).toBe(false);
+    expect(component.find('li').length).toBe(0);
   });
 
   it('does render posts when checked', () => {
@@ -76,10 +76,10 @@ describe('PostsPage', () => {
     }
     props.posts = posts;
 
-    const page = postsPage();
-    page.setState({ checked: true });
+    const component = toggleablePosts();
+    component.setState({ checked: true });
 
-    const listItems = page.find('li');
+    const listItems = component.find('li');
 
     expect(listItems.length).toBe(10);
 

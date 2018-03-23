@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
-import PostsPage from '../components/PostsPage';
-import { fetchPosts } from '../data/actions';
+
+import ToggleablePosts from '../../components/ToggleablePosts';
+import { fetchPosts } from '../../data/actions/posts';
 
 const mapStateToProps = state => (
   {
@@ -14,9 +15,9 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
-const CurrentPostsPage = connect(
+const PostsPage = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(PostsPage);
+)(ToggleablePosts);
 
-export default CurrentPostsPage;
+export default PostsPage;

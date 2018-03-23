@@ -1,12 +1,12 @@
-import 'babel-polyfill'; // general ES2015 polyfill (e.g. promise)
+import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import CurrentPostsPage from './containers/CurrentPostsPage';
+import PostsPage from './containers/PostsPage';
 import CommentSearchPage from './containers/CommentSearchPage';
-import DisclosurePage from './components/DisclosurePage';
+import DisclosurePage from './containers/DisclosurePage';
 import store from './data/store';
 import './App.scss';
 
@@ -27,7 +27,7 @@ const App = () => (
         <main>
           <Switch>
             <Route exact path="/" component={() => <span>Hello World</span>} />
-            <Route path="/posts" component={CurrentPostsPage} />
+            <Route path="/posts" component={PostsPage} />
             <Route path="/disclosure" component={DisclosurePage} />
             <Route path="/comment-search" component={CommentSearchPage} />
           </Switch>

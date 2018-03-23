@@ -4,7 +4,7 @@ import {
   STARTED_FETCHING_POSTS,
   FINISHED_FETCHING_POSTS,
   GET_POSTS,
-} from '../constants/ActionType';
+} from '../constants/actionTypes/posts';
 
 const startedFetchingPosts = () => (
   {

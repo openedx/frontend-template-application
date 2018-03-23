@@ -7,12 +7,12 @@ import {
   finishedFetchingPosts,
   getPosts,
   fetchPosts,
-} from './index';
+} from './posts';
 import {
   STARTED_FETCHING_POSTS,
   GET_POSTS,
   FINISHED_FETCHING_POSTS,
-} from '../constants/ActionType';
+} from '../constants/actionTypes/posts';
 
 const mockStore = configureMockStore([thunk]);
 
