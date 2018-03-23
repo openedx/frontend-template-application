@@ -3829,6 +3829,30 @@ eval("\n/**\n * This is the common logic for both the Node.js and web browser\n 
 
 /***/ }),
 
+/***/ "./node_modules/email-prop-type/build/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/email-prop-type/build/index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _emailValidator = __webpack_require__(/*! email-validator */ \"./node_modules/email-validator/index.js\");\n\nvar _emailValidator2 = _interopRequireDefault(_emailValidator);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar requiredEmailPropType = function requiredEmailPropType(props, propName, componentName) {\n  var value = props[propName];\n\n  if (value == null || typeof value !== 'string' || !_emailValidator2.default.validate(value)) {\n    return new TypeError('Invalid Email Prop Value: ' + value + ' for ' + propName + ' in ' + componentName);\n  }\n\n  return null;\n};\n\nvar emailPropType = function emailPropType(props, propName, componentName) {\n  if (props[propName] == null) {\n    return null;\n  }\n\n  return requiredEmailPropType(props, propName, componentName);\n};\n\nemailPropType.isRequired = requiredEmailPropType;\n\nexports.default = emailPropType;\n\n//# sourceURL=webpack:///./node_modules/email-prop-type/build/index.js?");
+
+/***/ }),
+
+/***/ "./node_modules/email-validator/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/email-validator/index.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nvar tester = /^[-!#$%&'*+\\/0-9=?A-Z^_a-z{|}~](\\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?\\.?[a-zA-Z0-9])*\\.[a-zA-Z](-?[a-zA-Z0-9])+$/;\n// Thanks to:\n// http://fightingforalostcause.net/misc/2006/compare-email-regex.php\n// http://thedailywtf.com/Articles/Validating_Email_Addresses.aspx\n// http://stackoverflow.com/questions/201323/what-is-the-best-regular-expression-for-validating-email-addresses/201378#201378\nexports.validate = function(email)\n{\n\tif (!email)\n\t\treturn false;\n\t\t\n\tif(email.length>254)\n\t\treturn false;\n\n\tvar valid = tester.test(email);\n\tif(!valid)\n\t\treturn false;\n\n\t// Further checking of some things regex can't handle\n\tvar parts = email.split(\"@\");\n\tif(parts[0].length>64)\n\t\treturn false;\n\n\tvar domainParts = parts[1].split(\".\");\n\tif(domainParts.some(function(part) { return part.length>63; }))\n\t\treturn false;\n\n\treturn true;\n}\n\n\n//# sourceURL=webpack:///./node_modules/email-validator/index.js?");
+
+/***/ }),
+
 /***/ "./node_modules/escape-string-regexp/index.js":
 /*!****************************************************!*\
   !*** ./node_modules/escape-string-regexp/index.js ***!
@@ -6110,6 +6134,30 @@ eval("\nvar content = __webpack_require__(/*! !../node_modules/css-loader??ref--
 
 /***/ }),
 
+/***/ "./src/components/CommentDetails/index.jsx":
+/*!*************************************************!*\
+  !*** ./src/components/CommentDetails/index.jsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _react = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _propTypes = __webpack_require__(/*! prop-types */ \"./node_modules/prop-types/index.js\");\n\nvar _propTypes2 = _interopRequireDefault(_propTypes);\n\nvar _emailPropType = __webpack_require__(/*! email-prop-type */ \"./node_modules/email-prop-type/build/index.js\");\n\nvar _emailPropType2 = _interopRequireDefault(_emailPropType);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar CommentDetails = function CommentDetails(_ref) {\n  var id = _ref.id,\n      postId = _ref.postId,\n      name = _ref.name,\n      email = _ref.email,\n      body = _ref.body;\n  return _react2.default.createElement(\n    'ul',\n    null,\n    _react2.default.createElement(\n      'li',\n      null,\n      'ID: ',\n      id\n    ),\n    _react2.default.createElement(\n      'li',\n      null,\n      'Post ID: ',\n      postId\n    ),\n    _react2.default.createElement(\n      'li',\n      null,\n      'Name: ',\n      name\n    ),\n    _react2.default.createElement(\n      'li',\n      null,\n      'Email Address: ',\n      email\n    ),\n    _react2.default.createElement(\n      'li',\n      null,\n      'Body: ',\n      body\n    )\n  );\n};\n\nCommentDetails.defaultProps = {\n  id: null,\n  postId: null,\n  name: '',\n  email: 'example@example.com',\n  body: ''\n};\n\nCommentDetails.propTypes = {\n  id: _propTypes2.default.number,\n  postId: _propTypes2.default.number,\n  name: _propTypes2.default.string,\n  email: _emailPropType2.default,\n  body: _propTypes2.default.string\n};\n\nexports.default = CommentDetails;\n\n//# sourceURL=webpack:///./src/components/CommentDetails/index.jsx?");
+
+/***/ }),
+
+/***/ "./src/components/CommentSearch/index.jsx":
+/*!************************************************!*\
+  !*** ./src/components/CommentSearch/index.jsx ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nvar _react = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _paragon = __webpack_require__(/*! @edx/paragon */ \"./node_modules/@edx/paragon/themeable/index.js\");\n\nvar _propTypes = __webpack_require__(/*! prop-types */ \"./node_modules/prop-types/index.js\");\n\nvar _propTypes2 = _interopRequireDefault(_propTypes);\n\nvar _emailPropType = __webpack_require__(/*! email-prop-type */ \"./node_modules/email-prop-type/build/index.js\");\n\nvar _emailPropType2 = _interopRequireDefault(_emailPropType);\n\nvar _CommentDetails = __webpack_require__(/*! ../CommentDetails */ \"./src/components/CommentDetails/index.jsx\");\n\nvar _CommentDetails2 = _interopRequireDefault(_CommentDetails);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }\n\nvar CommentSearch = function (_Component) {\n  _inherits(CommentSearch, _Component);\n\n  function CommentSearch(props) {\n    _classCallCheck(this, CommentSearch);\n\n    var _this = _possibleConstructorReturn(this, (CommentSearch.__proto__ || Object.getPrototypeOf(CommentSearch)).call(this, props));\n\n    _this.handleSubmit = _this.handleSubmit.bind(_this);\n    _this.handleInputChange = _this.handleInputChange.bind(_this);\n\n    _this.state = { commentId: '' };\n    return _this;\n  }\n\n  _createClass(CommentSearch, [{\n    key: 'handleSubmit',\n    value: function handleSubmit() {\n      this.props.getComment(this.state.commentId);\n    }\n  }, {\n    key: 'handleInputChange',\n    value: function handleInputChange(commentId) {\n      this.setState({ commentId: commentId });\n    }\n  }, {\n    key: 'render',\n    value: function render() {\n      return _react2.default.createElement(\n        'div',\n        null,\n        _react2.default.createElement(_paragon.StatusAlert, {\n          open: this.props.errorFetching,\n          dialog: 'Invalid Comment ID',\n          onClose: function onClose() {}\n        }),\n        _react2.default.createElement(_paragon.InputText, {\n          name: 'comment-id-input',\n          label: 'Input a Comment ID',\n          value: '',\n          description: 'Comment ID to search by',\n          onChange: this.handleInputChange\n        }),\n        _react2.default.createElement(_paragon.Button, { label: 'Search for Comment By ID', onClick: this.handleSubmit }),\n        this.props.commentDetails && !this.props.errorFetching && _react2.default.createElement(_CommentDetails2.default, this.props.commentDetails)\n      );\n    }\n  }]);\n\n  return CommentSearch;\n}(_react.Component);\n\nCommentSearch.defaultProps = {\n  commentDetails: {\n    id: null,\n    postId: null,\n    name: '',\n    email: 'example@example.com',\n    body: ''\n  },\n  getComment: function getComment() {},\n  errorFetching: false\n};\n\nCommentSearch.propTypes = {\n  commentDetails: _propTypes2.default.shape({\n    id: _propTypes2.default.number,\n    postId: _propTypes2.default.number,\n    name: _propTypes2.default.string,\n    email: _emailPropType2.default,\n    body: _propTypes2.default.string\n  }),\n  getComment: _propTypes2.default.func,\n  errorFetching: _propTypes2.default.bool\n};\n\nexports.default = CommentSearch;\n\n//# sourceURL=webpack:///./src/components/CommentSearch/index.jsx?");
+
+/***/ }),
+
 /***/ "./src/components/DisclosurePage/index.jsx":
 /*!*************************************************!*\
   !*** ./src/components/DisclosurePage/index.jsx ***!
@@ -6134,6 +6182,18 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 /***/ }),
 
+/***/ "./src/containers/CommentSearchPage/index.jsx":
+/*!****************************************************!*\
+  !*** ./src/containers/CommentSearchPage/index.jsx ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _reactRedux = __webpack_require__(/*! react-redux */ \"./node_modules/react-redux/es/index.js\");\n\nvar _CommentSearch = __webpack_require__(/*! ../../components/CommentSearch */ \"./src/components/CommentSearch/index.jsx\");\n\nvar _CommentSearch2 = _interopRequireDefault(_CommentSearch);\n\nvar _comment = __webpack_require__(/*! ../../data/actions/comment */ \"./src/data/actions/comment.js\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar mapStateToProps = function mapStateToProps(state) {\n  return {\n    commentDetails: state.comment.details,\n    errorFetching: state.comment.errorFetching\n  };\n};\n\nvar mapDispatchToProps = function mapDispatchToProps(dispatch) {\n  return {\n    getComment: function getComment(commentId) {\n      return dispatch((0, _comment.fetchComment)(commentId));\n    }\n  };\n};\n\nvar CommentSearchPage = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_CommentSearch2.default);\n\nexports.default = CommentSearchPage;\n\n//# sourceURL=webpack:///./src/containers/CommentSearchPage/index.jsx?");
+
+/***/ }),
+
 /***/ "./src/containers/CurrentPostsPage.jsx":
 /*!*********************************************!*\
   !*** ./src/containers/CurrentPostsPage.jsx ***!
@@ -6143,6 +6203,18 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 "use strict";
 eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _reactRedux = __webpack_require__(/*! react-redux */ \"./node_modules/react-redux/es/index.js\");\n\nvar _PostsPage = __webpack_require__(/*! ../components/PostsPage */ \"./src/components/PostsPage/index.jsx\");\n\nvar _PostsPage2 = _interopRequireDefault(_PostsPage);\n\nvar _actions = __webpack_require__(/*! ../data/actions */ \"./src/data/actions/index.js\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar mapStateToProps = function mapStateToProps(state) {\n  return {\n    posts: state.posts.posts\n  };\n};\n\nvar mapDispatchToProps = function mapDispatchToProps(dispatch) {\n  return {\n    getPosts: function getPosts() {\n      return dispatch((0, _actions.fetchPosts)());\n    }\n  };\n};\n\nvar CurrentPostsPage = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_PostsPage2.default);\n\nexports.default = CurrentPostsPage;\n\n//# sourceURL=webpack:///./src/containers/CurrentPostsPage.jsx?");
+
+/***/ }),
+
+/***/ "./src/data/actions/comment.js":
+/*!*************************************!*\
+  !*** ./src/data/actions/comment.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.fetchComment = exports.getComment = exports.errorFetchingComment = exports.finishedFetchingComment = exports.startedFetchingComment = undefined;\n\n__webpack_require__(/*! whatwg-fetch */ \"./node_modules/whatwg-fetch/fetch.js\");\n\nvar _comment = __webpack_require__(/*! ../constants/actionTypes/comment */ \"./src/data/constants/actionTypes/comment.js\");\n\nvar startedFetchingComment = function startedFetchingComment() {\n  return { type: _comment.STARTED_FETCHING_COMMENT };\n};\nvar finishedFetchingComment = function finishedFetchingComment() {\n  return { type: _comment.FINISHED_FETCHING_COMMENT };\n};\nvar errorFetchingComment = function errorFetchingComment() {\n  return { type: _comment.ERROR_FETCHING_COMMENT };\n};\nvar getComment = function getComment(comment) {\n  return { type: _comment.GET_COMMENT, comment: comment };\n};\nvar fetchComment = function fetchComment(commentId) {\n  return function (dispatch) {\n    dispatch(startedFetchingComment());\n    return fetch('https://jsonplaceholder.typicode.com/comments/' + commentId).then(function (response) {\n      if (response.ok) {\n        return response.json();\n      }\n\n      throw new Error();\n    }).then(function (data) {\n      dispatch(getComment(data));\n      dispatch(finishedFetchingComment());\n    }).catch(function () {\n      return dispatch(errorFetchingComment());\n    });\n  };\n};\n\nexports.startedFetchingComment = startedFetchingComment;\nexports.finishedFetchingComment = finishedFetchingComment;\nexports.errorFetchingComment = errorFetchingComment;\nexports.getComment = getComment;\nexports.fetchComment = fetchComment;\n\n//# sourceURL=webpack:///./src/data/actions/comment.js?");
 
 /***/ }),
 
@@ -6170,6 +6242,30 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 /***/ }),
 
+/***/ "./src/data/constants/actionTypes/comment.js":
+/*!***************************************************!*\
+  !*** ./src/data/constants/actionTypes/comment.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nvar STARTED_FETCHING_COMMENT = 'STARTED_FETCHING_COMMENT';\nvar FINISHED_FETCHING_COMMENT = 'FINISHED_FETCHING_COMMENT';\nvar ERROR_FETCHING_COMMENT = 'ERROR_FETCHING_COMMENT';\nvar GET_COMMENT = 'GET_COMMENT';\n\nexports.STARTED_FETCHING_COMMENT = STARTED_FETCHING_COMMENT;\nexports.FINISHED_FETCHING_COMMENT = FINISHED_FETCHING_COMMENT;\nexports.ERROR_FETCHING_COMMENT = ERROR_FETCHING_COMMENT;\nexports.GET_COMMENT = GET_COMMENT;\n\n//# sourceURL=webpack:///./src/data/constants/actionTypes/comment.js?");
+
+/***/ }),
+
+/***/ "./src/data/reducers/comment.js":
+/*!**************************************!*\
+  !*** ./src/data/reducers/comment.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };\n\nvar _comment = __webpack_require__(/*! ../constants/actionTypes/comment */ \"./src/data/constants/actionTypes/comment.js\");\n\nvar initialState = {\n  details: {\n    id: null,\n    postId: null,\n    name: '',\n    email: 'example@example.com',\n    body: ''\n  },\n  startedFetching: false,\n  finishedFetching: false,\n  errorFetching: false\n};\n\nvar comment = function comment() {\n  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;\n  var action = arguments[1];\n\n  switch (action.type) {\n    case _comment.GET_COMMENT:\n      return _extends({}, state, {\n        details: _extends({}, action.comment),\n        finishedFetching: true,\n        errorFetching: false\n      });\n    case _comment.STARTED_FETCHING_COMMENT:\n      return _extends({}, state, {\n        startedFetching: true,\n        finishedFetching: false\n      });\n    case _comment.ERROR_FETCHING_COMMENT:\n      return _extends({}, state, {\n        finishedFetching: true,\n        errorFetching: true\n      });\n    default:\n      return state;\n  }\n};\n\nexports.default = comment;\n\n//# sourceURL=webpack:///./src/data/reducers/comment.js?");
+
+/***/ }),
+
 /***/ "./src/data/reducers/index.js":
 /*!************************************!*\
   !*** ./src/data/reducers/index.js ***!
@@ -6178,7 +6274,7 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _redux = __webpack_require__(/*! redux */ \"./node_modules/redux/es/index.js\");\n\nvar _posts = __webpack_require__(/*! ./posts */ \"./src/data/reducers/posts.js\");\n\nvar _posts2 = _interopRequireDefault(_posts);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar rootReducer = (0, _redux.combineReducers)({\n  posts: _posts2.default\n});\n\nexports.default = rootReducer;\n\n//# sourceURL=webpack:///./src/data/reducers/index.js?");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _redux = __webpack_require__(/*! redux */ \"./node_modules/redux/es/index.js\");\n\nvar _posts = __webpack_require__(/*! ./posts */ \"./src/data/reducers/posts.js\");\n\nvar _posts2 = _interopRequireDefault(_posts);\n\nvar _comment = __webpack_require__(/*! ./comment */ \"./src/data/reducers/comment.js\");\n\nvar _comment2 = _interopRequireDefault(_comment);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar rootReducer = (0, _redux.combineReducers)({\n  posts: _posts2.default,\n  comment: _comment2.default\n});\n\nexports.default = rootReducer;\n\n//# sourceURL=webpack:///./src/data/reducers/index.js?");
 
 /***/ }),
 
@@ -6214,7 +6310,7 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\n__webpack_require__(/*! babel-polyfill */ \"./node_modules/babel-polyfill/lib/index.js\");\n\nvar _react = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _reactDom = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nvar _reactDom2 = _interopRequireDefault(_reactDom);\n\nvar _reactRouterDom = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/es/index.js\");\n\nvar _reactRedux = __webpack_require__(/*! react-redux */ \"./node_modules/react-redux/es/index.js\");\n\nvar _CurrentPostsPage = __webpack_require__(/*! ./containers/CurrentPostsPage */ \"./src/containers/CurrentPostsPage.jsx\");\n\nvar _CurrentPostsPage2 = _interopRequireDefault(_CurrentPostsPage);\n\nvar _DisclosurePage = __webpack_require__(/*! ./components/DisclosurePage */ \"./src/components/DisclosurePage/index.jsx\");\n\nvar _DisclosurePage2 = _interopRequireDefault(_DisclosurePage);\n\nvar _store = __webpack_require__(/*! ./data/store */ \"./src/data/store.js\");\n\nvar _store2 = _interopRequireDefault(_store);\n\n__webpack_require__(/*! ./App.scss */ \"./src/App.scss\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n// general ES2015 polyfill (e.g. promise)\nvar App = function App() {\n  return _react2.default.createElement(\n    _reactRedux.Provider,\n    { store: _store2.default },\n    _react2.default.createElement(\n      _reactRouterDom.BrowserRouter,\n      null,\n      _react2.default.createElement(\n        'div',\n        null,\n        _react2.default.createElement(\n          'header',\n          null,\n          _react2.default.createElement(\n            'nav',\n            null,\n            _react2.default.createElement(\n              'ul',\n              { className: 'nav' },\n              _react2.default.createElement(\n                'li',\n                { className: 'nav-item' },\n                _react2.default.createElement(\n                  _reactRouterDom.Link,\n                  { className: 'nav-link', to: '/' },\n                  'Home'\n                )\n              ),\n              _react2.default.createElement(\n                'li',\n                { className: 'nav-item' },\n                _react2.default.createElement(\n                  _reactRouterDom.Link,\n                  { className: 'nav-link', to: '/posts' },\n                  'Posts'\n                )\n              ),\n              _react2.default.createElement(\n                'li',\n                { className: 'nav-item' },\n                _react2.default.createElement(\n                  _reactRouterDom.Link,\n                  { className: 'nav-link', to: '/disclosure' },\n                  'Disclosure'\n                )\n              )\n            )\n          )\n        ),\n        _react2.default.createElement(\n          'main',\n          null,\n          _react2.default.createElement(\n            _reactRouterDom.Switch,\n            null,\n            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: function component() {\n                return _react2.default.createElement(\n                  'span',\n                  null,\n                  'Hello World'\n                );\n              } }),\n            _react2.default.createElement(_reactRouterDom.Route, { path: '/posts', component: _CurrentPostsPage2.default }),\n            _react2.default.createElement(_reactRouterDom.Route, { path: '/disclosure', component: _DisclosurePage2.default })\n          )\n        )\n      )\n    )\n  );\n};\n\n_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('root'));\n\n//# sourceURL=webpack:///./src/index.jsx?");
+eval("\n\n__webpack_require__(/*! babel-polyfill */ \"./node_modules/babel-polyfill/lib/index.js\");\n\nvar _react = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _reactDom = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nvar _reactDom2 = _interopRequireDefault(_reactDom);\n\nvar _reactRouterDom = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/es/index.js\");\n\nvar _reactRedux = __webpack_require__(/*! react-redux */ \"./node_modules/react-redux/es/index.js\");\n\nvar _CurrentPostsPage = __webpack_require__(/*! ./containers/CurrentPostsPage */ \"./src/containers/CurrentPostsPage.jsx\");\n\nvar _CurrentPostsPage2 = _interopRequireDefault(_CurrentPostsPage);\n\nvar _CommentSearchPage = __webpack_require__(/*! ./containers/CommentSearchPage */ \"./src/containers/CommentSearchPage/index.jsx\");\n\nvar _CommentSearchPage2 = _interopRequireDefault(_CommentSearchPage);\n\nvar _DisclosurePage = __webpack_require__(/*! ./components/DisclosurePage */ \"./src/components/DisclosurePage/index.jsx\");\n\nvar _DisclosurePage2 = _interopRequireDefault(_DisclosurePage);\n\nvar _store = __webpack_require__(/*! ./data/store */ \"./src/data/store.js\");\n\nvar _store2 = _interopRequireDefault(_store);\n\n__webpack_require__(/*! ./App.scss */ \"./src/App.scss\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar App = function App() {\n  return _react2.default.createElement(\n    _reactRedux.Provider,\n    { store: _store2.default },\n    _react2.default.createElement(\n      _reactRouterDom.BrowserRouter,\n      null,\n      _react2.default.createElement(\n        'div',\n        null,\n        _react2.default.createElement(\n          'header',\n          null,\n          _react2.default.createElement(\n            'nav',\n            null,\n            _react2.default.createElement(\n              'ul',\n              { className: 'nav' },\n              _react2.default.createElement(\n                'li',\n                { className: 'nav-item' },\n                _react2.default.createElement(\n                  _reactRouterDom.Link,\n                  { className: 'nav-link', to: '/' },\n                  'Home'\n                )\n              ),\n              _react2.default.createElement(\n                'li',\n                { className: 'nav-item' },\n                _react2.default.createElement(\n                  _reactRouterDom.Link,\n                  { className: 'nav-link', to: '/posts' },\n                  'Posts'\n                )\n              ),\n              _react2.default.createElement(\n                'li',\n                { className: 'nav-item' },\n                _react2.default.createElement(\n                  _reactRouterDom.Link,\n                  { className: 'nav-link', to: '/disclosure' },\n                  'Disclosure'\n                )\n              ),\n              _react2.default.createElement(\n                'li',\n                { className: 'nav-item' },\n                _react2.default.createElement(\n                  _reactRouterDom.Link,\n                  { className: 'nav-link', to: '/comment-search' },\n                  'Comment Search'\n                )\n              )\n            )\n          )\n        ),\n        _react2.default.createElement(\n          'main',\n          null,\n          _react2.default.createElement(\n            _reactRouterDom.Switch,\n            null,\n            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: function component() {\n                return _react2.default.createElement(\n                  'span',\n                  null,\n                  'Hello World'\n                );\n              } }),\n            _react2.default.createElement(_reactRouterDom.Route, { path: '/posts', component: _CurrentPostsPage2.default }),\n            _react2.default.createElement(_reactRouterDom.Route, { path: '/disclosure', component: _DisclosurePage2.default }),\n            _react2.default.createElement(_reactRouterDom.Route, { path: '/comment-search', component: _CommentSearchPage2.default })\n          )\n        )\n      )\n    )\n  );\n}; // general ES2015 polyfill (e.g. promise)\n\n\n_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('root'));\n\n//# sourceURL=webpack:///./src/index.jsx?");
 
 /***/ }),
 
