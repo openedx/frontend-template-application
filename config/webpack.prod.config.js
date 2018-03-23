@@ -4,12 +4,14 @@ const Merge = require('webpack-merge');
 const commonConfig = require('./webpack.common.config.js');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = Merge.smart(commonConfig, {
   mode: 'production',
   devtool: 'source-map',
   output: {
-    filename: '[name].min.js',
+    filename: '[name].[chunkhash].js',
+    path: path.resolve(__dirname, '../dist'),
   },
   module: {
     // Specify file-by-file rules to Webpack. Some file-types need a particular kind of loader.
@@ -83,6 +85,11 @@ module.exports = Merge.smart(commonConfig, {
     new ExtractTextPlugin({
       filename: '[name].min.css',
       allChunks: true,
+    }),
+    // Generates an HTML file in the output directory.
+    new HtmlWebpackPlugin({
+      inject: true, // Appends script tags linking to the webpack bundles at the end of the body
+      template: path.resolve(__dirname, '../public/index.html'),
     }),
   ],
 });
