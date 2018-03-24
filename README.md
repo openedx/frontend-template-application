@@ -1,6 +1,6 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/edx/front-end-cookie-cutter-application.svg)](https://greenkeeper.io/)
 
-# front-end-cookie-cutter
+# 🍪 front-end-cookie-cutter 🍪
 
 Please tag **@edx/fedx-team** on any PRs or issues.
 
@@ -9,6 +9,24 @@ Please tag **@edx/fedx-team** on any PRs or issues.
 The purpose of this repository is to illustrate general front-end best practices for [`React`](https://reactjs.org/) and [`Redux`](https://redux.js.org) applications using a handful of (overly) simplified examples.
 
 We are currently using `node v8.9.3` and `npm@5.5.1`.
+
+## Getting Started
+
+After cloning the repository, run `make up-detached` in the `front-end-cookie-cutter` directory - this will build and start the `front-end-cookie-cutter` web application in a docker container.
+
+Hopefully, the output looks something like
+
+![make-up-detached-output](https://imgur.com/9oFeCzA.png)
+
+The web application runs on port **1991**, so when you go to `http://localhost:1991` you should see something like
+
+![hello-world](https://imgur.com/JnnySGX.png)
+
+If you don't, you can see the log messages for the docker container by executing `make logs` in the `front-end-cookie-cutter` directory. This should output something like
+
+![make-logs](https://imgur.com/JDUEkZ3.png)
+
+Note that `make up-detached` executes the `npm run start` script which will hot-reload JavaScript and Sass files changes, so you should (:crossed_fingers:) not need to do anything (other than wait) when making changes.
 
 ## Directory Structure
 
