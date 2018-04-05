@@ -16,7 +16,7 @@
   },
   "license": "AGPL-3.0",
   "dependencies": {
-    "@edx/edx-bootstrap": "^0.4.3",
+    "@edx/edx-bootstrap": "^1.0.0",
     "@edx/paragon": "^2.3.0",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
