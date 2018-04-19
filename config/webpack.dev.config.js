@@ -3,6 +3,7 @@
 const Merge = require('webpack-merge');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const commonConfig = require('./webpack.common.config.js');
 
@@ -72,6 +73,10 @@ module.exports = Merge.smart(commonConfig, {
       inject: true, // Appends script tags linking to the webpack bundles at the end of the body
       template: path.resolve(__dirname, '../public/index.html'),
     }),
+    // when the --hot option is not passed in as part of the command
+    // the HotModuleReplacementPlugin has to be specified in the Webpack configuration
+    // https://webpack.js.org/configuration/dev-server/#devserver-hot
+    new webpack.HotModuleReplacementPlugin(),
   ],
   // This configures webpack-dev-server which serves bundles from memory and provides live
   // reloading.
@@ -79,5 +84,7 @@ module.exports = Merge.smart(commonConfig, {
     host: '0.0.0.0',
     port: 1991,
     historyApiFallback: true,
+    hot: true,
+    inline: true,
   },
 });
