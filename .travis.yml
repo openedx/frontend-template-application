@@ -1,13 +1,13 @@
 language: node_js
 node_js:
-- 8.9.3
+  - "lts/*"
 cache:
   directories:
-  - "~/.npm"
+    - "~/.npm"
 notifications:
   email:
     recipients:
-    - jbradley@edx.org
+      - jbradley@edx.org
     on_success: never
     on_failure: always
   hipchat:
@@ -16,18 +16,20 @@ notifications:
   webhooks: https://www.travisbuddy.com/
   on_success: never
 before_install:
-- npm install -g npm
-- npm install -g greenkeeper-lockfile@1.14.0
+  - npm install -g npm@latest
+  - npm install -g greenkeeper-lockfile@1.14.0
+install:
+  - npm ci
 before_script: greenkeeper-lockfile-update
 after_script: greenkeeper-lockfile-upload
 script:
-- make validate-no-uncommitted-package-lock-changes
-- npm run lint
-- npm run test
-- npm run build
-- npm run is-es5
+  - make validate-no-uncommitted-package-lock-changes
+  - npm run lint
+  - npm run test
+  - npm run build
+  - npm run is-es5
 after_success:
-- npm run build:gh-pages
+  - npm run build:gh-pages
 deploy:
   local-dir: "./dist"
   provider: pages
