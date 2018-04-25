@@ -20,14 +20,23 @@ before_install:
 - npm install -g greenkeeper-lockfile@1.14.0
 before_script: greenkeeper-lockfile-update
 after_script: greenkeeper-lockfile-upload
-script:
-- make validate-no-uncommitted-package-lock-changes
-- npm run lint
-- npm run test
-- npm run build
-- npm run is-es5
-after_success:
-- npm run build:gh-pages
+jobs:
+  include:
+    - stage: test
+      script:
+        - make validate-no-uncommitted-package-lock-changes
+        - npm run lint
+        - npm run test
+        - npm run build
+        - npm run is-es5
+      before_script: greenkeeper-lockfile-update
+      after_script: greenkeeper-lockfile-upload
+      after_success: npm run codecov
+    - stage: deploy
+      if: branch = master
+      script:
+        - npm run build:gh-pages
+
 deploy:
   local-dir: "./dist"
   provider: pages
