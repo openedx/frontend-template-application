@@ -1,46 +1,74 @@
 import 'whatwg-fetch';
 
 import {
-  STARTED_FETCHING_POSTS,
-  FINISHED_FETCHING_POSTS,
-  GET_POSTS,
+  STARTED_FETCHING_COURSE_OUTLINE,
+  FINISHED_FETCHING_COURSE_OUTLINE,
+  GET_COURSE_OUTLINE,
 } from '../constants/ActionType';
 
-const startedFetchingPosts = () => (
+// TODO, this should be built based on LMS_URL and course passed in via route
+const OUTLINE_URL = 'http://localhost:18000/api/courses/v1/blocks/block-v1:edX+DemoX+Demo_Course+type@course+block@course/?username=staff&depth=all&nav_depth=3&block_types_filter=course,chapter,sequential';
+
+const startedFetchingOutline = () => (
   {
-    type: STARTED_FETCHING_POSTS,
+    type: STARTED_FETCHING_COURSE_OUTLINE,
   }
 );
 
-const finishedFetchingPosts = () => (
+const finishedFetchingOutline = () => (
   {
-    type: FINISHED_FETCHING_POSTS,
+    type: FINISHED_FETCHING_COURSE_OUTLINE,
   }
 );
 
-const getPosts = posts => (
+const getOutline = outline => (
   {
-    type: GET_POSTS,
-    posts,
+    type: GET_COURSE_OUTLINE,
+    outline,
   }
 );
 
-const fetchPosts = () => (
+const buildOutlineTree = (blockData) => {
+  const rootBlock = blockData.blocks[blockData.root]
+  let outline = createTreeNode(rootBlock, blockData.blocks);
+  return outline;
+}
+
+const createTreeNode = (node, blocks) => {
+  return {
+    id: node.block_id,
+    displayName: node.display_name,
+    type: node.type,
+    descendants: node.descendants &&
+      node.descendants
+        .filter(descendant => blocks[descendant])
+        .map(descendant => createTreeNode(blocks[descendant], blocks))
+  }
+}
+
+const fetchCourseOutline = () => (
   (dispatch) => {
-    dispatch(startedFetchingPosts());
-    return fetch('https://jsonplaceholder.typicode.com/posts')
+    dispatch(startedFetchingOutline());
+    return fetch(OUTLINE_URL, {
+        credentials: "include",
+        headers: {
+          // TODO: get cookie from cookies.get('csrftoken'), which will assume login on LMS already and same-origin
+          'X-CSRFToken': 'axjfX6SquerIjJ9PogaRTOvYElCSWcW2ADxW0MSVhC8PpfysXJzFV3gmQuUsfcVd'
+        }
+      })
       // TODO: handle response error
       .then(response => response.json())
-      .then((data) => {
-        dispatch(getPosts(data));
-        dispatch(finishedFetchingPosts());
+      .then(data => buildOutlineTree(data))
+      .then((outline) => {
+        dispatch(getOutline(outline));
+        dispatch(finishedFetchingOutline());
       });
   }
 );
 
 export {
-  startedFetchingPosts,
-  finishedFetchingPosts,
-  getPosts,
-  fetchPosts,
+  startedFetchingOutline,
+  finishedFetchingOutline,
+  getOutline,
+  fetchCourseOutline,
 };

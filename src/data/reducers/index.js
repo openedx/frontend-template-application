@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-import posts from './posts';
+import courseOutline from './courseOutline';
 
 const rootReducer = combineReducers({
-  posts,
+  courseOutline,
 });
 
 export default rootReducer;

@@ -25,6 +25,7 @@
     "history": "^4.7.2",
     "prop-types": "^15.5.10",
     "react": "^16.2.0",
+    "react-cookie": "^2.1.4",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
