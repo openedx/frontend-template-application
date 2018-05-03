@@ -22,8 +22,8 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           <div className="col-xs-12 col-md footer-links">
             <nav>
               <ul className="nav justify-content-end">
-                <li className="nav-item"><Link className="nav-link" to="/terms-of-service">Terms of Service</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/privacy-policy">Privacy Policy</Link></li>
+                <li className="nav-item"><a className="nav-link" href="https://www.edx.org/edx-terms-service">Terms of Service</a></li>
+                <li className="nav-item"><a className="nav-link" href="https://www.edx.org/edx-privacy-policy">Privacy Policy</a></li>
                 <li className="nav-item"><Link className="nav-link" to="/faq">FAQ &amp; Support</Link></li>
               </ul>
             </nav>

@@ -10,7 +10,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
   render() {
     return (
       <header>
-        <nav className="navbar navbar-default">
+        <nav className="navbar">
           <div className="container-fluid">
             <div className="navbar-header">
               <Link className="navbar-brand" to="/">
