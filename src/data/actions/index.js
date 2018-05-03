@@ -4,10 +4,14 @@ import {
   STARTED_FETCHING_COURSE_OUTLINE,
   FINISHED_FETCHING_COURSE_OUTLINE,
   GET_COURSE_OUTLINE,
+  STARTED_FETCHING_SECTION_BLOCKS,
+  FINISHED_FETCHING_SECTION_BLOCKS,
+  GET_SECTION_BLOCKS
 } from '../constants/ActionType';
 
 // TODO, this should be built based on LMS_URL and course passed in via route
 const OUTLINE_URL = 'http://localhost:18000/api/courses/v1/blocks/block-v1:edX+DemoX+Demo_Course+type@course+block@course/?username=staff&depth=all&nav_depth=3&block_types_filter=course,chapter,sequential';
+const SECTION_BLOCKS_URL = 'http://localhost:18000/api/courses/v1/blocks/block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40fc/?username=staff&depth=all&nav_depth=3'
 
 const startedFetchingOutline = () => (
   {
@@ -34,6 +38,7 @@ const buildOutlineTree = (blockData) => {
   return outline;
 }
 
+// Return object that contains nested descendant nodes
 const createTreeNode = (node, blocks) => {
   return {
     id: node.block_id,
@@ -66,9 +71,52 @@ const fetchCourseOutline = () => (
   }
 );
 
+const startedFetchingSectionBlocks = () => (
+  {
+    type: STARTED_FETCHING_SECTION_BLOCKS,
+  }
+);
+
+const finishedFetchingSectionBlocks = () => (
+  {
+    type: FINISHED_FETCHING_SECTION_BLOCKS,
+  }
+);
+
+const getSectionBlocks = blockUrls => (
+  {
+    type: GET_SECTION_BLOCKS,
+    blockUrls,
+  }
+);
+
+// Return array of block urls to display
+const getSectionBlockUrls = (blockData) => {
+  const rootBlock = blockData.blocks[blockData.root];
+  return rootBlock.descendants && rootBlock.descendants.map(descendant => blockData.blocks[descendant].student_view_url);
+}
+
+const fetchSectionBlocks = () => (
+  (dispatch) => {
+    dispatch(startedFetchingSectionBlocks());
+    return fetch(SECTION_BLOCKS_URL, {
+        credentials: "include",
+        headers: {
+          // TODO: get cookie from cookies.get('csrftoken'), which will assume login on LMS already and same-origin
+          'X-CSRFToken': 'axjfX6SquerIjJ9PogaRTOvYElCSWcW2ADxW0MSVhC8PpfysXJzFV3gmQuUsfcVd'
+        }
+      })
+      // TODO: handle response error
+      .then(response => response.json())
+      .then(data => getSectionBlockUrls(data))
+      .then(blockUrls => {
+        dispatch(getSectionBlocks(blockUrls));
+        dispatch(finishedFetchingSectionBlocks());
+      });
+  }
+);
+
 export {
-  startedFetchingOutline,
-  finishedFetchingOutline,
-  getOutline,
   fetchCourseOutline,
+  fetchSectionBlocks,
 };

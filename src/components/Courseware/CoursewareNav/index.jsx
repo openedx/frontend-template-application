@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class CoursewarePage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+class CoursewareNav extends React.Component {
   componentDidMount() {
     this.props.getCourseOutline();
   }
@@ -17,14 +13,15 @@ class CoursewarePage extends React.Component {
         <ul>
           {node.descendants.map(item => this.renderTreeNode(item))}
         </ul>
-    )}
-  
+      );
+    }
+
     return (
       <li key={node.id}>
         {node.displayName}
         {subtree}
       </li>
-    )
+    );
   }
 
   render() {
@@ -39,17 +36,17 @@ class CoursewarePage extends React.Component {
   }
 }
 
-CoursewarePage.defaultProps = {
+CoursewareNav.defaultProps = {
   courseOutline: {
     displayName: '',
-    descendants: []
+    descendants: [],
   },
   getCourseOutline: () => {},
 };
 
-CoursewarePage.propTypes = {
-  courseOutline: PropTypes.object,
+CoursewareNav.propTypes = {
+  courseOutline: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   getCourseOutline: PropTypes.func,
 };
 
-export default CoursewarePage;
+export default CoursewareNav;

@@ -131,7 +131,7 @@ class XBlockComponent extends React.Component {
 
   render() {
     return (
-    <div class="embed-responsive embed-responsive-1by1">
+    <div className="embed-responsive embed-responsive-1by1">
         <iframe src={this.getViewUrl()} />
     </div>
     );

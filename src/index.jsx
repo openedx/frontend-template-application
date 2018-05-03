@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { CookiesProvider } from 'react-cookie'; 
 
-import CoursewarePageContainer from './containers/CoursewarePageContainer'
+import Courseware from './components/Courseware'
 import EdxHeader from './components/EdxHeader'
 import EdxFooter from './components/EdxFooter'
 import store from './data/store';
@@ -20,7 +20,7 @@ const App = () => (
           <main>
             <Switch>
               <Route exact path="/" component={() => <span>Hello World</span>} />
-              <Route path='/course' component={CoursewarePageContainer} />
+              <Route path='/course' component={Courseware} />
             </Switch>
           </main>
         </div>

@@ -2,6 +2,7 @@ import {
   GET_COURSE_OUTLINE,
   STARTED_FETCHING_COURSE_OUTLINE,
   FINISHED_FETCHING_COURSE_OUTLINE,
+  
 } from '../constants/ActionType';
 
 const courseOutline = (state = { outline: {}, startedFetching: false, finishedFetching: false }, action) => {

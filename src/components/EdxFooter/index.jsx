@@ -8,5 +8,5 @@ class EdxFooter extends React.Component {
   }
 }
 
-
 export default EdxFooter;
+  
