@@ -63,6 +63,28 @@ module.exports = Merge.smart(commonConfig, {
         test: /\.(woff2?|ttf|svg|eot)(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
       },
+      {
+        test: /\.(jpe?g|png|gif)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              optimizationlevel: 7,
+              mozjpeg: {
+                progressive: true,
+              },
+              gifsicle: {
+                interlaced: false,
+              },
+              pngquant: {
+                quality: '65-90',
+                speed: 4,
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   // Specify additional processing or side-effects done on the Webpack output bundles as a whole.

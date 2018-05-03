@@ -6,7 +6,7 @@ import {
   GET_COURSE_OUTLINE,
   STARTED_FETCHING_SECTION_BLOCKS,
   FINISHED_FETCHING_SECTION_BLOCKS,
-  GET_SECTION_BLOCKS
+  GET_SECTION_BLOCKS,
 } from '../constants/ActionType';
 
 // TODO, this should be built based on LMS_URL and course passed in via route
@@ -32,35 +32,36 @@ const getOutline = outline => (
   }
 );
 
-const buildOutlineTree = (blockData) => {
-  const rootBlock = blockData.blocks[blockData.root]
-  let outline = createTreeNode(rootBlock, blockData.blocks);
-  return outline;
-}
-
 // Return object that contains nested descendant nodes
-const createTreeNode = (node, blocks) => {
-  return {
+const createTreeNode = (node, blocks) => (
+  {
     id: node.block_id,
     displayName: node.display_name,
     type: node.type,
     descendants: node.descendants &&
       node.descendants
         .filter(descendant => blocks[descendant])
-        .map(descendant => createTreeNode(blocks[descendant], blocks))
+        .map(descendant => createTreeNode(blocks[descendant], blocks)),
   }
-}
+);
+
+const buildOutlineTree = (blockData) => {
+  const rootBlock = blockData.blocks[blockData.root];
+  const outline = createTreeNode(rootBlock, blockData.blocks);
+  return outline;
+};
 
 const fetchCourseOutline = () => (
   (dispatch) => {
     dispatch(startedFetchingOutline());
     return fetch(OUTLINE_URL, {
-        credentials: "include",
-        headers: {
-          // TODO: get cookie from cookies.get('csrftoken'), which will assume login on LMS already and same-origin
-          'X-CSRFToken': 'axjfX6SquerIjJ9PogaRTOvYElCSWcW2ADxW0MSVhC8PpfysXJzFV3gmQuUsfcVd'
-        }
-      })
+      credentials: 'include',
+      headers: {
+        // TODO: get cookie from cookies.get('csrftoken'), which will assume login on
+        // LMS already and same-origin
+        'X-CSRFToken': 'B32SLtG266NibgTVbhY21ZAzUIZD1mxiNN3f86SL88VlBJJhTt8tr7FJFI77AimV',
+      },
+    })
       // TODO: handle response error
       .then(response => response.json())
       .then(data => buildOutlineTree(data))

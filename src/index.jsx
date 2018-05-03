@@ -1,33 +1,21 @@
 import 'babel-polyfill'; // general ES2015 polyfill (e.g. promise)
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { CookiesProvider } from 'react-cookie'; 
+import { CookiesProvider } from 'react-cookie';
 
-import Courseware from './components/Courseware'
-import EdxHeader from './components/EdxHeader'
-import EdxFooter from './components/EdxFooter'
+import App from './containers/App';
 import store from './data/store';
-import './App.scss';
 
-const App = () => (
+const AppWrapper = () => (
   <Provider store={store}>
     <CookiesProvider>
-      <EdxHeader />
       <Router>
-        <div>
-          <main>
-            <Switch>
-              <Route exact path="/" component={() => <span>Hello World</span>} />
-              <Route path='/course' component={Courseware} />
-            </Switch>
-          </main>
-        </div>
+        <App />
       </Router>
-      <EdxFooter />
     </CookiesProvider>
   </Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<AppWrapper />, document.getElementById('root'));

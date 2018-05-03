@@ -67,6 +67,28 @@ module.exports = Merge.smart(commonConfig, {
         test: /\.(woff2?|ttf|svg|eot)(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
       },
+      {
+        test: /\.(jpe?g|png|gif)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              optimizationlevel: 7,
+              mozjpeg: {
+                progressive: true,
+              },
+              gifsicle: {
+                interlaced: false,
+              },
+              pngquant: {
+                quality: '65-90',
+                speed: 4,
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   // New in Webpack 4. Replaces CommonChunksPlugin. Extract common modules among all chunks to one
