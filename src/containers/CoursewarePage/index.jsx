@@ -1,20 +1,22 @@
 import { connect } from 'react-redux';
 import { withCookies } from 'react-cookie';
 
-import CoursewareNav from '../../components/Courseware/CoursewareNav';
-import { fetchCourseOutline } from '../../data/actions';
+import Courseware from '../../components/Courseware';
+import { fetchCourseOutline, fetchSectionBlocks } from '../../data/actions';
 
 const mapStateToProps = state => ({
   courseOutline: state.courseOutline.outline,
+  blocks: state.sectionBlocks.blocks,
 });
 
 const mapDispatchToProps = dispatch => ({
   getCourseOutline: () => dispatch(fetchCourseOutline()),
+  getSectionBlocks: () => dispatch(fetchSectionBlocks()),
 });
 
-const CoursewareNavContainer = connect(
+const CoursewarePage = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CoursewareNav);
+)(Courseware);
 
-export default withCookies(CoursewareNavContainer);
+export default withCookies(CoursewarePage);

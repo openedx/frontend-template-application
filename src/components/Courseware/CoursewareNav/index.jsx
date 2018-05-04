@@ -2,10 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class CoursewareNav extends React.Component {
-  componentDidMount() {
-    this.props.getCourseOutline();
-  }
-
   renderTreeNode(node) {
     let subtree = '';
     if (node.descendants) {
@@ -36,17 +32,8 @@ class CoursewareNav extends React.Component {
   }
 }
 
-CoursewareNav.defaultProps = {
-  courseOutline: {
-    displayName: '',
-    descendants: [],
-  },
-  getCourseOutline: () => {},
-};
-
 CoursewareNav.propTypes = {
-  courseOutline: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  getCourseOutline: PropTypes.func,
+  courseOutline: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 export default CoursewareNav;

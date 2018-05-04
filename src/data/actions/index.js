@@ -59,7 +59,7 @@ const fetchCourseOutline = () => (
       headers: {
         // TODO: get cookie from cookies.get('csrftoken'), which will assume login on
         // LMS already and same-origin
-        'X-CSRFToken': 'B32SLtG266NibgTVbhY21ZAzUIZD1mxiNN3f86SL88VlBJJhTt8tr7FJFI77AimV',
+        'X-CSRFToken': 'axjfX6SquerIjJ9PogaRTOvYElCSWcW2ADxW0MSVhC8PpfysXJzFV3gmQuUsfcVd',
       },
     })
       // TODO: handle response error

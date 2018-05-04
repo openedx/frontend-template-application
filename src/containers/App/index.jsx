@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 
 import HomePage from '../HomePage';
-import Courseware from '../../components/Courseware';
+import CoursewarePage from '../CoursewarePage';
 import FAQSupportPage from '../FAQSupportPage';
 import NotFoundPage from '../NotFoundPage';
 import Header from '../../components/Header';
@@ -21,7 +21,7 @@ export default function App() {
       <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/course" component={Courseware} />
+        <Route path="/course" component={CoursewarePage} />
         <Route path="/faq" component={FAQSupportPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
