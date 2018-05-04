@@ -13,9 +13,10 @@ class CoursewareContent extends React.Component {
         <Helmet>
           <title>Course</title>
         </Helmet>
-        {this.props.blockUrls.map((blockUrl, idx) => (
-          <div className="embed-responsive embed-responsive-1by1" key={idx}>
-            <iframe src={blockUrl} title={idx} scrolling="no" />
+        {this.props.blocks.map(block =>
+        (
+          <div className="embed-responsive embed-responsive-1by1" key={block.id}>
+            <iframe src={block.url} title={block.displayName} />
           </div>
         ))}
       </div>
@@ -24,12 +25,12 @@ class CoursewareContent extends React.Component {
 }
 
 CoursewareContent.defaultProps = {
-  blockUrls: [],
+  blocks: [],
   getSectionBlocks: () => {},
 };
 
 CoursewareContent.propTypes = {
-  blockUrls: PropTypes.array, // eslint-disable-line
+  blocks: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   getSectionBlocks: PropTypes.func,
 };
 

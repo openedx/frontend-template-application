@@ -11,7 +11,7 @@ import {
 
 // TODO, this should be built based on LMS_URL and course passed in via route
 const OUTLINE_URL = 'http://localhost:18000/api/courses/v1/blocks/block-v1:edX+DemoX+Demo_Course+type@course+block@course/?username=staff&depth=all&nav_depth=3&block_types_filter=course,chapter,sequential';
-const SECTION_BLOCKS_URL = 'http://localhost:18000/api/courses/v1/blocks/block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40fc/?username=staff&depth=all&nav_depth=3'
+const SECTION_BLOCKS_URL = 'http://localhost:18000/api/courses/v1/blocks/block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40fc/?username=staff&depth=all&nav_depth=3';
 
 const startedFetchingOutline = () => (
   {
@@ -84,34 +84,41 @@ const finishedFetchingSectionBlocks = () => (
   }
 );
 
-const getSectionBlocks = blockUrls => (
+const getSectionBlocks = blocks => (
   {
     type: GET_SECTION_BLOCKS,
-    blockUrls,
+    blocks,
   }
 );
 
-// Return array of block urls to display
-const getSectionBlockUrls = (blockData) => {
+// Return array of blocks to iframe in
+const createSectionBlocks = (blockData) => {
   const rootBlock = blockData.blocks[blockData.root];
-  return rootBlock.descendants && rootBlock.descendants.map(descendant => blockData.blocks[descendant].student_view_url);
-}
+  return rootBlock.descendants && rootBlock.descendants.map((descendant) => {
+    const block = blockData.blocks[descendant];
+    return {
+      id: block.id,
+      displayName: block.display_name,
+      url: block.student_view_url,
+    };
+  });
+};
 
 const fetchSectionBlocks = () => (
   (dispatch) => {
     dispatch(startedFetchingSectionBlocks());
     return fetch(SECTION_BLOCKS_URL, {
-        credentials: "include",
-        headers: {
-          // TODO: get cookie from cookies.get('csrftoken'), which will assume login on LMS already and same-origin
-          'X-CSRFToken': 'axjfX6SquerIjJ9PogaRTOvYElCSWcW2ADxW0MSVhC8PpfysXJzFV3gmQuUsfcVd'
-        }
-      })
+      credentials: 'include',
+      headers: {
+        // TODO: get cookie from cookies.get('csrftoken') assume login on LMS and same-origin
+        'X-CSRFToken': 'axjfX6SquerIjJ9PogaRTOvYElCSWcW2ADxW0MSVhC8PpfysXJzFV3gmQuUsfcVd',
+      },
+    })
       // TODO: handle response error
       .then(response => response.json())
-      .then(data => getSectionBlockUrls(data))
-      .then(blockUrls => {
-        dispatch(getSectionBlocks(blockUrls));
+      .then(data => createSectionBlocks(data))
+      .then((blocks) => {
+        dispatch(getSectionBlocks(blocks));
         dispatch(finishedFetchingSectionBlocks());
       });
   }

@@ -4,7 +4,7 @@ import CoursewareContent from '../../components/Courseware/CoursewareContent';
 import { fetchSectionBlocks } from '../../data/actions';
 
 const mapStateToProps = state => ({
-  blockUrls: state.sectionBlocks.blockUrls,
+  blocks: state.sectionBlocks.blocks,
 });
 
 const mapDispatchToProps = dispatch => ({
