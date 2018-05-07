@@ -6,8 +6,7 @@ import CoursewareContent from './CoursewareContent';
 
 class Courseware extends React.Component {
   componentDidMount() {
-    this.props.getCourseOutline();
-    this.props.getSectionBlocks();
+    this.props.getCourseOutline(this.props.match.params.courseId);
   }
 
   render() {
@@ -41,6 +40,11 @@ Courseware.propTypes = {
   blocks: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   getCourseOutline: PropTypes.func,
   getSectionBlocks: PropTypes.func,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      courseId: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default Courseware;

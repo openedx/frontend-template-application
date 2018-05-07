@@ -10,8 +10,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getCourseOutline: () => dispatch(fetchCourseOutline()),
-  getSectionBlocks: () => dispatch(fetchSectionBlocks()),
+  getCourseOutline: courseId => dispatch(fetchCourseOutline(courseId)),
+  getSectionBlocks: sectionId => dispatch(fetchSectionBlocks(sectionId)),
 });
 
 const CoursewarePage = connect(

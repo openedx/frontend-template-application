@@ -9,28 +9,9 @@ import {
   GET_SECTION_BLOCKS,
 } from '../constants/ActionType';
 
-// TODO, this should be built based on LMS_URL and course passed in via route
-const OUTLINE_URL = 'http://localhost:18000/api/courses/v1/blocks/block-v1:edX+DemoX+Demo_Course+type@course+block@course/?username=staff&depth=all&nav_depth=3&block_types_filter=course,chapter,sequential';
-const SECTION_BLOCKS_URL = 'http://localhost:18000/api/courses/v1/blocks/block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40fc/?username=staff&depth=all&nav_depth=3';
-
-const startedFetchingOutline = () => (
-  {
-    type: STARTED_FETCHING_COURSE_OUTLINE,
-  }
-);
-
-const finishedFetchingOutline = () => (
-  {
-    type: FINISHED_FETCHING_COURSE_OUTLINE,
-  }
-);
-
-const getOutline = outline => (
-  {
-    type: GET_COURSE_OUTLINE,
-    outline,
-  }
-);
+const startedFetchingOutline = () => ({ type: STARTED_FETCHING_COURSE_OUTLINE });
+const finishedFetchingOutline = () => ({ type: FINISHED_FETCHING_COURSE_OUTLINE });
+const getOutline = outline => ({ type: GET_COURSE_OUTLINE, outline });
 
 // Return object that contains nested descendant nodes
 const createTreeNode = (node, blocks) => (
@@ -51,10 +32,11 @@ const buildOutlineTree = (blockData) => {
   return outline;
 };
 
-const fetchCourseOutline = () => (
+const fetchCourseOutline = courseId => (
   (dispatch) => {
     dispatch(startedFetchingOutline());
-    return fetch(OUTLINE_URL, {
+    const outlineUrl = `http://localhost:18000/api/courses/v1/blocks/?course_id=${encodeURIComponent(courseId)}&username=staff&depth=all&nav_depth=3&block_types_filter=course,chapter,sequential`;
+    return fetch(outlineUrl, {
       credentials: 'include',
       headers: {
         // TODO: get cookie from cookies.get('csrftoken'), which will assume login on
@@ -72,24 +54,9 @@ const fetchCourseOutline = () => (
   }
 );
 
-const startedFetchingSectionBlocks = () => (
-  {
-    type: STARTED_FETCHING_SECTION_BLOCKS,
-  }
-);
-
-const finishedFetchingSectionBlocks = () => (
-  {
-    type: FINISHED_FETCHING_SECTION_BLOCKS,
-  }
-);
-
-const getSectionBlocks = blocks => (
-  {
-    type: GET_SECTION_BLOCKS,
-    blocks,
-  }
-);
+const startedFetchingSectionBlocks = () => ({ type: STARTED_FETCHING_SECTION_BLOCKS });
+const finishedFetchingSectionBlocks = () => ({ type: FINISHED_FETCHING_SECTION_BLOCKS });
+const getSectionBlocks = blocks => ({ type: GET_SECTION_BLOCKS, blocks });
 
 // Return array of blocks to iframe in
 const createSectionBlocks = (blockData) => {
@@ -104,10 +71,11 @@ const createSectionBlocks = (blockData) => {
   });
 };
 
-const fetchSectionBlocks = () => (
+const fetchSectionBlocks = sectionId => (
   (dispatch) => {
     dispatch(startedFetchingSectionBlocks());
-    return fetch(SECTION_BLOCKS_URL, {
+    const sectionBlocksUrl = `http://localhost:18000/api/courses/v1/blocks/${encodeURIComponent(sectionId)}/?username=staff&depth=all&nav_depth=3`;
+    return fetch(sectionBlocksUrl, {
       credentials: 'include',
       headers: {
         // TODO: get cookie from cookies.get('csrftoken') assume login on LMS and same-origin
