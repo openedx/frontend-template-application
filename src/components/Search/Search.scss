@@ -1,0 +1,70 @@
+.search-form {
+    border: 1px solid #D6DBE0;
+    border-radius: 30px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    &.focused {
+        border-color: #0072DB;
+        box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+        .fa-search {
+            color: #0072DB;
+        }
+        .input-group-append {
+            .clear-search-btn {
+                border-right-color: #0072DB;
+                z-index: 3;
+            }
+            button[type=submit] {
+                background: transparent;
+            }
+        }
+    }
+    &.has-value {
+        .input-group-append {
+            .clear-search-btn {
+                margin-left: -39px;
+            }
+            button[type=submit] {
+                background: #ffffff;
+            }
+        }
+    }
+    &.has-value:not(.focused) {
+        .input-group-append {
+            .clear-search-btn {
+                border-right-color: #D6DBE0;
+                z-index: 3;
+            }
+        }
+    }
+    .form-group {
+        margin-bottom: 0;
+        .input-group {
+            flex-grow: 1;
+        }
+    }
+    input[type=search] {
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+    }
+    .fa-search {
+        padding-left: 10px;
+        color: #636C72;
+    }
+    .clear-search-btn {
+        display: flex;
+        width: 40px;
+        font-size: 0.8rem;
+        padding: 0;
+        justify-content: center;
+        align-content: center;
+        color: #636C72;
+        background: transparent;
+    }
+    .input-group-append {
+        button[type=submit] {
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+    }
+}
