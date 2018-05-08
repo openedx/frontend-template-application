@@ -27,6 +27,12 @@ class CoursewareContent extends React.Component {
 
 CoursewareContent.propTypes = {
   blocks: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  getSectionBlocks: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      sequentialId: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default withRouter(CoursewareContent);
