@@ -18,8 +18,9 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@edx/edx-bootstrap": "^0.4.3",
-    "@edx/paragon": "^2.3.0",
+    "@edx/paragon": "^3.0.0",
     "babel-polyfill": "^6.26.0",
+    "bootstrap": "^4.1.1",
     "classnames": "^2.2.5",
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",

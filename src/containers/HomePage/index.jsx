@@ -1,7 +1,7 @@
 import React from 'react';
 
 const HomePage = () => (
-  <div className="container-fluid">
+  <div className="container">
     <h1>Rockin&apos; the Home Page!</h1>
     <p>Blah blah blah blah</p>
   </div>

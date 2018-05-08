@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 const FAQSupportPage = () => (
-  <div className="container-fluid">
+  <div className="container">
     <Helmet>
       <title>FAQ &amp; Support</title>
     </Helmet>
