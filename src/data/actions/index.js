@@ -4,9 +4,6 @@ import {
   STARTED_FETCHING_COURSE_OUTLINE,
   FINISHED_FETCHING_COURSE_OUTLINE,
   GET_COURSE_OUTLINE,
-  STARTED_FETCHING_SECTION_BLOCKS,
-  FINISHED_FETCHING_SECTION_BLOCKS,
-  GET_SECTION_BLOCKS,
 } from '../constants/ActionType';
 
 const startedFetchingOutline = () => ({ type: STARTED_FETCHING_COURSE_OUTLINE });
@@ -55,45 +52,6 @@ const fetchCourseOutline = courseId => (
   }
 );
 
-const startedFetchingSectionBlocks = () => ({ type: STARTED_FETCHING_SECTION_BLOCKS });
-const finishedFetchingSectionBlocks = () => ({ type: FINISHED_FETCHING_SECTION_BLOCKS });
-const getSectionBlocks = blocks => ({ type: GET_SECTION_BLOCKS, blocks });
-
-// Return array of blocks to iframe in
-const createSectionBlocks = (blockData) => {
-  const rootBlock = blockData.blocks[blockData.root];
-  return rootBlock.descendants && rootBlock.descendants.map((descendant) => {
-    const block = blockData.blocks[descendant];
-    return {
-      id: block.id,
-      displayName: block.display_name,
-      url: block.student_view_url,
-    };
-  });
-};
-
-const fetchSectionBlocks = sectionId => (
-  (dispatch) => {
-    dispatch(startedFetchingSectionBlocks());
-    const sectionBlocksUrl = `http://localhost:18000/api/courses/v1/blocks/${encodeURIComponent(sectionId)}/?username=staff&depth=all&nav_depth=3`;
-    return fetch(sectionBlocksUrl, {
-      credentials: 'include',
-      headers: {
-        // TODO: get cookie from cookies.get('csrftoken') assume login on LMS and same-origin
-        'X-CSRFToken': 'axjfX6SquerIjJ9PogaRTOvYElCSWcW2ADxW0MSVhC8PpfysXJzFV3gmQuUsfcVd',
-      },
-    })
-      // TODO: handle response error
-      .then(response => response.json())
-      .then(data => createSectionBlocks(data))
-      .then((blocks) => {
-        dispatch(getSectionBlocks(blocks));
-        dispatch(finishedFetchingSectionBlocks());
-      });
-  }
-);
-
-export {
-  fetchCourseOutline,
-  fetchSectionBlocks,
+export { // eslint-disable-line TODO: remove eslint disable when exporting more action creators
+  fetchCourseOutline, // eslint-disable-line import/prefer-default-export
 };

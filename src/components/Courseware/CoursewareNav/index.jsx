@@ -38,9 +38,8 @@ class CoursewareNav extends React.Component {
         <h1>{this.props.courseOutline.displayName}</h1>
         <ul>
           { this.props.courseOutline.descendants &&
-            this.props.courseOutline.descendants.map((node) => {
-              return this.renderTreeNode(node);
-            })}
+            this.props.courseOutline.descendants.map(node => this.renderTreeNode(node))
+          }
         </ul>
       </nav>
     );

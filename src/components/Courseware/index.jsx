@@ -12,8 +12,6 @@ class Courseware extends React.Component {
 
   renderCourseContent(routeProps) {
     if (this.props) {
-      console.log(routeProps);
-      console.log(this.props);
       return (
         <CoursewareContent node={routeProps.location.state.node} />
       );
@@ -34,6 +32,7 @@ class Courseware extends React.Component {
               render={routeProps => this.renderCourseContent(routeProps)}
             />
           </div>
+
         </div>
       </div>
     );
@@ -45,16 +44,12 @@ Courseware.defaultProps = {
     displayName: '',
     descendants: [],
   },
-  blocks: [],
   getCourseOutline: () => {},
-  getSectionBlocks: () => {},
 };
 
 Courseware.propTypes = {
   courseOutline: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  blocks: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   getCourseOutline: PropTypes.func,
-  getSectionBlocks: PropTypes.func,
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
