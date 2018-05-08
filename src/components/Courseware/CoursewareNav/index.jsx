@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class CoursewareNav extends React.Component {
@@ -11,10 +12,14 @@ class CoursewareNav extends React.Component {
         </ul>
       );
     }
+    let content = node.displayName;
+    if (node.type === 'sequential' && this.props.match) {
+      content = (<Link to={`${this.props.match.url}/${node.id}`}>{node.displayName}</Link>);
+    }
 
     return (
       <li key={node.id}>
-        {node.displayName}
+        {content}
         {subtree}
       </li>
     );
@@ -34,6 +39,9 @@ class CoursewareNav extends React.Component {
 
 CoursewareNav.propTypes = {
   courseOutline: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
-export default CoursewareNav;
+export default withRouter(CoursewareNav);

@@ -1,23 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { withRouter } from 'react-router-dom';
 
-const CoursewareContent = ({ blocks }) => (
-  <div>
-    <Helmet>
-      <title>Course</title>
-    </Helmet>
-    {blocks.map(block =>
-    (
-      <div className="embed-responsive embed-responsive-1by1" key={block.id}>
-        <iframe src={block.url} title={block.displayName} />
+class CoursewareContent extends React.Component {
+  componentDidMount() {
+    this.props.getSectionBlocks(this.props.match.params.sequentialId);
+  }
+
+  render() {
+    return (
+      <div>
+        <Helmet>
+          <title>Course</title>
+        </Helmet>
+        {this.props.blocks.map(block =>
+        (
+          <div className="embed-responsive embed-responsive-1by1" key={block.id}>
+            <iframe src={block.url} title={block.displayName} />
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-);
+    );
+  }
+}
 
 CoursewareContent.propTypes = {
   blocks: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-export default CoursewareContent;
+export default withRouter(CoursewareContent);

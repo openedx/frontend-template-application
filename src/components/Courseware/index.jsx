@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Route } from 'react-router-dom';
 
 import CoursewareNav from './CoursewareNav';
 import CoursewareContent from './CoursewareContent';
@@ -7,6 +8,18 @@ import CoursewareContent from './CoursewareContent';
 class Courseware extends React.Component {
   componentDidMount() {
     this.props.getCourseOutline(this.props.match.params.courseId);
+  }
+
+  renderCourseContent() {
+    if (this.props) {
+      return (
+        <CoursewareContent
+          blocks={this.props.blocks}
+          getSectionBlocks={this.props.getSectionBlocks}
+        />
+      );
+    }
+    return null;
   }
 
   render() {
@@ -17,7 +30,10 @@ class Courseware extends React.Component {
             <CoursewareNav courseOutline={this.props.courseOutline} />
           </div>
           <div className="col-9">
-            <CoursewareContent blocks={this.props.blocks} />
+            <Route
+              path={`${this.props.match.url}/:sequentialId`}
+              render={() => this.renderCourseContent()}
+            />
           </div>
         </div>
       </div>
@@ -44,6 +60,7 @@ Courseware.propTypes = {
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
     }).isRequired,
+    url: PropTypes.string.isRequired,
   }).isRequired,
 };
 

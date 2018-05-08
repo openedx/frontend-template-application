@@ -16,7 +16,7 @@ const getOutline = outline => ({ type: GET_COURSE_OUTLINE, outline });
 // Return object that contains nested descendant nodes
 const createTreeNode = (node, blocks) => (
   {
-    id: node.block_id,
+    id: node.id,
     displayName: node.display_name,
     type: node.type,
     descendants: node.descendants &&
