@@ -10,13 +10,12 @@ class Courseware extends React.Component {
     this.props.getCourseOutline(this.props.match.params.courseId);
   }
 
-  renderCourseContent() {
+  renderCourseContent(routeProps) {
     if (this.props) {
+      console.log(routeProps);
+      console.log(this.props);
       return (
-        <CoursewareContent
-          blocks={this.props.blocks}
-          getSectionBlocks={this.props.getSectionBlocks}
-        />
+        <CoursewareContent node={routeProps.location.state.node} />
       );
     }
     return null;
@@ -31,8 +30,8 @@ class Courseware extends React.Component {
           </div>
           <div className="col-9">
             <Route
-              path={`${this.props.match.url}/:sequentialId`}
-              render={() => this.renderCourseContent()}
+              path={`${this.props.match.url}/:verticalId`}
+              render={routeProps => this.renderCourseContent(routeProps)}
             />
           </div>
         </div>

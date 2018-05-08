@@ -18,6 +18,7 @@ const createTreeNode = (node, blocks) => (
   {
     id: node.id,
     displayName: node.display_name,
+    displayUrl: node.student_view_url,
     type: node.type,
     descendants: node.descendants &&
       node.descendants
@@ -35,7 +36,7 @@ const buildOutlineTree = (blockData) => {
 const fetchCourseOutline = courseId => (
   (dispatch) => {
     dispatch(startedFetchingOutline());
-    const outlineUrl = `http://localhost:18000/api/courses/v1/blocks/?course_id=${encodeURIComponent(courseId)}&username=staff&depth=all&nav_depth=3&block_types_filter=course,chapter,sequential`;
+    const outlineUrl = `http://localhost:18000/api/courses/v1/blocks/?course_id=${encodeURIComponent(courseId)}&username=staff&depth=all&nav_depth=3&block_types_filter=course,chapter,sequential,vertical`;
     return fetch(outlineUrl, {
       credentials: 'include',
       headers: {

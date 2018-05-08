@@ -13,8 +13,15 @@ class CoursewareNav extends React.Component {
       );
     }
     let content = node.displayName;
-    if (node.type === 'sequential' && this.props.match) {
-      content = (<Link to={`${this.props.match.url}/${node.id}`}>{node.displayName}</Link>);
+    if (node.type === 'vertical' && this.props.match) {
+      content = (
+        <Link to={{
+          pathname: `${this.props.match.url}/${node.id}`,
+          state: { node },
+          }}
+        >
+          {node.displayName}
+        </Link>);
     }
 
     return (
@@ -30,7 +37,10 @@ class CoursewareNav extends React.Component {
       <nav id="navigation">
         <h1>{this.props.courseOutline.displayName}</h1>
         <ul>
-          {this.renderTreeNode(this.props.courseOutline)}
+          { this.props.courseOutline.descendants &&
+            this.props.courseOutline.descendants.map((node) => {
+              return this.renderTreeNode(node);
+            })}
         </ul>
       </nav>
     );
