@@ -135,7 +135,7 @@ class Search extends React.Component {
         <InputText
           name="search"
           label={
-            <Icon className={['fa', 'fa-search']} />
+            <Icon className={['fa', 'fa-search']} screenReaderText="text" />
           }
           type="search"
           placeholder="Search"
