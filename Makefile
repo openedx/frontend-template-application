@@ -29,4 +29,4 @@ restart-detached:
 	make up-detached
 
 validate-no-uncommitted-package-lock-changes:
-	git diff --name-only --exit-code package-lock.json
+	git diff --exit-code package-lock.json
