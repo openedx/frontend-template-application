@@ -20,7 +20,7 @@
     "@edx/paragon": "^3.1.1",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
-    "email-prop-type": "^1.1.5",
+    "email-prop-type": "^3.0.0",
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
     "prop-types": "^15.5.10",
