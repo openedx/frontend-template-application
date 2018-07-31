@@ -83,7 +83,7 @@ module.exports = Merge.smart(commonConfig, {
   plugins: [
     // Writes the extracted CSS from each entry to a file in the output directory.
     new ExtractTextPlugin({
-      filename: '[name].min.css',
+      filename: '[name].[chunkhash].css',
       allChunks: true,
     }),
     // Generates an HTML file in the output directory.
