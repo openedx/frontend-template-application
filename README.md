@@ -100,3 +100,7 @@ For more information, see [the `npm` documentation](https://docs.npmjs.com/files
 [`Greenkeeper`](https://greenkeeper.io/) is basically a `GitHub` application that handles `npm` dependencies. It will automatically open PRs with `package.json` updates when new versions of your `npm` dependencies get published. There are ways to also automatically keep the `package-lock.json` in-line, in the same PR, using [`greenkeeper-lockfile`].
 
 For more information, see [the `Greenkeeper` documentation](https://greenkeeper.io/docs.html#what-greenkeeper-does).
+
+## Authentication with backend API services
+
+See the [`@edx/frontend-auth`](https://github.com/edx/frontend-auth) repo for information about securing routes in your application that require user authentication.
