@@ -17,6 +17,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@edx/edx-bootstrap": "^0.4.3",
+    "@edx/frontend-auth": "^1.0.3",
     "@edx/paragon": "^3.1.1",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
@@ -51,7 +52,7 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "es-check": "^2.0.2",
     "eslint-config-edx": "^4.0.3",
-    "extract-text-webpack-plugin": "next",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fetch-mock": "^6.3.0",
     "file-loader": "^1.1.9",
     "gh-pages": "^1.1.0",
