@@ -18,7 +18,7 @@
   "dependencies": {
     "@edx/edx-bootstrap": "^0.4.3",
     "@edx/frontend-auth": "^1.0.3",
-    "@edx/paragon": "^3.7.1",
+    "@edx/paragon": "3.7.2",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
     "email-prop-type": "^1.1.5",
