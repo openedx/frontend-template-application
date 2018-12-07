@@ -47,7 +47,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "codecov": "^3.0.0",
-    "css-loader": "^0.28.9",
+    "css-loader": "^2.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "es-check": "^2.0.2",
