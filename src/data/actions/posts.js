@@ -1,4 +1,4 @@
-import 'whatwg-fetch';
+import axios from 'axios';
 
 import {
   STARTED_FETCHING_POSTS,
@@ -28,11 +28,10 @@ const getPosts = posts => (
 const fetchPosts = () => (
   (dispatch) => {
     dispatch(startedFetchingPosts());
-    return fetch('https://jsonplaceholder.typicode.com/posts')
+    return axios.get('https://jsonplaceholder.typicode.com/posts')
       // TODO: handle response error
-      .then(response => response.json())
-      .then((data) => {
-        dispatch(getPosts(data));
+      .then((result) => {
+        dispatch(getPosts(result.data));
         dispatch(finishedFetchingPosts());
       });
   }

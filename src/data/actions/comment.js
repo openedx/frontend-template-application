@@ -1,4 +1,5 @@
-import 'whatwg-fetch';
+import axios from 'axios';
+
 import {
   STARTED_FETCHING_COMMENT,
   FINISHED_FETCHING_COMMENT,
@@ -13,16 +14,9 @@ const getComment = comment => ({ type: GET_COMMENT, comment });
 const fetchComment = commentId => (
   (dispatch) => {
     dispatch(startedFetchingComment());
-    return fetch(`https://jsonplaceholder.typicode.com/comments/${commentId}`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-
-        throw new Error();
-      })
-      .then((data) => {
-        dispatch(getComment(data));
+    return axios.get(`https://jsonplaceholder.typicode.com/comments/${commentId}`)
+      .then((result) => {
+        dispatch(getComment(result.data));
         dispatch(finishedFetchingComment());
       })
       .catch(() => dispatch(errorFetchingComment()));
