@@ -19,6 +19,8 @@
     "@edx/edx-bootstrap": "^0.4.3",
     "@edx/frontend-auth": "^1.0.3",
     "@edx/paragon": "^3.7.1",
+    "axios": "^0.18.0",
+    "axios-mock-adapter": "^1.15.0",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
     "clean-webpack-plugin": "^1.0.0",
@@ -35,8 +37,7 @@
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0",
-    "whatwg-fetch": "^2.0.3"
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -53,7 +54,6 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "es-check": "^2.0.2",
     "eslint-config-edx": "^4.0.3",
-    "fetch-mock": "^6.3.0",
     "file-loader": "^1.1.9",
     "gh-pages": "^1.1.0",
     "html-webpack-harddisk-plugin": "^0.2.0",

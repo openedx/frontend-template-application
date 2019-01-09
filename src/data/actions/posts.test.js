@@ -1,6 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import fetchMock from 'fetch-mock';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 
 import {
   startedFetchingPosts,
@@ -15,11 +16,11 @@ import {
 } from '../constants/actionTypes/posts';
 
 const mockStore = configureMockStore([thunk]);
+const axiosMock = new MockAdapter(axios);
 
 describe('actions', () => {
   afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
+    axiosMock.reset();
   });
 
   it('sends started fetching post action', () => {
@@ -46,15 +47,14 @@ describe('actions', () => {
         body: 'body',
       },
     ];
-    fetchMock.getOnce('https://jsonplaceholder.typicode.com/posts', {
-      body: JSON.stringify({ posts }),
-      headers: { 'content-type': 'application/json' },
-    });
+    axiosMock.onGet()
+      .reply(200, JSON.stringify(posts));
+
     const store = mockStore({ posts: [] });
 
     const expectedActions = [
       { type: STARTED_FETCHING_POSTS },
-      { type: GET_POSTS, posts: { posts } },
+      { type: GET_POSTS, posts },
       { type: FINISHED_FETCHING_POSTS },
     ];
 
