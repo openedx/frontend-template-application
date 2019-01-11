@@ -97,7 +97,7 @@ For more information, see [the `npm` documentation](https://docs.npmjs.com/files
 
 ### [`Greenkeeper`](https://greenkeeper.io/)
 
-[`Greenkeeper`](https://greenkeeper.io/) is basically a `GitHub` application that handles `npm` dependencies. It will automatically open PRs with `package.json` updates when new versions of your `npm` dependencies get published. There are ways to also automatically keep the `package-lock.json` in-line, in the same PR, using [`greenkeeper-lockfile`].
+[`Greenkeeper`](https://greenkeeper.io/) is basically a `GitHub` application that handles `npm` dependencies. It will automatically open PRs with `package.json` and `package-lock.json` updates when new versions of your `npm` dependencies get published.
 
 For more information, see [the `Greenkeeper` documentation](https://greenkeeper.io/docs.html#what-greenkeeper-does).
 
