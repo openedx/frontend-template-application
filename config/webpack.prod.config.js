@@ -47,6 +47,7 @@ module.exports = Merge.smart(commonConfig, {
               minimize: true,
             },
           },
+          'postcss-loader', // for autoprefixing, needs to be before the sass loader, not sure why
           {
             loader: 'sass-loader', // compiles Sass to CSS
             options: {
