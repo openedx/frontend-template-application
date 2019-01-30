@@ -1,18 +1,22 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { Route, Switch } from 'react-router';
+import { Link } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 
 import PostsPage from './containers/PostsPage';
 import CommentSearchPage from './containers/CommentSearchPage';
 import DisclosurePage from './containers/DisclosurePage';
+import history from './data/history';
 import store from './data/store';
+
 import './App.scss';
 
 const App = () => (
   <Provider store={store}>
-    <Router>
+    <ConnectedRouter history={history}>
       <div>
         <header>
           <nav>
@@ -33,7 +37,7 @@ const App = () => (
           </Switch>
         </main>
       </div>
-    </Router>
+    </ConnectedRouter>
   </Provider>
 );
 
