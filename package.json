@@ -12,7 +12,8 @@
     "prepublishOnly": "npm run build",
     "start": "NODE_ENV=development BABEL_ENV=development node_modules/.bin/webpack-dev-server --config=config/webpack.dev.config.js --progress",
     "debug-test": "node --inspect-brk node_modules/.bin/jest --runInBand --coverage",
-    "test": "jest --coverage --passWithNoTests"
+    "test": "jest --coverage --passWithNoTests",
+    "snapshot": "jest --updateSnapshot"
   },
   "license": "AGPL-3.0",
   "dependencies": {
