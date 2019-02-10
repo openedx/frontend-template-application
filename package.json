@@ -24,7 +24,7 @@
     "axios-mock-adapter": "^1.15.0",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
-    "connected-react-router": "^5.0.1",
+    "connected-react-router": "^6.3.0",
     "clean-webpack-plugin": "^1.0.0",
     "email-prop-type": "^1.1.5",
     "font-awesome": "^4.7.0",
