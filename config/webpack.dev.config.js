@@ -100,7 +100,7 @@ module.exports = Merge.smart(commonConfig, {
       BASE_URL: 'localhost:1991',
       LMS_BASE_URL: 'http://localhost:18000',
       LOGIN_URL: 'http://localhost:18000/login',
-      LOGOUT_URL: 'http://localhost:18000/logout',
+      LOGOUT_URL: 'http://localhost:18000/login',
       CSRF_TOKEN_API_PATH: '/csrf/api/v1/token',
       REFRESH_ACCESS_TOKEN_ENDPOINT: 'http://localhost:18000/login',
       ACCESS_TOKEN_COOKIE_NAME: 'edx-jwt-cookie-header-payload',

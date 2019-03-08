@@ -1,13 +1,18 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Switch, Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
+import { PrivateRoute } from '@edx/frontend-auth';
 
+import DashboardPage from './containers/DashboardPage';
+import Header from './components/Header';
+import HelloWorld from './components/HelloWorld';
+
+import apiClient from './data/apiClient';
 import history from './data/history';
 import store from './data/store';
-import apiClient from './data/apiClient';
 
 import './App.scss';
 
@@ -15,18 +20,18 @@ const App = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <React.Fragment>
-        <header>
-          <nav>
-            <ul className="nav">
-              <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
-            </ul>
-          </nav>
-        </header>
+        <Header />
         <main className="container mb-4">
           <div className="row">
             <div className="col">
               <Switch>
-                <Route exact path="/" component={() => <p>Hello World!</p>} />
+                <Route exact path="/" component={HelloWorld} />
+                <PrivateRoute
+                  path="/dashboard/:courseStatus?"
+                  component={DashboardPage}
+                  authenticatedAPIClient={apiClient}
+                  redirect={process.env.BASE_URL}
+                />
               </Switch>
             </div>
           </div>

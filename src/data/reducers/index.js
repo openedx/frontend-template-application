@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
+import { userAccount } from '@edx/frontend-auth';
+import courses from './courses';
+
 const identityReducer = (state) => {
   const newState = { ...state };
   return newState;
@@ -8,7 +11,7 @@ const identityReducer = (state) => {
 
 export default history => combineReducers({
   router: connectRouter(history),
-  // The authentication state is added as initialState when
-  // creating the store in data/store.js.
   authentication: identityReducer,
+  userAccount,
+  courses,
 });

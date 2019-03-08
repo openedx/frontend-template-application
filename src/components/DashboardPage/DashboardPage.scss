@@ -1,0 +1,19 @@
+.row.equal-col-height {
+    display: flex;
+    flex-wrap: wrap;
+
+    > [class*="col-"] {
+        display: flex;
+
+        > div {
+            position: relative;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+    }
+
+    .card {
+        flex: 1;
+    }
+}

@@ -18,7 +18,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@edx/edx-bootstrap": "git://github.com/edx/edx-bootstrap.git#update-with-documentation-site",
-    "@edx/frontend-auth": "^1.3.2",
+    "@edx/frontend-auth": "^3.0.1",
     "@edx/paragon": "^3.7.1",
     "axios": "^0.18.0",
     "axios-mock-adapter": "^1.15.0",
@@ -29,7 +29,9 @@
     "email-prop-type": "^1.1.5",
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
+    "moment": "^2.24.0",
     "prop-types": "^15.5.10",
+    "query-string": "^6.3.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
