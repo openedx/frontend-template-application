@@ -7,7 +7,6 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import history from './data/history';
 import store from './data/store';
-import apiClient from './data/apiClient';
 
 import './App.scss';
 
@@ -36,6 +35,4 @@ const App = () => (
   </Provider>
 );
 
-if (apiClient.ensurePublicOrAuthencationAndCookies(window.location.pathname)) {
-  ReactDOM.render(<App />, document.getElementById('root'));
-}
+ReactDOM.render(<App />, document.getElementById('root'));
