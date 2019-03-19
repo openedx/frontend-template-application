@@ -5,6 +5,8 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 
+import DashboardPage from './components/DashboardPage';
+
 import history from './data/history';
 import store from './data/store';
 
@@ -18,6 +20,7 @@ const App = () => (
           <nav>
             <ul className="nav">
               <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/dashboard">My Courses</Link></li>
             </ul>
           </nav>
         </header>
@@ -25,7 +28,8 @@ const App = () => (
           <div className="row">
             <div className="col">
               <Switch>
-                <Route exact path="/" component={() => <p>Hello World!</p>} />
+                <Route exact path="/" render={() => <p>Hello World!</p>} />
+                <Route path="/dashboard" render={() => <DashboardPage />} />
               </Switch>
             </div>
           </div>
