@@ -25,10 +25,10 @@ const App = () => (
           <div className="row">
             <div className="col">
               <Switch>
-                <Route exact path="/" component={HelloWorld} />
+                <Route exact path="/" render={() => <HelloWorld />} />
                 <PrivateRoute
                   path="/dashboard/:courseStatus?"
-                  component={DashboardPage}
+                  render={() => <DashboardPage />}
                   authenticatedAPIClient={apiClient}
                   redirect={process.env.BASE_URL}
                 />
