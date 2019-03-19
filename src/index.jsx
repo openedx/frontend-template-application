@@ -28,7 +28,7 @@ const App = () => (
                 <Route exact path="/" render={() => <HelloWorld />} />
                 <PrivateRoute
                   path="/dashboard/:courseStatus?"
-                  render={() => <DashboardPage />}
+                  render={routeProps => <DashboardPage {...routeProps} />}
                   authenticatedAPIClient={apiClient}
                   redirect={process.env.BASE_URL}
                 />
