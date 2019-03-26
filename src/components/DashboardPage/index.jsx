@@ -58,7 +58,19 @@ class DashboardPage extends React.Component {
   }
 
   renderLoadingMessage() {
-    return <p>Loading...</p>;
+    return (
+      <StatusAlert
+        alertType="info"
+        dialog={
+          <React.Fragment>
+            <Icon className={['fa', 'fa-spinner', 'fa-spin', 'mr-2']} />
+            Loading...
+          </React.Fragment>
+        }
+        dismissible={false}
+        open
+      />
+    );
   }
 
   render() {
