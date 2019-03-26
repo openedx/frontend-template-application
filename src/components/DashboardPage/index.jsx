@@ -43,24 +43,12 @@ class DashboardPage extends React.Component {
   }
 
   renderNoEnrolledCourses() {
-    const {
-      match: {
-        params: { courseStatus },
-      },
-    } = this.props;
-    let message = 'You are not currently enrolled in any';
-    if (courseStatus === 'starting') {
-      message += ' upcoming courses.';
-    } else {
-      message += ` ${courseStatus} courses.`;
-    }
-
     return (
       <StatusAlert
         dialog={
           <React.Fragment>
             <Icon className={['fa', 'fa-exclamation-circle', 'mr-2']} />
-            {message}
+            There are no courses to show.
           </React.Fragment>
         }
         dismissible={false}
