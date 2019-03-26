@@ -6,11 +6,13 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 
 import DashboardPage from './components/DashboardPage';
+import HelloWorld from './components/HelloWorld';
 
 import history from './data/history';
 import store from './data/store';
 
 import './App.scss';
+
 
 const App = () => (
   <Provider store={store}>
@@ -28,7 +30,7 @@ const App = () => (
           <div className="row">
             <div className="col">
               <Switch>
-                <Route exact path="/" render={() => <p>Hello World!</p>} />
+                {/* <Route exact path="/" render={() => <HelloWorld />} /> */}
                 <Route path="/dashboard" render={() => <DashboardPage />} />
               </Switch>
             </div>
