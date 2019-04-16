@@ -199,7 +199,7 @@ Load up your translation files
      // ...
      <IntlProvider locale={getLocale()} messages={getMessages()}>
 
-As of this writing, ``i18n-loader.js`` reads the locale from the browser settings, so you can verify everything is working by changing your browser language to one of the languages you have translations for.
+As of this writing, ``i18n-loader.js`` reads the locale from the user language preference cookie and if none is found, the browser settings. You can verify everything is working by changing your language preference in your account settings or if you are not logged in, changing your browser language to one of the languages you have translations for.
 
 ********************
 For more information
