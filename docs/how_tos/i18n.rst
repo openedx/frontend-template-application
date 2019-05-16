@@ -77,19 +77,7 @@ These steps will allow your application to accept translation strings. See `fron
 Set up Transifex
 ****************
 
-#. Log in as a user that can create new resources under the `edx-platform project <https://www.transifex.com/open-edx/edx-platform/>`_. Create a new resource with the same name as your repo. Languages are determined at the project level, so you will automatically get all 70+ languages even though you will probably only be actually using a few of them.
-
-   To create the resource, you may need to drag and drop your generated ``transifex_input.json`` file (see `Set up the pipeline tools`_) into the edx-platform project in Transifex.
-
-   * Ensure a resource named ``transifex_input.json`` doesn't already exist.
-
-   * Create the resource through drag and drop.  Choose "Key Value JSON" for the format.
-
-   * Find the new ``transifex_input.json`` resource, open it, and click the 3-vertical-dot button to get to Settings.
-
-   * Update both the Slug and Name to match your git repository name.
-
-#. In your repo, create and commit a file named ``.tx/config``::
+In your repo, create and commit a file named ``.tx/config``::
 
     [main]
     host = https://www.transifex.com
