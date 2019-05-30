@@ -7,7 +7,7 @@ services:
       args:
         - NODE_ENV=development
     container_name: edx.fecc
-    image: edxops/front-end-cookie-cutter:latest
+    image: edxops/frontend-cookie-cutter:latest
     volumes:
       - .:/edx/app:delegated
       - notused:/edx/app/node_modules
