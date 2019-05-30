@@ -1,10 +1,10 @@
 |Greenkeeper badge|
 
-.. |Greenkeeper badge| image:: https://badges.greenkeeper.io/edx/front-end-cookie-cutter-application.svg
+.. |Greenkeeper badge| image:: https://badges.greenkeeper.io/edx/frontend-cookie-cutter-application.svg
    :target: https://greenkeeper.io/
 
 
-🍪 front-end-cookie-cutter 🍪
+🍪 frontend-cookie-cutter 🍪
 =============================
 
 Please tag **@edx/fedx-team** on any PRs or issues.
@@ -12,7 +12,7 @@ Please tag **@edx/fedx-team** on any PRs or issues.
 Introduction
 ------------
 
-The purpose of this repository is to illustrate general front-end best
+The purpose of this repository is to illustrate general frontend best
 practices for ```React`` <https://reactjs.org/>`__ and
 ```Redux`` <https://redux.js.org>`__ applications using a handful of
 (overly) simplified examples.
@@ -23,8 +23,8 @@ Getting Started
 ---------------
 
 After cloning the repository, run ``make up-detached`` in the
-``front-end-cookie-cutter`` directory - this will build and start the
-``front-end-cookie-cutter`` web application in a docker container.
+``frontend-cookie-cutter`` directory - this will build and start the
+``frontend-cookie-cutter`` web application in a docker container.
 
 Hopefully, the output looks something like
 
@@ -43,7 +43,7 @@ authentication with the openedx platform so when you go to
    hello-world
 
 If you don’t, you can see the log messages for the docker container by
-executing ``make logs`` in the ``front-end-cookie-cutter`` directory.
+executing ``make logs`` in the ``frontend-cookie-cutter`` directory.
 This should output something like
 
 .. figure:: https://imgur.com/JDUEkZ3.png
@@ -81,7 +81,7 @@ Directory Structure
 -  ``public``
 
    -  Entry point for the single-page application -
-      ``front-end-cookie-cutter`` has a single ``index.html`` file
+      ``frontend-cookie-cutter`` has a single ``index.html`` file
 
 -  ``src``
 
