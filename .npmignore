@@ -7,7 +7,7 @@ Dockerfile
 Makefile
 npm-debug.log
 
-config
+webpack
 coverage
 node_modules
 public

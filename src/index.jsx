@@ -1,64 +1,40 @@
 import 'babel-polyfill';
+
+import { App, AppProvider, APP_ERROR, APP_READY, ErrorPage, APP_AUTHENTICATED } from '@edx/frontend-base';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Switch, Link } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
-import { PrivateRoute } from '@edx/frontend-auth';
 
-import PostsPage from './containers/PostsPage';
-import CommentSearchPage from './containers/CommentSearchPage';
-import DisclosurePage from './containers/DisclosurePage';
-import history from './data/history';
-import store from './data/store';
+import Header, { messages as headerMessages } from '@edx/frontend-component-header';
+import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
 
-import './App.scss';
+import appMessages from './i18n';
+import configureStore from './store';
+import ExamplePage from './example/ExamplePage';
 
-import apiClient from './data/apiClient';
+import './index.scss';
+import './assets/favicon.ico';
 
-const App = () => (
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <div>
-        <header>
-          <nav>
-            <ul className="nav">
-              <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/posts">Posts</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/comment-search">Comment Search</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/public/disclosure">Disclosure</Link></li>
-            </ul>
-          </nav>
-        </header>
-        <main>
-          <Switch>
-            <Route path="/public/disclosure" component={DisclosurePage} />
-            <Route path="/public/hello" component={() => <span>Hello World, open route</span>} />
-            <PrivateRoute
-              path="/posts"
-              component={PostsPage}
-              authenticatedAPIClient={apiClient}
-              redirect={`${process.env.BASE_URL}`}
-            />
-            <PrivateRoute
-              path="/comment-search"
-              component={CommentSearchPage}
-              authenticatedAPIClient={apiClient}
-              redirect={`${process.env.BASE_URL}`}
-            />
-            <PrivateRoute
-              path="/"
-              component={() => <span>Hello World, Private route</span>}
-              authenticatedAPIClient={apiClient}
-              redirect={`${process.env.BASE_URL}`}
-            />
-          </Switch>
-        </main>
-      </div>
-    </ConnectedRouter>
-  </Provider>
-);
+App.subscribe(APP_READY, () => {
+  ReactDOM.render(
+    <AppProvider store={configureStore()}>
+      <Header />
+      <main>
+        <ExamplePage />
+      </main>
+      <Footer />
+    </AppProvider>,
+    document.getElementById('root'),
+  );
+});
 
-if (apiClient.ensurePublicOrAuthencationAndCookies(window.location.pathname)) {
-  ReactDOM.render(<App />, document.getElementById('root'));
-}
+App.subscribe(APP_ERROR, (error) => {
+  ReactDOM.render(<ErrorPage message={error.message} />, document.getElementById('root'));
+});
+
+App.initialize({
+  messages: [
+    appMessages,
+    headerMessages,
+    footerMessages,
+  ],
+});
