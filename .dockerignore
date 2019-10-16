@@ -1,6 +1,6 @@
 node_modules
 npm-debug.log
-README.md
+README.rst
 LICENSE
 .babelrc
 .eslintignore
