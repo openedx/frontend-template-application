@@ -3,7 +3,7 @@
 frontend-template-application
 =================================
 
-Please tag **@edx/arch-team** on any PRs or issues.  Thanks.
+Please tag **@edx/fedx-team** on any PRs or issues.  Thanks.
 
 Introduction
 ------------
