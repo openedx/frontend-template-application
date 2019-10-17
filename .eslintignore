@@ -1,4 +1,4 @@
 coverage/*
 dist/
 node_modules/
-src/postcss.config.js
+jest.config.js

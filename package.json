@@ -1,102 +1,71 @@
 {
-  "name": "edx-cookie-cutter",
+  "name": "@edx/frontend-template-application",
   "version": "0.1.0",
-  "description": "Starter app from the ground up",
-  "repository": "https://github.com/jaebradley/edx-cookie-cutter",
-  "scripts": {
-    "build": "NODE_ENV=production BABEL_ENV=production webpack --config=config/webpack.prod.config.js",
-    "deploy:gh-pages": "npm run build && gh-pages -d dist",
-    "is-es5": "es-check es5 ./dist/*.js",
-    "lint": "eslint --ext .js --ext .jsx .",
-    "precommit": "npm run lint",
-    "prepublishOnly": "npm run build",
-    "start": "NODE_ENV=development BABEL_ENV=development node_modules/.bin/webpack-dev-server --config=config/webpack.dev.config.js --progress",
-    "debug-test": "node --inspect-brk node_modules/.bin/jest --runInBand --coverage",
-    "test": "jest --coverage --passWithNoTests",
-    "snapshot": "jest --updateSnapshot"
+  "description": "Frontend application template",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edx/frontend-template-application.git"
   },
+  "browserslist": [
+    "last 2 versions",
+    "ie 11"
+  ],
+  "scripts": {
+    "build": "fedx-scripts webpack",
+    "i18n_extract": "BABEL_ENV=i18n fedx-scripts babel src --quiet > /dev/null",
+    "is-es5": "es-check es5 ./dist/*.js",
+    "lint": "fedx-scripts eslint",
+    "snapshot": "fedx-scripts jest --updateSnapshot",
+    "start": "fedx-scripts webpack-dev-server --progress",
+    "test": "fedx-scripts jest --coverage --passWithNoTests"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "author": "edX",
   "license": "AGPL-3.0",
+  "homepage": "https://github.com/edx/frontend-template-application#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/edx/frontend-template-application/issues"
+  },
   "dependencies": {
-    "@edx/edx-bootstrap": "^0.4.3",
-    "@edx/frontend-auth": "^1.3.2",
-    "@edx/paragon": "^3.7.1",
-    "axios": "^0.18.0",
-    "axios-mock-adapter": "^1.15.0",
+    "@edx/frontend-analytics": "^3.0.0",
+    "@edx/frontend-auth": "^7.0.1",
+    "@edx/frontend-base": "^4.1.0",
+    "@edx/frontend-component-footer": "^9.0.1",
+    "@edx/frontend-component-header": "^1.1.4",
+    "@edx/frontend-i18n": "^3.0.3",
+    "@edx/frontend-logging": "^3.0.1",
+    "@edx/paragon": "^7.1.5",
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-brands-svg-icons": "^5.11.2",
+    "@fortawesome/free-regular-svg-icons": "^5.11.2",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/react-fontawesome": "^0.1.6",
     "babel-polyfill": "^6.26.0",
-    "classnames": "^2.2.5",
-    "clean-webpack-plugin": "^1.0.0",
-    "connected-react-router": "^5.0.1",
-    "email-prop-type": "^1.1.5",
-    "font-awesome": "^4.7.0",
-    "history": "^4.7.2",
-    "prop-types": "^15.5.10",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^5.0.7",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.2.2",
-    "react-router-redux": "^5.0.0-alpha.9",
-    "redux": "^3.7.2",
-    "redux-devtools-extension": "^2.13.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-redux": "^7.1.1",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.0.4",
+    "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "autoprefixer": "^9.4.5",
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.2",
-    "babel-jest": "^22.4.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "codecov": "^3.1.0",
-    "css-loader": "^0.28.9",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
-    "es-check": "^2.0.2",
-    "eslint-config-edx": "^4.0.3",
-    "file-loader": "^1.1.9",
-    "gh-pages": "^1.1.0",
-    "html-webpack-harddisk-plugin": "^0.2.0",
-    "html-webpack-plugin": "^3.0.3",
-    "husky": "^0.14.3",
-    "identity-obj-proxy": "^3.0.0",
-    "image-webpack-loader": "^4.6.0",
-    "jest": "^22.4.0",
-    "mini-css-extract-plugin": "^0.4.0",
-    "node-sass": "^4.11.0",
-    "postcss-loader": "^3.0.0",
-    "react-dev-utils": "^5.0.0",
-    "react-test-renderer": "^16.2.0",
-    "redux-mock-store": "^1.5.1",
-    "sass-loader": "^6.0.6",
-    "style-loader": "^0.20.2",
-    "webpack": "^4.28.3",
-    "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.1.1"
-  },
-  "jest": {
-    "setupFiles": [
-      "./src/setupTest.js"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|scss)$": "identity-obj-proxy"
-    },
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(@edx/paragon)/).*/"
-    ],
-    "globals": {
-      "courseContext": {}
-    }
+    "@edx/frontend-build": "^1.2.1",
+    "codecov": "^3.6.1",
+    "es-check": "^5.0.0",
+    "glob": "^7.1.4",
+    "husky": "^3.0.9",
+    "jest": "^24.9.0",
+    "reactifex": "^1.1.1"
   }
 }

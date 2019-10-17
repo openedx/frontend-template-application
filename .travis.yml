@@ -1,39 +1,15 @@
 language: node_js
-node_js:
-  - "lts/*"
-cache:
-  directories:
-    - "~/.npm"
-notifications:
-  email:
-    recipients:
-      - jbradley@edx.org
-    on_success: never
-    on_failure: always
-  hipchat:
-    rooms:
-      secure: g5fu70/Dv5qaE7UztS2FWEwhTpEOwDo9CMA/J6jcdKrpT/vRqAkAD5x3WHrHdN2BMOJh2VeFO7xAeAuTwf072kc6Q+ND8Zi495Wc1FItKApzYiipYPBouYdgRbP0oqplII1TaGAbs7YB/7xPApkhNwG+KV2p+ih8aaRUPRqmEYgTkiXWGsrgs4E0L070TPR75Fc9GsxaTnCcZ4tCSdvlOmlMJaF9jNiF6+6zkANWsrHW70zU+7YA8muT7NLFKB1l0tcJOpxr3svWFl4SFdoiqVm2SPO6VjJE6HaxPt82lin0Hvovm5ABxc5Y953SC/9c8TteT5XNAO9PrcO7AKIivjkR2XYGkTIk0DUTex5rVPXvN4AxjA3kXGmg947fAI8MmlTXD/BgkryVfOyuh2jO7RKvnjtosVshmGjsDO8VC1cZCQQLMYrMBQHcfiBcHU0hYKCtSgH5NsIA8S4WQk0w50uR9QiZgAHEuQME1tiFQt8DozQX5nH5Im+jZgrbt/2Nzy2l7eG1QExx+X8bHhRezZuRbQOgFCnbCnr5iUtE9sQJVhdsyyo8cTS36HsYOL8868HKgWdY8UPtwoe3ZfKUo8hlORAr2B3XUv9vBz0W9GwvrNcYrJrpt+xVIqKwCdx/dxDscCAgrN7JGlw2rQQU+bqOpTp4v8Ut+fDUCZZWEUM=
-  webhooks: https://www.travisbuddy.com/
-  on_success: never
+node_js: 12
 before_install:
-  - npm install -g npm@latest
+- npm install -g npm@6
 install:
-  - npm ci
+- npm ci
 script:
-  - make validate-no-uncommitted-package-lock-changes
-  - npm run lint
-  - npm run test
-  - npm run build
-  - npm run is-es5
+- make validate-no-uncommitted-package-lock-changes
+- npm run i18n_extract
+- npm run lint
+- npm run test
+- npm run build
+- npm run is-es5
 after_success:
-  - npm run build:gh-pages
-deploy:
-  local-dir: "./dist"
-  provider: pages
-  skip-cleanup: true
-  github-token: "$GITHUB_TOKEN"
-  keep-history: true
-  name: edx-semantic-release
-  email: edx-semantic-release@edx.org
-  on:
-    branch: master
+- codecov

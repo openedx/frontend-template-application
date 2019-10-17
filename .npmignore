@@ -7,7 +7,6 @@ Dockerfile
 Makefile
 npm-debug.log
 
-config
 coverage
 node_modules
 public

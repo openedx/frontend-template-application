@@ -1,6 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import 'babel-polyfill';
 
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { App } from '@edx/frontend-base';
+import { configure as configureI18n } from '@edx/frontend-i18n';
 
-Enzyme.configure({ adapter: new Adapter() });
+import messages from './i18n';
+
+configureI18n(App.config, messages);
