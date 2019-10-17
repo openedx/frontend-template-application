@@ -18,9 +18,7 @@ App.subscribe(APP_READY, () => {
   ReactDOM.render(
     <AppProvider store={configureStore()}>
       <Header />
-      <main>
-        <ExamplePage />
-      </main>
+      <ExamplePage />
       <Footer />
     </AppProvider>,
     document.getElementById('root'),
