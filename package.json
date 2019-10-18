@@ -60,7 +60,7 @@
     "redux-thunk": "2.3.0"
   },
   "devDependencies": {
-    "@edx/frontend-build": "1.2.1",
+    "@edx/frontend-build": "1.2.2",
     "codecov": "3.6.1",
     "es-check": "5.0.0",
     "glob": "7.1.4",
