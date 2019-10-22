@@ -8,7 +8,7 @@ import Header, { messages as headerMessages } from '@edx/frontend-component-head
 import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
 
 import appMessages from './i18n';
-import configureStore from './store';
+import configureStore from './data/configureStore';
 import ExamplePage from './example/ExamplePage';
 
 import './index.scss';
