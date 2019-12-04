@@ -2,4 +2,4 @@
 React App i18n HOWTO
 ####################
 
-This document has moved to the frontend-i18n repo: https://github.com/edx/frontend-i18n/blob/master/docs/how_tos/i18n.rst
+This document has moved to the frontend-platform repo: https://github.com/edx/frontend-platform/blob/master/docs/how_tos/i18n.rst
