@@ -63,7 +63,7 @@
     "@edx/frontend-build": "1.2.2",
     "codecov": "3.6.1",
     "es-check": "5.0.0",
-    "glob": "7.1.4",
+    "glob": "7.1.6",
     "husky": "3.0.9",
     "jest": "24.9.0",
     "reactifex": "1.1.1"
