@@ -1,6 +1,7 @@
 import 'babel-polyfill';
 
-import { App, AppProvider, APP_ERROR, APP_READY, ErrorPage, APP_AUTHENTICATED } from '@edx/frontend-base';
+import { APP_INIT_ERROR, APP_READY, subscribe, initialize } from '@edx/frontend-platform';
+import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -8,15 +9,14 @@ import Header, { messages as headerMessages } from '@edx/frontend-component-head
 import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
 
 import appMessages from './i18n';
-import configureStore from './data/configureStore';
 import ExamplePage from './example/ExamplePage';
 
 import './index.scss';
 import './assets/favicon.ico';
 
-App.subscribe(APP_READY, () => {
+subscribe(APP_READY, () => {
   ReactDOM.render(
-    <AppProvider store={configureStore()}>
+    <AppProvider>
       <Header />
       <ExamplePage />
       <Footer />
@@ -25,11 +25,11 @@ App.subscribe(APP_READY, () => {
   );
 });
 
-App.subscribe(APP_ERROR, (error) => {
+subscribe(APP_INIT_ERROR, (error) => {
   ReactDOM.render(<ErrorPage message={error.message} />, document.getElementById('root'));
 });
 
-App.initialize({
+initialize({
   messages: [
     appMessages,
     headerMessages,
