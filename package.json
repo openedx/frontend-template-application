@@ -53,7 +53,7 @@
     "redux": "4.0.4"
   },
   "devDependencies": {
-    "@edx/frontend-build": "2.0.4",
+    "@edx/frontend-build": "2.0.5",
     "codecov": "3.6.1",
     "es-check": "5.1.0",
     "glob": "7.1.6",
