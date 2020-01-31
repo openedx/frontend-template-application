@@ -21,7 +21,9 @@ You'll want to do a find-and-replace to replace all instances of ``frontend-temp
 
 **Installation and Startup**
 
-1. Clone this repo:
+In the following steps, replace "frontend-template-application' with the name of the repo you created when copying this template above.
+
+1. Clone your new repo:
 
   ``git clone https://github.com/edx/frontend-template-application.git``
 
