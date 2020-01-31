@@ -52,7 +52,7 @@ The production build is created with ``npm run build``.
 Internationalization
 --------------------
 
-Please see `edx/frontend-i18n <https://github.com/edx/frontend-i18n>`_ for documentation on internationalization.  The repository README.rst explains how to use it, and the `How To <https://github.com/edx/frontend-i18n/blob/master/docs/how_tos/i18n.rst>`_ has more detail.
+Please see `edx/frontend-platform's i18n module <https://edx.github.io/frontend-platform/module-Internationalization.html>`_ for documentation on internationalization.  The documentation explains how to use it, and the `How To <https://github.com/edx/frontend-i18n/blob/master/docs/how_tos/i18n.rst>`_ has more detail.
 
 .. |Build Status| image:: https://api.travis-ci.org/edx/frontend-template-application.svg?branch=master
    :target: https://travis-ci.org/edx/frontend-template-application
