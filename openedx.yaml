@@ -4,3 +4,9 @@
 nick: tmpa
 oeps: {}
 owner: edx/arch-team
+openedx-release:
+  # The openedx-release key is described in OEP-10:
+  #   https://open-edx-proposals.readthedocs.io/en/latest/oep-0010-proc-openedx-releases.html
+  # The FAQ might also be helpful: https://openedx.atlassian.net/wiki/spaces/COMM/pages/1331268879/Open+edX+Release+FAQ
+  maybe: true   # Delete this "maybe" line when you have decided about Open edX inclusion.
+  ref: master
