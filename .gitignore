@@ -4,6 +4,7 @@
 node_modules
 npm-debug.log
 coverage
+module.config.js
 
 dist/
 src/i18n/transifex_input.json
