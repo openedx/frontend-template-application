@@ -14,7 +14,6 @@ import appMessages from './i18n';
 import ExamplePage from './example/ExamplePage';
 
 import './index.scss';
-import './assets/favicon.ico';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
