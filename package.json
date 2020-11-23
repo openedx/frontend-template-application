@@ -43,7 +43,7 @@
     "@fortawesome/free-brands-svg-icons": "5.11.2",
     "@fortawesome/free-regular-svg-icons": "5.11.2",
     "@fortawesome/free-solid-svg-icons": "5.11.2",
-    "@fortawesome/react-fontawesome": "0.1.12",
+    "@fortawesome/react-fontawesome": "0.1.13",
     "babel-polyfill": "6.26.0",
     "prop-types": "15.7.2",
     "react": "16.12.0",
