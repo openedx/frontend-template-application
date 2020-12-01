@@ -1,0 +1,30 @@
+name: Default CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup Nodejs
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install dependencies
+      run: npm ci
+    - name: Validate package-lock.json changes
+      run: make validate-no-uncommitted-package-lock-changes
+    - name: Lint
+      run: npm run lint
+    - name: Test
+      run: npm run test
+    - name: Build
+      run: npm run build
+    - name: i18n_extract
+      run: npm run i18n_extract
+    - name: is-es5
+      run: npm run is-es5
+    - name: Coverage
+      uses: codecov/codecov-action@v1
