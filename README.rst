@@ -27,15 +27,23 @@ In the following steps, replace "frontend-template-application' with the name of
 
   ``git clone https://github.com/edx/frontend-template-application.git``
 
-2. Install npm dependencies:
+2. Use node v12.x.
+   
+   The micro-frontend build scripts support node 12.  Using other major versions of node *may* work, but is unsupported.  For convenience, this repository includes an .nvmrc file to help in setting the correct node version via `nvm <https://github.com/nvm-sh/nvm>`_.
+
+3. Install npm dependencies:
 
   ``cd frontend-template-application && npm install``
 
-3. Start the dev server:
+4. Update the application port to use for local development:
+
+   Default port is 8080. If this does not work for you, update the line `PORT=8080` to your port in all .env.* files
+
+5. Start the dev server:
 
   ``npm start``
 
-The dev server is running at `http://localhost:8080 <http://localhost:8080>`_.
+The dev server is running at `http://localhost:8080 <http://localhost:8080>`_ or whatever port you setup.
 
 Project Structure
 -----------------
