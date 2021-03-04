@@ -27,9 +27,9 @@ In the following steps, replace "frontend-template-application' with the name of
 
   ``git clone https://github.com/edx/frontend-template-application.git``
 
-2. Ensure to use correct node/npm versions:
-
-   Min required is 12.x. Best is to use ``nvm use`` at this step, since there is a .nvmrc file at root that indicates the node version. nvm will ask to install if you don't have that version.
+2. Use node v12.x.
+   
+   The micro-frontend build scripts support node 12.  Using other major versions of node _may_ work, but is unsupported.  For convenience, this repository includes an .nvmrc file to help in setting the correct node version via `nvm <https://github.com/nvm-sh/nvm>`_.
 
 3. Install npm dependencies:
 
