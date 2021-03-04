@@ -27,15 +27,23 @@ In the following steps, replace "frontend-template-application' with the name of
 
   ``git clone https://github.com/edx/frontend-template-application.git``
 
-2. Install npm dependencies:
+2. Ensure to use correct node/npm versions:
+
+   Min required is 12.x. Best is to use `nvm use` at this step, since there is a .nvmrc file at root that indicated node version. nvm will ask to install if you don't have that version.   
+
+3. Install npm dependencies:
 
   ``cd frontend-template-application && npm install``
 
-3. Start the dev server:
+4. Update the application port to use for local development:
+
+   Default port is 8080. If this does not work for you, update the line `PORT=8080` to your port in all .env.* files
+
+5. Start the dev server:
 
   ``npm start``
 
-The dev server is running at `http://localhost:8080 <http://localhost:8080>`_.
+The dev server is running at `http://localhost:8080 <http://localhost:8080>`_ or whatever port you setup.
 
 Project Structure
 -----------------
