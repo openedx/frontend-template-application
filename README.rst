@@ -29,7 +29,8 @@ In the following steps, replace "frontend-template-application' with the name of
 
 2. Ensure to use correct node/npm versions:
 
-   Min required is 12.x. Best is to use ``nvm use`` at this step, since there is a .nvmrc file at root that indicated node version. nvm will ask to install if you don't have that version.
+   Min required is 12.x. Any ``@version`` styled dependencies, such as that to ``@edx/brand``, will cause a npm install failure for lower node versions. 
+   Best is to use ``nvm use`` at this step, since there is a .nvmrc file at root that indicated node version. nvm will ask to install if you don't have that version.
 
 3. Install npm dependencies:
 
