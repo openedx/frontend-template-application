@@ -45,6 +45,12 @@ In the following steps, replace "frontend-template-application' with the name of
 
 The dev server is running at `http://localhost:8080 <http://localhost:8080>`_ or whatever port you setup.
 
+Making Your New Project's README File
+-------------------------------------
+
+Move the file ``README-template-frontend-app.rst`` to your project's ``README.rst`` file. Please fill out all
+the sections - this helps out all developers understand your MFE, how to install it, and how to use it.
+
 Project Structure
 -----------------
 
