@@ -16,12 +16,10 @@ Introduction
 *Add any additional detail/notes relevant to understanding the whats/whys of this*
 *MFE: could be links to publically available wikis/documents.*
 
-Devstack Installation
----------------------
+Installation
+------------
 
-Follow these steps to provision, run, and enable an instance of the [YOUR NAME HERE] MFE for local development via the
-`official Open edX devstack
-<https://edx.readthedocs.io/projects/edx-installing-configuring-and-running/en/latest/installation/index.html>`_.
+This MFE is bundled with `Devstack <https://github.com/edx/devstack>`_, see the `Getting Started <https://github.com/edx/devstack#getting-started>`_ section for setup instructions.
 
 1. Enumerated list of steps & code blocks, like this:
 
