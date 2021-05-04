@@ -13,7 +13,7 @@ This repository is a template for Open edX micro-frontend applications. It is fl
 After Copying The Template
 --------------------------
 
-You'll want to do a find-and-replace to replace all instances of ``frontend-template-application`` with the name of your new repository.
+You'll want to do a find-and-replace to replace all instances of ``frontend-template-application`` with the name of your new repository.  Also edit index.html to replace "Application Template" with a friendly name for this application that users will see in their browser tab.
 
 **Prerequisite**
 
@@ -28,7 +28,7 @@ In the following steps, replace "frontend-template-application' with the name of
   ``git clone https://github.com/edx/frontend-template-application.git``
 
 2. Use node v12.x.
-   
+
    The micro-frontend build scripts support node 12.  Using other major versions of node *may* work, but is unsupported.  For convenience, this repository includes an .nvmrc file to help in setting the correct node version via `nvm <https://github.com/nvm-sh/nvm>`_.
 
 3. Install npm dependencies:
