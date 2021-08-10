@@ -27,4 +27,4 @@ jobs:
     - name: is-es5
       run: npm run is-es5
     - name: Coverage
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
