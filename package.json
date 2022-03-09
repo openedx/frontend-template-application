@@ -56,7 +56,7 @@
     "regenerator-runtime": "0.13.9"
   },
   "devDependencies": {
-    "@edx/frontend-build": "8.2.0",
+    "@edx/frontend-build": "9.0.4",
     "codecov": "3.8.3",
     "es-check": "5.2.4",
     "glob": "7.2.0",
