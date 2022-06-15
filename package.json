@@ -57,7 +57,6 @@
   },
   "devDependencies": {
     "@edx/frontend-build": "9.2.2",
-    "codecov": "3.8.3",
     "es-check": "5.2.4",
     "glob": "7.2.3",
     "husky": "7.0.4",
