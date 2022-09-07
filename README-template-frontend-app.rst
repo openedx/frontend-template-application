@@ -19,7 +19,7 @@ Introduction
 Installation
 ------------
 
-This MFE is bundled with `Devstack <https://github.com/edx/devstack>`_, see the `Getting Started <https://github.com/edx/devstack#getting-started>`_ section for setup instructions.
+This MFE is bundled with `Devstack <https://github.com/openedx/devstack>`_, see the `Getting Started <https://github.com/openedx/devstack#getting-started>`_ section for setup instructions.
 
 1. Enumerated list of steps & code blocks, like this:
 
@@ -27,7 +27,7 @@ This MFE is bundled with `Devstack <https://github.com/edx/devstack>`_, see the 
 
       mkdir -p ~/workspace/
       cd ~/workspace/
-      git clone https://github.com/edx/devstack.git
+      git clone https://github.com/openedx/devstack.git
 
 2. Include as many screenshots as you can, to make your guide easier to follow! Include images with the following syntax:
 
@@ -68,7 +68,7 @@ The following is a list of current short-term development targets, in (rough) de
 
 References (for authors of the README; delete this section before publishing)
 
-* https://github.com/edx/frontend-app-library-authoring/blob/master/README.rst has many of the above discussed
+* https://github.com/openedx/frontend-app-library-authoring/blob/master/README.rst has many of the above discussed
   sections and implements them well
 
 * https://opencraft.com/blog/introducing-open-edx-publisher/#how-does-it-work is an example of explaining when
