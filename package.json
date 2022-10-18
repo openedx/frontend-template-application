@@ -4,7 +4,7 @@
   "description": "Frontend application template",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edx/frontend-template-application.git"
+    "url": "git+https://github.com/openedx/frontend-template-application.git"
   },
   "browserslist": [
     "last 2 versions",
@@ -27,29 +27,29 @@
   },
   "author": "edX",
   "license": "AGPL-3.0",
-  "homepage": "https://github.com/edx/frontend-template-application#readme",
+  "homepage": "https://github.com/openedx/frontend-template-application#readme",
   "publishConfig": {
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/edx/frontend-template-application/issues"
+    "url": "https://github.com/openedx/frontend-template-application/issues"
   },
   "dependencies": {
     "@edx/brand": "npm:@edx/brand-openedx@1.1.0",
-    "@edx/frontend-component-footer": "10.3.0",
-    "@edx/frontend-component-header": "2.6.1",
-    "@edx/frontend-platform": "1.15.6",
+    "@edx/frontend-component-footer": "11.1.1",
+    "@edx/frontend-component-header": "^3.1.1",
+    "@edx/frontend-platform": "2.6.2",
     "@edx/paragon": "19.25.3",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "0.2.0",
-    "core-js": "3.24.1",
+    "core-js": "3.25.5",
     "prop-types": "15.8.1",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "react-redux": "7.2.8",
+    "react-redux": "7.2.9",
     "react-router": "5.3.3",
     "react-router-dom": "5.3.3",
     "redux": "4.2.0",
