@@ -50,8 +50,8 @@
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-redux": "7.2.9",
-    "react-router": "5.3.3",
-    "react-router-dom": "5.3.3",
+    "react-router": "5.3.4",
+    "react-router-dom": "5.3.4",
     "redux": "4.2.0",
     "regenerator-runtime": "0.13.10"
   },
