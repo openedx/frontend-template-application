@@ -53,7 +53,7 @@
     "react-router": "5.3.4",
     "react-router-dom": "5.3.4",
     "redux": "4.2.0",
-    "regenerator-runtime": "0.13.10"
+    "regenerator-runtime": "0.13.11"
   },
   "devDependencies": {
     "@edx/frontend-build": "12.3.0",
