@@ -34,7 +34,5 @@ jobs:
       run: npm run build
     - name: i18n_extract
       run: npm run i18n_extract
-    - name: is-es5
-      run: npm run is-es5
     - name: Coverage
       uses: codecov/codecov-action@v3
