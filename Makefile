@@ -47,8 +47,3 @@ push_translations:
 # Pulls translations from Transifex.
 pull_translations:
 	tx pull -t -f --mode reviewed --languages=$(transifex_langs)
-
-# This target is used by Travis.
-validate-no-uncommitted-package-lock-changes:
-	# Checking for package-lock.json changes...
-	git diff --exit-code package-lock.json
