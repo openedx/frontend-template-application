@@ -24,8 +24,6 @@ jobs:
         node-version: ${{ matrix.node }}
     - name: Install dependencies
       run: npm ci
-    - name: Validate package-lock.json changes
-      run: make validate-no-uncommitted-package-lock-changes
     - name: Lint
       run: npm run lint
     - name: Test
@@ -34,7 +32,5 @@ jobs:
       run: npm run build
     - name: i18n_extract
       run: npm run i18n_extract
-    - name: is-es5
-      run: npm run is-es5
     - name: Coverage
       uses: codecov/codecov-action@v3
