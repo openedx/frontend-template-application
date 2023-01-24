@@ -47,7 +47,7 @@
     "prop-types": "15.8.1",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "react-redux": "7.2.9",
+    "react-redux": "8.0.5",
     "react-router": "5.3.4",
     "react-router-dom": "5.3.4",
     "redux": "4.2.0",
