@@ -1,10 +1,12 @@
-const ExamplePage = () => {
+import { Container } from '@edx/paragon';
+
+const ExamplePage = () => (
   <main>
-    <div className="container-fluid">
+    <Container className="py-5">
       <h1>Example Page</h1>
       <p>Hello world!</p>
-    </div>
-  </main>;
-};
+    </Container>
+  </main>
+);
 
 export default ExamplePage;
