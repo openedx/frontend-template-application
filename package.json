@@ -50,7 +50,7 @@
     "react-redux": "7.2.9",
     "react-router": "5.3.4",
     "react-router-dom": "5.3.4",
-    "redux": "4.2.0",
+    "redux": "4.2.1",
     "regenerator-runtime": "0.13.11"
   },
   "devDependencies": {
