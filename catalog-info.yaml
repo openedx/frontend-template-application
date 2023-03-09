@@ -1,0 +1,18 @@
+# This file records information about this repo. Its use is described in OEP-55:
+# https://open-edx-proposals.readthedocs.io/en/latest/processes/oep-0055-proc-project-maintainers.html
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "frontend-template-application"
+  description: "A template for Open edX micro-frontend applications."
+  links:
+    - url: "https://github.com/openedx/frontend-template-application/blob/master/README.rst"
+      title: "README"
+      icon: "Article"
+  annotations:
+    openedx.org/arch-interest-groups: ""
+spec:
+  owner: group:frontend-all
+  type: "library"
+  lifecycle: "experimental"
