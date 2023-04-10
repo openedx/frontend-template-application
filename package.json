@@ -35,7 +35,7 @@
   "dependencies": {
     "@edx/brand": "npm:@edx/brand-openedx@1.2.0",
     "@edx/frontend-component-footer": "11.6.3",
-    "@edx/frontend-component-header": "3.6.3",
+    "@edx/frontend-component-header": "3.6.5",
     "@edx/frontend-platform": "3.3.1",
     "@edx/paragon": "^20.20.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
@@ -55,10 +55,10 @@
   },
   "devDependencies": {
     "@edx/browserslist-config": "^1.1.1",
-    "@edx/frontend-build": "12.4.15",
+    "@edx/frontend-build": "12.7.0",
     "@edx/reactifex": "^2.1.1",
     "glob": "7.2.3",
     "husky": "7.0.4",
-    "jest": "29.4.3"
+    "jest": "29.5.0"
   }
 }
