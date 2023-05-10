@@ -72,5 +72,5 @@ Please see `edx/frontend-platform's i18n module <https://edx.github.io/frontend-
    :target: https://travis-ci.com/edx/frontend-template-application
 .. |Codecov| image:: https://codecov.io/gh/edx/frontend-template-application/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/edx/frontend-template-application
-.. |license| image:: https://img.shields.io/npm/l/@edx/frontend-template-application.svg
-   :target: @edx/frontend-template-application
+.. |license| image:: https://img.shields.io/github/license/openedx/frontend-template-application.svg
+   :target: https://github.com/openedx/frontend-template-application/blob/main/LICENSE
