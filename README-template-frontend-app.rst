@@ -256,4 +256,4 @@ file in this repo.
 Reporting Security Issues
 =========================
 
-Please do not report security issues in public.  Email security@axim.org instead.
+Please do not report security issues in public.  Email security@openedx.org instead.

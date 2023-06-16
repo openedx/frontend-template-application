@@ -179,7 +179,7 @@ file in this repo.
 Reporting Security Issues
 *************************
 
-Please do not report security issues in public, and email security@axim.org instead.
+Please do not report security issues in public, and email security@openedx.org instead.
 
 .. |license-badge| image:: https://img.shields.io/github/license/openedx/frontend-template-application.svg
     :target: https://github.com/openedx/frontend-template-application/blob/main/LICENSE
