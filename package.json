@@ -33,7 +33,7 @@
     "url": "https://github.com/openedx/frontend-template-application/issues"
   },
   "dependencies": {
-    "@edx/brand": "npm:@edx/brand-openedx@1.2.0",
+    "@edx/brand": "npm:@openedx/brand-openedx@^1.2.2",
     "@edx/frontend-component-footer": "12.4.0",
     "@edx/frontend-component-header": "4.7.1",
     "@edx/frontend-platform": "5.5.4",
