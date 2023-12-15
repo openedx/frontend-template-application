@@ -16,6 +16,7 @@
     "lint:fix": "fedx-scripts eslint --fix --ext .js --ext .jsx .",
     "snapshot": "fedx-scripts jest --updateSnapshot",
     "start": "fedx-scripts webpack-dev-server --progress",
+    "start:with-theme": "paragon install-theme && npm start && npm install",
     "test": "fedx-scripts jest --coverage --passWithNoTests"
   },
   "husky": {
