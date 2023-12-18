@@ -52,7 +52,7 @@
     "react-router": "6.17.0",
     "react-router-dom": "6.17.0",
     "redux": "4.2.1",
-    "regenerator-runtime": "0.14.0"
+    "regenerator-runtime": "0.14.1"
   },
   "devDependencies": {
     "@edx/browserslist-config": "^1.1.1",
