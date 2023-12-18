@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@edx/browserslist-config": "^1.1.1",
-    "@edx/frontend-build": "13.0.12",
+    "@edx/frontend-build": "13.0.14",
     "@edx/reactifex": "^2.1.1",
     "glob": "7.2.3",
     "husky": "7.0.4",
