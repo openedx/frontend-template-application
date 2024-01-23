@@ -1,4 +1,4 @@
-const { createConfig } = require('@edx/frontend-build');
+const { createConfig } = require('@openedx/frontend-build');
 
 module.exports = createConfig('jest', {
   // setupFilesAfterEnv is used after the jest environment has been loaded.  In general this is what you want.  
