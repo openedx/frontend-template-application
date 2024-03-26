@@ -30,4 +30,4 @@ jobs:
     - name: i18n_extract
       run: npm run i18n_extract
     - name: Coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
