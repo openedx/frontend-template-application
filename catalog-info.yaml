@@ -11,6 +11,7 @@ metadata:
       title: "README"
       icon: "Article"
   annotations:
+    openedx.org/release: "main"
     openedx.org/arch-interest-groups: ""
 spec:
   owner: group:committers-frontend
