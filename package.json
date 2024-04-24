@@ -16,6 +16,7 @@
     "lint:fix": "fedx-scripts eslint --fix --ext .js --ext .jsx .",
     "snapshot": "fedx-scripts jest --updateSnapshot",
     "start": "fedx-scripts webpack-dev-server --progress",
+    "start:with-theme": "paragon install-theme && npm start && npm install",
     "test": "fedx-scripts jest --coverage --passWithNoTests"
   },
   "husky": {
@@ -34,29 +35,29 @@
   },
   "dependencies": {
     "@edx/brand": "npm:@openedx/brand-openedx@^1.2.2",
-    "@edx/frontend-component-footer": "12.6.1",
-    "@edx/frontend-component-header": "4.10.1",
-    "@edx/frontend-platform": "6.0.2",
-    "@edx/paragon": "^21.5.0",
+    "@edx/frontend-component-footer": "13.0.5",
+    "@edx/frontend-component-header": "5.2.0",
+    "@edx/frontend-platform": "7.1.4",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "0.2.0",
-    "core-js": "3.33.3",
+    "@openedx/paragon": "^22.0.0",
+    "core-js": "3.37.0",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-redux": "7.2.9",
-    "react-router": "6.17.0",
-    "react-router-dom": "6.17.0",
+    "react-router": "6.22.3",
+    "react-router-dom": "6.22.3",
     "redux": "4.2.1",
-    "regenerator-runtime": "0.14.0"
+    "regenerator-runtime": "0.14.1"
   },
   "devDependencies": {
     "@edx/browserslist-config": "^1.1.1",
-    "@edx/frontend-build": "https://github.com/openedx/frontend-build/tarball/bilalqamar95/jest-v29-upgrade",
     "@edx/reactifex": "^2.1.1",
+    "@openedx/frontend-build": "13.1.4",
     "glob": "7.2.3",
     "husky": "7.0.4",
     "jest": "29.7.0"
