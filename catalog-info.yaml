@@ -11,6 +11,16 @@ metadata:
       title: "README"
       icon: "Article"
   annotations:
+    # The openedx.org/release key is described in OEP-10:
+    #   https://open-edx-proposals.readthedocs.io/en/latest/oep-0010-proc-openedx-releases.html
+    # The FAQ might also be helpful: https://openedx.atlassian.net/wiki/spaces/COMM/pages/1331268879/Open+edX+Release+FAQ
+    # Note: This will only work if the repo is in the `openedx` org in github.  Repos in other orgs that have this
+    # setting will still be treated as if they don't want to be part of the Open edX releases.
+    openedx.org/release: null
+    # (Optional) Annotation keys and values can be whatever you want.
+    # We use it in Open edX repos to have a comma-separated list of GitHub user
+    # names that might be interested in changes to the architecture of this
+    # component.
     openedx.org/arch-interest-groups: ""
 spec:
   owner: group:committers-frontend
