@@ -42,7 +42,7 @@
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
-    "@fortawesome/react-fontawesome": "0.2.0",
+    "@fortawesome/react-fontawesome": "0.2.2",
     "@openedx/paragon": "^22.0.0",
     "core-js": "3.37.0",
     "prop-types": "15.8.1",
