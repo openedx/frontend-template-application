@@ -147,6 +147,12 @@ Configuration
 
 .. _feature and waffle flags: https://docs.openedx.org/projects/openedx-proposals/en/latest/best-practices/oep-0017-bp-feature-toggles.html
 
+Plugins
+=======
+This MFE can be customized using `Frontend Plugin Framework <https://github.com/openedx/frontend-plugin-framework>`_.
+
+The parts of this MFE that can be customized in that manner are documented `here </src/plugin-slots>`_.
+
 [PLACEHOLDER: Other Relevant Sections]
 ======================================
 
