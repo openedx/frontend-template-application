@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "@edx/brand": "npm:@openedx/brand-openedx@^1.2.2",
-    "@edx/frontend-component-footer": "13.1.0",
     "@edx/frontend-component-header": "5.3.3",
     "@edx/frontend-platform": "8.0.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
@@ -43,6 +42,7 @@
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "0.2.2",
+    "@openedx/frontend-slot-footer": "^1.0.2",
     "@openedx/paragon": "^22.0.0",
     "core-js": "3.37.1",
     "prop-types": "15.8.1",
