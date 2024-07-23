@@ -75,11 +75,11 @@ This section details a specific taxonomy and hierarchy to help make code modular
 In order to isolate our view layer (React) from the management of our data, global state, APIs, and side effects, we want to adopt the "ducks" organization (see references). This involves isolating data management into a
 sub directory of a feature. We'll use the directory name "data" rather than the traditional "ducks".
 
-**C. React components will be named semantically.**
+**B. React components will be named semantically.**
 
 The convention for React components is for the file to be named for what the component does, so we will preserve this. A given feature may break up its view layer into multiple sub-components without a sub-feature being present.
 
-**B. Files in a module's data directory are named by function.**
+**C. Files in a module's data directory are named by function.**
 
 In the data sub-directory, the file names describe what each piece of code does. Unlike React components, all of the data handlers (actions, reducers, sagas, selectors, services, etc.) are generally short functions, and so we put them all in the same file together with others of their kind.
 
@@ -99,7 +99,7 @@ In the data sub-directory, the file names describe what each piece of code does.
 
 If you find yourself desiring to have multiple files of a particular type in the data directory, this is a strong sign that you actually need a sub-feature instead.
 
-**C. Sub-features follow the same naming scheme.**
+**D. Sub-features follow the same naming scheme.**
 
 Sub-features should follow the same rules as any other module.
 
@@ -147,7 +147,7 @@ As described above in "Avoid circular dependencies", features should not import 
 
 The feature may only import from the exports of its child, which may include exports of the grandchildren. Importing directly from grandchildren (or great grandchildren, etc.) would violate the strict module boundary of the child.
 
-**II. Features may import from their siblings.**
+**III. Features may import from their siblings.**
 
 It's acceptable to import from a module's siblings, or the siblings of their parents, grandparents, etc. This is necessary to support code re-use. As an example, assume we have a sub-module with common code to support our web forms.
 
@@ -160,7 +160,7 @@ It's acceptable to import from a module's siblings, or the siblings of their par
 
 The sub-form modules can import from forms-common-code. The latter has its own strict module boundary and could conceptually be extracted into its own repository/completely independent module as far as they're concerned. They're unaware, conceptually, that it's a child of feature1, and they don't care.
 
-**III. Features may import from the siblings of their parentage.**
+**IV. Features may import from the siblings of their parentage.**
 
 This is less intuitive, but is not really any different than the above.
 
