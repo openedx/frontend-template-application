@@ -1,7 +1,4 @@
-@import "@edx/brand/paragon/fonts.scss";
-@import "@edx/brand/paragon/variables.scss";
-@import "@openedx/paragon/scss/core/core.scss";
-@import "@edx/brand/paragon/overrides.scss";
+@use "@openedx/paragon/styles/css/core/custom-media-breakpoints" as paragonCustomMediaBreakpoints;
 
 @import './example/index.scss';
 
