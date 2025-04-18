@@ -1,3 +1,3 @@
 # `frontend-app-profile` Plugin Slots
 
-* [`footer_slot`](./FooterSlot/)
+* [`org.openedx.frontend.layout.footer.v1`](./FooterSlot/)
