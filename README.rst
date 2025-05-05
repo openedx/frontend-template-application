@@ -3,6 +3,12 @@ frontend-template-application
 
 |license-badge| |status-badge| |ci-badge| |codecov-badge|
 
+⚠️ Warning ⚠️
+***************
+
+This template uses a version of Paragon that includes `design tokens <https://github.com/openedx/paragon/?tab=readme-ov-file#design-tokens>`_ support. Support for design tokens is a breaking change, and more information is available in `the DEPR <https://github.com/openedx/brand-openedx/issues/23>`_.
+
+To use this template with a pre-design-tokens version of Paragon, you can utilize `the release/teak branch <https://github.com/openedx/frontend-template-application/tree/release/teak>`_.
 
 Purpose
 *******
