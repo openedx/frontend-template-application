@@ -16,16 +16,14 @@ module.exports = {
   */
   localModules: [
     /*********************************************************************************************
-     IMPORTANT NOTE: If any of the below packages (like paragon or frontend-platform) have a build
-     step that populates their 'dist' directories, you must manually run that step.  For paragon
-     and frontend-platform, for instance, you need to run `npm run build` in the repo before
-     module.config.js will work.
+     IMPORTANT NOTE: If any of the below packages (like paragon) have a build step that populates
+     their 'dist' directories, you must manually run that step.  For paragon, for instance, you need
+     to run `npm run build` in the repo before module.config.js will work.
     **********************************************************************************************/
 
     // { moduleName: '@edx/brand', dir: '../brand-openedx' }, // replace with your brand checkout
     // { moduleName: '@openedx/paragon/scss/core', dir: '../paragon', dist: 'scss/core' },
     // { moduleName: '@openedx/paragon/icons', dir: '../paragon', dist: 'icons' },
     // { moduleName: '@openedx/paragon', dir: '../paragon', dist: 'dist' },
-    // { moduleName: '@edx/frontend-platform', dir: '../frontend-platform', dist: 'dist' },
   ],
 };

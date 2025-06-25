@@ -31,101 +31,34 @@ Purpose
 
    [TODO]
 
-   What is this MFE?  Add a 2-3 sentence description of what it is and what it
-   does.
+   What does this frontend app do?  Add a 2-3 sentence description of what it
+   is and what it does.
 
-This is the Awesome MFE.  It was built to provide an unmatched learning
-experience, with improved tools for both randomized goodness and the ability to
-directly reference amaze-blocks in existing courses. This experience is powered
-by the new Fantastico storage engine.
+This is the Awesome Frontend App.  It was built to provide an unmatched
+learning experience, with improved tools for both randomized goodness and the
+ability to directly reference amaze-blocks in existing courses. This experience
+is powered by the new Fantastico storage engine.
 
 Getting Started
 ===============
 
-Devstack Installation
+Developing with Tutor
 ---------------------
 
 .. note::
 
    [TODO]
 
-   Describe in detail how this MFE can be installed and set up for development
-   in a devstack.  Include as many screenshots as you can to make your guide
-   easier to follow!  Use the following steps as an example:
+   If there are steps that deviate from the default Tutor setup, describe them
+   here.
 
-Follow these steps to provision, run, and enable an instance of the
-[PLACEHOLDER] MFE for local development via the `devstack`_.
+`Tutor`_ is recommended as the development environment for this frontend app.
+You can refer to the `relevant tutor-mfe documentation`_ to get started using
+it.
 
-.. _devstack: https://github.com/openedx/devstack#getting-started
+.. _Tutor: https://github.com/overhangio/tutor
 
-#. To start, clone the devstack repository as a child of an arbitrary ``~/workspace/`` directory.
-
-   .. code-block::
-
-      mkdir -p ~/workspace/
-      cd ~/workspace/
-      git clone https://github.com/openedx/devstack.git
-
-#. Configure default services and setup devstack
-
-   Create a ``devstack/options.local.mk`` file with only the services required.
-   Commonly, this will just be the LMS:
-
-   .. code-block::
-
-      DEFAULT_SERVICES ?= \
-      lms
-
-#. Start the devstack with:
-
-   .. code-block::
-
-      cd devstack
-      make dev.pull
-      make dev.provision
-      make dev.up
-
-#. In an LMS shell, enable the ``ENABLE_[PLACEHOLDER]_MICROFRONTEND`` feature flag:
-
-   .. code-block::
-
-      make lms-shell
-      vim /edx/etc/lms.yml
-      ---
-      FEATURES:
-          ENABLE_[PLACEHOLDER]_MICROFRONTEND: true
-
-   Exit the shell and restart the LMS so changes take effect:
-
-   .. code-block::
-
-      make lms-restart
-
-#. Create and enable the waffle flag required to redirect users to the MFE,
-   enabling it for everyone:
-
-   .. code-block::
-
-      make lms-shell
-      ./manage.py lms waffle_flag --create --everyone [PLACEHOLDER].redirect_to_microfrontend
-
-#. Start this MFE with:
-
-   .. code-block::
-
-      cd frontend-app-[PLACEHOLDER]
-      nvm use
-      npm ci
-      npm start
-
-#. Finally, open the MFE in a browser
-
-   Navigate to `http://localhost:8080 <http://localhost:8080>`_ to open the
-   MFE.  This is what it should look like if everything worked:
-
-   .. figure:: ./docs/images/template.jpg
-
-      "Polycon marking template" by mangtronix is licensed under CC BY-SA 2.0.
+.. _relevant tutor-mfe documentation: https://github.com/overhangio/tutor-mfe#mfe-development
 
 Configuration
 -------------
@@ -134,24 +67,25 @@ Configuration
 
    [TODO]
 
-   Explicitly list anything that this MFE requires to function correctly.  This includes:
+   Explicitly list anything that this app requires to function correctly.  This includes:
 
-   * A list of both required and optional .env variables, and how they each
-     affect the functioning of the MFE
+   * A list of both required and optional configuration variables, and how they
+     each affect the functioning of the app
 
-   * A list of edx-platform `feature and waffle flags`_ that are either required
-     to enable use of this MFE, or affect the behavior of the MFE in some other
-     way
+   * A list of edx-platform `feature and waffle flags`_ that are either
+     required to enable use of this app, or affect the behavior of the app in
+     some other way
 
-   * A list of IDAs or other MFEs that this MFE depends on to function correctly
+   * A list of IDAs or other frontend apps that this app depends on to function
+     correctly
 
 .. _feature and waffle flags: https://docs.openedx.org/projects/openedx-proposals/en/latest/best-practices/oep-0017-bp-feature-toggles.html
 
-Plugins
-=======
-This MFE can be customized using `Frontend Plugin Framework <https://github.com/openedx/frontend-plugin-framework>`_.
+Customization
+=============
 
-The parts of this MFE that can be customized in that manner are documented `here </src/plugin-slots>`_.
+This frontend app can be customized using UI "slots".  The parts of this MFE
+that can be customized in that manner are documented `here </src/slots>`_.
 
 [PLACEHOLDER: Other Relevant Sections]
 ======================================
@@ -193,7 +127,7 @@ Getting Help
    [TODO]
 
    Use the following as a template, but feel free to add specific places where
-   this MFE is commonly discussed.
+   this app is commonly discussed.
 
 If you're having trouble, we have discussion forums at
 https://discuss.openedx.org where you can connect with others in the community.

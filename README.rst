@@ -25,14 +25,9 @@ tab.
 Prerequisites
 =============
 
-The `devstack`_ is currently recommended as a development environment for your
-new MFE.  If you start it with ``make dev.up.lms`` that should give you
-everything you need as a companion to this frontend.
-
-Note that it is also possible to use `Tutor`_ to develop an MFE.  You can refer
-to the `relevant tutor-mfe documentation`_ to get started using it.
-
-.. _Devstack: https://github.com/openedx/devstack
+`Tutor`_ is recommended as the development environment for your new frontend
+app.  You can refer to the `relevant tutor-mfe documentation`_ to get started
+using it.
 
 .. _Tutor: https://github.com/overhangio/tutor
 
@@ -48,9 +43,9 @@ created when copying this template above.
 
   ``git clone https://github.com/openedx/frontend-app-[PLACEHOLDER].git``
 
-2. Use node v18.x.
+2. Use node v20.x.
 
-   The current version of the micro-frontend build scripts support node 18.
+   The current version of the micro-frontend build scripts support node 20.
    Using other major versions of node *may* work, but this is unsupported.  For
    convenience, this repository includes an .nvmrc file to help in setting the
    correct node version via `nvm <https://github.com/nvm-sh/nvm>`_.
@@ -62,13 +57,13 @@ created when copying this template above.
 4. Update the application port to use for local development:
 
    Default port is 8080. If this does not work for you, update the line
-   `PORT=8080` to your port in all .env.* files
+   `PORT=8080` to your port in ``site.config.dev.tsx``.
 
 5. Start the dev server:
 
-  ``npm start``
+  ``npm run dev``
 
-The dev server is running at `http://localhost:8080 <http://localhost:8080>`_
+The dev server is running at `http://apps.local.openedx.io:8080 <http://apps.local.openedx.io:8080>`_
 or whatever port you setup.
 
 Making Your New Project's README File
@@ -76,7 +71,7 @@ Making Your New Project's README File
 
 Move ``README-template-frontend-app.rst`` to your project's ``README.rst``
 file. Please fill out all the sections - this helps out all developers
-understand your MFE, how to install it, and how to use it.
+understand your frontend app, how to install it, and how to use it.
 
 Developing
 **********
@@ -85,9 +80,10 @@ This section concerns development of ``frontend-template-application`` itself,
 not the templated copy.
 
 It should be noted that one of the goals of this repository is for it to
-function correctly as an MFE (as in ``npm install && npm start``) even if no
-modifications are made.  This ensures that developers get a *practical* working
-example, not just a theoretical one.
+function in development mode (as in ``npm install && npm run dev``) and as an
+app that can be imported into a shell site, even if no modifications are made.
+This ensures that developers get a *practical* working example, not just a
+theoretical one.
 
 This also means, of course, that any committed code should be tested and
 subject to both CI and branch protection rules.
@@ -100,20 +96,13 @@ the `Feature-based Application Organization ADR`_.
 
 .. _Feature-based Application Organization ADR: https://github.com/openedx/frontend-template-application/blob/master/docs/decisions/0002-feature-based-application-organization.rst
 
-Build Process Notes
-===================
-
-**Production Build**
-
-The production build is created with ``npm run build``.
-
 Internationalization
 ====================
 
-Please see refer to the `frontend-platform i18n howto`_ for documentation on
+Please see refer to the `frontend-base i18n howto`_ for documentation on
 internationalization.
 
-.. _frontend-platform i18n howto: https://github.com/openedx/frontend-platform/blob/master/docs/how_tos/i18n.rst
+.. _frontend-base i18n howto: https://github.com/openedx/frontend-base/blob/master/docs/how_tos/i18n.rst
 
 Getting Help
 ************

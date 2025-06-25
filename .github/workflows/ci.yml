@@ -25,8 +25,6 @@ jobs:
       run: npm run lint
     - name: Test
       run: npm run test
-    - name: Build
-      run: npm run build
     - name: i18n_extract
       run: npm run i18n_extract
     - name: Coverage

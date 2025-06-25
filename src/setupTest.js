@@ -1,2 +1,4 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+import siteConfig from 'site.config';
+import { mergeSiteConfig } from '@openedx/frontend-base';
+
+mergeSiteConfig(siteConfig);

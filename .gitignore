@@ -1,19 +1,15 @@
-.DS_Store
-.eslintcache
-.idea
 node_modules
 npm-debug.log
 coverage
 module.config.js
-
 dist/
+/*.tgz
+
+### i18n ###
 src/i18n/transifex_input.json
-temp/babel-plugin-react-intl
 
-### pyenv ###
-.python-version
-
-### Emacs ###
+### Editors ###
+.DS_Store
 *~
 /temp
 /.vscode

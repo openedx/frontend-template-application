@@ -1,12 +1,6 @@
-.eslintignore
-.eslintrc.json
-.gitignore
-.travis.yml
-docker-compose.yml
-Dockerfile
-Makefile
-npm-debug.log
-
-coverage
+__mocks__
 node_modules
-public
+*.test.js
+*.test.jsx
+*.test.ts
+*.test.tsx
