@@ -45,7 +45,7 @@
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "0.2.2",
     "@openedx/paragon": "^23.4.5",
-    "core-js": "3.43.0",
+    "core-js": "3.44.0",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
