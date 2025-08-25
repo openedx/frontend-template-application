@@ -60,7 +60,7 @@
     "@edx/reactifex": "^2.1.1",
     "@openedx/frontend-build": "14.6.1",
     "glob": "7.2.3",
-    "husky": "7.0.4",
+    "husky": "9.1.7",
     "jest": "30.0.5"
   }
 }
