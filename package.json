@@ -13,7 +13,7 @@
     "build": "fedx-scripts webpack",
     "i18n_extract": "fedx-scripts formatjs extract",
     "stylelint": "stylelint \"plugins/**/*.scss\" \"src/**/*.scss\" \"scss/**/*.scss\" --config .stylelintrc.json",
-    "lint": "npm run stylelint && fedx-scripts eslint --ext .js --ext .jsx --ext .ts --ext .tsx . && npm types",
+    "lint": "npm run stylelint && fedx-scripts eslint --ext .js --ext .jsx --ext .ts --ext .tsx . && npm run types",
     "lint:fix": "npm run stylelint && fedx-scripts eslint --ext .js --ext .jsx --ext .ts --ext .tsx . --fix",
     "snapshot": "fedx-scripts jest --updateSnapshot",
     "start": "fedx-scripts webpack-dev-server --progress",
