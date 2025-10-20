@@ -7,8 +7,8 @@ import {
 import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
 import { createRoot } from 'react-dom/client';
 import {
-QueryClient,
-QueryClientProvider,
+  QueryClient,
+  QueryClientProvider,
 } from '@tanstack/react-query';
 
 import Header from '@edx/frontend-component-header';
