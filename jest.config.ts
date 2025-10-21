@@ -1,19 +1,15 @@
 const { createConfig } = require('@openedx/frontend-build');
 
-module.exports = createConfig(
-  'eslint',
-  {
-    rules: {
-      'jsx-a11y/label-has-associated-control': [2, {
-        controlComponents: ['Input'],
-      }],
-      'template-curly-spacing': 'off',
-      'react-hooks/exhaustive-deps': 'off',
-      'no-restricted-exports': 'off',
-      // There is no reason to disallow this syntax anymore; we don't use regenerator-runtime in new browsers
-      'no-restricted-syntax': 'off',
-    },
-  },
-);
+module.exports = createConfig('jest', {
+  // setupFilesAfterEnv is used after the jest environment has been loaded. In general this is what you want.
+  // If you want to add config BEFORE jest loads, use setupFiles instead.
+  setupFilesAfterEnv: [
+    '<rootDir>/src/setupTest.js',
+  ],
+  coveragePathIgnorePatterns: [
+    'src/setupTest.js',
+    'src/i18n',
+  ],
+});
 
 export {};
