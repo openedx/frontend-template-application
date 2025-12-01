@@ -12,12 +12,14 @@
   "scripts": {
     "build": "fedx-scripts webpack",
     "i18n_extract": "fedx-scripts formatjs extract",
-    "lint": "fedx-scripts eslint --ext .js --ext .jsx .",
-    "lint:fix": "fedx-scripts eslint --fix --ext .js --ext .jsx .",
+    "stylelint": "stylelint \"plugins/**/*.scss\" \"src/**/*.scss\" \"scss/**/*.scss\" --config .stylelintrc.json",
+    "lint": "npm run stylelint && fedx-scripts eslint --ext .js --ext .jsx --ext .ts --ext .tsx . && npm run types",
+    "lint:fix": "npm run stylelint && fedx-scripts eslint --ext .js --ext .jsx --ext .ts --ext .tsx . --fix",
     "snapshot": "fedx-scripts jest --updateSnapshot",
     "start": "fedx-scripts webpack-dev-server --progress",
     "start:with-theme": "paragon install-theme && npm start && npm install",
-    "test": "fedx-scripts jest --coverage --passWithNoTests"
+    "test": "fedx-scripts jest --coverage --passWithNoTests",
+    "types": "tsc --noEmit"
   },
   "husky": {
     "hooks": {
@@ -35,31 +37,34 @@
   },
   "dependencies": {
     "@edx/brand": "npm:@openedx/brand-openedx@^1.2.2",
-    "@edx/frontend-component-header": "^6.4.0",
-    "@edx/frontend-component-footer": "^14.6.0",
-    "@edx/frontend-platform": "^8.3.0",
+    "@edx/frontend-component-footer": "^14.9.2",
+    "@edx/frontend-component-header": "^8.0.0",
+    "@edx/frontend-platform": "^8.5.1",
     "@edx/openedx-atlas": "^0.7.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "0.2.6",
-    "@openedx/paragon": "^23.4.5",
+    "@openedx/paragon": "^23.14.9",
+    "@tanstack/react-query": "^5.90.5",
+    "classnames": "^2.5.1",
     "core-js": "3.46.0",
-    "prop-types": "15.8.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-redux": "7.2.9",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router": "6.30.2",
     "react-router-dom": "6.30.2",
-    "redux": "4.2.1",
     "regenerator-runtime": "0.14.1"
   },
   "devDependencies": {
     "@edx/browserslist-config": "^1.1.1",
+    "@edx/reactifex": "^2.2.0",
+    "@edx/stylelint-config-edx": "^2.3.3",
+    "@edx/typescript-config": "^1.1.0",
     "@openedx/frontend-build": "14.6.2",
-    "glob": "11.1.0",
-    "husky": "7.0.4",
-    "jest": "30.2.0"
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "glob": "11.1.0"
   }
 }
