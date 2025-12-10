@@ -31,14 +31,8 @@ tab.
 Prerequisites
 =============
 
-The `devstack`_ is currently recommended as a development environment for your
-new MFE.  If you start it with ``make dev.up.lms`` that should give you
-everything you need as a companion to this frontend.
-
-Note that it is also possible to use `Tutor`_ to develop an MFE.  You can refer
-to the `relevant tutor-mfe documentation`_ to get started using it.
-
-.. _Devstack: https://github.com/openedx/devstack
+`Tutor`_ is currently recommended as the development environment for your
+new MFE.  You can refer to the `relevant tutor-mfe documentation`_ to get started using it.
 
 .. _Tutor: https://github.com/overhangio/tutor
 
