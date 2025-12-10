@@ -48,12 +48,12 @@ created when copying this template above.
 
   ``git clone https://github.com/openedx/frontend-app-[PLACEHOLDER].git``
 
-2. Use node v18.x.
+2. Use the version of Node specified in the ``.nvmrc`` file.
 
-   The current version of the micro-frontend build scripts support node 18.
-   Using other major versions of node *may* work, but this is unsupported.  For
-   convenience, this repository includes an .nvmrc file to help in setting the
-   correct node version via `nvm <https://github.com/nvm-sh/nvm>`_.
+  The current version of the micro-frontend build scripts supports the version of Node found in ``.nvmrc``.
+  Using other major versions of node *may* work, but this is unsupported.  For
+  convenience, this repository includes an .nvmrc file to help in setting the
+  correct node version via `nvm <https://github.com/nvm-sh/nvm>`_.
 
 3. Install npm dependencies:
 
