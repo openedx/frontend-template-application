@@ -42,90 +42,24 @@ by the new Fantastico storage engine.
 Getting Started
 ===============
 
-Devstack Installation
----------------------
+Prerequisites
+=============
+
+The Tutor_ platform is a prerequisite for developing an MFE.
+Utilize `relevant tutor-mfe documentation`_ to guide you through
+the process of MFE development within the Tutor environment.
+
+.. _Tutor: https://github.com/overhangio/tutor
+
+.. _relevant tutor-mfe documentation: https://github.com/overhangio/tutor-mfe#mfe-development
 
 .. note::
 
    [TODO]
 
    Describe in detail how this MFE can be installed and set up for development
-   in a devstack.  Include as many screenshots as you can to make your guide
+   with tutor.  Include as many screenshots as you can to make your guide
    easier to follow!  Use the following steps as an example:
-
-Follow these steps to provision, run, and enable an instance of the
-[PLACEHOLDER] MFE for local development via the `devstack`_.
-
-.. _devstack: https://github.com/openedx/devstack#getting-started
-
-#. To start, clone the devstack repository as a child of an arbitrary ``~/workspace/`` directory.
-
-   .. code-block::
-
-      mkdir -p ~/workspace/
-      cd ~/workspace/
-      git clone https://github.com/openedx/devstack.git
-
-#. Configure default services and setup devstack
-
-   Create a ``devstack/options.local.mk`` file with only the services required.
-   Commonly, this will just be the LMS:
-
-   .. code-block::
-
-      DEFAULT_SERVICES ?= \
-      lms
-
-#. Start the devstack with:
-
-   .. code-block::
-
-      cd devstack
-      make dev.pull
-      make dev.provision
-      make dev.up
-
-#. In an LMS shell, enable the ``ENABLE_[PLACEHOLDER]_MICROFRONTEND`` feature flag:
-
-   .. code-block::
-
-      make lms-shell
-      vim /edx/etc/lms.yml
-      ---
-      FEATURES:
-          ENABLE_[PLACEHOLDER]_MICROFRONTEND: true
-
-   Exit the shell and restart the LMS so changes take effect:
-
-   .. code-block::
-
-      make lms-restart
-
-#. Create and enable the waffle flag required to redirect users to the MFE,
-   enabling it for everyone:
-
-   .. code-block::
-
-      make lms-shell
-      ./manage.py lms waffle_flag --create --everyone [PLACEHOLDER].redirect_to_microfrontend
-
-#. Start this MFE with:
-
-   .. code-block::
-
-      cd frontend-app-[PLACEHOLDER]
-      nvm use
-      npm ci
-      npm start
-
-#. Finally, open the MFE in a browser
-
-   Navigate to `http://localhost:8080 <http://localhost:8080>`_ to open the
-   MFE.  This is what it should look like if everything worked:
-
-   .. figure:: ./docs/images/template.jpg
-
-      "Polycon marking template" by mangtronix is licensed under CC BY-SA 2.0.
 
 Configuration
 -------------
