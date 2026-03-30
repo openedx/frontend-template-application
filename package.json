@@ -61,7 +61,7 @@
     "@edx/reactifex": "^2.2.0",
     "@edx/stylelint-config-edx": "^2.3.3",
     "@edx/typescript-config": "^1.1.0",
-    "@openedx/frontend-build": "14.6.2",
+    "@openedx/frontend-build": "14.6.3",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
