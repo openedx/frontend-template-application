@@ -1,5 +1,21 @@
-@use "@openedx/paragon/styles/css/core/custom-media-breakpoints" as paragonCustomMediaBreakpoints;
+/* Disable dark theme for template app */
+$enable-dark-mode: false !default;
 
-@import './example/index.scss';
-@import "~@edx/frontend-component-header/dist/index";
-@import "~@edx/frontend-component-footer/dist/footer";
+
+/* 0. Bootstrap (required for brand + Paragon logic) */
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+/* 1. Brand variables FIRST (override Paragon defaults) */
+@import "~@edx/brand/paragon/variables";
+
+/* 2. Brand fonts (optional but recommended) */
+@import "~@edx/brand/paragon/fonts";
+
+/* 3. Brand overrides (header, footer, colors, dark theme, etc.) */
+@import "~@edx/brand/paragon/overrides";
+
+/* 4. Paragon CSS (actual component styles) */
+@import "~@openedx/paragon/dist/core.min.css";
+@import "~@openedx/paragon/dist/light.min.css";
