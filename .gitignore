@@ -1,21 +1,19 @@
-.DS_Store
-.eslintcache
-.idea
 node_modules
 npm-debug.log
 coverage
-module.config.js
-
 dist/
+packages/
+/.turbo
+/turbo.json
+/*.tgz
+
+### i18n ###
 src/i18n/transifex_input.json
-temp/babel-plugin-react-intl
+src/i18n/messages.ts
+src/i18n/messages/
 
-### pyenv ###
-.python-version
-
-### Emacs ###
+### Editors ###
+.DS_Store
 *~
 /temp
 /.vscode
-
-webpack.dev-tutor.config.js
