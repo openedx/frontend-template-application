@@ -1,0 +1,10 @@
+{
+  "userRole": "Training Provider",
+  "navbarAccess": {
+    "accessDashboard": true,
+    "accessCompetencies": true,
+    "accessActivities": true,
+    "accessTrainingCatalog": true,
+    "accessUsers": true
+  }
+}
