@@ -6,5 +6,22 @@
     "accessActivities": true,
     "accessTrainingCatalog": true,
     "accessUsers": true
+  },
+  "componentAccess": {
+    "dashboard": {
+      "showStats": true,
+      "showUsersPerCountry": true,
+      "showRequestsSection": true,
+      "showTopRequestedActivities": true,
+      "showPendingRequests": true
+    },
+    "users": {
+      "showTable": true,
+      "canSearchAndFilter": true,
+      "canAddUser": true,
+      "canViewUserDetail": true,
+      "canEditUser": true,
+      "canDeleteUser": true
+    }
   }
 }

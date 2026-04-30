@@ -7,36 +7,41 @@ import {
   useLocation,
 } from 'react-router-dom';
 import AdminLayout from './layout/AdminLayout';
-import DashboardDemoPage from './pages/DashboardDemoPage';
+import Dashboard from './pages/dashboard/Dashboard';
+import Users from './pages/users/Users';
+import UserDetailPage from './pages/users/UserDetailPage';
+import Roles from './pages/roles/Roles';
+import AccessRestrictedPage from './pages/AccessRestrictedPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import appMessages from './messages/appMessages';
-import { UserRoleProvider } from './contexts/UserRoleContext';
+import { ToastProvider } from './components/toast/ToastProvider';
+import { UserRoleProvider, useUserRole } from './contexts/UserRoleContext';
 
 const queryClient = new QueryClient();
 
 const getHeaderMeta = (pathname, formatMessage) => {
-  if (pathname.startsWith('/searn-administrator/users')) {
+  if (pathname.startsWith('/admin/users')) {
     return {
       title: formatMessage(appMessages.usersTitle),
       description: formatMessage(appMessages.usersDescription),
     };
   }
 
-  if (pathname.startsWith('/searn-administrator/roles')) {
+  if (pathname.startsWith('/admin/roles')) {
     return {
       title: formatMessage(appMessages.rolesTitle),
       description: formatMessage(appMessages.rolesDescription),
     };
   }
 
-  if (pathname.startsWith('/searn-administrator/reports')) {
+  if (pathname.startsWith('/admin/reports')) {
     return {
       title: formatMessage(appMessages.reportsTitle),
       description: formatMessage(appMessages.reportsDescription),
     };
   }
 
-  if (pathname.startsWith('/searn-administrator/settings')) {
+  if (pathname.startsWith('/admin/settings')) {
     return {
       title: formatMessage(appMessages.settingsTitle),
       description: formatMessage(appMessages.settingsDescription),
@@ -52,32 +57,36 @@ const getHeaderMeta = (pathname, formatMessage) => {
 const RoutedLayout = () => {
   const { formatMessage } = useIntl();
   const location = useLocation();
+  const { navbarAccess } = useUserRole();
   const headerMeta = getHeaderMeta(location.pathname, formatMessage);
+  const withAccess = (hasAccess, component) => (hasAccess ? component : <AccessRestrictedPage />);
 
   return (
     <AdminLayout title={headerMeta.title} description={headerMeta.description}>
       <Routes>
-        <Route path="/searn-administrator/dashboard" element={<DashboardDemoPage />} />
-        <Route path="/searn-administrator/competency-frameworks" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/domains" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/sub-domains" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/competencies-management" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/activities-management" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/training-catalog" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/nras" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/training-providers" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/cb-modules" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/users" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/roles" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/reports/staff-trained" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/reports/training-offers" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/reports/competency-coverage" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/reports/staff-per-training" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/reports/trainee-satisfaction" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/reports/priority-feedback" element={<PlaceholderPage />} />
-        <Route path="/searn-administrator/settings" element={<PlaceholderPage />} />
-        <Route path="/:userType/dashboard" element={<DashboardDemoPage />} />
-        <Route path="*" element={<Navigate to="/searn-administrator/dashboard" replace />} />
+        <Route path="/admin/dashboard/secretariat" element={withAccess(navbarAccess.accessDashboard, <Dashboard />)} />
+        <Route path="/admin/dashboard/training-provider" element={withAccess(navbarAccess.accessDashboard, <Dashboard />)} />
+        <Route path="/admin/competency-frameworks" element={withAccess(navbarAccess.accessCompetencyFramework, <PlaceholderPage />)} />
+        <Route path="/admin/domains" element={withAccess(navbarAccess.accessDomains, <PlaceholderPage />)} />
+        <Route path="/admin/sub-domains" element={withAccess(navbarAccess.accessSubDomains, <PlaceholderPage />)} />
+        <Route path="/admin/competencies-management" element={withAccess(navbarAccess.accessCompetencies, <PlaceholderPage />)} />
+        <Route path="/admin/activities-management" element={withAccess(navbarAccess.accessActivities, <PlaceholderPage />)} />
+        <Route path="/admin/training-catalog" element={withAccess(navbarAccess.accessTrainingCatalog, <PlaceholderPage />)} />
+        <Route path="/admin/nras" element={withAccess(navbarAccess.accessNras, <PlaceholderPage />)} />
+        <Route path="/admin/training-providers" element={withAccess(navbarAccess.accessTrainingProviders, <PlaceholderPage />)} />
+        <Route path="/admin/cb-modules" element={withAccess(navbarAccess.accessCbModules, <PlaceholderPage />)} />
+        <Route path="/admin/users" element={withAccess(navbarAccess.accessUsers, <Users />)} />
+        <Route path="/admin/users/:userId" element={withAccess(navbarAccess.accessUsers, <UserDetailPage />)} />
+        <Route path="/admin/roles" element={withAccess(navbarAccess.accessRoles, <Roles />)} />
+        <Route path="/admin/reports/staff-trained" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path="/admin/reports/training-offers" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path="/admin/reports/competency-coverage" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path="/admin/reports/staff-per-training" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path="/admin/reports/trainee-satisfaction" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path="/admin/reports/priority-feedback" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path="/admin/settings" element={withAccess(navbarAccess.accessSettings, <PlaceholderPage />)} />
+        <Route path="/admin/dashboard/:role" element={withAccess(navbarAccess.accessDashboard, <Dashboard />)} />
+        <Route path="*" element={<Navigate to="/admin/dashboard/secretariat" replace />} />
       </Routes>
     </AdminLayout>
   );
@@ -87,11 +96,13 @@ const App = () => (
   <BrowserRouter>
     <AppProvider wrapWithRouter={false}>
       <UserRoleProvider>
-        <QueryClientProvider client={queryClient}>
-          <Routes>
-            <Route path="*" element={<RoutedLayout />} />
-          </Routes>
-        </QueryClientProvider>
+        <ToastProvider>
+          <QueryClientProvider client={queryClient}>
+            <Routes>
+              <Route path="*" element={<RoutedLayout />} />
+            </Routes>
+          </QueryClientProvider>
+        </ToastProvider>
       </UserRoleProvider>
     </AppProvider>
   </BrowserRouter>

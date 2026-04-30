@@ -81,6 +81,11 @@ const pageMessages = defineMessages({
     defaultMessage: 'This route is wired in the new layout and ready for future mock/API integration.',
     description: 'Generic placeholder page description',
   },
+  accessRestrictedMessage: {
+    id: 'app.access.restricted.message.text',
+    defaultMessage: 'You do not have permission to view this page.',
+    description: 'Generic message shown when user does not have page access',
+  },
 });
 
 export default pageMessages;

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "registeredNraUsers",
+    "icon": "faUsers",
+    "iconBackground": "#2A3B8F",
+    "value": "1,284",
+    "label": "Registered NRA users"
+  },
+  {
+    "id": "activitiesWithoutTraining",
+    "icon": "faExclamationTriangle",
+    "iconBackground": "#F59E0B",
+    "value": "20%",
+    "label": "Activities with no training"
+  },
+  {
+    "id": "activeNras",
+    "icon": "faGlobe",
+    "iconBackground": "#059669",
+    "value": "30",
+    "label": "Active NRAs"
+  },
+  {
+    "id": "pendingRequests",
+    "icon": "faClock",
+    "iconBackground": "#F43F5E",
+    "value": "10",
+    "label": "Pending requests"
+  }
+]

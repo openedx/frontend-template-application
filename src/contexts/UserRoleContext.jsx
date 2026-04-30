@@ -21,9 +21,34 @@ const DEFAULT_NAVBAR_ACCESS = {
   accessReports: false,
 };
 
+const DEFAULT_COMPONENT_ACCESS = {
+  dashboard: {
+    showStats: false,
+    showUsersPerCountry: false,
+    showRequestsSection: false,
+    showTopRequestedActivities: false,
+    showPendingRequests: false,
+  },
+  users: {
+    showTable: false,
+    canSearchAndFilter: false,
+    canAddUser: false,
+    canViewUserDetail: false,
+    canEditUser: false,
+    canDeleteUser: false,
+  },
+  roles: {
+    canAddRole: false,
+    canViewRole: false,
+    canEditRole: false,
+    canDeleteRole: false,
+  },
+};
+
 const UserRoleContext = createContext({
   role: null,
   navbarAccess: DEFAULT_NAVBAR_ACCESS,
+  componentAccess: DEFAULT_COMPONENT_ACCESS,
   setUserRoleData: () => {},
   setRole: () => {},
   loadUserRole: async () => null,
@@ -32,6 +57,7 @@ const UserRoleContext = createContext({
 const UserRoleProvider = ({ children }) => {
   const [role, setRoleState] = useState(null);
   const [navbarAccess, setNavbarAccess] = useState(DEFAULT_NAVBAR_ACCESS);
+  const [componentAccess, setComponentAccess] = useState(DEFAULT_COMPONENT_ACCESS);
 
   const setUserRoleData = useCallback((roleData) => {
     if (!roleData) {
@@ -43,11 +69,28 @@ const UserRoleProvider = ({ children }) => {
       ...DEFAULT_NAVBAR_ACCESS,
       ...(roleData.navbarAccess || {}),
     };
+    const nextComponentAccess = {
+      ...DEFAULT_COMPONENT_ACCESS,
+      ...(roleData.componentAccess || {}),
+      dashboard: {
+        ...DEFAULT_COMPONENT_ACCESS.dashboard,
+        ...(roleData.componentAccess?.dashboard || {}),
+      },
+      users: {
+        ...DEFAULT_COMPONENT_ACCESS.users,
+        ...(roleData.componentAccess?.users || {}),
+      },
+      roles: {
+        ...DEFAULT_COMPONENT_ACCESS.roles,
+        ...(roleData.componentAccess?.roles || {}),
+      },
+    };
 
     if (nextRole) {
       setRoleState(nextRole);
     }
     setNavbarAccess(nextNavbarAccess);
+    setComponentAccess(nextComponentAccess);
   }, []);
 
   const setRole = useCallback((nextRole) => {
@@ -69,10 +112,11 @@ const UserRoleProvider = ({ children }) => {
   const value = useMemo(() => ({
     role,
     navbarAccess,
+    componentAccess,
     setUserRoleData,
     setRole,
     loadUserRole,
-  }), [role, navbarAccess, setUserRoleData, setRole, loadUserRole]);
+  }), [role, navbarAccess, componentAccess, setUserRoleData, setRole, loadUserRole]);
 
   return (
     <UserRoleContext.Provider value={value}>
@@ -84,6 +128,7 @@ const UserRoleProvider = ({ children }) => {
 const useUserRole = () => useContext(UserRoleContext);
 
 export {
+  DEFAULT_COMPONENT_ACCESS,
   DEFAULT_NAVBAR_ACCESS,
   UserRoleProvider,
   useUserRole,

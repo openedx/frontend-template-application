@@ -41,7 +41,7 @@ body {
 .admin-shell {
   display: flex;
   min-height: 100vh;
-  background: #F4F6FB;
+  background: #FBFBFC;
 }
 
 .admin-sidebar {
@@ -49,6 +49,7 @@ body {
   max-width: 255px;
   background: #FFFFFF;
   border: 0;
+  border-right: 1px solid #E0E6EB;
   position: fixed;
   top: 0;
   left: 0;
@@ -77,7 +78,6 @@ body {
   justify-content: flex-start;
   padding: 16px;
   border-bottom: 1px solid #E0E6EB;
-  border-right: 1px solid #E0E6EB;
 }
 
 .admin-sidebar__brand {
@@ -433,6 +433,12 @@ body {
 
   .admin-top-header__actions {
     margin-left: auto;
+  }
+
+  .admin-top-header__description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .admin-sidebar {

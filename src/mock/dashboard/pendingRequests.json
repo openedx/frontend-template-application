@@ -1,0 +1,34 @@
+[
+  {
+    "id": "myanmarOnboarding",
+    "title": "NRA onboarding — Myanmar FDA",
+    "description": "Awaiting final account activation",
+    "tag": "NRA onboarding",
+    "tagVariant": "primary",
+    "timeAgo": "3 days ago"
+  },
+  {
+    "id": "thailandFramework",
+    "title": "Framework submission — NRA Thailand",
+    "description": "NRA-specific domains awaiting approval",
+    "tag": "Framework approval",
+    "tagVariant": "success",
+    "timeAgo": "2 days ago"
+  },
+  {
+    "id": "catalogueSubmission",
+    "title": "Catalogue submission — PIC/S Training",
+    "description": "3 programmes submitted for review",
+    "tag": "Catalogue review",
+    "tagVariant": "warning",
+    "timeAgo": "1 day ago"
+  },
+  {
+    "id": "providerOnboarding",
+    "title": "Training Provider onboarding — WHO EMRO",
+    "description": "Profile submitted, pending activation",
+    "tag": "Provider onboarding",
+    "tagVariant": "purple",
+    "timeAgo": "5 hours ago"
+  }
+]

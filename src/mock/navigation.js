@@ -1,54 +1,54 @@
 const navigationItems = [
   {
-    key: 'dashboard', labelKey: 'navDashboard', iconKey: 'dashboard', path: '/searn-administrator/dashboard',
+    key: 'dashboard', labelKey: 'navDashboard', iconKey: 'dashboard', path: '/admin/dashboard',
   },
   {
-    key: 'competencyFramework', labelKey: 'navCompetencyFramework', iconKey: 'competencyFramework', path: '/searn-administrator/competency-frameworks',
+    key: 'competencyFramework', labelKey: 'navCompetencyFramework', iconKey: 'competencyFramework', path: '/admin/competency-frameworks',
   },
   {
-    key: 'domains', labelKey: 'navDomains', iconKey: 'domains', path: '/searn-administrator/domains',
+    key: 'domains', labelKey: 'navDomains', iconKey: 'domains', path: '/admin/domains',
   },
   {
-    key: 'subDomains', labelKey: 'navSubDomains', iconKey: 'subDomains', path: '/searn-administrator/sub-domains',
+    key: 'subDomains', labelKey: 'navSubDomains', iconKey: 'subDomains', path: '/admin/sub-domains',
   },
   {
-    key: 'competencies', labelKey: 'navCompetencies', iconKey: 'competencies', path: '/searn-administrator/competencies-management',
+    key: 'competencies', labelKey: 'navCompetencies', iconKey: 'competencies', path: '/admin/competencies-management',
   },
   {
-    key: 'activities', labelKey: 'navActivities', iconKey: 'activities', path: '/searn-administrator/activities-management',
+    key: 'activities', labelKey: 'navActivities', iconKey: 'activities', path: '/admin/activities-management',
   },
   {
-    key: 'trainingCatalog', labelKey: 'navTrainingCatalog', iconKey: 'trainingCatalog', path: '/searn-administrator/training-catalog',
+    key: 'trainingCatalog', labelKey: 'navTrainingCatalog', iconKey: 'trainingCatalog', path: '/admin/training-catalog',
   },
   {
-    key: 'nras', labelKey: 'navNras', iconKey: 'nras', path: '/searn-administrator/nras',
+    key: 'nras', labelKey: 'navNras', iconKey: 'nras', path: '/admin/nras',
   },
   {
-    key: 'trainingProviders', labelKey: 'navTrainingProviders', iconKey: 'trainingProviders', path: '/searn-administrator/training-providers',
+    key: 'trainingProviders', labelKey: 'navTrainingProviders', iconKey: 'trainingProviders', path: '/admin/training-providers',
   },
   {
-    key: 'cbModules', labelKey: 'navCbModules', iconKey: 'cbModules', path: '/searn-administrator/cb-modules',
+    key: 'cbModules', labelKey: 'navCbModules', iconKey: 'cbModules', path: '/admin/cb-modules',
   },
   {
-    key: 'users', labelKey: 'navUsers', iconKey: 'users', path: '/searn-administrator/users',
+    key: 'users', labelKey: 'navUsers', iconKey: 'users', path: '/admin/users',
   },
   {
-    key: 'roles', labelKey: 'navRoles', iconKey: 'roles', path: '/searn-administrator/roles',
+    key: 'roles', labelKey: 'navRoles', iconKey: 'roles', path: '/admin/roles',
   },
   {
-    key: 'settings', labelKey: 'navSettings', iconKey: 'settings', path: '/searn-administrator/settings',
+    key: 'settings', labelKey: 'navSettings', iconKey: 'settings', path: '/admin/settings',
   },
   {
     key: 'reports',
     labelKey: 'navReports',
     iconKey: 'reports',
     children: [
-      { key: 'staffTrained', labelKey: 'navReportsStaffTrained', path: '/searn-administrator/reports/staff-trained' },
-      { key: 'trainingOffers', labelKey: 'navReportsTrainingOffers', path: '/searn-administrator/reports/training-offers' },
-      { key: 'competencyCoverage', labelKey: 'navReportsCompetencyCoverage', path: '/searn-administrator/reports/competency-coverage' },
-      { key: 'staffPerTraining', labelKey: 'navReportsStaffPerTraining', path: '/searn-administrator/reports/staff-per-training' },
-      { key: 'traineeSatisfaction', labelKey: 'navReportsTraineeSatisfaction', path: '/searn-administrator/reports/trainee-satisfaction' },
-      { key: 'priorityFeedback', labelKey: 'navReportsPriorityFeedback', path: '/searn-administrator/reports/priority-feedback' },
+      { key: 'staffTrained', labelKey: 'navReportsStaffTrained', path: '/admin/reports/staff-trained' },
+      { key: 'trainingOffers', labelKey: 'navReportsTrainingOffers', path: '/admin/reports/training-offers' },
+      { key: 'competencyCoverage', labelKey: 'navReportsCompetencyCoverage', path: '/admin/reports/competency-coverage' },
+      { key: 'staffPerTraining', labelKey: 'navReportsStaffPerTraining', path: '/admin/reports/staff-per-training' },
+      { key: 'traineeSatisfaction', labelKey: 'navReportsTraineeSatisfaction', path: '/admin/reports/trainee-satisfaction' },
+      { key: 'priorityFeedback', labelKey: 'navReportsPriorityFeedback', path: '/admin/reports/priority-feedback' },
     ],
   },
 ];

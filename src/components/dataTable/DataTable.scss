@@ -1,0 +1,132 @@
+.data-table {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: .75rem;
+  box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+  overflow: hidden;
+
+  &__wrap {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+  }
+
+  &__head-row {
+    background: rgb(42 59 143 / .05);
+  }
+
+  &__head-cell {
+    text-align: left;
+    padding: .75rem 1.5rem;
+    font-size: .75rem;
+    color: #6B7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+
+    &--right {
+      text-align: right;
+    }
+  }
+
+  &__body-row {
+    border-top: 1px solid #E5E7EB;
+  }
+
+  &__body-cell {
+    padding: 1rem 1.5rem;
+    font-size: .875rem;
+    color: #6B7280;
+
+    &--right {
+      text-align: right;
+    }
+  }
+
+  &__footer {
+    border-top: 1px solid #E5E7EB;
+    padding: .875rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    font-size: .875rem;
+    color: #6B7280;
+    position: relative;
+  }
+
+  &__footer > div:first-child {
+    position: absolute;
+    left: 1.5rem;
+  }
+
+  &__pagination {
+    margin: 0;
+
+    .page-link {
+      color: #2A3B8F;
+      border-color: #2A3B8F;
+    }
+
+    .page-item.active .page-link {
+      background: #2A3B8F;
+      border-color: #2A3B8F;
+      color: #FFFFFF;
+    }
+
+    .page-link:hover {
+      background: #2A3B8F;
+      border-color: #2A3B8F;
+      color: #FFFFFF;
+    }
+  }
+}
+
+@media (width <= 767px) {
+  .data-table {
+    overflow: visible;
+
+    &__footer {
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+    }
+
+    &__footer > div:first-child {
+      position: static;
+      text-align: center;
+    }
+
+    &__pagination {
+      width: 100%;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    &__pagination .pagination-default {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .25rem;
+      margin: 0;
+    }
+
+    &__pagination .page-link {
+      min-width: 30px;
+      height: 30px;
+      padding: 0 .5rem;
+      font-size: .75rem;
+      line-height: 1;
+    }
+
+    &__pagination .page-item:first-child .page-link,
+    &__pagination .page-item:last-child .page-link {
+      font-size: .6875rem;
+      padding: 0 .375rem;
+    }
+  }
+}

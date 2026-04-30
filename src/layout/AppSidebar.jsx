@@ -33,7 +33,7 @@ const AppSidebar = ({
   const { formatMessage } = useIntl();
   const location = useLocation();
   const { role, navbarAccess } = useUserRole();
-  const isReportsActive = location.pathname.startsWith('/searn-administrator/reports');
+  const isReportsActive = location.pathname.startsWith('/admin/reports');
   const [reportsOpen, setReportsOpen] = useState(isReportsActive);
 
   const iconMap = {
@@ -87,12 +87,15 @@ const AppSidebar = ({
             const isParentActive = item.children
               ? item.children.some(child => location.pathname.startsWith(child.path))
               : location.pathname.startsWith(item.path);
+            const navPath = item.key === 'dashboard'
+              ? `/admin/dashboard/${role || 'secretariat'}`
+              : item.path;
 
             return (
               <div key={item.key} className="admin-sidebar__item-group">
                 {!item.children && (
                   <NavLink
-                    to={item.path}
+                    to={navPath}
                     className={({ isActive }) => `admin-sidebar__item ${isActive ? 'is-active' : ''}`}
                     onClick={onNavigate}
                   >
