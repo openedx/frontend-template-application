@@ -1,0 +1,21 @@
+{
+  "countryOptions": [
+    { "value": "India", "label": "India" },
+    { "value": "Indonesia", "label": "Indonesia" },
+    { "value": "Bangladesh", "label": "Bangladesh" },
+    { "value": "Thailand", "label": "Thailand" },
+    { "value": "Sri Lanka", "label": "Sri Lanka" },
+    { "value": "Nepal", "label": "Nepal" },
+    { "value": "Myanmar", "label": "Myanmar" },
+    { "value": "Maldives", "label": "Maldives" },
+    { "value": "Bhutan", "label": "Bhutan" }
+  ],
+  "roleOptions": [
+    { "value": "SEARN Secretariat", "label": "SEARN Secretariat" },
+    { "value": "NRA Admin", "label": "NRA Admin" },
+    { "value": "Training Provider", "label": "Training Provider" },
+    { "value": "IT Support", "label": "IT Support" },
+    { "value": "Country Focal Point", "label": "Country Focal Point" },
+    { "value": "Regulatory Assessor", "label": "Regulatory Assessor" }
+  ]
+}

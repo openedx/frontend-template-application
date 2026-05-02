@@ -2,6 +2,7 @@
   "userRole": "Training Provider",
   "navbarAccess": {
     "accessDashboard": true,
+    "accessCompetencyFramework": true,
     "accessCompetencies": true,
     "accessActivities": true,
     "accessTrainingCatalog": true,
@@ -22,6 +23,34 @@
       "canViewUserDetail": true,
       "canEditUser": true,
       "canDeleteUser": true
+    },
+    "competencyFramework": {
+      "canDownloadTemplate": false,
+      "canImportFramework": false,
+      "canCreateFramework": false,
+      "showWhoTab": true,
+      "showSearnTab": true,
+      "showNraTab": false,
+      "canViewFrameworkWhoTab": true,
+      "canViewFrameworkSearnTab": true,
+      "canViewFrameworkNraTab": false,
+      "canEditFrameworkWhoTab": false,
+      "canEditFrameworkSearnTab": false,
+      "canEditFrameworkNraTab": false,
+      "canDeleteFrameworkWhoTab": false,
+      "canDeleteFrameworkSearnTab": false,
+      "canDeleteFrameworkNraTab": false,
+      "canEditFrameworkPage": false,
+      "showBuilderGeneralTab": true,
+      "showBuilderIntroductionTab": true,
+      "showBuilderOverviewTab": true,
+      "showBuilderDomainsTab": false,
+      "showBuilderSubDomainsTab": false,
+      "showBuilderRoleTab": false,
+      "showBuilderProficiencyLevelTab": false,
+      "showBuilderOrgCompetenciesTab": false,
+      "showBuilderRoleCompetenciesTab": false,
+      "showBuilderActivitiesTab": false
     }
   }
 }

@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PopupDialog from '../popupDialog/PopupDialog';
 import SearchableDropdown from '../searchableDropdown/SearchableDropdown';
 import { useToast } from '../toast/ToastProvider';
+import userFormOptions from '../../mock/users/formOptions.json';
 import messages from '../../pages/users/messages';
 import './AddUserModal.scss';
 
@@ -29,26 +30,13 @@ const AddUserModal = ({
     }
   }, [initialValues, isOpen]);
 
-  const countryOptions = [
-    { value: 'India', label: 'India' },
-    { value: 'Indonesia', label: 'Indonesia' },
-    { value: 'Bangladesh', label: 'Bangladesh' },
-    { value: 'Thailand', label: 'Thailand' },
-    { value: 'Sri Lanka', label: 'Sri Lanka' },
-    { value: 'Nepal', label: 'Nepal' },
-    { value: 'Myanmar', label: 'Myanmar' },
-    { value: 'Maldives', label: 'Maldives' },
-    { value: 'Bhutan', label: 'Bhutan' },
-  ];
-
-  const roleOptions = [
-    { value: 'SEARN Secretariat', label: 'SEARN Secretariat' },
-    { value: 'NRA Admin', label: 'NRA Admin' },
-    { value: 'Training Provider', label: 'Training Provider' },
-    { value: 'IT Support', label: 'IT Support' },
-    { value: 'Country Focal Point', label: 'Country Focal Point' },
-    { value: 'Regulatory Assessor', label: 'Regulatory Assessor' },
-  ];
+  const { countryOptions, roleOptions } = userFormOptions;
+  const isSubmitDisabled = useMemo(() => (
+    !fullName.trim()
+    || !email.trim()
+    || !country
+    || !role
+  ), [country, email, fullName, role]);
 
   return (
     <PopupDialog
@@ -111,6 +99,7 @@ const AddUserModal = ({
         <button
           type="button"
           className="add-user-modal__submit"
+          disabled={isSubmitDisabled}
           onClick={() => {
             const name = fullName || 'User';
             const isEdit = mode === 'edit';

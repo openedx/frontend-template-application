@@ -47,15 +47,8 @@ const SearchableDropdown = ({
   }, [options, searchTerm]);
   const shouldShowSearch = options.length > 5;
 
-  const updateMobileMenuPlacement = useCallback(() => {
+  const updateMenuPlacement = useCallback(() => {
     if (!open || !wrapperRef.current || !menuRef.current) {
-      return;
-    }
-
-    const isMobile = window.matchMedia('(max-width: 767px)').matches;
-    if (!isMobile) {
-      setOpenUpward(false);
-      setMenuMaxHeight(null);
       return;
     }
 
@@ -77,15 +70,15 @@ const SearchableDropdown = ({
       return undefined;
     }
 
-    updateMobileMenuPlacement();
-    const handleViewportChange = () => updateMobileMenuPlacement();
+    updateMenuPlacement();
+    const handleViewportChange = () => updateMenuPlacement();
     window.addEventListener('resize', handleViewportChange);
     window.addEventListener('scroll', handleViewportChange, true);
     return () => {
       window.removeEventListener('resize', handleViewportChange);
       window.removeEventListener('scroll', handleViewportChange, true);
     };
-  }, [open, updateMobileMenuPlacement]);
+  }, [open, updateMenuPlacement]);
 
   return (
     <div className="searchable-dropdown" ref={wrapperRef}>

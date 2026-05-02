@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import AdminLayout from './layout/AdminLayout';
 import Dashboard from './pages/dashboard/Dashboard';
+import CompetencyFramework from './pages/competencyFramework/CompetencyFramework';
 import Users from './pages/users/Users';
 import UserDetailPage from './pages/users/UserDetailPage';
 import Roles from './pages/roles/Roles';
@@ -23,34 +24,35 @@ const getHeaderMeta = (pathname, formatMessage) => {
   if (pathname.startsWith('/admin/users')) {
     return {
       title: formatMessage(appMessages.usersTitle),
-      description: formatMessage(appMessages.usersDescription),
+    };
+  }
+
+  if (pathname.startsWith('/admin/competency-frameworks')) {
+    return {
+      title: formatMessage(appMessages.competencyFrameworkTitle),
     };
   }
 
   if (pathname.startsWith('/admin/roles')) {
     return {
       title: formatMessage(appMessages.rolesTitle),
-      description: formatMessage(appMessages.rolesDescription),
     };
   }
 
   if (pathname.startsWith('/admin/reports')) {
     return {
       title: formatMessage(appMessages.reportsTitle),
-      description: formatMessage(appMessages.reportsDescription),
     };
   }
 
   if (pathname.startsWith('/admin/settings')) {
     return {
       title: formatMessage(appMessages.settingsTitle),
-      description: formatMessage(appMessages.settingsDescription),
     };
   }
 
   return {
     title: formatMessage(appMessages.dashboardTitle),
-    description: formatMessage(appMessages.dashboardDescription),
   };
 };
 
@@ -62,11 +64,12 @@ const RoutedLayout = () => {
   const withAccess = (hasAccess, component) => (hasAccess ? component : <AccessRestrictedPage />);
 
   return (
-    <AdminLayout title={headerMeta.title} description={headerMeta.description}>
+    <AdminLayout title={headerMeta.title}>
       <Routes>
         <Route path="/admin/dashboard/secretariat" element={withAccess(navbarAccess.accessDashboard, <Dashboard />)} />
         <Route path="/admin/dashboard/training-provider" element={withAccess(navbarAccess.accessDashboard, <Dashboard />)} />
-        <Route path="/admin/competency-frameworks" element={withAccess(navbarAccess.accessCompetencyFramework, <PlaceholderPage />)} />
+        <Route path="/admin/competency-frameworks" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
+        <Route path="/admin/competency-frameworks/new" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
         <Route path="/admin/domains" element={withAccess(navbarAccess.accessDomains, <PlaceholderPage />)} />
         <Route path="/admin/sub-domains" element={withAccess(navbarAccess.accessSubDomains, <PlaceholderPage />)} />
         <Route path="/admin/competencies-management" element={withAccess(navbarAccess.accessCompetencies, <PlaceholderPage />)} />

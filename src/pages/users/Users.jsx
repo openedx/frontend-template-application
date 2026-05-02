@@ -15,6 +15,7 @@ import SearchInput from '../../components/searchInput/SearchInput';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import userModeFilterOptions from '../../mock/users/filterOptions.json';
 import usersData from '../../mock/users/users.json';
 import messages from './messages';
 import './Users.scss';
@@ -48,12 +49,10 @@ const Users = () => {
   const canShowActions = canViewUserDetail || canEditUser || canDeleteUser;
   const shouldRenderToolbar = canSearchAndFilter || canAddUser;
 
-  const modeOptions = [
-    { value: 'all', label: formatMessage(messages.allModes) },
-    { value: 'Virtual', label: 'Virtual' },
-    { value: 'In-person', label: 'In-person' },
-    { value: 'Hybrid', label: 'Hybrid' },
-  ];
+  const modeOptions = userModeFilterOptions.map(item => ({
+    value: item.value,
+    label: item.messageKey ? formatMessage(messages[item.messageKey]) : item.label,
+  }));
 
   const filteredUsers = useMemo(() => usersData.filter((user) => {
     const matchesMode = !canSearchAndFilter || modeFilter === 'all' || user.mode === modeFilter;

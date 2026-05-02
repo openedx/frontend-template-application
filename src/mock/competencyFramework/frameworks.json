@@ -1,0 +1,103 @@
+{
+  "frameworks": [
+    {
+      "id": "who-global-1",
+      "tabId": "who",
+      "title": "Global competency framework for regulators of medicines",
+      "description": "A comprehensive framework developed by WHO to strengthen regulatory workforce competencies for medicines regulation worldwide.",
+      "domains": 8,
+      "subDomains": 24,
+      "createdAt": "2024-01-15"
+    },
+    {
+      "id": "who-global-2",
+      "tabId": "who",
+      "title": "WHO quality management competency framework",
+      "description": "Defines core and advanced competencies for quality management systems in medicine regulatory environments.",
+      "domains": 7,
+      "subDomains": 20,
+      "createdAt": "2024-02-11"
+    },
+    {
+      "id": "who-global-3",
+      "tabId": "who",
+      "title": "WHO pharmacovigilance competency framework",
+      "description": "Supports capability building for safety signal detection, risk communication, and post-market surveillance.",
+      "domains": 6,
+      "subDomains": 16,
+      "createdAt": "2024-03-06"
+    },
+    {
+      "id": "who-global-4",
+      "tabId": "who",
+      "title": "WHO inspection and compliance framework",
+      "description": "Competency map for GMP inspections, enforcement readiness, and corrective action oversight.",
+      "domains": 5,
+      "subDomains": 15,
+      "createdAt": "2024-03-20"
+    },
+    {
+      "id": "who-global-5",
+      "tabId": "who",
+      "title": "WHO digital regulation competency framework",
+      "description": "Builds regulator skills for digital submissions, data integrity, and electronic document workflows.",
+      "domains": 4,
+      "subDomains": 12,
+      "createdAt": "2024-04-04"
+    },
+    {
+      "id": "who-global-6",
+      "tabId": "who",
+      "title": "WHO clinical evaluation competency framework",
+      "description": "Framework for evidence review, benefit-risk evaluation, and clinical dossier assessment competency.",
+      "domains": 6,
+      "subDomains": 17,
+      "createdAt": "2024-04-19"
+    },
+    {
+      "id": "nra-national-1",
+      "tabId": "nra",
+      "title": "National competency framework baseline",
+      "description": "Baseline competency framework for national regulator teams across inspection, licensing, and surveillance.",
+      "domains": 5,
+      "subDomains": 14,
+      "createdAt": "2024-03-01"
+    },
+    {
+      "id": "nra-national-2",
+      "tabId": "nra",
+      "title": "NRA inspection supervisor framework",
+      "description": "National competency baseline for inspection supervisors and field decision-making.",
+      "domains": 4,
+      "subDomains": 10,
+      "createdAt": "2024-03-15"
+    },
+    {
+      "id": "nra-national-3",
+      "tabId": "nra",
+      "title": "NRA product quality review framework",
+      "description": "Supports national-level competency development for product quality and consistency checks.",
+      "domains": 4,
+      "subDomains": 9,
+      "createdAt": "2024-04-02"
+    },
+    {
+      "id": "nra-national-4",
+      "tabId": "nra",
+      "title": "NRA post-market surveillance framework",
+      "description": "Competencies for adverse event tracking, incident follow-up, and market surveillance operations.",
+      "domains": 5,
+      "subDomains": 13,
+      "createdAt": "2024-04-18"
+    },
+    {
+      "id": "nra-national-5",
+      "tabId": "nra",
+      "title": "NRA regulatory intelligence framework",
+      "description": "Framework for policy scanning, intelligence collection, and regulatory response planning.",
+      "domains": 3,
+      "subDomains": 8,
+      "createdAt": "2024-04-30"
+    }
+  ]
+}

@@ -180,7 +180,7 @@
   &__field-label {
     font-size: .875rem;
     font-weight: 500;
-    color: #111827;
+    color: #2A398D;
   }
 
   &__field-input {
@@ -190,7 +190,7 @@
     border-radius: .375rem;
     padding: .5rem .75rem;
     font-size: .875rem;
-    color: #111827;
+    color: #2A398D;
 
     &:focus {
       outline: 0;
@@ -235,6 +235,11 @@
     align-items: center;
     justify-content: center;
     gap: .5rem;
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
   }
 
   &__danger-outline-button {
@@ -275,7 +280,7 @@
 
   &__view-text {
     margin: 0;
-    color: #111827;
+    color: #2A398D;
     font-size: .875rem;
   }
 

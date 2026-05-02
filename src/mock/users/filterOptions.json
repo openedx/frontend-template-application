@@ -1,0 +1,6 @@
+[
+  { "value": "all", "messageKey": "allModes" },
+  { "value": "Virtual", "label": "Virtual" },
+  { "value": "In-person", "label": "In-person" },
+  { "value": "Hybrid", "label": "Hybrid" }
+]

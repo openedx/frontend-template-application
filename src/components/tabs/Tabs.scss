@@ -1,0 +1,29 @@
+.app-tabs {
+  background: #F3F5F7;
+  border-radius: .625rem;
+  padding: .25rem;
+  display: flex;
+  gap: .25rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+
+  &__button {
+    border: 0;
+    background: transparent;
+    border-radius: .5rem;
+    padding: .375rem .75rem;
+    font-size: .875rem;
+    color: #505B95;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &.is-active {
+      background: #FFFFFF;
+      color: #2A398D;
+      box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+      font-weight: 500;
+    }
+  }
+}

@@ -34,6 +34,25 @@ body {
   color: #1F2937;
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: #2A398D !important;
+  opacity: 1;
+}
+
+input,
+textarea,
+select,
+option {
+  color: #2A398D;
+}
+
+button:disabled,
+[role='button'][aria-disabled='true'] {
+  opacity: .5 !important;
+  cursor: not-allowed !important;
+}
+
 #root {
   min-height: 100vh;
 }
@@ -372,7 +391,6 @@ body {
   align-self: center;
 }
 
-.admin-top-header__title-wrap p,
 .admin-top-header__title-wrap h1 {
   grid-column: 2;
 }
@@ -383,13 +401,6 @@ body {
   line-height: 1.75rem;
   font-weight: 700;
   color: #2A3B8F;
-}
-
-.admin-top-header__description {
-  margin: 0;
-  font-size: .875rem;
-  line-height: 1.75rem;
-  color: #505B95;
 }
 
 .admin-top-header__actions {
@@ -433,12 +444,6 @@ body {
 
   .admin-top-header__actions {
     margin-left: auto;
-  }
-
-  .admin-top-header__description {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .admin-sidebar {

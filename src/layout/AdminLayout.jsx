@@ -5,7 +5,6 @@ import TopHeader from './TopHeader';
 
 const AdminLayout = ({
   title,
-  description,
   children,
 }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -63,7 +62,6 @@ const AdminLayout = ({
       <div className="admin-main">
         <TopHeader
           title={title}
-          description={description}
           collapsed={isMobile ? !mobileSidebarOpen : sidebarCollapsed}
           isMobile={isMobile}
           onToggleSidebar={handleToggleSidebar}

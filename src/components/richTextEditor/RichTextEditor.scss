@@ -1,0 +1,94 @@
+.app-rich-text-editor {
+  border: 1px solid #D1D5DB;
+  border-radius: .5rem;
+  overflow: hidden;
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+    padding: .5rem;
+    border-bottom: 1px solid #E5E7EB;
+    background: #F8FAFC;
+    flex-wrap: wrap;
+  }
+
+  &__mode {
+    height: 1.75rem;
+    border: 0;
+    border-radius: .375rem;
+    background: transparent;
+    color: #2A398D;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: 0 .625rem;
+    transition: background-color .2s ease, color .2s ease;
+
+    &:hover {
+      background: #2A398D1A;
+    }
+
+    &.is-active {
+      background: #F3F5F7;
+      color: #2A398D;
+    }
+  }
+
+  &__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    border-left: 1px solid #D1D5DB;
+    padding-left: .5rem;
+    margin-left: .25rem;
+    flex-wrap: wrap;
+  }
+
+  &__action {
+    height: 1.75rem;
+    border: 0;
+    border-radius: .375rem;
+    background: transparent;
+    color: #2A398D;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: 0 .625rem;
+    transition: background-color .2s ease, color .2s ease;
+
+    &:hover:not(:disabled) {
+      background: #2A398D1A;
+      color: #2A398D;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    min-height: 7rem;
+    border: 0;
+    border-radius: 0;
+    padding: .5rem .75rem;
+    resize: vertical;
+    font-size: .875rem;
+    color: #2A398D;
+    outline: 0;
+  }
+
+  &__preview {
+    padding: .75rem;
+    min-height: 7rem;
+    font-size: .875rem;
+    color: #2A398D;
+    background: #FFFFFF;
+
+    h3 {
+      margin: .5rem 0;
+      font-size: 1rem;
+      color: #2A3B8F;
+    }
+
+    ul {
+      margin: .5rem 0;
+      padding-left: 1.25rem;
+    }
+  }
+}

@@ -10,7 +10,6 @@ import layoutMessages from './messages';
 
 const TopHeader = ({
   title,
-  description,
   collapsed,
   isMobile,
   onToggleSidebar,
@@ -38,7 +37,6 @@ const TopHeader = ({
             <FontAwesomeIcon icon={toggleIcon} />
           </button>
           <h1 className="admin-top-header__title">{title}</h1>
-          {description && <p className="admin-top-header__description">{description}</p>}
         </div>
 
         <div className="admin-top-header__actions">

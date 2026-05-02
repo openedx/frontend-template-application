@@ -15,7 +15,7 @@
   &__label {
     font-size: .875rem;
     font-weight: 500;
-    color: #111827;
+    color: #2A398D;
   }
 
   &__input {
@@ -44,5 +44,10 @@
     color: #FFFFFF;
     font-size: .875rem;
     font-weight: 600;
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
   }
 }

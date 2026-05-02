@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PopupDialog from '../popupDialog/PopupDialog';
 import MultiSelectInput from '../multiSelectInput/MultiSelectInput';
 
@@ -23,6 +23,9 @@ const RoleFormModal = ({
       setPermissions(role?.permissions || []);
     }
   }, [isOpen, role]);
+  const isSubmitDisabled = useMemo(() => (
+    !name.trim() || !description.trim() || permissions.length === 0
+  ), [description, name, permissions.length]);
 
   return (
     <PopupDialog
@@ -71,6 +74,7 @@ const RoleFormModal = ({
           <button
             type="button"
             className="roles-page__submit-button"
+            disabled={isSubmitDisabled}
             onClick={() => onSave({
               id: role?.id || `role-${Date.now()}`,
               name,
