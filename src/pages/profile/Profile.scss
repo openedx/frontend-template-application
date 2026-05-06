@@ -1,0 +1,248 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+
+  &__card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 1rem;
+    box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+    overflow: hidden;
+  }
+
+  &__card-inner {
+    padding: 1.5rem;
+
+    @media (width >= 640px) {
+      padding: 2rem;
+    }
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    @media (width >= 640px) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  &__avatar {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    border-radius: 1rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / .10);
+    border: 1px solid #E5E7EB;
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__avatar-fallback {
+    width: 100%;
+    height: 100%;
+    background: #2A3B8F;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  &__avatar-upload {
+    position: absolute;
+    right: .25rem;
+    bottom: .25rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    border: 0;
+    background: #2A3B8F;
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 10px -4px rgb(0 0 0 / .35);
+
+    &:hover {
+      background: #1F2D6E;
+    }
+  }
+
+  &__file {
+    display: none;
+  }
+
+  &__summary-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2A3B8F;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    margin-top: .25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+    font-size: .875rem;
+    color: #6B7280;
+  }
+
+  &__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    min-width: 0;
+  }
+
+  &__hint {
+    margin: .5rem 0 0;
+    font-size: .75rem;
+    color: #6B7280;
+  }
+
+  &__section-title {
+    margin: 0 0 1rem;
+    font-size: .875rem;
+    font-weight: 700;
+    color: #2A3B8F;
+  }
+
+  &__form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+
+    @media (width >= 640px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    min-width: 0;
+
+    &--full {
+      @media (width >= 640px) {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  &__label {
+    font-size: .875rem;
+    font-weight: 600;
+    color: #2A398D;
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+    border: 1px solid #D1D5DB;
+    border-radius: .375rem;
+    background: #FFFFFF;
+    padding: .5rem .75rem;
+    font-size: .875rem;
+    color: #2A398D;
+    min-width: 0;
+
+    &::placeholder {
+      color: #2A398D;
+    }
+
+    &:focus {
+      outline: 0;
+      border-color: #2A398D;
+      box-shadow: 0 0 0 2px rgb(42 57 141 / .15);
+    }
+  }
+
+  &__input {
+    height: 44px;
+  }
+
+  &__textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .searchable-dropdown__trigger,
+  .searchable-dropdown__search {
+    color: #2A398D;
+  }
+
+  &__placeholder {
+    color: #2A398D;
+  }
+
+  &__helper {
+    margin: 0;
+    font-size: .75rem;
+    color: #6B7280;
+  }
+
+  &__footer {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .75rem;
+    flex-wrap: wrap;
+  }
+
+  &__outline-button,
+  &__primary-button {
+    height: 44px;
+    border-radius: .5rem;
+    font-size: .875rem;
+    font-weight: 600;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+  }
+
+  &__outline-button {
+    border: 2px solid #2A3B8F;
+    background: transparent;
+    color: #2A3B8F;
+  }
+
+  &__primary-button {
+    border: 0;
+    background: #2A3B8F;
+    color: #FFFFFF;
+
+    &:hover {
+      background: #1F2D6E;
+    }
+  }
+}
+

@@ -6,15 +6,50 @@ const usersPageMessages = defineMessages({
     defaultMessage: 'Search users by name or email...',
     description: 'Placeholder for users search input',
   },
+  downloadTemplate: {
+    id: 'app.users.actions.downloadTemplate',
+    defaultMessage: 'Download Template',
+    description: 'Download users template button label',
+  },
+  importFromExcel: {
+    id: 'app.users.actions.importFromExcel',
+    defaultMessage: 'Import from Excel',
+    description: 'Import users from excel button label',
+  },
+  importModalTitle: {
+    id: 'app.users.import.modal.title',
+    defaultMessage: 'Import Users from Excel',
+    description: 'Title for import users modal',
+  },
+  importModalDescription: {
+    id: 'app.users.import.modal.description',
+    defaultMessage: 'Fill in user details in the file, then upload it here.',
+    description: 'Description for import users modal',
+  },
+  importModalChooseFile: {
+    id: 'app.users.import.modal.chooseFile',
+    defaultMessage: 'Choose file (.xlsx, .csv)',
+    description: 'Choose file label for import users modal',
+  },
+  importModalCancel: {
+    id: 'app.users.import.modal.cancel',
+    defaultMessage: 'Cancel',
+    description: 'Cancel button label for import users modal',
+  },
+  importModalImport: {
+    id: 'app.users.import.modal.import',
+    defaultMessage: 'Import',
+    description: 'Import button label for import users modal',
+  },
   addUser: {
     id: 'app.users.actions.addUser',
     defaultMessage: 'Add User',
     description: 'Button label to add user',
   },
-  allModes: {
-    id: 'app.users.filter.allModes',
-    defaultMessage: 'All Modes',
-    description: 'Default users mode filter label',
+  allRoles: {
+    id: 'app.users.filter.allRoles',
+    defaultMessage: 'All Roles',
+    description: 'Default users role filter label',
   },
   dropdownSearchPlaceholder: {
     id: 'app.users.filter.search.placeholder',
@@ -85,6 +120,11 @@ const usersPageMessages = defineMessages({
     id: 'app.users.addUser.modal.role.placeholder',
     defaultMessage: 'Select role',
     description: 'Placeholder for role dropdown in add user modal',
+  },
+  addUserModalSubRolePlaceholder: {
+    id: 'app.users.addUser.modal.subRole.placeholder',
+    defaultMessage: 'Select option',
+    description: 'Placeholder for sub-role dropdown when the selected role has sub-options',
   },
   addUserModalCreateButton: {
     id: 'app.users.addUser.modal.create.button',

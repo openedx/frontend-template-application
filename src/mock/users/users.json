@@ -13,6 +13,7 @@
     "name": "Mr. Somchai Kanchana",
     "email": "somchai@mfa.th",
     "role": "NRA Admin",
+    "roleSub": "nra-national-lead",
     "country": "Thailand",
     "joined": "Feb 3, 2026",
     "mode": "In-person"
@@ -22,15 +23,18 @@
     "name": "Ms. Aisha Rahman",
     "email": "aisha@nda.gov",
     "role": "Training Provider",
+    "roleSub": "tp-course-coordinator",
     "country": "Nepal",
     "joined": "Mar 12, 2026",
-    "mode": "Virtual"
+    "mode": "Virtual",
+    "status": "Active"
   },
   {
     "id": "u4",
     "name": "Dr. Lim Wei Chen",
     "email": "limwc@hsa.sg",
     "role": "Training Provider",
+    "roleSub": "tp-assessment-specialist",
     "country": "Sri Lanka",
     "joined": "Dec 5, 2025",
     "mode": "Hybrid"

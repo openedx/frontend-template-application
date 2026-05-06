@@ -10,11 +10,11 @@
       "Add/Onboard new user",
       "Edit/Delete user",
       "View user list",
-      "Manage domains",
-      "Manage sub-domain",
-      "Manage competencies",
       "Manage activities",
       "Manage training catalog",
+      "Manage countries",
+      "View pending requests",
+      "Manage profile",
       "Manage settings",
       "Manage reports"
     ]
@@ -30,11 +30,11 @@
       "Add/Onboard new user",
       "Edit/Delete user",
       "View user list",
-      "Manage domains",
-      "Manage sub-domain",
-      "Manage competencies",
       "Manage activities",
       "Manage training catalog",
+      "Manage countries",
+      "View pending requests",
+      "Manage profile",
       "Manage reports"
     ]
   },
@@ -57,11 +57,13 @@
     "name": "Training Provider",
     "description": "Creates and manages training content, courses, and assessments",
     "userCount": 24,
-    "permissionCount": 2,
+    "permissionCount": 4,
     "iconBackground": "#059669",
     "permissions": [
       "Manage training catalog",
-      "Manage activities"
+      "Manage activities",
+      "View pending requests",
+      "Manage profile"
     ]
   }
 ]

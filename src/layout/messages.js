@@ -31,21 +31,6 @@ const layoutMessages = defineMessages({
     defaultMessage: 'Competency Framework',
     description: 'Sidebar navigation label for competency framework',
   },
-  navDomains: {
-    id: 'app.layout.sidebar.nav.domains',
-    defaultMessage: 'Domains Management',
-    description: 'Sidebar navigation label for domains management',
-  },
-  navSubDomains: {
-    id: 'app.layout.sidebar.nav.subDomains',
-    defaultMessage: 'Sub Domains Management',
-    description: 'Sidebar navigation label for sub domains management',
-  },
-  navCompetencies: {
-    id: 'app.layout.sidebar.nav.competencies',
-    defaultMessage: 'Competencies',
-    description: 'Sidebar navigation label for competencies',
-  },
   navActivities: {
     id: 'app.layout.sidebar.nav.activities',
     defaultMessage: 'Activities',
@@ -61,15 +46,25 @@ const layoutMessages = defineMessages({
     defaultMessage: 'NRAs Management',
     description: 'Sidebar navigation label for nras management',
   },
+  navCountries: {
+    id: 'app.layout.sidebar.nav.countries',
+    defaultMessage: 'Countries',
+    description: 'Sidebar navigation label for countries management',
+  },
   navTrainingProviders: {
     id: 'app.layout.sidebar.nav.trainingProviders',
     defaultMessage: 'Training Providers',
     description: 'Sidebar navigation label for training providers',
   },
-  navCbModules: {
-    id: 'app.layout.sidebar.nav.cbModules',
-    defaultMessage: 'CB Module Management',
-    description: 'Sidebar navigation label for cb modules',
+  navPendingRequests: {
+    id: 'app.layout.sidebar.nav.pendingRequests',
+    defaultMessage: 'Pending Requests',
+    description: 'Sidebar navigation label for pending requests',
+  },
+  navProfile: {
+    id: 'app.layout.sidebar.nav.profile',
+    defaultMessage: 'Profile',
+    description: 'Sidebar navigation label for admin profile',
   },
   navUsers: {
     id: 'app.layout.sidebar.nav.users',

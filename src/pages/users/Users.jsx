@@ -1,23 +1,28 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo, useState } from 'react';
 import {
+  faDownload,
   faEye,
   faPen,
   faPlus,
   faTrash,
+  faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import AddUserModal from '../../components/addUserModal/AddUserModal';
+import ImportFrameworkModal from '../../components/competencyFramework/ImportFrameworkModal';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
 import DataTable from '../../components/dataTable/DataTable';
 import SearchInput from '../../components/searchInput/SearchInput';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
-import userModeFilterOptions from '../../mock/users/filterOptions.json';
+import userFormOptions from '../../mock/users/formOptions.json';
 import usersData from '../../mock/users/users.json';
 import messages from './messages';
+import { getRoleDisplayLine } from './roleDisplay';
+import '../competencyFramework/CompetencyFramework.scss';
 import './Users.scss';
 
 const USERS_PER_PAGE = 8;
@@ -33,42 +38,63 @@ const Users = () => {
   const { showToast } = useToast();
   const { componentAccess } = useUserRole();
   const [searchText, setSearchText] = useState('');
-  const [modeFilter, setModeFilter] = useState('all');
+  const [roleFilter, setRoleFilter] = useState('all');
   const [page, setPage] = useState(1);
   const [addUserOpen, setAddUserOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [modalInitialValues, setModalInitialValues] = useState({});
   const [deleteUser, setDeleteUser] = useState(null);
+  const [importUsersOpen, setImportUsersOpen] = useState(false);
 
   const canShowTable = Boolean(componentAccess?.users?.showTable ?? true);
   const canSearchAndFilter = Boolean(componentAccess?.users?.canSearchAndFilter ?? true);
+  const canDownloadUsersTemplate = Boolean(componentAccess?.users?.canDownloadUsersTemplate ?? false);
+  const canImportUsers = Boolean(componentAccess?.users?.canImportUsers ?? false);
   const canAddUser = Boolean(componentAccess?.users?.canAddUser ?? true);
   const canViewUserDetail = Boolean(componentAccess?.users?.canViewUserDetail ?? true);
   const canEditUser = Boolean(componentAccess?.users?.canEditUser ?? true);
   const canDeleteUser = Boolean(componentAccess?.users?.canDeleteUser ?? true);
-  const canShowActions = canViewUserDetail || canEditUser || canDeleteUser;
-  const shouldRenderToolbar = canSearchAndFilter || canAddUser;
 
-  const modeOptions = userModeFilterOptions.map(item => ({
-    value: item.value,
-    label: item.messageKey ? formatMessage(messages[item.messageKey]) : item.label,
-  }));
+  const canViewUserColumn = Boolean(componentAccess?.users?.canViewUserColumn ?? true);
+  const canViewRoleColumn = Boolean(componentAccess?.users?.canViewRoleColumn ?? true);
+  const canViewCountryColumn = Boolean(componentAccess?.users?.canViewCountryColumn ?? true);
+  const canViewJoinedColumn = Boolean(componentAccess?.users?.canViewJoinedColumn ?? true);
+  const canViewActionsColumn = Boolean(componentAccess?.users?.canViewActionsColumn ?? true);
+
+  const canShowActions = canViewUserDetail || canEditUser || canDeleteUser;
+  const shouldRenderToolbar = canSearchAndFilter || canDownloadUsersTemplate || canImportUsers || canAddUser;
+
+  const importModalLabels = useMemo(() => ({
+    title: formatMessage(messages.importModalTitle),
+    description: formatMessage(messages.importModalDescription),
+    chooseFile: formatMessage(messages.importModalChooseFile),
+    cancel: formatMessage(messages.importModalCancel),
+    import: formatMessage(messages.importModalImport),
+  }), [formatMessage]);
+
+  const roleOptions = [
+    { value: 'all', label: formatMessage(messages.allRoles) },
+    ...userFormOptions.roleOptions.map(item => ({
+      value: item.value,
+      label: item.label,
+    })),
+  ];
 
   const filteredUsers = useMemo(() => usersData.filter((user) => {
-    const matchesMode = !canSearchAndFilter || modeFilter === 'all' || user.mode === modeFilter;
+    const matchesRole = !canSearchAndFilter || roleFilter === 'all' || user.role === roleFilter;
     const query = canSearchAndFilter ? searchText.trim().toLowerCase() : '';
     const matchesSearch = !query
       || user.name.toLowerCase().includes(query)
       || user.email.toLowerCase().includes(query);
 
-    return matchesMode && matchesSearch;
-  }), [canSearchAndFilter, modeFilter, searchText]);
+    return matchesRole && matchesSearch;
+  }), [canSearchAndFilter, roleFilter, searchText]);
 
   const totalPages = Math.max(1, Math.ceil(filteredUsers.length / USERS_PER_PAGE));
   const safePage = Math.min(page, totalPages);
   const currentUsers = filteredUsers.slice((safePage - 1) * USERS_PER_PAGE, safePage * USERS_PER_PAGE);
   const columns = [
-    {
+    ...(canViewUserColumn ? [{
       key: 'user',
       header: formatMessage(messages.columnUser),
       renderCell: user => (
@@ -86,15 +112,21 @@ const Users = () => {
           </div>
         </div>
       ),
-    },
-    {
+    }] : []),
+    ...(canViewRoleColumn ? [{
       key: 'role',
       header: formatMessage(messages.columnRole),
-      renderCell: user => <span className="users-page__role-pill">{user.role}</span>,
-    },
-    { key: 'country', header: formatMessage(messages.columnCountry) },
-    { key: 'joined', header: formatMessage(messages.columnJoined) },
-    ...(canShowActions ? [{
+      renderCell: user => <span className="users-page__role-pill">{getRoleDisplayLine(user)}</span>,
+    }] : []),
+    ...(canViewCountryColumn ? [{
+      key: 'country',
+      header: formatMessage(messages.columnCountry),
+    }] : []),
+    ...(canViewJoinedColumn ? [{
+      key: 'joined',
+      header: formatMessage(messages.columnJoined),
+    }] : []),
+    ...(canShowActions && canViewActionsColumn ? [{
       key: 'actions',
       header: formatMessage(messages.columnActions),
       align: 'right',
@@ -117,6 +149,7 @@ const Users = () => {
                   email: row.email,
                   country: row.country,
                   role: row.role,
+                  roleSub: row.roleSub || '',
                 });
                 setAddUserOpen(true);
               }}
@@ -136,8 +169,7 @@ const Users = () => {
           )}
         </div>
       ),
-    },
-    ] : []),
+    }] : []),
   ];
 
   return (
@@ -158,24 +190,40 @@ const Users = () => {
           <div className="users-page__actions">
             {canSearchAndFilter && (
               <SearchableDropdown
-                value={modeFilter}
-                options={modeOptions}
+                value={roleFilter}
+                options={roleOptions}
                 onChange={(nextValue) => {
-                  setModeFilter(nextValue);
+                  setRoleFilter(nextValue);
                   setPage(1);
                 }}
                 triggerLabel={
-                  modeOptions.find(item => item.value === modeFilter)?.label
-                  || formatMessage(messages.allModes)
+                  roleOptions.find(item => item.value === roleFilter)?.label
+                  || formatMessage(messages.allRoles)
                 }
                 searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
                 noOptionsText={formatMessage(messages.dropdownNoOptions)}
               />
             )}
+            {canDownloadUsersTemplate && (
+              <button type="button" className="competency-framework-page__outline-button">
+                <FontAwesomeIcon icon={faDownload} />
+                {formatMessage(messages.downloadTemplate)}
+              </button>
+            )}
+            {canImportUsers && (
+              <button
+                type="button"
+                className="competency-framework-page__outline-button"
+                onClick={() => setImportUsersOpen(true)}
+              >
+                <FontAwesomeIcon icon={faUpload} />
+                {formatMessage(messages.importFromExcel)}
+              </button>
+            )}
             {canAddUser && (
               <button
                 type="button"
-                className="users-page__add-button"
+                className="competency-framework-page__primary-button"
                 onClick={() => {
                   setModalMode('add');
                   setModalInitialValues({});
@@ -211,6 +259,14 @@ const Users = () => {
           onClose={() => setAddUserOpen(false)}
           mode={modalMode}
           initialValues={modalInitialValues}
+        />
+      )}
+
+      {canImportUsers && (
+        <ImportFrameworkModal
+          isOpen={importUsersOpen}
+          onClose={() => setImportUsersOpen(false)}
+          labels={importModalLabels}
         />
       )}
 

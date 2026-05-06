@@ -17,6 +17,7 @@ import userDetailsData from '../../mock/users/userDetails.json';
 import usersData from '../../mock/users/users.json';
 import detailMessages from './detailMessages';
 import usersMessages from './messages';
+import { getRoleDisplayLine } from './roleDisplay';
 import '../../components/userDetails/UserDetails.scss';
 
 const getInitials = name => name.split(' ')
@@ -72,7 +73,7 @@ const UserDetailPage = () => {
         user={user}
         detail={detail}
         initials={getInitials(user.name)}
-        roleLabel={user.role}
+        roleLabel={getRoleDisplayLine(user)}
         statusLabel={detail.status}
         canEditUser={canEditUser}
         canDeleteUser={canDeleteUser}
@@ -115,6 +116,7 @@ const UserDetailPage = () => {
             email: user.email,
             country: user.country,
             role: user.role,
+            roleSub: user.roleSub || '',
           }}
         />
       )}

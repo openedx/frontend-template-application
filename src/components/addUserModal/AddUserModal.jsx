@@ -20,6 +20,7 @@ const AddUserModal = ({
   const [email, setEmail] = useState('');
   const [country, setCountry] = useState('');
   const [role, setRole] = useState('');
+  const [roleSub, setRoleSub] = useState('');
 
   useEffect(() => {
     if (isOpen) {
@@ -27,16 +28,24 @@ const AddUserModal = ({
       setEmail(initialValues.email || '');
       setCountry(initialValues.country || '');
       setRole(initialValues.role || '');
+      setRoleSub(initialValues.roleSub || '');
     }
   }, [initialValues, isOpen]);
 
   const { countryOptions, roleOptions } = userFormOptions;
-  const isSubmitDisabled = useMemo(() => (
-    !fullName.trim()
-    || !email.trim()
-    || !country
-    || !role
-  ), [country, email, fullName, role]);
+
+  const selectedRoleDef = useMemo(
+    () => roleOptions.find(item => item.value === role),
+    [role, roleOptions],
+  );
+  const subRoleOptions = selectedRoleDef?.subOptions || [];
+  const needsSubRole = subRoleOptions.length > 0;
+
+  const isSubmitDisabled = useMemo(() => {
+    const base = !fullName.trim() || !email.trim() || !country || !role;
+    const subInvalid = needsSubRole && !roleSub;
+    return base || subInvalid;
+  }, [country, email, fullName, role, needsSubRole, roleSub]);
 
   return (
     <PopupDialog
@@ -88,13 +97,35 @@ const AddUserModal = ({
           <label className="add-user-modal__label">{formatMessage(messages.addUserModalRole)}</label>
           <SearchableDropdown
             value={role}
-            options={roleOptions}
-            onChange={setRole}
+            options={roleOptions.map(({ value, label }) => ({ value, label }))}
+            onChange={(nextRole) => {
+              setRole(nextRole);
+              setRoleSub('');
+            }}
             triggerLabel={role || formatMessage(messages.addUserModalRolePlaceholder)}
             searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
             noOptionsText={formatMessage(messages.dropdownNoOptions)}
           />
         </div>
+
+        {needsSubRole && selectedRoleDef && (
+          <div className="add-user-modal__field">
+            <label className="add-user-modal__label">
+              {selectedRoleDef.label}
+            </label>
+            <SearchableDropdown
+              value={roleSub}
+              options={subRoleOptions}
+              onChange={setRoleSub}
+              triggerLabel={
+                subRoleOptions.find(o => o.value === roleSub)?.label
+                || formatMessage(messages.addUserModalSubRolePlaceholder)
+              }
+              searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
+              noOptionsText={formatMessage(messages.dropdownNoOptions)}
+            />
+          </div>
+        )}
 
         <button
           type="button"

@@ -6,15 +6,6 @@ const navigationItems = [
     key: 'competencyFramework', labelKey: 'navCompetencyFramework', iconKey: 'competencyFramework', path: '/admin/competency-frameworks',
   },
   {
-    key: 'domains', labelKey: 'navDomains', iconKey: 'domains', path: '/admin/domains',
-  },
-  {
-    key: 'subDomains', labelKey: 'navSubDomains', iconKey: 'subDomains', path: '/admin/sub-domains',
-  },
-  {
-    key: 'competencies', labelKey: 'navCompetencies', iconKey: 'competencies', path: '/admin/competencies-management',
-  },
-  {
     key: 'activities', labelKey: 'navActivities', iconKey: 'activities', path: '/admin/activities-management',
   },
   {
@@ -24,10 +15,16 @@ const navigationItems = [
     key: 'nras', labelKey: 'navNras', iconKey: 'nras', path: '/admin/nras',
   },
   {
+    key: 'countries', labelKey: 'navCountries', iconKey: 'countries', path: '/admin/countries',
+  },
+  {
     key: 'trainingProviders', labelKey: 'navTrainingProviders', iconKey: 'trainingProviders', path: '/admin/training-providers',
   },
   {
-    key: 'cbModules', labelKey: 'navCbModules', iconKey: 'cbModules', path: '/admin/cb-modules',
+    key: 'pendingRequests', labelKey: 'navPendingRequests', iconKey: 'pendingRequests', path: '/admin/pending-requests',
+  },
+  {
+    key: 'profile', labelKey: 'navProfile', iconKey: 'profile', path: '/admin/profile',
   },
   {
     key: 'users', labelKey: 'navUsers', iconKey: 'users', path: '/admin/users',
@@ -56,14 +53,13 @@ const navigationItems = [
 const navigationAccessMap = {
   dashboard: 'accessDashboard',
   competencyFramework: 'accessCompetencyFramework',
-  domains: 'accessDomains',
-  subDomains: 'accessSubDomains',
-  competencies: 'accessCompetencies',
   activities: 'accessActivities',
   trainingCatalog: 'accessTrainingCatalog',
   nras: 'accessNras',
+  countries: 'accessCountries',
   trainingProviders: 'accessTrainingProviders',
-  cbModules: 'accessCbModules',
+  pendingRequests: 'accessPendingRequests',
+  profile: 'accessProfile',
   users: 'accessUsers',
   roles: 'accessRoles',
   settings: 'accessSettings',

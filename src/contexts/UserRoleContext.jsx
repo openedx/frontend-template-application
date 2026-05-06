@@ -7,14 +7,13 @@ import { fetchUserRoleData } from '../services/userRoleDataService';
 const DEFAULT_NAVBAR_ACCESS = {
   accessDashboard: false,
   accessCompetencyFramework: false,
-  accessDomains: false,
-  accessSubDomains: false,
-  accessCompetencies: false,
   accessActivities: false,
   accessTrainingCatalog: false,
   accessNras: false,
+  accessCountries: false,
   accessTrainingProviders: false,
-  accessCbModules: false,
+  accessPendingRequests: false,
+  accessProfile: false,
   accessUsers: false,
   accessRoles: false,
   accessSettings: false,
@@ -32,10 +31,17 @@ const DEFAULT_COMPONENT_ACCESS = {
   users: {
     showTable: false,
     canSearchAndFilter: false,
+    canDownloadUsersTemplate: false,
+    canImportUsers: false,
     canAddUser: false,
     canViewUserDetail: false,
     canEditUser: false,
     canDeleteUser: false,
+    canViewUserColumn: false,
+    canViewRoleColumn: false,
+    canViewCountryColumn: false,
+    canViewJoinedColumn: false,
+    canViewActionsColumn: false,
   },
   competencyFramework: {
     canDownloadTemplate: false,
@@ -70,6 +76,63 @@ const DEFAULT_COMPONENT_ACCESS = {
     canViewRole: false,
     canEditRole: false,
     canDeleteRole: false,
+  },
+  activities: {
+    showTable: false,
+    canSearchAndFilter: false,
+    canViewActivityColumn: false,
+    canViewDomainColumn: false,
+    canViewSubDomainColumn: false,
+    canViewProficiencyColumn: false,
+    canViewRoleColumn: false,
+  },
+  trainingCatalog: {
+    showTable: false,
+    canSearchAndFilter: false,
+    canViewTrainingDetail: false,
+    canViewProviderDetail: false,
+    canViewFeedback: false,
+  },
+  countries: {
+    showCards: false,
+    canSearch: false,
+    canAddCountry: false,
+    canEditCountry: false,
+    canDeleteCountry: false,
+  },
+  nras: {
+    showTable: false,
+    canSearch: false,
+    canOnboardNra: false,
+    canEditNra: false,
+    canDeleteNra: false,
+  },
+  trainingProviders: {
+    showTable: false,
+    canSearch: false,
+    canAddProvider: false,
+    canEditProvider: false,
+    canDeleteProvider: false,
+  },
+  profile: {
+    canEdit: false,
+    canUploadPhoto: false,
+  },
+  settings: {
+    canEdit: false,
+    canUploadLogo: false,
+  },
+  pendingRequests: {
+    showTable: false,
+    canSearch: false,
+    canFilterByType: false,
+    canViewRequestDetail: false,
+  },
+  requestedTrainings: {
+    showTable: false,
+    canSearch: false,
+    canFilterByStatus: false,
+    canRequestTraining: false,
   },
 };
 
@@ -115,6 +178,42 @@ const UserRoleProvider = ({ children }) => {
       roles: {
         ...DEFAULT_COMPONENT_ACCESS.roles,
         ...(roleData.componentAccess?.roles || {}),
+      },
+      activities: {
+        ...DEFAULT_COMPONENT_ACCESS.activities,
+        ...(roleData.componentAccess?.activities || {}),
+      },
+      trainingCatalog: {
+        ...DEFAULT_COMPONENT_ACCESS.trainingCatalog,
+        ...(roleData.componentAccess?.trainingCatalog || {}),
+      },
+      countries: {
+        ...DEFAULT_COMPONENT_ACCESS.countries,
+        ...(roleData.componentAccess?.countries || {}),
+      },
+      nras: {
+        ...DEFAULT_COMPONENT_ACCESS.nras,
+        ...(roleData.componentAccess?.nras || {}),
+      },
+      trainingProviders: {
+        ...DEFAULT_COMPONENT_ACCESS.trainingProviders,
+        ...(roleData.componentAccess?.trainingProviders || {}),
+      },
+      profile: {
+        ...DEFAULT_COMPONENT_ACCESS.profile,
+        ...(roleData.componentAccess?.profile || {}),
+      },
+      settings: {
+        ...DEFAULT_COMPONENT_ACCESS.settings,
+        ...(roleData.componentAccess?.settings || {}),
+      },
+      pendingRequests: {
+        ...DEFAULT_COMPONENT_ACCESS.pendingRequests,
+        ...(roleData.componentAccess?.pendingRequests || {}),
+      },
+      requestedTrainings: {
+        ...DEFAULT_COMPONENT_ACCESS.requestedTrainings,
+        ...(roleData.componentAccess?.requestedTrainings || {}),
       },
     };
 

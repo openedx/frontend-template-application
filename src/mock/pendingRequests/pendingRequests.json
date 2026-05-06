@@ -1,0 +1,23 @@
+[
+  {
+    "id": "id-00arra",
+    "title": "NRA onboarding — Myanmar FDA",
+    "subtitle": "Awaiting final account activation",
+    "type": "NRA onboarding",
+    "status": "approved",
+    "submittedRelative": "3 days ago",
+    "submittedBy": { "name": "Dr. Aung Min", "email": "aung.min@fda.gov.mm" },
+    "description": "Myanmar FDA has completed the onboarding documentation and is awaiting final account activation by the SEARN Secretariat. All required organisational details, admin contacts, and signed MoU have been received."
+  },
+  {
+    "id": "id-00arrb",
+    "title": "Training Provider onboarding — WHO EMRO",
+    "subtitle": "Profile submitted, pending activation",
+    "type": "Provider onboarding",
+    "status": "rejected",
+    "submittedRelative": "5 hours ago",
+    "submittedBy": { "name": "Dr. Sara Ahmed", "email": "s.ahmed@who.int" },
+    "description": "The provider onboarding request was submitted but requires additional verification of organisation details and admin contacts."
+  }
+]
+

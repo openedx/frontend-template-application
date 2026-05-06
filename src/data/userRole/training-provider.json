@@ -3,9 +3,10 @@
   "navbarAccess": {
     "accessDashboard": true,
     "accessCompetencyFramework": true,
-    "accessCompetencies": true,
     "accessActivities": true,
     "accessTrainingCatalog": true,
+    "accessPendingRequests": true,
+    "accessProfile": true,
     "accessUsers": true
   },
   "componentAccess": {
@@ -19,10 +20,17 @@
     "users": {
       "showTable": true,
       "canSearchAndFilter": true,
+      "canDownloadUsersTemplate": false,
+      "canImportUsers": false,
       "canAddUser": true,
       "canViewUserDetail": true,
       "canEditUser": true,
-      "canDeleteUser": true
+      "canDeleteUser": true,
+      "canViewUserColumn": true,
+      "canViewRoleColumn": true,
+      "canViewCountryColumn": true,
+      "canViewJoinedColumn": true,
+      "canViewActionsColumn": true
     },
     "competencyFramework": {
       "canDownloadTemplate": false,
@@ -51,6 +59,63 @@
       "showBuilderOrgCompetenciesTab": false,
       "showBuilderRoleCompetenciesTab": false,
       "showBuilderActivitiesTab": false
+    },
+    "nras": {
+      "showTable": false,
+      "canSearch": false,
+      "canOnboardNra": false,
+      "canEditNra": false,
+      "canDeleteNra": false
+    },
+    "trainingProviders": {
+      "showTable": false,
+      "canSearch": false,
+      "canAddProvider": false,
+      "canEditProvider": false,
+      "canDeleteProvider": false
+    },
+    "profile": {
+      "canEdit": true,
+      "canUploadPhoto": true
+    },
+    "settings": {
+      "canEdit": false,
+      "canUploadLogo": false
+    },
+    "pendingRequests": {
+      "showTable": false,
+      "canSearch": false,
+      "canFilterByType": false,
+      "canViewRequestDetail": false
+    },
+    "requestedTrainings": {
+      "showTable": true,
+      "canSearch": true,
+      "canFilterByStatus": true,
+      "canRequestTraining": true
+    },
+    "activities": {
+      "showTable": true,
+      "canSearchAndFilter": true,
+      "canViewActivityColumn": true,
+      "canViewDomainColumn": true,
+      "canViewSubDomainColumn": true,
+      "canViewProficiencyColumn": true,
+      "canViewRoleColumn": true
+    },
+    "trainingCatalog": {
+      "showTable": true,
+      "canSearchAndFilter": true,
+      "canViewTrainingDetail": true,
+      "canViewProviderDetail": true,
+      "canViewFeedback": true
+    },
+    "countries": {
+      "showCards": false,
+      "canSearch": false,
+      "canAddCountry": false,
+      "canEditCountry": false,
+      "canDeleteCountry": false
     }
   }
 }

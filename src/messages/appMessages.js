@@ -31,6 +31,46 @@ const appMessages = defineMessages({
     defaultMessage: 'Settings',
     description: 'Top header title for settings route',
   },
+  countriesTitle: {
+    id: 'app.layout.route.countries.title',
+    defaultMessage: 'Countries',
+    description: 'Top header title for countries route',
+  },
+  pendingRequestsTitle: {
+    id: 'app.layout.route.pendingRequests.title',
+    defaultMessage: 'Pending Requests',
+    description: 'Top header title for pending requests route',
+  },
+  requestedTrainingsTitle: {
+    id: 'app.layout.route.requestedTrainings.title',
+    defaultMessage: 'Requested Trainings',
+    description: 'Top header title for requested trainings route',
+  },
+  profileTitle: {
+    id: 'app.layout.route.profile.title',
+    defaultMessage: 'Profile',
+    description: 'Top header title for profile route',
+  },
+  activitiesTitle: {
+    id: 'app.layout.route.activities.title',
+    defaultMessage: 'Activities',
+    description: 'Top header title for activities management route',
+  },
+  trainingCatalogTitle: {
+    id: 'app.layout.route.trainingCatalog.title',
+    defaultMessage: 'Training Catalog',
+    description: 'Top header title for training catalog routes',
+  },
+  nrasTitle: {
+    id: 'app.layout.route.nras.title',
+    defaultMessage: 'NRAs Management',
+    description: 'Top header title for NRAs management route',
+  },
+  trainingProvidersTitle: {
+    id: 'app.layout.route.trainingProviders.title',
+    defaultMessage: 'Training Providers',
+    description: 'Top header title for training providers route',
+  },
 });
 
 export default appMessages;
