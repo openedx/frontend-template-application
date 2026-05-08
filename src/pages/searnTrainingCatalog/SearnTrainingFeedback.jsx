@@ -10,9 +10,9 @@ import feedbackData from '../../mock/trainingCatalog/feedback.json';
 import trainingsData from '../../mock/trainingCatalog/trainings.json';
 import messages from './messages';
 import { getStarFill } from './starUtils';
-import './TrainingFeedback.scss';
+import './SearnTrainingFeedback.scss';
 
-const TrainingFeedback = () => {
+const SearnTrainingFeedback = () => {
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const { trainingId } = useParams();
@@ -27,7 +27,7 @@ const TrainingFeedback = () => {
   if (!training || !feedback) {
     return (
       <section className="training-feedback">
-        <button type="button" className="training-feedback__back" onClick={() => navigate('/admin/training-catalog')}>
+        <button type="button" className="training-feedback__back" onClick={() => navigate('/admin/searn-training-catalog')}>
           <FontAwesomeIcon icon={faArrowLeft} />
           {formatMessage(messages.backToCatalog)}
         </button>
@@ -42,7 +42,7 @@ const TrainingFeedback = () => {
 
   return (
     <section className="training-feedback">
-      <button type="button" className="training-feedback__back" onClick={() => navigate('/admin/training-catalog')}>
+      <button type="button" className="training-feedback__back" onClick={() => navigate('/admin/searn-training-catalog')}>
         <FontAwesomeIcon icon={faArrowLeft} />
         {formatMessage(messages.backToCatalog)}
       </button>
@@ -183,4 +183,5 @@ const TrainingFeedback = () => {
   );
 };
 
-export default TrainingFeedback;
+export default SearnTrainingFeedback;
+

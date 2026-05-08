@@ -1,30 +1,23 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Pagination } from '@openedx/paragon';
-import {
-  faArrowLeft, faBookOpen, faSearch, faStar,
-} from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import EmptyState from '../../components/emptyState/EmptyState';
+import SearchInput from '../../components/searchInput/SearchInput';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
-import trainingsData from '../../mock/trainingCatalog/trainings.json';
 import providersData from '../../mock/trainingCatalog/providers.json';
+import trainingsData from '../../mock/trainingCatalog/trainings.json';
 import messages from './messages';
 import { getStarFill } from './starUtils';
-import './TrainingCatalog.scss';
+import './SearnTrainingCatalog.scss';
 
 const TRAININGS_PER_PAGE = 8;
 
-const ProviderCatalog = () => {
+const SearnTrainingCatalog = () => {
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
-  const { providerSlug } = useParams();
-
-  const providerName = useMemo(
-    () => providersData.find(p => p.slug === providerSlug)?.name || null,
-    [providerSlug],
-  );
 
   const [searchText, setSearchText] = useState('');
   const [frameworkFilter, setFrameworkFilter] = useState('all');
@@ -33,79 +26,84 @@ const ProviderCatalog = () => {
   const [subDomainFilter, setSubDomainFilter] = useState('all');
   const [activityFilter, setActivityFilter] = useState('all');
   const [nraGoalFilter, setNraGoalFilter] = useState('all');
+  const [providerFilter, setProviderFilter] = useState('all');
   const [page, setPage] = useState(1);
 
-  const scopedTrainings = useMemo(() => (
-    providerName ? trainingsData.filter(t => t.providerSlug === providerSlug || t.provider === providerName) : []
-  ), [providerName, providerSlug]);
-
   const frameworkOptions = useMemo(() => {
-    const unique = [...new Set(scopedTrainings.map(t => t.framework).filter(Boolean))].sort();
+    const unique = [...new Set(trainingsData.map(t => t.framework).filter(Boolean))].sort();
     return [
       { value: 'all', label: formatMessage(messages.allFrameworks) },
       ...unique.map(v => ({ value: v, label: v })),
     ];
-  }, [formatMessage, scopedTrainings]);
+  }, [formatMessage]);
 
   const roleOptions = useMemo(() => {
-    const unique = [...new Set(scopedTrainings.map(t => t.role).filter(Boolean))].sort();
+    const unique = [...new Set(trainingsData.map(t => t.role).filter(Boolean))].sort();
     return [{ value: 'all', label: formatMessage(messages.allRoles) }, ...unique.map(v => ({ value: v, label: v }))];
-  }, [formatMessage, scopedTrainings]);
+  }, [formatMessage]);
 
   const domainOptions = useMemo(() => {
-    const unique = [...new Set(scopedTrainings.map(t => t.domain).filter(Boolean))].sort();
+    const unique = [...new Set(trainingsData.map(t => t.domain).filter(Boolean))].sort();
     return [{ value: 'all', label: formatMessage(messages.allDomains) }, ...unique.map(v => ({ value: v, label: v }))];
-  }, [formatMessage, scopedTrainings]);
+  }, [formatMessage]);
 
   const subDomainOptions = useMemo(() => {
-    const unique = [...new Set(scopedTrainings.map(t => t.subDomain).filter(Boolean))].sort();
+    const unique = [...new Set(trainingsData.map(t => t.subDomain).filter(Boolean))].sort();
     return [
       { value: 'all', label: formatMessage(messages.allSubDomains) },
       ...unique.map(v => ({ value: v, label: v })),
     ];
-  }, [formatMessage, scopedTrainings]);
+  }, [formatMessage]);
 
   const activityOptions = useMemo(() => {
-    const unique = [...new Set(scopedTrainings.map(t => t.activity).filter(Boolean))].sort();
+    const unique = [...new Set(trainingsData.map(t => t.activity).filter(Boolean))].sort();
     return [
       { value: 'all', label: formatMessage(messages.allActivities) },
       ...unique.map(v => ({ value: v, label: v })),
     ];
-  }, [formatMessage, scopedTrainings]);
+  }, [formatMessage]);
 
   const nraGoalOptions = useMemo(() => {
-    const unique = [...new Set(scopedTrainings.flatMap(t => t.nraGoals || []).filter(Boolean))].sort();
+    const unique = [...new Set(trainingsData.flatMap(t => t.nraGoals || []).filter(Boolean))].sort();
     return [{ value: 'all', label: formatMessage(messages.allNraGoals) }, ...unique.map(v => ({ value: v, label: v }))];
-  }, [formatMessage, scopedTrainings]);
+  }, [formatMessage]);
+
+  const providerOptions = useMemo(() => {
+    const unique = [...new Set(trainingsData.map(t => t.provider).filter(Boolean))].sort();
+    return [
+      { value: 'all', label: formatMessage(messages.allProviders) },
+      ...unique.map(v => ({ value: v, label: v })),
+    ];
+  }, [formatMessage]);
 
   const filteredTrainings = useMemo(() => {
     const query = searchText.trim().toLowerCase();
-    return scopedTrainings.filter((t) => {
+
+    return trainingsData.filter((t) => {
       if (frameworkFilter !== 'all' && t.framework !== frameworkFilter) { return false; }
       if (roleFilter !== 'all' && t.role !== roleFilter) { return false; }
       if (domainFilter !== 'all' && t.domain !== domainFilter) { return false; }
       if (subDomainFilter !== 'all' && (t.subDomain || '') !== subDomainFilter) { return false; }
       if (activityFilter !== 'all' && t.activity !== activityFilter) { return false; }
       if (nraGoalFilter !== 'all' && !(t.nraGoals || []).includes(nraGoalFilter)) { return false; }
+      if (providerFilter !== 'all' && t.provider !== providerFilter) { return false; }
       if (!query) { return true; }
+
       const haystack = [
         t.title,
         t.description,
         t.mode,
+        t.provider,
         t.framework,
         t.role,
         t.domain,
         t.subDomain,
         t.activity,
         ...(t.nraGoals || []),
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
+      ].filter(Boolean).join(' ').toLowerCase();
       return haystack.includes(query);
     });
   }, [
-    scopedTrainings,
     searchText,
     frameworkFilter,
     roleFilter,
@@ -113,6 +111,7 @@ const ProviderCatalog = () => {
     subDomainFilter,
     activityFilter,
     nraGoalFilter,
+    providerFilter,
   ]);
 
   const totalPages = Math.max(1, Math.ceil(filteredTrainings.length / TRAININGS_PER_PAGE));
@@ -123,35 +122,24 @@ const ProviderCatalog = () => {
   const rangeStart = filteredTrainings.length === 0 ? 0 : startIndex + 1;
   const rangeEnd = Math.min(endIndex, filteredTrainings.length);
 
-  if (!providerName) {
-    return (
-      <section className="training-catalog-page">
-        <button type="button" className="provider-page__back" onClick={() => navigate('/admin/training-catalog')}>
-          <FontAwesomeIcon icon={faArrowLeft} />
-          {formatMessage(messages.backToCatalog)}
-        </button>
-        <EmptyState fullSize className="training-catalog-page__empty" message={formatMessage(messages.noTrainingsFound)} />
-      </section>
-    );
-  }
+  const getProviderSlug = (providerName) => (
+    providersData.find(p => p.name === providerName)?.slug
+    || trainingsData.find(t => t.provider === providerName)?.providerSlug
+    || providerName.toLowerCase().replaceAll(' ', '-')
+  );
 
   return (
-    <section className="training-catalog-page">
-      <button type="button" className="provider-page__back" onClick={() => navigate(`/admin/training-catalog/providers/${providerSlug}`)}>
-        <FontAwesomeIcon icon={faArrowLeft} />
-        Back to Provider
-      </button>
-
-      <div className="training-catalog-page__toolbar">
-        <div className="training-catalog-page__filters-grid">
-          <div className="training-catalog-page__search">
-            <FontAwesomeIcon icon={faSearch} className="training-catalog-page__search-icon" />
-            <input
-              type="search"
-              className="training-catalog-page__search-input"
-              placeholder={formatMessage(messages.searchPlaceholder)}
+    <section className="searn-training-catalog-page">
+      <div className="searn-training-catalog-page__toolbar">
+        <div className="searn-training-catalog-page__filters-grid">
+          <div className="searn-training-catalog-page__search">
+            <SearchInput
               value={searchText}
-              onChange={(e) => { setSearchText(e.target.value); setPage(1); }}
+              placeholder={formatMessage(messages.searchPlaceholder)}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+                setPage(1);
+              }}
             />
           </div>
 
@@ -219,10 +207,13 @@ const ProviderCatalog = () => {
             noOptionsText="No matches"
           />
           <SearchableDropdown
-            value="fixed"
-            options={[{ value: 'fixed', label: providerName }]}
-            onChange={() => {}}
-            triggerLabel={providerName}
+            value={providerFilter}
+            options={providerOptions}
+            onChange={(v) => { setProviderFilter(v); setPage(1); }}
+            triggerLabel={
+              providerOptions.find(o => o.value === providerFilter)?.label
+              || formatMessage(messages.allProviders)
+            }
             searchPlaceholder="Search…"
             noOptionsText="No matches"
           />
@@ -230,50 +221,67 @@ const ProviderCatalog = () => {
       </div>
 
       {filteredTrainings.length === 0 && (
-        <EmptyState fullSize className="training-catalog-page__empty" message={formatMessage(messages.noTrainingsFound)} />
+        <EmptyState fullSize className="searn-training-catalog-page__empty" message={formatMessage(messages.noTrainingsFound)} />
       )}
 
       {filteredTrainings.length > 0 && (
-        <div className="training-catalog-page__card">
-          <div className="training-catalog-page__table-wrap">
-            <table className="training-catalog-page__table">
+        <div className="searn-training-catalog-page__card">
+          <div className="searn-training-catalog-page__table-wrap">
+            <table className="searn-training-catalog-page__table">
               <thead>
-                <tr className="training-catalog-page__thead-row">
-                  <th className="training-catalog-page__th">{formatMessage(messages.columnTraining)}</th>
-                  <th className="training-catalog-page__th">{formatMessage(messages.columnMode)}</th>
-                  <th className="training-catalog-page__th">{formatMessage(messages.columnProvider)}</th>
-                  <th className="training-catalog-page__th">{formatMessage(messages.columnSatisfaction)}</th>
-                  <th className="training-catalog-page__th">{formatMessage(messages.columnCost)}</th>
+                <tr className="searn-training-catalog-page__thead-row">
+                  <th className="searn-training-catalog-page__th">{formatMessage(messages.columnTraining)}</th>
+                  <th className="searn-training-catalog-page__th">{formatMessage(messages.columnMode)}</th>
+                  <th className="searn-training-catalog-page__th">{formatMessage(messages.columnProvider)}</th>
+                  <th className="searn-training-catalog-page__th">{formatMessage(messages.columnSatisfaction)}</th>
+                  <th className="searn-training-catalog-page__th">{formatMessage(messages.columnCost)}</th>
                 </tr>
               </thead>
               <tbody>
                 {pageRows.map(row => (
                   <tr
                     key={row.id}
-                    className="training-catalog-page__row"
-                    onClick={() => navigate(`/admin/training-catalog/${row.id}`)}
+                    className="searn-training-catalog-page__row"
+                    onClick={() => navigate(`/admin/searn-training-catalog/${row.id}`)}
                   >
-                    <td className="training-catalog-page__td">
-                      <div className="training-catalog-page__training-cell">
-                        <span className="training-catalog-page__training-icon" aria-hidden>
+                    <td className="searn-training-catalog-page__td">
+                      <div className="searn-training-catalog-page__training-cell">
+                        <span className="searn-training-catalog-page__training-icon" aria-hidden>
                           <FontAwesomeIcon icon={faBookOpen} />
                         </span>
                         <div style={{ minWidth: 0 }}>
-                          <p className="training-catalog-page__training-title">{row.title}</p>
-                          <p className="training-catalog-page__training-desc">{row.description}</p>
+                          <p className="searn-training-catalog-page__training-title">{row.title}</p>
+                          <p className="searn-training-catalog-page__training-desc">{row.description}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="training-catalog-page__td">{row.mode}</td>
-                    <td className="training-catalog-page__td">{providerName}</td>
-                    <td className="training-catalog-page__td">
+                    <td className="searn-training-catalog-page__td">
+                      <span>{row.mode}</span>
+                    </td>
+                    <td className="searn-training-catalog-page__td">
                       <button
                         type="button"
-                        className="training-catalog-page__rating-button"
-                        onClick={(e) => { e.stopPropagation(); navigate(`/admin/training-catalog/${row.id}/feedback`); }}
+                        className="searn-training-catalog-page__provider-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/admin/searn-training-catalog/providers/${getProviderSlug(row.provider)}`);
+                        }}
+                        title={`View ${row.provider} profile`}
+                      >
+                        {row.provider}
+                      </button>
+                    </td>
+                    <td className="searn-training-catalog-page__td">
+                      <button
+                        type="button"
+                        className="searn-training-catalog-page__rating-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/admin/searn-training-catalog/${row.id}/feedback`);
+                        }}
                         title="View user feedback"
                       >
-                        <span className="training-catalog-page__stars" aria-hidden>
+                        <span className="searn-training-catalog-page__stars" aria-hidden>
                           {[1, 2, 3, 4, 5].map((position) => {
                             const idx = position - 1;
                             const fill = getStarFill(row.rating, idx);
@@ -282,35 +290,38 @@ const ProviderCatalog = () => {
                                 <FontAwesomeIcon
                                   key={position}
                                   icon={faStar}
-                                  className="training-catalog-page__star training-catalog-page__star--fill"
+                                  className="searn-training-catalog-page__star searn-training-catalog-page__star--fill"
                                 />
                               );
                             }
                             if (fill > 0) {
                               return (
-                                <span key={position} className="training-catalog-page__star">
+                                <span key={position} className="searn-training-catalog-page__star">
                                   <FontAwesomeIcon icon={faStar} style={{ opacity: 0.35 }} />
-                                  <span className="training-catalog-page__star-half" style={{ width: `${Math.round(fill * 100)}%` }}>
-                                    <FontAwesomeIcon icon={faStar} className="training-catalog-page__star training-catalog-page__star--fill" />
+                                  <span className="searn-training-catalog-page__star-half" style={{ width: `${Math.round(fill * 100)}%` }}>
+                                    <FontAwesomeIcon icon={faStar} className="searn-training-catalog-page__star searn-training-catalog-page__star--fill" />
                                   </span>
                                 </span>
                               );
                             }
-                            return <FontAwesomeIcon key={position} icon={faStar} className="training-catalog-page__star" />;
+                            return <FontAwesomeIcon key={position} icon={faStar} className="searn-training-catalog-page__star" />;
                           })}
                         </span>
-                        <span className="training-catalog-page__rating-value">{row.rating.toFixed(1)}</span>
-                        <span className="training-catalog-page__rating-count">({row.reviewCount})</span>
+                        <span className="searn-training-catalog-page__rating-value">{row.rating.toFixed(1)}</span>
+                        <span className="searn-training-catalog-page__rating-count">({row.reviewCount})</span>
                       </button>
                     </td>
-                    <td className="training-catalog-page__td" style={{ fontWeight: 600 }}>{row.cost}</td>
+                    <td className="searn-training-catalog-page__td" style={{ fontWeight: 600 }}>
+                      {row.cost}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="training-catalog-page__footer">
-            <div className="training-catalog-page__footer-left">
+
+          <div className="data-table__footer">
+            <div>
               {formatMessage(messages.showingRange, {
                 start: rangeStart,
                 end: rangeEnd,
@@ -318,8 +329,8 @@ const ProviderCatalog = () => {
               })}
             </div>
             <Pagination
-              className="training-catalog-page__pagination"
-              paginationLabel="Provider catalog pagination"
+              className="data-table__pagination"
+              paginationLabel="Table pagination"
               pageCount={totalPages}
               currentPage={safePage}
               onPageSelect={(selected) => setPage(selected)}
@@ -331,4 +342,4 @@ const ProviderCatalog = () => {
   );
 };
 
-export default ProviderCatalog;
+export default SearnTrainingCatalog;

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -182,4 +183,3 @@ const PendingRequestDetail = () => {
 };
 
 export default PendingRequestDetail;
-

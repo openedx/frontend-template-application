@@ -9,6 +9,7 @@ import {
   faChevronDown,
   faChevronLeft,
   faCog,
+  faClipboardList,
   faFileAlt,
   faFlag,
   faGlobe,
@@ -45,6 +46,7 @@ const AppSidebar = ({
     countries: faFlag,
     trainingProviders: faBuilding,
     pendingRequests: faInbox,
+    requestedTrainings: faClipboardList,
     profile: faUserCircle,
     users: faUsers,
     roles: faShieldAlt,
@@ -87,7 +89,7 @@ const AppSidebar = ({
               ? item.children.some(child => location.pathname.startsWith(child.path))
               : location.pathname.startsWith(item.path);
             const navPath = item.key === 'dashboard'
-              ? `/admin/dashboard/${role || 'secretariat'}`
+              ? `/admin/dashboard/${role}`
               : item.path;
 
             return (

@@ -1,11 +1,6 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
-  viewRequestedTrainings: {
-    id: 'app.pendingRequests.actions.viewRequestedTrainings',
-    defaultMessage: 'View Requested Trainings',
-    description: 'Button label to navigate to requested trainings page',
-  },
   searchPlaceholder: {
     id: 'app.pendingRequests.search.placeholder',
     defaultMessage: 'Search requests...',

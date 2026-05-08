@@ -1,85 +1,92 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import {
-  faChevronRight,
-  faExternalLinkAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '../toast/ToastProvider';
+import { useUserRole } from '../../contexts/UserRoleContext';
+import pageMessages from '../../pages/messages';
 import messages from './messages';
 import './DashboardRequests.scss';
 
-const DashboardRequests = ({
-  topRequestedItems = [],
-  pendingItems = [],
-  showTopRequested = false,
-  showPendingRequests = false,
-}) => {
+const TopRequestedActivitiesCard = ({ items = [] }) => {
   const { formatMessage } = useIntl();
-  const showSection = showTopRequested || showPendingRequests;
-
-  if (!showSection) {
-    return null;
-  }
 
   return (
-    <section className="dashboard-requests-grid">
-      {showTopRequested && (
-        <article className="dashboard-requests-card">
-          <div className="dashboard-requests-card__header">
-            <div>
-              <h2 className="dashboard-requests-card__title">{formatMessage(messages.topRequestedTitle)}</h2>
-              <p className="dashboard-requests-card__description">{formatMessage(messages.topRequestedDescription)}</p>
+    <article className="dashboard-requests-card">
+      <div className="dashboard-requests-card__header">
+        <div>
+          <h2 className="dashboard-requests-card__title">{formatMessage(messages.topRequestedTitle)}</h2>
+        </div>
+      </div>
+
+      <div className="dashboard-requests-card__list">
+        {items.map(item => (
+          <div className="dashboard-requests-card__item" key={item.id}>
+            <div className="top-activity__rank">{item.rank}</div>
+            <div className="top-activity__main">
+              <p className="top-activity__title">{item.title}</p>
+              <p className="top-activity__subtitle">{item.subtitle}</p>
             </div>
-            <FontAwesomeIcon className="dashboard-requests-card__header-icon" icon={faExternalLinkAlt} />
-          </div>
-
-          <div className="dashboard-requests-card__list">
-            {topRequestedItems.map(item => (
-              <div className="dashboard-requests-card__item" key={item.id}>
-                <div className="top-activity__rank">{item.rank}</div>
-                <div className="top-activity__main">
-                  <p className="top-activity__title">{item.title}</p>
-                  <p className="top-activity__subtitle">{item.subtitle}</p>
-                </div>
-                <div className="top-activity__meta">
-                  <p className="top-activity__count">{item.requestCount}</p>
-                  <p className="top-activity__unit">{formatMessage(messages.requestsUnit)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </article>
-      )}
-
-      {showPendingRequests && (
-        <article className="dashboard-requests-card">
-          <div className="dashboard-requests-card__header">
-            <div>
-              <h2 className="dashboard-requests-card__title">{formatMessage(messages.pendingRequestsTitle)}</h2>
-              <p className="dashboard-requests-card__description">{formatMessage(messages.pendingRequestsDescription)}</p>
+            <div className="top-activity__meta">
+              <p className="top-activity__count">{item.requestCount}</p>
+              <p className="top-activity__unit">{formatMessage(messages.requestsUnit)}</p>
             </div>
-            <FontAwesomeIcon className="dashboard-requests-card__header-icon" icon={faExternalLinkAlt} />
           </div>
-
-          <div className="dashboard-requests-card__list">
-            {pendingItems.map(item => (
-              <div className="dashboard-requests-card__item" key={item.id}>
-                <div className="pending-request__main">
-                  <p className="pending-request__title">{item.title}</p>
-                  <p className="pending-request__description">{item.description}</p>
-                  <div className="pending-request__meta">
-                    <span className={`pending-request__tag pending-request__tag--${item.tagVariant}`}>{item.tag}</span>
-                    <span className="pending-request__time">{item.timeAgo}</span>
-                  </div>
-                </div>
-                <FontAwesomeIcon className="pending-request__chevron" icon={faChevronRight} />
-              </div>
-            ))}
-          </div>
-        </article>
-      )}
-    </section>
+        ))}
+      </div>
+    </article>
   );
 };
 
-export default DashboardRequests;
+const PendingRequestsCard = ({ items = [] }) => {
+  const { formatMessage } = useIntl();
+  const navigate = useNavigate();
+  const { showToast } = useToast();
+  const { navbarAccess } = useUserRole();
+
+  return (
+    <article className="dashboard-requests-card">
+      <div className="dashboard-requests-card__header">
+        <div>
+          <h2 className="dashboard-requests-card__title">{formatMessage(messages.pendingRequestsTitle)}</h2>
+        </div>
+      </div>
+
+      <div className="dashboard-requests-card__list">
+        {items.map(item => (
+          <button
+            key={item.id}
+            type="button"
+            className="dashboard-requests-card__item dashboard-requests-card__item--clickable"
+            onClick={() => {
+              if (!navbarAccess?.accessPendingRequests) {
+                showToast({
+                  title: 'Access restricted',
+                  description: formatMessage(pageMessages.accessRestrictedMessage),
+                });
+                return;
+              }
+              navigate(`/admin/pending-requests/${item.id}`);
+            }}
+          >
+            <div className="pending-request__main">
+              <p className="pending-request__title">{item.title}</p>
+              <p className="pending-request__description">{item.description}</p>
+              <div className="pending-request__meta">
+                <span className={`pending-request__tag pending-request__tag--${item.tagVariant}`}>{item.tag}</span>
+                <span className="pending-request__time">{item.timeAgo}</span>
+              </div>
+            </div>
+            <FontAwesomeIcon className="pending-request__chevron" icon={faChevronRight} />
+          </button>
+        ))}
+      </div>
+    </article>
+  );
+};
+
+export {
+  TopRequestedActivitiesCard,
+  PendingRequestsCard,
+};

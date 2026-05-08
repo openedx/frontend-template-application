@@ -1,10 +1,10 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo, useState } from 'react';
 import EmptyState from '../../components/emptyState/EmptyState';
 import PopupDialog from '../../components/popupDialog/PopupDialog';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { useToast } from '../../components/toast/ToastProvider';
-import { useUserRole } from '../../contexts/UserRoleContext';
 import statusOptions from '../../mock/requestedTrainings/statusOptions.json';
 import requestedTrainings from '../../mock/requestedTrainings/requestedTrainings.json';
 import activities from '../../mock/activities/activities.json';
@@ -128,12 +128,10 @@ const CircleCheckIcon = ({ className }) => (
 const RequestedTrainings = () => {
   const { formatMessage } = useIntl();
   const { showToast } = useToast();
-  const { componentAccess } = useUserRole();
-
-  const canShowTable = Boolean(componentAccess?.requestedTrainings?.showTable ?? true);
-  const canSearch = Boolean(componentAccess?.requestedTrainings?.canSearch ?? true);
-  const canFilter = Boolean(componentAccess?.requestedTrainings?.canFilterByStatus ?? true);
-  const canRequestTraining = Boolean(componentAccess?.requestedTrainings?.canRequestTraining ?? true);
+  const canShowTable = true;
+  const canSearch = true;
+  const canFilter = true;
+  const canRequestTraining = true;
 
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');

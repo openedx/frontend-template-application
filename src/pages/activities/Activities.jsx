@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react';
 import DataTable from '../../components/dataTable/DataTable';
 import EmptyState from '../../components/emptyState/EmptyState';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
-import { useUserRole } from '../../contexts/UserRoleContext';
 import activitiesData from '../../mock/activities/activities.json';
 import messages from './messages';
 import './Activities.scss';
@@ -14,7 +13,6 @@ const ACTIVITIES_PER_PAGE = 20;
 
 const Activities = () => {
   const { formatMessage } = useIntl();
-  const { componentAccess } = useUserRole();
   const [searchText, setSearchText] = useState('');
   const [frameworkFilter, setFrameworkFilter] = useState('all');
   const [roleFilter, setRoleFilter] = useState('all');
@@ -23,14 +21,6 @@ const Activities = () => {
   const [levelFilter, setLevelFilter] = useState('all');
   const [streamFilter, setStreamFilter] = useState('all');
   const [page, setPage] = useState(1);
-
-  const canShowTable = Boolean(componentAccess?.activities?.showTable ?? true);
-  const canSearchAndFilter = Boolean(componentAccess?.activities?.canSearchAndFilter ?? true);
-  const canViewActivityColumn = Boolean(componentAccess?.activities?.canViewActivityColumn ?? true);
-  const canViewDomainColumn = Boolean(componentAccess?.activities?.canViewDomainColumn ?? true);
-  const canViewSubDomainColumn = Boolean(componentAccess?.activities?.canViewSubDomainColumn ?? true);
-  const canViewProficiencyColumn = Boolean(componentAccess?.activities?.canViewProficiencyColumn ?? true);
-  const canViewRoleColumn = Boolean(componentAccess?.activities?.canViewRoleColumn ?? true);
 
   const emptyLabel = formatMessage(messages.emptyCell);
 
@@ -87,10 +77,6 @@ const Activities = () => {
   }, [formatMessage]);
 
   const filteredActivities = useMemo(() => {
-    if (!canSearchAndFilter) {
-      return activitiesData;
-    }
-
     const query = searchText.trim().toLowerCase();
 
     return activitiesData.filter((row) => {
@@ -131,7 +117,6 @@ const Activities = () => {
       return haystack.includes(query);
     });
   }, [
-    canSearchAndFilter,
     searchText,
     frameworkFilter,
     roleFilter,
@@ -141,7 +126,7 @@ const Activities = () => {
     streamFilter,
   ]);
 
-  const shouldRenderToolbar = canSearchAndFilter;
+  const shouldRenderToolbar = true;
 
   const totalPages = Math.max(1, Math.ceil(filteredActivities.length / ACTIVITIES_PER_PAGE));
   const safePage = Math.min(page, totalPages);
@@ -153,7 +138,7 @@ const Activities = () => {
   const rangeEnd = Math.min(endIndex, filteredActivities.length);
 
   const columns = [
-    ...(canViewActivityColumn ? [{
+    ...([{
       key: 'activity',
       header: formatMessage(messages.columnActivity),
       renderCell: (row) => (
@@ -167,13 +152,13 @@ const Activities = () => {
           </div>
         </div>
       ),
-    }] : []),
-    ...(canViewDomainColumn ? [{
+    }]),
+    ...([{
       key: 'domain',
       header: formatMessage(messages.columnDomain),
       renderCell: row => <span className="activities-page__text">{row.domain}</span>,
-    }] : []),
-    ...(canViewSubDomainColumn ? [{
+    }]),
+    ...([{
       key: 'subDomain',
       header: formatMessage(messages.columnSubDomain),
       renderCell: row => (
@@ -181,13 +166,13 @@ const Activities = () => {
           {row.subDomain || emptyLabel}
         </span>
       ),
-    }] : []),
-    ...(canViewProficiencyColumn ? [{
+    }]),
+    ...([{
       key: 'proficiencyLevel',
       header: formatMessage(messages.columnProficiency),
       renderCell: row => <span className="activities-page__text">{row.proficiencyLevel}</span>,
-    }] : []),
-    ...(canViewRoleColumn ? [{
+    }]),
+    ...([{
       key: 'targetRole',
       header: formatMessage(messages.columnRole),
       renderCell: row => (
@@ -195,7 +180,7 @@ const Activities = () => {
           {row.targetRole || emptyLabel}
         </span>
       ),
-    }] : []),
+    }]),
   ];
 
   return (
@@ -308,7 +293,7 @@ const Activities = () => {
         </div>
       )}
 
-      {canShowTable && columns.length > 0 && filteredActivities.length === 0 && (
+      {columns.length > 0 && filteredActivities.length === 0 && (
         <EmptyState
           fullSize
           className="activities-page__empty"
@@ -316,7 +301,7 @@ const Activities = () => {
         />
       )}
 
-      {canShowTable && columns.length > 0 && filteredActivities.length > 0 && (
+      {columns.length > 0 && filteredActivities.length > 0 && (
         <DataTable
           columns={columns}
           rows={pageRows}

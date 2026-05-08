@@ -58,8 +58,8 @@ const appMessages = defineMessages({
   },
   trainingCatalogTitle: {
     id: 'app.layout.route.trainingCatalog.title',
-    defaultMessage: 'Training Catalog',
-    description: 'Top header title for training catalog routes',
+    defaultMessage: 'SEARN Training Catalog',
+    description: 'Top header title for SEARN training catalog routes',
   },
   nrasTitle: {
     id: 'app.layout.route.nras.title',

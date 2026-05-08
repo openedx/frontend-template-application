@@ -63,8 +63,11 @@ const usersPageMessages = defineMessages({
   },
   columnUser: { id: 'app.users.table.column.user', defaultMessage: 'User', description: 'Users table column' },
   columnRole: { id: 'app.users.table.column.role', defaultMessage: 'Role', description: 'Users table column' },
-  columnCountry: { id: 'app.users.table.column.country', defaultMessage: 'Country', description: 'Users table column' },
-  columnJoined: { id: 'app.users.table.column.joined', defaultMessage: 'Joined', description: 'Users table column' },
+  columnCompetencyRole: {
+    id: 'app.users.table.column.competencyRole',
+    defaultMessage: 'Competency Role',
+    description: 'Users table column',
+  },
   columnActions: { id: 'app.users.table.column.actions', defaultMessage: 'Actions', description: 'Users table column' },
   viewAction: { id: 'app.users.row.action.view', defaultMessage: 'View user', description: 'View action label' },
   editAction: { id: 'app.users.row.action.edit', defaultMessage: 'Edit user', description: 'Edit action label' },
@@ -75,6 +78,11 @@ const usersPageMessages = defineMessages({
     id: 'app.users.pagination.showing',
     defaultMessage: 'Showing {count} of {total} users',
     description: 'Showing count text for users table',
+  },
+  empty: {
+    id: 'app.users.empty',
+    defaultMessage: 'No data available.',
+    description: 'Empty state message when no users match the current filters',
   },
   addUserModalTitle: {
     id: 'app.users.addUser.modal.title',

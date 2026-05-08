@@ -1,6 +1,6 @@
 [
   {
-    "id": "id-00arra",
+    "id": "myanmarOnboarding",
     "title": "NRA onboarding — Myanmar FDA",
     "subtitle": "Awaiting final account activation",
     "type": "NRA onboarding",
@@ -10,7 +10,27 @@
     "description": "Myanmar FDA has completed the onboarding documentation and is awaiting final account activation by the SEARN Secretariat. All required organisational details, admin contacts, and signed MoU have been received."
   },
   {
-    "id": "id-00arrb",
+    "id": "thailandFramework",
+    "title": "Framework submission — NRA Thailand",
+    "subtitle": "NRA-specific domains awaiting approval",
+    "type": "Framework approval",
+    "status": "approved",
+    "submittedRelative": "2 days ago",
+    "submittedBy": { "name": "Dr. Somchai Prasert", "email": "somchai.prasert@nra.go.th" },
+    "description": "NRA Thailand submitted an updated competency framework for review. The submission includes additional NRA-specific domains and updates to proficiency levels. Review is pending final validation of mapped activities and role alignment."
+  },
+  {
+    "id": "catalogueSubmission",
+    "title": "Catalogue submission — PIC/S Training",
+    "subtitle": "3 programmes submitted for review",
+    "type": "Catalogue review",
+    "status": "rejected",
+    "submittedRelative": "1 day ago",
+    "submittedBy": { "name": "PIC/S Secretariat", "email": "training@picscheme.org" },
+    "description": "PIC/S submitted three new programmes for inclusion in the SEARN Training Catalog. The review requires additional information (learning outcomes, delivery method, and assessment criteria) before approval."
+  },
+  {
+    "id": "providerOnboarding",
     "title": "Training Provider onboarding — WHO EMRO",
     "subtitle": "Profile submitted, pending activation",
     "type": "Provider onboarding",
@@ -18,6 +38,26 @@
     "submittedRelative": "5 hours ago",
     "submittedBy": { "name": "Dr. Sara Ahmed", "email": "s.ahmed@who.int" },
     "description": "The provider onboarding request was submitted but requires additional verification of organisation details and admin contacts."
+  },
+  {
+    "id": "id-00arra",
+    "title": "NRA onboarding — Myanmar FDA (Archive)",
+    "subtitle": "Archived request for testing",
+    "type": "NRA onboarding",
+    "status": "approved",
+    "submittedRelative": "2 weeks ago",
+    "submittedBy": { "name": "System", "email": "no-reply@searn.example" },
+    "description": "This is an archived mock request kept for backward compatibility with older IDs."
+  },
+  {
+    "id": "id-00arrb",
+    "title": "Training Provider onboarding — WHO EMRO (Archive)",
+    "subtitle": "Archived request for testing",
+    "type": "Provider onboarding",
+    "status": "rejected",
+    "submittedRelative": "2 weeks ago",
+    "submittedBy": { "name": "System", "email": "no-reply@searn.example" },
+    "description": "This is an archived mock request kept for backward compatibility with older IDs."
   }
 ]
 

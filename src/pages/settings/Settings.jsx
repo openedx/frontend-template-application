@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo, useRef, useState } from 'react';
 import { useToast } from '../../components/toast/ToastProvider';
-import { useUserRole } from '../../contexts/UserRoleContext';
 import settingsData from '../../mock/settings/settings.json';
 import messages from './messages';
 import './Settings.scss';
@@ -68,11 +68,9 @@ const SaveIcon = ({ className }) => (
 
 const Settings = () => {
   const { formatMessage } = useIntl();
-  const { componentAccess } = useUserRole();
   const { showToast } = useToast();
-
-  const canEdit = Boolean(componentAccess?.settings?.canEdit ?? true);
-  const canUploadLogo = Boolean(componentAccess?.settings?.canUploadLogo ?? true);
+  const canEdit = true;
+  const canUploadLogo = true;
 
   const fileRef = useRef(null);
 

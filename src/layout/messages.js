@@ -38,8 +38,8 @@ const layoutMessages = defineMessages({
   },
   navTrainingCatalog: {
     id: 'app.layout.sidebar.nav.trainingCatalog',
-    defaultMessage: 'Training Catalog',
-    description: 'Sidebar navigation label for training catalog',
+    defaultMessage: 'SEARN Training Catalog',
+    description: 'Sidebar navigation label for SEARN training catalog',
   },
   navNras: {
     id: 'app.layout.sidebar.nav.nras',
@@ -60,6 +60,11 @@ const layoutMessages = defineMessages({
     id: 'app.layout.sidebar.nav.pendingRequests',
     defaultMessage: 'Pending Requests',
     description: 'Sidebar navigation label for pending requests',
+  },
+  navRequestedTrainings: {
+    id: 'app.layout.sidebar.nav.requestedTrainings',
+    defaultMessage: 'Requested Trainings',
+    description: 'Sidebar navigation label for requested trainings',
   },
   navProfile: {
     id: 'app.layout.sidebar.nav.profile',

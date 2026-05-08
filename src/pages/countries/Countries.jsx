@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo, useState } from 'react';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
@@ -113,14 +114,13 @@ const TrashIcon = ({ className }) => (
 
 const Countries = () => {
   const { formatMessage } = useIntl();
-  const { componentAccess } = useUserRole();
   const { showToast } = useToast();
+  const { componentAccess } = useUserRole();
 
-  const canShowCards = Boolean(componentAccess?.countries?.showCards ?? true);
-  const canSearch = Boolean(componentAccess?.countries?.canSearch ?? true);
-  const canAddCountry = Boolean(componentAccess?.countries?.canAddCountry ?? true);
-  const canEditCountry = Boolean(componentAccess?.countries?.canEditCountry ?? true);
-  const canDeleteCountry = Boolean(componentAccess?.countries?.canDeleteCountry ?? true);
+  const canSearch = true;
+  const canAddCountry = Boolean(componentAccess?.countries?.canAddCountry ?? false);
+  const canEditCountry = Boolean(componentAccess?.countries?.canEditCountry ?? false);
+  const canDeleteCountry = Boolean(componentAccess?.countries?.canDeleteCountry ?? false);
 
   const [countries, setCountries] = useState(initialSearnCountries);
   const [searchText, setSearchText] = useState('');
@@ -244,9 +244,7 @@ const Countries = () => {
         )}
       </div>
 
-      {!canShowCards ? (
-        emptyState
-      ) : filteredCountries.length === 0 ? (
+      {filteredCountries.length === 0 ? (
         emptyState
       ) : (
         <div className="countries-page__grid">
@@ -344,4 +342,3 @@ const Countries = () => {
 };
 
 export default Countries;
-

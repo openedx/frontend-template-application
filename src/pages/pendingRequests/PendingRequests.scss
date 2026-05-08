@@ -135,10 +135,14 @@
   &__row {
     border-top: 1px solid #E5E7EB;
     transition: background .15s ease;
-    cursor: pointer;
+    cursor: default;
 
-    &:hover {
-      background: rgb(42 59 143 / .03);
+    &--clickable {
+      cursor: pointer;
+
+      &:hover {
+        background: rgb(42 59 143 / .03);
+      }
     }
   }
 

@@ -2,7 +2,7 @@
   "sourceFrameworkOptions": [
     { "value": "who-framework", "label": "WHO Global Competency Framework" },
     { "value": "searn-framework", "label": "SEARN Competency Framework" },
-    { "value": "nra-framework", "label": "NRA Competency Framework" }
+    { "value": "nra-framework", "label": "NRA Specific Competency Framework" }
   ],
   "productTypeOptions": [
     { "value": "medicines", "label": "Medicines" },

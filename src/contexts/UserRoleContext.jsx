@@ -2,18 +2,15 @@
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
-import { fetchUserRoleData } from '../services/userRoleDataService';
+import { ACTIVE_ROLE_DATA } from '../services/userRoleDataService';
 
 const DEFAULT_NAVBAR_ACCESS = {
-  accessDashboard: false,
   accessCompetencyFramework: false,
   accessActivities: false,
-  accessTrainingCatalog: false,
-  accessNras: false,
+  accessNrasManagement: false,
   accessCountries: false,
   accessTrainingProviders: false,
   accessPendingRequests: false,
-  accessProfile: false,
   accessUsers: false,
   accessRoles: false,
   accessSettings: false,
@@ -22,34 +19,58 @@ const DEFAULT_NAVBAR_ACCESS = {
 
 const DEFAULT_COMPONENT_ACCESS = {
   dashboard: {
-    showStats: false,
     showUsersPerCountry: false,
-    showRequestsSection: false,
     showTopRequestedActivities: false,
     showPendingRequests: false,
   },
+  nrasManagement: {
+    canOnboardNra: false,
+    canEditNra: false,
+    canDeleteNra: false,
+  },
+  countries: {
+    canAddCountry: false,
+    canEditCountry: false,
+    canDeleteCountry: false,
+  },
+  trainingProviders: {
+    canAddTrainingProvider: false,
+    canEditTrainingProvider: false,
+    canDeleteTrainingProvider: false,
+  },
+  roles: {
+    canAddRole: false,
+    canViewRole: false,
+    canEditRole: false,
+    canDeleteRole: false,
+  },
+  pendingRequests: {
+    canEditPendingRequest: false,
+  },
   users: {
-    showTable: false,
-    canSearchAndFilter: false,
-    canDownloadUsersTemplate: false,
-    canImportUsers: false,
     canAddUser: false,
-    canViewUserDetail: false,
+    canViewUserAbout: false,
     canEditUser: false,
     canDeleteUser: false,
-    canViewUserColumn: false,
     canViewRoleColumn: false,
-    canViewCountryColumn: false,
-    canViewJoinedColumn: false,
-    canViewActionsColumn: false,
+    canViewCompetencyRoleColumn: false,
+    canAssignTrainings: false,
+    canRemoveAssignedTrainings: false,
+    canViewRegulatoryPassport: false,
+    userFormFields: {
+      showRoleField: false,
+      showManagerField: false,
+      showCompetencyRoleField: false,
+      showCountryField: false,
+    },
   },
   competencyFramework: {
-    canDownloadTemplate: false,
-    canImportFramework: false,
-    canCreateFramework: false,
     showWhoTab: false,
     showSearnTab: false,
     showNraTab: false,
+    canCreateFrameworkWhoTab: false,
+    canCreateFrameworkSearnTab: false,
+    canCreateFrameworkNraTab: false,
     canViewFrameworkWhoTab: false,
     canViewFrameworkSearnTab: false,
     canViewFrameworkNraTab: false,
@@ -59,84 +80,13 @@ const DEFAULT_COMPONENT_ACCESS = {
     canDeleteFrameworkWhoTab: false,
     canDeleteFrameworkSearnTab: false,
     canDeleteFrameworkNraTab: false,
-    canEditFrameworkPage: false,
-    showBuilderGeneralTab: false,
-    showBuilderIntroductionTab: false,
-    showBuilderOverviewTab: false,
-    showBuilderDomainsTab: false,
-    showBuilderSubDomainsTab: false,
-    showBuilderRoleTab: false,
-    showBuilderProficiencyLevelTab: false,
-    showBuilderOrgCompetenciesTab: false,
-    showBuilderRoleCompetenciesTab: false,
-    showBuilderActivitiesTab: false,
-  },
-  roles: {
-    canAddRole: false,
-    canViewRole: false,
-    canEditRole: false,
-    canDeleteRole: false,
-  },
-  activities: {
-    showTable: false,
-    canSearchAndFilter: false,
-    canViewActivityColumn: false,
-    canViewDomainColumn: false,
-    canViewSubDomainColumn: false,
-    canViewProficiencyColumn: false,
-    canViewRoleColumn: false,
-  },
-  trainingCatalog: {
-    showTable: false,
-    canSearchAndFilter: false,
-    canViewTrainingDetail: false,
-    canViewProviderDetail: false,
-    canViewFeedback: false,
-  },
-  countries: {
-    showCards: false,
-    canSearch: false,
-    canAddCountry: false,
-    canEditCountry: false,
-    canDeleteCountry: false,
-  },
-  nras: {
-    showTable: false,
-    canSearch: false,
-    canOnboardNra: false,
-    canEditNra: false,
-    canDeleteNra: false,
-  },
-  trainingProviders: {
-    showTable: false,
-    canSearch: false,
-    canAddProvider: false,
-    canEditProvider: false,
-    canDeleteProvider: false,
-  },
-  profile: {
-    canEdit: false,
-    canUploadPhoto: false,
-  },
-  settings: {
-    canEdit: false,
-    canUploadLogo: false,
-  },
-  pendingRequests: {
-    showTable: false,
-    canSearch: false,
-    canFilterByType: false,
-    canViewRequestDetail: false,
-  },
-  requestedTrainings: {
-    showTable: false,
-    canSearch: false,
-    canFilterByStatus: false,
-    canRequestTraining: false,
+    showSuggestionsTab: false,
   },
 };
 
 const UserRoleContext = createContext({
+  userName: '',
+  userProfileImage: '',
   role: null,
   navbarAccess: DEFAULT_NAVBAR_ACCESS,
   componentAccess: DEFAULT_COMPONENT_ACCESS,
@@ -146,16 +96,26 @@ const UserRoleContext = createContext({
 });
 
 const UserRoleProvider = ({ children }) => {
-  const [role, setRoleState] = useState(null);
-  const [navbarAccess, setNavbarAccess] = useState(DEFAULT_NAVBAR_ACCESS);
-  const [componentAccess, setComponentAccess] = useState(DEFAULT_COMPONENT_ACCESS);
+  const [userName, setUserName] = useState(ACTIVE_ROLE_DATA?.userInfo?.userName || '');
+  const [userProfileImage, setUserProfileImage] = useState(ACTIVE_ROLE_DATA?.userInfo?.userProfileImage || '');
+  const [role, setRoleState] = useState(ACTIVE_ROLE_DATA?.userInfo?.userRole || null);
+  const [navbarAccess, setNavbarAccess] = useState(() => ({
+    ...DEFAULT_NAVBAR_ACCESS,
+    ...(ACTIVE_ROLE_DATA?.navbarAccess || {}),
+  }));
+  const [componentAccess, setComponentAccess] = useState(() => ({
+    ...DEFAULT_COMPONENT_ACCESS,
+    ...(ACTIVE_ROLE_DATA?.componentAccess || {}),
+  }));
 
   const setUserRoleData = useCallback((roleData) => {
     if (!roleData) {
       return;
     }
 
-    const nextRole = roleData.userRole;
+    const nextUserName = roleData.userInfo?.userName;
+    const nextUserProfileImage = roleData.userInfo?.userProfileImage;
+    const nextRole = roleData.userInfo?.userRole;
     const nextNavbarAccess = {
       ...DEFAULT_NAVBAR_ACCESS,
       ...(roleData.navbarAccess || {}),
@@ -167,6 +127,26 @@ const UserRoleProvider = ({ children }) => {
         ...DEFAULT_COMPONENT_ACCESS.dashboard,
         ...(roleData.componentAccess?.dashboard || {}),
       },
+      nrasManagement: {
+        ...DEFAULT_COMPONENT_ACCESS.nrasManagement,
+        ...(roleData.componentAccess?.nrasManagement || {}),
+      },
+      countries: {
+        ...DEFAULT_COMPONENT_ACCESS.countries,
+        ...(roleData.componentAccess?.countries || {}),
+      },
+      trainingProviders: {
+        ...DEFAULT_COMPONENT_ACCESS.trainingProviders,
+        ...(roleData.componentAccess?.trainingProviders || {}),
+      },
+      roles: {
+        ...DEFAULT_COMPONENT_ACCESS.roles,
+        ...(roleData.componentAccess?.roles || {}),
+      },
+      pendingRequests: {
+        ...DEFAULT_COMPONENT_ACCESS.pendingRequests,
+        ...(roleData.componentAccess?.pendingRequests || {}),
+      },
       users: {
         ...DEFAULT_COMPONENT_ACCESS.users,
         ...(roleData.componentAccess?.users || {}),
@@ -175,48 +155,14 @@ const UserRoleProvider = ({ children }) => {
         ...DEFAULT_COMPONENT_ACCESS.competencyFramework,
         ...(roleData.componentAccess?.competencyFramework || {}),
       },
-      roles: {
-        ...DEFAULT_COMPONENT_ACCESS.roles,
-        ...(roleData.componentAccess?.roles || {}),
-      },
-      activities: {
-        ...DEFAULT_COMPONENT_ACCESS.activities,
-        ...(roleData.componentAccess?.activities || {}),
-      },
-      trainingCatalog: {
-        ...DEFAULT_COMPONENT_ACCESS.trainingCatalog,
-        ...(roleData.componentAccess?.trainingCatalog || {}),
-      },
-      countries: {
-        ...DEFAULT_COMPONENT_ACCESS.countries,
-        ...(roleData.componentAccess?.countries || {}),
-      },
-      nras: {
-        ...DEFAULT_COMPONENT_ACCESS.nras,
-        ...(roleData.componentAccess?.nras || {}),
-      },
-      trainingProviders: {
-        ...DEFAULT_COMPONENT_ACCESS.trainingProviders,
-        ...(roleData.componentAccess?.trainingProviders || {}),
-      },
-      profile: {
-        ...DEFAULT_COMPONENT_ACCESS.profile,
-        ...(roleData.componentAccess?.profile || {}),
-      },
-      settings: {
-        ...DEFAULT_COMPONENT_ACCESS.settings,
-        ...(roleData.componentAccess?.settings || {}),
-      },
-      pendingRequests: {
-        ...DEFAULT_COMPONENT_ACCESS.pendingRequests,
-        ...(roleData.componentAccess?.pendingRequests || {}),
-      },
-      requestedTrainings: {
-        ...DEFAULT_COMPONENT_ACCESS.requestedTrainings,
-        ...(roleData.componentAccess?.requestedTrainings || {}),
-      },
     };
 
+    if (nextUserName) {
+      setUserName(nextUserName);
+    }
+    if (typeof nextUserProfileImage === 'string') {
+      setUserProfileImage(nextUserProfileImage);
+    }
     if (nextRole) {
       setRoleState(nextRole);
     }
@@ -230,10 +176,11 @@ const UserRoleProvider = ({ children }) => {
     }
   }, []);
 
-  const loadUserRole = useCallback(async (nextRole) => {
-    const roleData = await fetchUserRoleData(nextRole);
+  const loadUserRole = useCallback(async () => {
+    // Single active user only: ignore nextRole and always load ACTIVE_ROLE_DATA.
+    const roleData = ACTIVE_ROLE_DATA;
     setUserRoleData(roleData);
-    return roleData.userRole;
+    return roleData.userInfo?.userRole;
   }, [setUserRoleData]);
 
   useEffect(() => {
@@ -241,13 +188,15 @@ const UserRoleProvider = ({ children }) => {
   }, [loadUserRole]);
 
   const value = useMemo(() => ({
+    userName,
+    userProfileImage,
     role,
     navbarAccess,
     componentAccess,
     setUserRoleData,
     setRole,
     loadUserRole,
-  }), [role, navbarAccess, componentAccess, setUserRoleData, setRole, loadUserRole]);
+  }), [userName, userProfileImage, role, navbarAccess, componentAccess, setUserRoleData, setRole, loadUserRole]);
 
   return (
     <UserRoleContext.Provider value={value}>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,10 +17,10 @@ const Roles = () => {
   const { formatMessage } = useIntl();
   const { showToast } = useToast();
   const { componentAccess } = useUserRole();
-  const canAddRole = Boolean(componentAccess?.roles?.canAddRole);
-  const canViewRole = Boolean(componentAccess?.roles?.canViewRole);
-  const canEditRole = Boolean(componentAccess?.roles?.canEditRole);
-  const canDeleteRole = Boolean(componentAccess?.roles?.canDeleteRole);
+  const canAddRole = Boolean(componentAccess?.roles?.canAddRole ?? false);
+  const canViewRole = Boolean(componentAccess?.roles?.canViewRole ?? false);
+  const canEditRole = Boolean(componentAccess?.roles?.canEditRole ?? false);
+  const canDeleteRole = Boolean(componentAccess?.roles?.canDeleteRole ?? false);
   const [roles, setRoles] = useState(rolesData);
   const [activeRole, setActiveRole] = useState(null);
   const [deleteRole, setDeleteRole] = useState(null);
@@ -88,16 +89,19 @@ const Roles = () => {
             canEditRole={canEditRole}
             canDeleteRole={canDeleteRole}
             onView={(targetRole) => {
+              if (!canViewRole) return;
               setActiveRole(targetRole);
               setViewOpen(true);
             }}
             onEdit={(targetRole) => {
+              if (!canEditRole) return;
               setActiveRole(targetRole);
               setFormMode('edit');
               setViewOpen(false);
               setFormOpen(true);
             }}
             onDelete={(targetRole) => {
+              if (!canDeleteRole) return;
               setDeleteRole(targetRole);
               setViewOpen(false);
             }}

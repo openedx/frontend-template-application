@@ -4,6 +4,7 @@
     "name": "Dr. Nguyen Thi Hoa",
     "email": "nguyen@vfda.gov.vn",
     "role": "SEARN Secretariat",
+    "competencyRole": "Inspector",
     "country": "Maldives",
     "joined": "Jan 15, 2026",
     "mode": "Hybrid"
@@ -14,6 +15,7 @@
     "email": "somchai@mfa.th",
     "role": "NRA Admin",
     "roleSub": "nra-national-lead",
+    "competencyRole": "Reviewer",
     "country": "Thailand",
     "joined": "Feb 3, 2026",
     "mode": "In-person"
@@ -24,6 +26,7 @@
     "email": "aisha@nda.gov",
     "role": "Training Provider",
     "roleSub": "tp-course-coordinator",
+    "competencyRole": "Laboratory Analyst",
     "country": "Nepal",
     "joined": "Mar 12, 2026",
     "mode": "Virtual",
@@ -35,6 +38,7 @@
     "email": "limwc@hsa.sg",
     "role": "Training Provider",
     "roleSub": "tp-assessment-specialist",
+    "competencyRole": "Laboratory Analyst",
     "country": "Sri Lanka",
     "joined": "Dec 5, 2025",
     "mode": "Hybrid"
@@ -44,6 +48,7 @@
     "name": "Mr. Arjun Patel",
     "email": "arjun@cdsco.in",
     "role": "SEARN Secretariat",
+    "competencyRole": "Inspector",
     "country": "India",
     "joined": "Nov 20, 2025",
     "mode": "In-person"
@@ -53,6 +58,7 @@
     "name": "Dr. Maria Santos",
     "email": "maria@fda.ph",
     "role": "SEARN Secretariat",
+    "competencyRole": "Reviewer",
     "country": "Indonesia",
     "joined": "Jan 28, 2026",
     "mode": "Virtual"
@@ -62,6 +68,7 @@
     "name": "Mr. Kyaw Min Oo",
     "email": "kyaw@fda.mm",
     "role": "IT Support",
+    "competencyRole": "Reviewer",
     "country": "Myanmar",
     "joined": "Feb 14, 2026",
     "mode": "In-person"
@@ -71,6 +78,7 @@
     "name": "Ms. Siti Nurhaliza",
     "email": "siti@npra.my",
     "role": "Training Provider",
+    "competencyRole": "Reviewer, Inspector",
     "country": "Nepal",
     "joined": "Mar 1, 2026",
     "mode": "Virtual"

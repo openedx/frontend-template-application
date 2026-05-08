@@ -257,6 +257,25 @@
     margin-top: 1.5rem;
   }
 
+  &__readonly-banner {
+    margin: 1rem 0;
+    padding: .5rem .75rem;
+    border-radius: .5rem;
+    background: #FEF3C7;
+    border: 1px solid #FCD34D;
+    color: #92400E;
+    font-size: .75rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  &__readonly-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
   &__section-card {
     border: 1px solid #E5E7EB;
     border-radius: .75rem;

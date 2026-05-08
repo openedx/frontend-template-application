@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import EmptyState from '../../components/emptyState/EmptyState';
 import providersData from '../../mock/trainingCatalog/providers.json';
-import './Provider.scss';
+import './SearnTrainingProvider.scss';
 
 const ArrowLeftIcon = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -38,7 +38,7 @@ const Building2Icon = (props) => (
   </svg>
 );
 
-const Provider = () => {
+const SearnTrainingProvider = () => {
   const navigate = useNavigate();
   const { providerSlug } = useParams();
 
@@ -50,9 +50,9 @@ const Provider = () => {
   if (!provider) {
     return (
       <section className="provider-page">
-        <button type="button" className="provider-page__back" onClick={() => navigate('/admin/training-catalog')}>
+        <button type="button" className="provider-page__back" onClick={() => navigate('/admin/searn-training-catalog')}>
           <ArrowLeftIcon className="provider-page__back-icon" />
-          Back to Training Catalog
+          Back to SEARN Training Catalog
         </button>
         <EmptyState fullSize className="provider-page__empty" message="No provider found." />
       </section>
@@ -61,9 +61,9 @@ const Provider = () => {
 
   return (
     <section className="provider-page">
-      <button type="button" className="provider-page__back" onClick={() => navigate('/admin/training-catalog')}>
+      <button type="button" className="provider-page__back" onClick={() => navigate('/admin/searn-training-catalog')}>
         <ArrowLeftIcon className="provider-page__back-icon" />
-        Back to Training Catalog
+        Back to SEARN Training Catalog
       </button>
 
       <div className="provider-page__hero">
@@ -86,7 +86,7 @@ const Provider = () => {
             <button
               type="button"
               className="provider-page__hero-action"
-              onClick={() => navigate(`/admin/training-catalog/providers/${provider.slug}/catalog`)}
+              onClick={() => navigate(`/admin/searn-training-catalog/providers/${provider.slug}/catalog`)}
             >
               <BookOpenIcon className="provider-page__action-icon" />
               View Catalog
@@ -118,4 +118,5 @@ const Provider = () => {
   );
 };
 
-export default Provider;
+export default SearnTrainingProvider;
+

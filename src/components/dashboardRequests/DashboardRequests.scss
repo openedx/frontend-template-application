@@ -27,19 +27,6 @@
     color: #2A3B8F;
   }
 
-  &__description {
-    margin: 0;
-    font-size: .875rem;
-    line-height: 1.25rem;
-    color: #505B95;
-  }
-
-  &__header-icon {
-    font-size: 1rem;
-    color: #6B7280;
-    flex-shrink: 0;
-  }
-
   &__list {
     display: flex;
     flex-direction: column;
@@ -50,9 +37,26 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    width: 100%;
+    text-align: left;
 
     &:not(:last-child) {
       border-bottom: 1px solid #E5E7EB;
+    }
+  }
+
+  &__item--clickable {
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+
+    &:hover {
+      background: rgb(42 59 143 / .04);
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgb(42 59 143 / .35);
+      outline-offset: -2px;
     }
   }
 }

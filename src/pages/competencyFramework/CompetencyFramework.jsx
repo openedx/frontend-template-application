@@ -26,37 +26,54 @@ import EmptyState from '../../components/emptyState/EmptyState';
 import Tabs from '../../components/tabs/Tabs';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
-import builderTabsConfig from '../../data/competencyFramework/builderTabs.json';
-import frameworkTabs from '../../data/competencyFramework/frameworkTabs.json';
+import SuggestionsTab from '../../components/competencyFramework/create/SuggestionsTab';
 import builderOptions from '../../mock/competencyFramework/builderOptions.json';
 import frameworkData from '../../mock/competencyFramework/frameworks.json';
 import messages from './messages';
 import './CompetencyFramework.scss';
 
 const ITEMS_PER_PAGE = 5;
+const BUILDER_TABS_CONFIG = [
+  { id: 'general', messageKey: 'tabGeneralInformation', accessKey: 'showBuilderGeneralTab' },
+  { id: 'introduction', messageKey: 'tabIntroduction', accessKey: 'showBuilderIntroductionTab' },
+  { id: 'overview', messageKey: 'tabOverview', accessKey: 'showBuilderOverviewTab' },
+  { id: 'domains', messageKey: 'tabDomains', accessKey: 'showBuilderDomainsTab' },
+  { id: 'subDomains', messageKey: 'tabSubDomain', accessKey: 'showBuilderSubDomainsTab' },
+  { id: 'frameworkRoles', messageKey: 'tabRole', accessKey: 'showBuilderRoleTab' },
+  { id: 'proficiencyLevels', messageKey: 'tabProficiencyLevel', accessKey: 'showBuilderProficiencyLevelTab' },
+  { id: 'orgCompetencies', messageKey: 'tabOrgCompetencies', accessKey: 'showBuilderOrgCompetenciesTab' },
+  { id: 'roleCompetencies', messageKey: 'tabRoleSpecificCompetencies', accessKey: 'showBuilderRoleCompetenciesTab' },
+  { id: 'activities', messageKey: 'tabRoleSpecificActivities', accessKey: 'showBuilderActivitiesTab' },
+];
 
 const CompetencyFramework = () => {
   const { formatMessage } = useIntl();
   const location = useLocation();
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const isCreateMode = location.pathname === '/admin/competency-frameworks/new';
   const { componentAccess } = useUserRole();
   const access = componentAccess?.competencyFramework || {};
-  const canDownloadTemplate = Boolean(access.canDownloadTemplate);
-  const canImportFramework = Boolean(access.canImportFramework);
-  const canCreateFramework = Boolean(access.canCreateFramework);
-  const visibleTabs = useMemo(() => frameworkTabs.filter((tab) => {
-    if (tab.id === 'who') {
-      return Boolean(access.showWhoTab);
-    }
-    if (tab.id === 'searn') {
-      return Boolean(access.showSearnTab);
-    }
-    if (tab.id === 'nra') {
-      return Boolean(access.showNraTab);
-    }
-    return false;
-  }), [access.showNraTab, access.showSearnTab, access.showWhoTab]);
+  const visibleTabs = useMemo(() => {
+    const fixedTabs = [
+      { id: 'who', label: formatMessage(messages.frameworkTabWho) },
+      { id: 'searn', label: formatMessage(messages.frameworkTabSearn) },
+      { id: 'nra', label: formatMessage(messages.frameworkTabNraSpecific) },
+    ];
+
+    return fixedTabs.filter(tab => {
+      if (tab.id === 'who') {
+        return Boolean(access.showWhoTab);
+      }
+      if (tab.id === 'searn') {
+        return Boolean(access.showSearnTab);
+      }
+      if (tab.id === 'nra') {
+        return Boolean(access.showNraTab);
+      }
+      return false;
+    });
+  }, [access.showNraTab, access.showSearnTab, access.showWhoTab, formatMessage]);
   const [activeTabId, setActiveTabId] = useState(visibleTabs[0]?.id || null);
   const [page, setPage] = useState(1);
   const [importOpen, setImportOpen] = useState(false);
@@ -81,6 +98,42 @@ const CompetencyFramework = () => {
     roleSpecificActivityRoles: [createRsaRoleItem()],
   });
 
+  const sourceFrameworkByTabId = useMemo(() => ({
+    who: 'who-framework',
+    searn: 'searn-framework',
+    nra: 'nra-framework',
+  }), []);
+  const builderTabIdContext = location.state?.tabId || 'who';
+
+  useEffect(() => {
+    if (!isCreateMode) {
+      return;
+    }
+
+    const framework = location.state?.framework;
+    const tabId = location.state?.tabId || 'who';
+
+    setBuilderActiveTabId('general');
+
+    if (!framework) {
+      // New create flow: default the source framework based on originating tab.
+      setBuilderForm(prev => ({
+        ...prev,
+        name: '',
+        description: '',
+        sourceFramework: sourceFrameworkByTabId[tabId] || '',
+      }));
+      return;
+    }
+
+    // Edit/view flow: best-effort prefill from framework card data.
+    setBuilderForm(prev => ({
+      ...prev,
+      name: framework.title || '',
+      description: framework.description || '',
+      sourceFramework: sourceFrameworkByTabId[tabId] || prev.sourceFramework,
+    }));
+  }, [isCreateMode, location.state, sourceFrameworkByTabId]);
   const activeTabSafe = visibleTabs.some(tab => tab.id === activeTabId) ? activeTabId : (visibleTabs[0]?.id || null);
   const canViewFramework = Boolean(
     (activeTabSafe === 'who' && access.canViewFrameworkWhoTab)
@@ -119,7 +172,7 @@ const CompetencyFramework = () => {
     subDomains: count => formatMessage(messages.metaSubDomains, { count }),
     created: date => formatMessage(messages.metaCreated, { date }),
   };
-  const canEditFrameworkPage = Boolean(access.canEditFrameworkPage);
+  const canShowSuggestionsTab = Boolean(access.showSuggestionsTab);
   const { sourceFrameworkOptions, productTypeOptions } = builderOptions;
   const importModalLabels = {
     title: formatMessage(messages.importModalTitle),
@@ -129,12 +182,52 @@ const CompetencyFramework = () => {
     cancel: formatMessage(messages.importModalCancel),
     import: formatMessage(messages.importModalImport),
   };
-  const isCreateMode = location.pathname === '/admin/competency-frameworks/new';
+  const builderMode = location.state?.mode || 'create'; // 'create' | 'edit' | 'view'
+  const isReadOnlyMode = builderMode === 'view';
+
+  const canCreateFrameworkInActiveTab = useMemo(() => {
+    const tabId = isCreateMode ? builderTabIdContext : activeTabSafe;
+    if (tabId === 'who') {
+      return Boolean(access.canCreateFrameworkWhoTab);
+    }
+    if (tabId === 'searn') {
+      return Boolean(access.canCreateFrameworkSearnTab);
+    }
+    if (tabId === 'nra') {
+      return Boolean(access.canCreateFrameworkNraTab);
+    }
+    return false;
+  }, [
+    isCreateMode,
+    builderTabIdContext,
+    activeTabSafe,
+    access.canCreateFrameworkNraTab,
+    access.canCreateFrameworkSearnTab,
+    access.canCreateFrameworkWhoTab,
+  ]);
+  const canEditFrameworkInActiveTab = canEditFramework;
+  const canShowDownloadAndImport = canCreateFrameworkInActiveTab || canEditFrameworkInActiveTab;
+
+  const canEditBuilderTabs = !isReadOnlyMode && (
+    builderMode === 'edit'
+      ? canEditFrameworkInActiveTab
+      : canCreateFrameworkInActiveTab || canEditFrameworkInActiveTab
+  );
   const builderTabs = useMemo(
-    () => builderTabsConfig
-      .filter(item => Boolean(access[item.accessKey]))
-      .map(item => ({ id: item.id, label: formatMessage(messages[item.messageKey]) })),
-    [access, formatMessage],
+    () => {
+      const baseTabs = BUILDER_TABS_CONFIG
+        .map(item => ({ id: item.id, label: formatMessage(messages[item.messageKey]) }));
+
+      if (isCreateMode && canShowSuggestionsTab) {
+        return [
+          ...baseTabs,
+          { id: 'suggestions', label: formatMessage(messages.tabSuggestions) },
+        ];
+      }
+
+      return baseTabs;
+    },
+    [formatMessage, isCreateMode, canShowSuggestionsTab],
   );
   const builderTabSafe = builderTabs.some(tab => tab.id === builderActiveTabId)
     ? builderActiveTabId
@@ -502,7 +595,7 @@ const CompetencyFramework = () => {
         onChange={(key, value) => setBuilderForm(prev => ({ ...prev, [key]: value }))}
         sourceFrameworkOptions={sourceFrameworkOptions}
         productTypeOptions={productTypeOptions}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
       />
     );
   } else if (builderTabSafe === 'introduction') {
@@ -514,7 +607,7 @@ const CompetencyFramework = () => {
           objectives: builderForm.introductionObjectives,
         }}
         onChange={(key, value) => setBuilderForm(prev => ({ ...prev, [key]: value }))}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
       />
     );
   } else if (builderTabSafe === 'overview') {
@@ -523,14 +616,14 @@ const CompetencyFramework = () => {
         labels={overviewLabels}
         value={builderForm.overviewCompetencyModel}
         onChange={next => setBuilderForm(prev => ({ ...prev, overviewCompetencyModel: next }))}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
       />
     );
   } else if (builderTabSafe === 'domains') {
     builderContent = (
       <DomainsTab
         labels={domainsLabels}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
         competencyTypes={builderForm.domainsCompetencyTypes}
         onChangeCompetencyTypes={next => setBuilderForm(prev => ({ ...prev, domainsCompetencyTypes: next }))}
         domainOptions={builderForm.domainsOptions}
@@ -541,7 +634,7 @@ const CompetencyFramework = () => {
     builderContent = (
       <SubDomainTab
         labels={subDomainsLabels}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
         competencyTypes={builderForm.subDomainsCompetencyTypes}
         onChangeCompetencyTypes={next => setBuilderForm(prev => ({ ...prev, subDomainsCompetencyTypes: next }))}
         subDomainOptions={builderForm.subDomainsOptions}
@@ -553,7 +646,7 @@ const CompetencyFramework = () => {
     builderContent = (
       <RoleTab
         labels={roleLabels}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
         roles={builderForm.frameworkRoles}
         onChangeRoles={next => setBuilderForm(prev => ({ ...prev, frameworkRoles: next }))}
       />
@@ -562,7 +655,7 @@ const CompetencyFramework = () => {
     builderContent = (
       <ProficiencyLevelTab
         labels={proficiencyLabels}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
         levels={builderForm.proficiencyLevels}
         onChangeLevels={next => setBuilderForm(prev => ({ ...prev, proficiencyLevels: next }))}
       />
@@ -571,7 +664,7 @@ const CompetencyFramework = () => {
     builderContent = (
       <OrganizationalCompetenciesTab
         labels={orgCompetenciesLabels}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
         items={builderForm.orgCompetencyTypes}
         onChangeItems={next => setBuilderForm(prev => ({ ...prev, orgCompetencyTypes: next }))}
         competencyTypeOptions={builderOptions.competencyTypeOptions}
@@ -583,7 +676,7 @@ const CompetencyFramework = () => {
     builderContent = (
       <RoleSpecificCompetenciesTab
         labels={roleSpecificLabels}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
         items={builderForm.roleSpecificRoles}
         onChangeItems={next => setBuilderForm(prev => ({ ...prev, roleSpecificRoles: next }))}
         domainOptions={builderForm.domainsOptions}
@@ -598,7 +691,7 @@ const CompetencyFramework = () => {
     builderContent = (
       <RoleSpecificActivitiesTab
         labels={roleActivitiesLabels}
-        canEdit={canEditFrameworkPage}
+        canEdit={canEditBuilderTabs}
         items={builderForm.roleSpecificActivityRoles}
         onChangeItems={next => setBuilderForm(prev => ({ ...prev, roleSpecificActivityRoles: next }))}
         domainOptions={builderForm.domainsOptions}
@@ -608,6 +701,10 @@ const CompetencyFramework = () => {
         onAddDomainOption={handleAddDomainOption}
         onAddSubDomainOption={handleAddSubDomainOption}
       />
+    );
+  } else if (builderTabSafe === 'suggestions') {
+    builderContent = (
+      <SuggestionsTab canEdit={canShowSuggestionsTab} />
     );
   }
 
@@ -633,6 +730,27 @@ const CompetencyFramework = () => {
           />
 
           <div className="framework-builder__content">
+            {isReadOnlyMode && builderTabSafe !== 'suggestions' && (
+              <div className="framework-builder__readonly-banner" role="status">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="framework-builder__readonly-icon"
+                  aria-hidden="true"
+                >
+                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                {formatMessage(messages.readOnlyBannerText)}
+              </div>
+            )}
             {builderContent}
           </div>
         </>
@@ -641,13 +759,13 @@ const CompetencyFramework = () => {
           <div className="competency-framework-page__top">
             <div />
             <div className="competency-framework-page__actions">
-              {canDownloadTemplate && (
+              {canShowDownloadAndImport && (
                 <button type="button" className="competency-framework-page__outline-button">
                   <FontAwesomeIcon icon={faDownload} />
                   {formatMessage(messages.downloadTemplate)}
                 </button>
               )}
-              {canImportFramework && (
+              {canShowDownloadAndImport && (
                 <button
                   type="button"
                   className="competency-framework-page__outline-button"
@@ -657,11 +775,16 @@ const CompetencyFramework = () => {
                   {formatMessage(messages.importFromExcel)}
                 </button>
               )}
-              {canCreateFramework && (
+              {canCreateFrameworkInActiveTab && (
                 <button
                   type="button"
                   className="competency-framework-page__primary-button"
-                  onClick={() => navigate('/admin/competency-frameworks/new')}
+                  onClick={() => navigate('/admin/competency-frameworks/new', {
+                    state: {
+                      mode: 'create',
+                      tabId: activeTabSafe || 'who',
+                    },
+                  })}
                 >
                   <FontAwesomeIcon icon={faPlus} />
                   {formatMessage(messages.createFramework)}
@@ -693,6 +816,24 @@ const CompetencyFramework = () => {
                 canEditFramework={canEditFramework}
                 canDeleteFramework={canDeleteFramework}
                 onDeleteClick={setPendingDeleteFramework}
+                onViewClick={(framework) => {
+                  navigate('/admin/competency-frameworks/new', {
+                    state: {
+                      mode: 'view',
+                      framework,
+                      tabId: activeTabSafe,
+                    },
+                  });
+                }}
+                onEditClick={(framework) => {
+                  navigate('/admin/competency-frameworks/new', {
+                    state: {
+                      mode: 'edit',
+                      framework,
+                      tabId: activeTabSafe,
+                    },
+                  });
+                }}
               />
             ))}
           </div>
@@ -709,7 +850,7 @@ const CompetencyFramework = () => {
             </div>
           )}
 
-          {canImportFramework && (
+          {canShowDownloadAndImport && (
             <ImportFrameworkModal
               isOpen={importOpen}
               onClose={() => setImportOpen(false)}

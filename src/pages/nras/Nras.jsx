@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo, useState } from 'react';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
@@ -151,14 +152,14 @@ const adminCountLabel = (count) => (count === 1 ? '1 admin' : `${count} admins`)
 
 const Nras = () => {
   const { formatMessage } = useIntl();
-  const { componentAccess } = useUserRole();
   const { showToast } = useToast();
+  const { componentAccess } = useUserRole();
 
-  const canShowTable = Boolean(componentAccess?.nras?.showTable ?? true);
-  const canSearch = Boolean(componentAccess?.nras?.canSearch ?? true);
-  const canOnboard = Boolean(componentAccess?.nras?.canOnboardNra ?? true);
-  const canEdit = Boolean(componentAccess?.nras?.canEditNra ?? true);
-  const canDelete = Boolean(componentAccess?.nras?.canDeleteNra ?? true);
+  const canShowTable = true;
+  const canSearch = true;
+  const canOnboard = Boolean(componentAccess?.nrasManagement?.canOnboardNra ?? false);
+  const canEdit = Boolean(componentAccess?.nrasManagement?.canEditNra ?? false);
+  const canDelete = Boolean(componentAccess?.nrasManagement?.canDeleteNra ?? false);
 
   const [nras, setNras] = useState(initialNras);
   const [searchText, setSearchText] = useState('');
@@ -333,7 +334,7 @@ const Nras = () => {
     </div>
   );
 
-  const modalCountryTrigger = country ? country : (
+  const modalCountryTrigger = country || (
     <span className="nras-modal__placeholder">
       {formatMessage(messages.fieldCountryPlaceholder)}
     </span>
@@ -367,9 +368,7 @@ const Nras = () => {
         )}
       </div>
 
-      {!canShowTable ? (
-        emptyState
-      ) : filtered.length === 0 ? (
+      {(!canShowTable || filtered.length === 0) ? (
         emptyState
       ) : (
         <div className="nras-page__table-card">
@@ -384,11 +383,7 @@ const Nras = () => {
               </thead>
               <tbody>
                 {filtered.map(nra => (
-                  <tr
-                    className="nras-page__tr"
-                    key={nra.id}
-                    onClick={() => {}}
-                  >
+                  <tr className="nras-page__tr" key={nra.id}>
                     <td className="nras-page__td">
                       <div className="nras-page__name-cell">
                         <div className="nras-page__badge-icon">
@@ -611,4 +606,3 @@ const Nras = () => {
 };
 
 export default Nras;
-

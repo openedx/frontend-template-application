@@ -57,28 +57,29 @@
   }
 
   &__desc {
-    margin: 0 0 1rem;
+    margin: 0;
     color: #6B7280;
-    line-height: 1.5;
+    line-height: 1.5rem;
   }
 
   &__badge {
+    height: 28px;
+    padding: 0 .75rem;
+    border-radius: 9999px;
     display: inline-flex;
     align-items: center;
-    border: 1px solid rgb(245 158 11 / .25);
-    background: rgb(245 158 11 / .12);
-    color: #92400E;
-    border-radius: 9999px;
-    padding: .25rem .625rem;
+    justify-content: center;
     font-size: .75rem;
-    font-weight: 800;
-    margin-left: auto;
+    font-weight: 900;
+    background: rgb(42 59 143 / .08);
+    color: #2A3B8F;
+    border: 1px solid rgb(42 59 143 / .16);
   }
 
   &__grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
 
     @media (width >= 1024px) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -87,14 +88,15 @@
 
   &__card {
     border: 1px solid #E5E7EB;
-    border-radius: .5rem;
+    border-radius: 1rem;
     background: #FFFFFF;
-    box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+    overflow: hidden;
   }
 
   &__card-head {
-    padding: 1.25rem 1.5rem .75rem;
-    font-weight: 800;
+    padding: 1rem 1rem .875rem;
+    border-bottom: 1px solid #F3F4F6;
+    font-weight: 900;
     color: #111827;
     display: flex;
     align-items: center;
@@ -102,7 +104,7 @@
   }
 
   &__card-body {
-    padding: 0 1.5rem 1.25rem;
+    padding: 1rem;
   }
 
   &__overall {
@@ -110,31 +112,31 @@
   }
 
   &__overall-score {
-    font-size: 3rem;
+    font-size: 2.25rem;
     font-weight: 900;
     color: #111827;
-    margin: .5rem 0;
+    line-height: 1;
+    margin-bottom: .5rem;
   }
 
   &__dist-row {
     display: flex;
     align-items: center;
     gap: .75rem;
-    font-size: .875rem;
-    color: #6B7280;
     margin: .5rem 0;
   }
 
   &__bar {
-    flex: 1;
-    height: 8px;
+    height: 10px;
     border-radius: 9999px;
-    background: rgb(107 114 128 / .14);
+    background: rgb(107 114 128 / .12);
+    flex: 1;
     overflow: hidden;
   }
 
   &__bar-fill {
     height: 100%;
+    border-radius: 9999px;
     background: #F59E0B;
   }
 
@@ -145,39 +147,37 @@
   }
 
   &__review {
+    border: 1px solid #F3F4F6;
+    border-radius: 1rem;
     padding: 1rem;
-    border: 1px solid rgb(229 231 235 / .6);
-    border-radius: .5rem;
-    background: rgb(107 114 128 / .06);
+    background: #FFFFFF;
   }
 
   &__review-head {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: .75rem;
-    flex-wrap: wrap;
+    gap: 1rem;
     margin-bottom: .5rem;
   }
 
   &__review-author {
-    font-weight: 800;
-    color: #111827;
-    font-size: .875rem;
     margin: 0;
+    font-weight: 900;
+    color: #111827;
   }
 
   &__review-date {
-    font-size: .75rem;
-    color: #6B7280;
     margin: .125rem 0 0;
+    font-size: .75rem;
+    font-weight: 700;
+    color: #6B7280;
   }
 
   &__comment {
     margin: 0;
-    color: #111827;
-    font-size: .875rem;
-    line-height: 1.5;
+    color: #374151;
+    line-height: 1.5rem;
   }
 
   &__empty {

@@ -1,24 +1,31 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useState } from 'react';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { useMemo, useState } from 'react';
+import {
+  faArrowLeft,
+  faCalendar,
+  faClock,
+  faEnvelope,
+  faMapMarkerAlt,
+  faPlus,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import AddUserModal from '../../components/addUserModal/AddUserModal';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
+import MultiSelectInput from '../../components/multiSelectInput/MultiSelectInput';
+import PopupDialog from '../../components/popupDialog/PopupDialog';
 import { useToast } from '../../components/toast/ToastProvider';
-import AccessRestrictedPage from '../AccessRestrictedPage';
-import UserCompetenciesCard from '../../components/userDetails/UserCompetenciesCard';
-import UserHeroCard from '../../components/userDetails/UserHeroCard';
-import UserPassportCard from '../../components/userDetails/UserPassportCard';
-import UserStatsGrid from '../../components/userDetails/UserStatsGrid';
-import UserTrainingPanels from '../../components/userDetails/UserTrainingPanels';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import AccessRestrictedPage from '../AccessRestrictedPage';
+import trainingCatalog from '../../mock/trainingCatalog/trainings.json';
 import userDetailsData from '../../mock/users/userDetails.json';
 import usersData from '../../mock/users/users.json';
+import profileFallback from '../../assets/images/profile-fallback.svg';
 import detailMessages from './detailMessages';
 import usersMessages from './messages';
 import { getRoleDisplayLine } from './roleDisplay';
-import '../../components/userDetails/UserDetails.scss';
+import './UserDetailPage.scss';
 
 const getInitials = name => name.split(' ')
   .slice(0, 2)
@@ -33,12 +40,18 @@ const UserDetailPage = () => {
   const navigate = useNavigate();
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const { componentAccess } = useUserRole();
-  const canViewUserDetail = Boolean(componentAccess?.users?.canViewUserDetail ?? true);
-  const canEditUser = Boolean(componentAccess?.users?.canEditUser ?? true);
-  const canDeleteUser = Boolean(componentAccess?.users?.canDeleteUser ?? true);
+  const [assignOpen, setAssignOpen] = useState(false);
+  const [selectedTrainingIds, setSelectedTrainingIds] = useState([]);
+  const [removeAssigned, setRemoveAssigned] = useState(null);
+  const { componentAccess, userProfileImage } = useUserRole();
+  const canViewUserAbout = Boolean(componentAccess?.users?.canViewUserAbout ?? false);
+  const canEditUser = Boolean(componentAccess?.users?.canEditUser ?? false);
+  const canDeleteUser = Boolean(componentAccess?.users?.canDeleteUser ?? false);
+  const canAssignTrainings = Boolean(componentAccess?.users?.canAssignTrainings ?? false);
+  const canRemoveAssignedTrainings = Boolean(componentAccess?.users?.canRemoveAssignedTrainings ?? false);
+  const canViewRegulatoryPassport = Boolean(componentAccess?.users?.canViewRegulatoryPassport ?? false);
 
-  if (!canViewUserDetail) {
+  if (!canViewUserAbout) {
     return <AccessRestrictedPage />;
   }
 
@@ -53,58 +66,202 @@ const UserDetailPage = () => {
     createdAt: user.joined,
   };
 
-  const statItems = [
-    { key: 'createdAt', label: formatMessage(detailMessages.createdAt), value: detail.createdAt },
-    { key: 'updatedAt', label: formatMessage(detailMessages.updatedAt), value: detail.updatedAt },
-    { key: 'lastLogin', label: formatMessage(detailMessages.lastLogin), value: detail.lastLogin },
-    { key: 'trainingsCompleted', label: formatMessage(detailMessages.trainingsCompleted), value: String(detail.trainingsCompleted) },
-  ];
+  const [assignedTrainings, setAssignedTrainings] = useState(() => {
+    const seed = trainingCatalog.slice(0, 2).map(t => ({
+      id: t.id,
+      title: t.title,
+      providerLine: `${t.provider} • ${t.duration}`,
+    }));
+    return seed;
+  });
+
+  const availableTrainingOptions = useMemo(
+    () => trainingCatalog
+      .filter(t => !assignedTrainings.some(a => a.id === t.id))
+      .slice(0, 40)
+      .map(t => ({ value: t.id, label: `${t.title} — ${t.provider} • ${t.duration}` })),
+    [assignedTrainings],
+  );
+
+  const canAssignSubmit = selectedTrainingIds.length > 0;
+
+  const initials = getInitials(user.name);
+  const roleLabel = getRoleDisplayLine(user);
 
   return (
-    <section className="user-detail">
-      <div className="user-detail__back">
-        <button type="button" className="user-detail__back-btn" onClick={() => navigate('/admin/users')}>
+    <section className="user-about-page">
+      <div className="user-about-page__back">
+        <button type="button" className="user-about-page__back-btn" onClick={() => navigate('/admin/users')}>
           <FontAwesomeIcon icon={faArrowLeft} />
           {formatMessage(detailMessages.backToUsers)}
         </button>
       </div>
 
-      <UserHeroCard
-        user={user}
-        detail={detail}
-        initials={getInitials(user.name)}
-        roleLabel={getRoleDisplayLine(user)}
-        statusLabel={detail.status}
-        canEditUser={canEditUser}
-        canDeleteUser={canDeleteUser}
-        editLabel={formatMessage(detailMessages.edit)}
-        deleteLabel={formatMessage(detailMessages.delete)}
-        onEditClick={() => setEditOpen(true)}
-        onDeleteClick={() => setDeleteOpen(true)}
-      />
+      <div className="user-about-page__hero">
+        <div className="user-about-page__hero-inner">
+          <div className="user-about-page__hero-left">
+            <div className="user-about-page__hero-avatar" aria-hidden="true">
+              <img
+                src={userProfileImage || profileFallback}
+                alt=""
+                className="user-about-page__hero-avatar-img"
+              />
+            </div>
+            <div>
+              <h2 className="user-about-page__hero-name">{user.name}</h2>
+              <div className="user-about-page__hero-meta">
+                <span className="user-about-page__hero-meta-item">
+                  <FontAwesomeIcon icon={faEnvelope} />
+                  {user.email}
+                </span>
+                <span className="user-about-page__hero-meta-item">
+                  <FontAwesomeIcon icon={faMapMarkerAlt} />
+                  {user.country}
+                </span>
+              </div>
+              <div className="user-about-page__hero-tags">
+                <span className="user-about-page__hero-tag">{roleLabel}</span>
+                <span className="user-about-page__hero-tag user-about-page__hero-tag--status">{detail.status || 'Active'}</span>
+              </div>
+            </div>
+          </div>
 
-      <UserStatsGrid items={statItems} />
+          {(canEditUser || canDeleteUser) && (
+            <div className="user-about-page__hero-actions">
+              {canEditUser && (
+                <button type="button" className="user-about-page__hero-action" onClick={() => setEditOpen(true)}>
+                  {formatMessage(detailMessages.edit)}
+                </button>
+              )}
+              {canDeleteUser && (
+                <button type="button" className="user-about-page__hero-action user-about-page__hero-action--danger" onClick={() => setDeleteOpen(true)}>
+                  {formatMessage(detailMessages.delete)}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
 
-      <UserTrainingPanels
-        completedTitle={formatMessage(detailMessages.completedTrainings)}
-        statusTitle={formatMessage(detailMessages.trainingStatus)}
-        completedTrainings={detail.completedTrainings}
-        trainingStatus={detail.trainingStatus}
-      />
+      <div className="user-about-page__stats">
+        <div className="user-about-page__stat-card">
+          <div className="user-about-page__stat-label">
+            <FontAwesomeIcon icon={faCalendar} />
+            <span>{formatMessage(detailMessages.createdAt)}</span>
+          </div>
+          <p className="user-about-page__stat-value">{detail.createdAt}</p>
+        </div>
+        <div className="user-about-page__stat-card">
+          <div className="user-about-page__stat-label">
+            <FontAwesomeIcon icon={faCalendar} />
+            <span>{formatMessage(detailMessages.updatedAt)}</span>
+          </div>
+          <p className="user-about-page__stat-value">{detail.updatedAt}</p>
+        </div>
+        <div className="user-about-page__stat-card">
+          <div className="user-about-page__stat-label">
+            <FontAwesomeIcon icon={faClock} />
+            <span>{formatMessage(detailMessages.lastLogin)}</span>
+          </div>
+          <p className="user-about-page__stat-value">{detail.lastLogin}</p>
+        </div>
+        <div className="user-about-page__stat-card">
+          <div className="user-about-page__stat-label">
+            <FontAwesomeIcon icon={faClock} />
+            <span>{formatMessage(detailMessages.trainingsCompleted)}</span>
+          </div>
+          <p className="user-about-page__stat-value">{detail.trainingsCompleted}</p>
+        </div>
+      </div>
 
-      <UserCompetenciesCard
-        title={formatMessage(detailMessages.competenciesTitle, { value: detail.competenciesSummary })}
-        competencies={detail.competencies}
-        proficiencyLabel={value => formatMessage(detailMessages.proficiency, { value })}
-        completedLabel={formatMessage(detailMessages.competencyCompleted)}
-        pendingLabel={formatMessage(detailMessages.competencyPending)}
-      />
+      <div className="user-about-page__grid">
+        <div className="user-about-page__card">
+          <div className="user-about-page__card-title">
+            {formatMessage(detailMessages.completedTrainings)}
+          </div>
+          <div className="user-about-page__list">
+            {detail.completedTrainings.map(item => (
+              <div key={item.title} className="user-about-page__list-item">
+                <div>
+                  <p className="user-about-page__list-title">{item.title}</p>
+                  <p className="user-about-page__list-sub">{item.completedOn}</p>
+                </div>
+                <span className="user-about-page__score">{item.score}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
-      <UserPassportCard
-        title={formatMessage(detailMessages.passportTitle)}
-        description={detail.passportDescription}
-        buttonLabel={formatMessage(detailMessages.passportButton)}
-      />
+        <div className="user-about-page__card">
+          <div className="user-about-page__card-title">
+            {formatMessage(detailMessages.trainingStatus)}
+          </div>
+          <div className="user-about-page__status-list">
+            {detail.trainingStatus.map(item => (
+              <div key={item.title} className="user-about-page__status-item">
+                <div className="user-about-page__status-row">
+                  <p className="user-about-page__status-title">{item.title}</p>
+                  <span className="user-about-page__status-badge">{item.status}</span>
+                </div>
+                <div className="user-about-page__progress">
+                  <div className="user-about-page__progress-fill" style={{ width: `${item.progress}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="user-about-page__card user-about-page__assigned">
+        <div className="user-about-page__assigned-head">
+          <div className="user-about-page__card-title">
+            {formatMessage(detailMessages.assignedTrainingsTitle, { count: assignedTrainings.length })}
+          </div>
+          {canAssignTrainings && (
+            <button type="button" className="user-about-page__assigned-btn" onClick={() => setAssignOpen(true)}>
+              <FontAwesomeIcon icon={faPlus} />
+              {formatMessage(detailMessages.assignTraining)}
+            </button>
+          )}
+        </div>
+        <div className="user-about-page__assigned-list">
+          {assignedTrainings.map(item => (
+            <div key={item.id} className="user-about-page__assigned-item">
+              <div className="user-about-page__assigned-main">
+                <a className="user-about-page__assigned-link" href={`/admin/searn-training-catalog/${item.id}`}>
+                  {item.title}
+                </a>
+                <p className="user-about-page__assigned-sub">{item.providerLine}</p>
+              </div>
+              {canRemoveAssignedTrainings && (
+                <button
+                  type="button"
+                  className="user-about-page__assigned-remove"
+                  aria-label={formatMessage(detailMessages.removeAssignedTraining)}
+                  onClick={() => setRemoveAssigned(item)}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {canViewRegulatoryPassport && (
+        <div className="user-about-page__passport">
+          <div className="user-about-page__passport-left">
+            <div className="user-about-page__passport-icon" aria-hidden="true">RP</div>
+            <div>
+              <h3 className="user-about-page__passport-title">{formatMessage(detailMessages.passportTitle)}</h3>
+              <p className="user-about-page__passport-desc">{detail.passportDescription}</p>
+            </div>
+          </div>
+          <Link to={`/admin/users/${userId}/regulatory-passport`} className="user-about-page__passport-btn">
+            {formatMessage(detailMessages.passportButton)}
+          </Link>
+        </div>
+      )}
 
       {canEditUser && (
         <AddUserModal
@@ -117,6 +274,7 @@ const UserDetailPage = () => {
             country: user.country,
             role: user.role,
             roleSub: user.roleSub || '',
+            competencyRole: user.competencyRole || '',
           }}
         />
       )}
@@ -135,6 +293,81 @@ const UserDetailPage = () => {
               description: formatMessage(usersMessages.toastUserDeletedDescription, { name: user.name }),
             });
             setDeleteOpen(false);
+          }}
+        />
+      )}
+
+      {canAssignTrainings && (
+        <PopupDialog
+          isOpen={assignOpen}
+          title={formatMessage(detailMessages.assignModalTitle, { name: user.name })}
+          onClose={() => {
+            setAssignOpen(false);
+            setSelectedTrainingIds([]);
+          }}
+          contentClassName="user-about-page__assign-modal"
+        >
+          <div className="user-about-page__assign-body">
+            <p className="user-about-page__assign-desc">{formatMessage(detailMessages.assignModalDescription)}</p>
+            <MultiSelectInput
+              options={availableTrainingOptions}
+              selectedValues={selectedTrainingIds}
+              onChange={setSelectedTrainingIds}
+            />
+            <div className="user-about-page__assign-actions">
+              <button
+                type="button"
+                className="user-about-page__assign-cancel"
+                onClick={() => {
+                  setAssignOpen(false);
+                  setSelectedTrainingIds([]);
+                }}
+              >
+                {formatMessage(detailMessages.cancel)}
+              </button>
+              <button
+                type="button"
+                className="user-about-page__assign-confirm"
+                disabled={!canAssignSubmit}
+                onClick={() => {
+                  const next = trainingCatalog
+                    .filter(t => selectedTrainingIds.includes(t.id))
+                    .map(t => ({
+                      id: t.id,
+                      title: t.title,
+                      providerLine: `${t.provider} • ${t.duration}`,
+                    }));
+                  setAssignedTrainings(prev => [...next, ...prev]);
+                  showToast({
+                    title: formatMessage(detailMessages.toastAssignedTitle),
+                    description: formatMessage(detailMessages.toastAssignedDescription),
+                  });
+                  setAssignOpen(false);
+                  setSelectedTrainingIds([]);
+                }}
+              >
+                {formatMessage(detailMessages.assign)}
+              </button>
+            </div>
+          </div>
+        </PopupDialog>
+      )}
+
+      {canRemoveAssignedTrainings && (
+        <ConfirmActionDialog
+          isOpen={Boolean(removeAssigned)}
+          title={formatMessage(detailMessages.removeAssignedDialogTitle)}
+          description={formatMessage(detailMessages.removeAssignedDialogDescription, { title: removeAssigned?.title || '' })}
+          cancelLabel={formatMessage(detailMessages.cancel)}
+          confirmLabel={formatMessage(detailMessages.removeAssignedConfirm)}
+          onCancel={() => setRemoveAssigned(null)}
+          onConfirm={() => {
+            setAssignedTrainings(prev => prev.filter(t => t.id !== removeAssigned?.id));
+            showToast({
+              title: formatMessage(detailMessages.toastRemovedAssignedTitle),
+              description: formatMessage(detailMessages.toastRemovedAssignedDescription),
+            });
+            setRemoveAssigned(null);
           }}
         />
       )}

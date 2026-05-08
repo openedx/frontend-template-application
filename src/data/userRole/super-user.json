@@ -1,7 +1,7 @@
 {
   "userInfo": {
-    "userName": "SEARN Secretariat",
-    "userRole": "secretariat",
+    "userName": "Super User",
+    "userRole": "super-user",
     "userProfileImage": ""
   },
   "navbarAccess": {

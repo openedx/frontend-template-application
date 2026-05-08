@@ -1306,6 +1306,161 @@ const competencyFrameworkMessages = defineMessages({
     defaultMessage: 'Unable to save role-specific activities. Please try again.',
     description: 'Save failed toast description in role-specific activities tab',
   },
+  frameworkTabWho: {
+    id: 'app.competencyFramework.frameworkTabs.who',
+    defaultMessage: 'WHO Global Competency Framework',
+    description: 'WHO competency framework tab label',
+  },
+  frameworkTabSearn: {
+    id: 'app.competencyFramework.frameworkTabs.searn',
+    defaultMessage: 'SEARN Competency Framework',
+    description: 'SEARN competency framework tab label',
+  },
+  frameworkTabNraSpecific: {
+    id: 'app.competencyFramework.frameworkTabs.nraSpecific',
+    defaultMessage: 'NRA Specific Competency Framework',
+    description: 'NRA specific competency framework tab label',
+  },
+  tabSuggestions: {
+    id: 'app.competencyFramework.builder.tab.suggestions',
+    defaultMessage: 'Suggestions',
+    description: 'Suggestions tab label in create mode',
+  },
+  suggestionsSubtitle: {
+    id: 'app.competencyFramework.suggestions.subtitle',
+    defaultMessage: 'Submit suggestions for new competencies, activities, domains, or sub-domains.',
+    description: 'Suggestions tab subtitle',
+  },
+  addSuggestion: {
+    id: 'app.competencyFramework.suggestions.add.button',
+    defaultMessage: 'Add Suggestion',
+    description: 'Add suggestion button label',
+  },
+  suggestionModalTitleAdd: {
+    id: 'app.competencyFramework.suggestions.modal.add.title',
+    defaultMessage: 'Add Suggestion',
+    description: 'Add suggestion modal title',
+  },
+  suggestionModalTitleEdit: {
+    id: 'app.competencyFramework.suggestions.modal.edit.title',
+    defaultMessage: 'Edit Suggestion',
+    description: 'Edit suggestion modal title',
+  },
+  suggestionTypeLabel: {
+    id: 'app.competencyFramework.suggestions.form.type.label',
+    defaultMessage: 'Suggestion Type',
+    description: 'Suggestion type field label',
+  },
+  suggestionNameLabel: {
+    id: 'app.competencyFramework.suggestions.form.name.label',
+    defaultMessage: 'Suggestion Name',
+    description: 'Suggestion name field label',
+  },
+  suggestionDescriptionLabel: {
+    id: 'app.competencyFramework.suggestions.form.description.label',
+    defaultMessage: 'Suggestion Description',
+    description: 'Suggestion description field label',
+  },
+  suggestionStatusLabel: {
+    id: 'app.competencyFramework.suggestions.form.status.label',
+    defaultMessage: 'Suggestion Status',
+    description: 'Suggestion status field label',
+  },
+  suggestionNamePlaceholder: {
+    id: 'app.competencyFramework.suggestions.form.name.placeholder',
+    defaultMessage: 'Enter suggestion name',
+    description: 'Suggestion name placeholder',
+  },
+  suggestionDescriptionPlaceholder: {
+    id: 'app.competencyFramework.suggestions.form.description.placeholder',
+    defaultMessage: 'Enter description',
+    description: 'Suggestion description placeholder',
+  },
+  cancel: {
+    id: 'app.competencyFramework.suggestions.form.cancel',
+    defaultMessage: 'Cancel',
+    description: 'Cancel button label',
+  },
+  add: {
+    id: 'app.competencyFramework.suggestions.form.add',
+    defaultMessage: 'Add',
+    description: 'Add button label',
+  },
+  save: {
+    id: 'app.competencyFramework.suggestions.form.save',
+    defaultMessage: 'Save',
+    description: 'Save button label',
+  },
+  suggestionTypeCompetency: {
+    id: 'app.competencyFramework.suggestions.type.competency',
+    defaultMessage: 'Competency',
+    description: 'Suggestion type option - Competency',
+  },
+  suggestionTypeDomain: {
+    id: 'app.competencyFramework.suggestions.type.domain',
+    defaultMessage: 'Domain',
+    description: 'Suggestion type option - Domain',
+  },
+  suggestionTypeSubDomain: {
+    id: 'app.competencyFramework.suggestions.type.subDomain',
+    defaultMessage: 'Sub-domain',
+    description: 'Suggestion type option - Sub-domain',
+  },
+  suggestionTypeActivity: {
+    id: 'app.competencyFramework.suggestions.type.activity',
+    defaultMessage: 'Activity',
+    description: 'Suggestion type option - Activity',
+  },
+  suggestionStatusPending: {
+    id: 'app.competencyFramework.suggestions.status.pending',
+    defaultMessage: 'Pending',
+    description: 'Suggestion status option - Pending',
+  },
+  suggestionStatusApproved: {
+    id: 'app.competencyFramework.suggestions.status.approved',
+    defaultMessage: 'Approved',
+    description: 'Suggestion status option - Approved',
+  },
+  suggestionDeleteDialogTitle: {
+    id: 'app.competencyFramework.suggestions.delete.dialog.title',
+    defaultMessage: 'Delete suggestion?',
+    description: 'Delete suggestion confirmation title',
+  },
+  suggestionDeleteDialogDescription: {
+    id: 'app.competencyFramework.suggestions.delete.dialog.description',
+    defaultMessage: 'This will permanently remove "{name}".',
+    description: 'Delete suggestion confirmation description',
+  },
+  suggestionDeleteConfirmLabel: {
+    id: 'app.competencyFramework.suggestions.delete.dialog.confirm',
+    defaultMessage: 'Delete',
+    description: 'Delete suggestion confirmation confirm button label',
+  },
+  suggestionDeletedToastTitle: {
+    id: 'app.competencyFramework.suggestions.delete.toast.title',
+    defaultMessage: 'Suggestion deleted',
+    description: 'Delete suggestion success toast title',
+  },
+  suggestionDeletedToastDescription: {
+    id: 'app.competencyFramework.suggestions.delete.toast.description',
+    defaultMessage: '"{name}" deleted successfully.',
+    description: 'Delete suggestion success toast description',
+  },
+  suggestionSavedToastTitle: {
+    id: 'app.competencyFramework.suggestions.save.toast.title',
+    defaultMessage: 'Suggestion saved',
+    description: 'Add/edit suggestion success toast title',
+  },
+  suggestionSavedToastDescription: {
+    id: 'app.competencyFramework.suggestions.save.toast.description',
+    defaultMessage: 'Your suggestion has been saved successfully.',
+    description: 'Add/edit suggestion success toast description',
+  },
+  readOnlyBannerText: {
+    id: 'app.competencyFramework.builder.readOnly.banner',
+    defaultMessage: 'This section is read-only. Use the Suggestions tab to propose changes to the Secretariat.',
+    description: 'Read-only banner shown in view mode on builder pages',
+  },
 });
 
 export default competencyFrameworkMessages;

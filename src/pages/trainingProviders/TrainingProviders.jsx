@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo, useState } from 'react';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
@@ -172,14 +173,14 @@ const XIcon = ({ className }) => (
 
 const TrainingProviders = () => {
   const { formatMessage } = useIntl();
-  const { componentAccess } = useUserRole();
   const { showToast } = useToast();
+  const { componentAccess } = useUserRole();
 
-  const canShowTable = Boolean(componentAccess?.trainingProviders?.showTable ?? true);
-  const canSearch = Boolean(componentAccess?.trainingProviders?.canSearch ?? true);
-  const canAdd = Boolean(componentAccess?.trainingProviders?.canAddProvider ?? true);
-  const canEdit = Boolean(componentAccess?.trainingProviders?.canEditProvider ?? true);
-  const canDelete = Boolean(componentAccess?.trainingProviders?.canDeleteProvider ?? true);
+  const canShowTable = true;
+  const canSearch = true;
+  const canAdd = Boolean(componentAccess?.trainingProviders?.canAddTrainingProvider ?? false);
+  const canEdit = Boolean(componentAccess?.trainingProviders?.canEditTrainingProvider ?? false);
+  const canDelete = Boolean(componentAccess?.trainingProviders?.canDeleteTrainingProvider ?? false);
 
   const [providers, setProviders] = useState(initialProviders);
   const [searchText, setSearchText] = useState('');
@@ -355,7 +356,7 @@ const TrainingProviders = () => {
   const canSubmit = Boolean(orgName.trim());
   const canAddAdmin = Boolean(adminDraftName.trim() && adminDraftEmail.trim());
 
-  const modalCountryTrigger = country ? country : (
+  const modalCountryTrigger = country || (
     <span className="training-providers-modal__placeholder">
       {formatMessage(messages.countryPlaceholder)}
     </span>
@@ -391,9 +392,7 @@ const TrainingProviders = () => {
         )}
       </div>
 
-      {!canShowTable ? (
-        emptyState
-      ) : filtered.length === 0 ? (
+      {(!canShowTable || filtered.length === 0) ? (
         emptyState
       ) : (
         <div className="training-providers-page__table-card">
@@ -657,4 +656,3 @@ const TrainingProviders = () => {
 };
 
 export default TrainingProviders;
-

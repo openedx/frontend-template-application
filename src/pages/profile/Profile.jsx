@@ -1,8 +1,8 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo, useRef, useState } from 'react';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { useToast } from '../../components/toast/ToastProvider';
-import { useUserRole } from '../../contexts/UserRoleContext';
 import allCountries from '../../mock/countries/allCountries.json';
 import profileData from '../../mock/profile/profile.json';
 import messages from './messages';
@@ -110,11 +110,9 @@ const SaveIcon = ({ className }) => (
 
 const Profile = () => {
   const { formatMessage } = useIntl();
-  const { componentAccess } = useUserRole();
   const { showToast } = useToast();
-
-  const canEdit = Boolean(componentAccess?.profile?.canEdit ?? true);
-  const canUploadPhoto = Boolean(componentAccess?.profile?.canUploadPhoto ?? true);
+  const canEdit = true;
+  const canUploadPhoto = true;
 
   const fileRef = useRef(null);
 

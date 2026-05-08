@@ -14,6 +14,8 @@ const FrameworkCard = ({
   canEditFramework,
   canDeleteFramework,
   onDeleteClick,
+  onViewClick,
+  onEditClick,
 }) => (
   <article className="competency-framework-page__card">
     <div className="competency-framework-page__card-content">
@@ -37,6 +39,7 @@ const FrameworkCard = ({
           className="competency-framework-page__icon-button"
           aria-label={labels.viewAction}
           title={labels.viewAction}
+          onClick={() => onViewClick(item)}
         >
           <FontAwesomeIcon icon={faEye} />
         </button>
@@ -47,6 +50,7 @@ const FrameworkCard = ({
           className="competency-framework-page__icon-button"
           aria-label={labels.editAction}
           title={labels.editAction}
+          onClick={() => onEditClick(item)}
         >
           <FontAwesomeIcon icon={faPen} />
         </button>

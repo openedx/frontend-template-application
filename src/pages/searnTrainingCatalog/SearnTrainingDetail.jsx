@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import EmptyState from '../../components/emptyState/EmptyState';
 import trainingsData from '../../mock/trainingCatalog/trainings.json';
-import './TrainingDetail.scss';
+import './SearnTrainingDetail.scss';
 
 const badgeClassForMode = (mode) => {
   const lower = String(mode || '').toLowerCase();
@@ -16,7 +16,7 @@ const badgeClassForMode = (mode) => {
   return 'training-detail__badge';
 };
 
-const TrainingDetail = () => {
+const SearnTrainingDetail = () => {
   const { trainingId } = useParams();
 
   const training = useMemo(
@@ -174,4 +174,5 @@ const TrainingDetail = () => {
   );
 };
 
-export default TrainingDetail;
+export default SearnTrainingDetail;
+

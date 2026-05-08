@@ -1,4 +1,4 @@
-import DashboardRequests from '../../components/dashboardRequests/DashboardRequests';
+import { PendingRequestsCard, TopRequestedActivitiesCard } from '../../components/dashboardRequests/DashboardRequests';
 import Stats from '../../components/stats/Stats';
 import UsersPerCountry from '../../components/usersPerCountry/UsersPerCountry';
 import { useUserRole } from '../../contexts/UserRoleContext';
@@ -10,23 +10,19 @@ import './Dashboard.scss';
 
 const Dashboard = () => {
   const { componentAccess } = useUserRole();
-  const canShowStats = Boolean(componentAccess?.dashboard?.showStats);
   const canShowUsersPerCountry = Boolean(componentAccess?.dashboard?.showUsersPerCountry);
-  const canShowRequestsSection = Boolean(componentAccess?.dashboard?.showRequestsSection);
   const canShowTopRequestedActivities = Boolean(componentAccess?.dashboard?.showTopRequestedActivities);
   const canShowPendingRequests = Boolean(componentAccess?.dashboard?.showPendingRequests);
 
   return (
     <section>
-      {canShowStats && <Stats items={dashboardStats} />}
+      <Stats items={dashboardStats} />
       {canShowUsersPerCountry && <UsersPerCountry items={usersPerCountry} />}
-      {canShowRequestsSection && (
-        <DashboardRequests
-          topRequestedItems={topRequestedActivities}
-          pendingItems={pendingRequests}
-          showTopRequested={canShowTopRequestedActivities}
-          showPendingRequests={canShowPendingRequests}
-        />
+      {(canShowTopRequestedActivities || canShowPendingRequests) && (
+        <section className="dashboard-requests-grid">
+          {canShowTopRequestedActivities && <TopRequestedActivitiesCard items={topRequestedActivities} />}
+          {canShowPendingRequests && <PendingRequestsCard items={pendingRequests} />}
+        </section>
       )}
     </section>
   );

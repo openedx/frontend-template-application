@@ -1,17 +1,17 @@
-.user-detail {
+.user-about-page {
   &__back {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   &__back-btn {
-    border: 0;
-    background: transparent;
-    color: #2A3B8F;
-    font-size: .875rem;
-    font-weight: 600;
     display: inline-flex;
     align-items: center;
     gap: .5rem;
+    border: 0;
+    background: transparent;
+    color: #2A3B8F;
+    font-weight: 600;
+    padding: .25rem 0;
   }
 
   &__hero {
@@ -23,20 +23,25 @@
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / .15);
   }
 
-  &__hero-row {
+  &__hero-inner {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     justify-content: space-between;
+
+    @media (width >= 768px) {
+      flex-direction: row;
+      align-items: center;
+    }
   }
 
-  &__identity {
+  &__hero-left {
     display: flex;
     align-items: center;
     gap: 1.25rem;
   }
 
-  &__avatar {
+  &__hero-avatar {
     width: 5rem;
     height: 5rem;
     border-radius: 1rem;
@@ -46,16 +51,25 @@
     justify-content: center;
     font-size: 1.5rem;
     font-weight: 700;
+    overflow: hidden;
   }
 
-  &__name {
+  &__hero-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 1rem;
+  }
+
+  &__hero-name {
     margin: 0 0 .25rem;
     font-size: 1.5rem;
     font-weight: 700;
     color: #FFFFFF;
   }
 
-  &__meta {
+  &__hero-meta {
     display: flex;
     flex-wrap: wrap;
     gap: .75rem 1rem;
@@ -63,7 +77,7 @@
     font-size: .875rem;
   }
 
-  &__meta-item {
+  &__hero-meta-item {
     display: inline-flex;
     align-items: center;
     gap: .375rem;
@@ -76,7 +90,7 @@
     flex-wrap: wrap;
   }
 
-  &__tag {
+  &__hero-tag {
     font-size: .75rem;
     padding: .125rem .625rem;
     border-radius: 9999px;
@@ -95,23 +109,17 @@
     flex-wrap: wrap;
   }
 
-  &__hero-btn {
+  &__hero-action {
     height: 40px;
     border-radius: .5rem;
     border: 0;
     padding: 0 1rem;
     font-size: .875rem;
     font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
+    background: #FFFFFF;
+    color: #2A3B8F;
 
-    &--edit {
-      background: #FFFFFF;
-      color: #2A3B8F;
-    }
-
-    &--delete {
+    &--danger {
       background: #DC2626;
       color: #FFFFFF;
     }
@@ -122,6 +130,10 @@
     gap: 1rem;
     grid-template-columns: repeat(1, minmax(0, 1fr));
     margin-bottom: 1.5rem;
+
+    @media (width >= 768px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
   &__stat-card {
@@ -129,14 +141,19 @@
     border: 1px solid #E5E7EB;
     border-radius: .75rem;
     padding: 1rem;
+    box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
   }
 
   &__stat-label {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
     margin: 0 0 .375rem;
     font-size: .75rem;
     text-transform: uppercase;
     color: #6B7280;
     font-weight: 600;
+    letter-spacing: .05em;
   }
 
   &__stat-value {
@@ -151,6 +168,10 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
+
+    @media (width >= 1024px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   &__card {
@@ -164,8 +185,8 @@
   &__card-title {
     margin: 0 0 1rem;
     color: #2A3B8F;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: .875rem;
+    font-weight: 800;
   }
 
   &__list {
@@ -184,10 +205,6 @@
     background: rgb(42 59 143 / .04);
   }
 
-  &__list-item-main {
-    min-width: 0;
-  }
-
   &__list-title {
     margin: 0;
     color: #2A3B8F;
@@ -195,35 +212,61 @@
     font-weight: 600;
   }
 
-  &__list-subtitle {
+  &__list-sub {
     margin: 0;
-    color: #505B95;
+    color: #6B7280;
     font-size: .75rem;
   }
 
-  &__badge {
-    font-size: .75rem;
-    font-weight: 600;
+  &__score {
+    display: inline-flex;
+    align-items: center;
     border-radius: 9999px;
-    padding: .125rem .5rem;
+    padding: .25rem .625rem;
+    font-size: .75rem;
+    background: #DCFCE7;
+    color: #166534;
+    font-weight: 700;
+  }
 
-    &--success {
-      background: #DCFCE7;
-      color: #166534;
-    }
+  &__status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-    &--primary {
-      background: #E0E7FF;
-      color: #2A3B8F;
-    }
+  &__status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: .5rem;
+  }
+
+  &__status-title {
+    margin: 0;
+    font-size: .875rem;
+    font-weight: 600;
+    color: #2A3B8F;
+  }
+
+  &__status-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: .25rem .625rem;
+    font-size: .75rem;
+    background: rgb(42 59 143 / .1);
+    color: #2A3B8F;
+    font-weight: 700;
+    white-space: nowrap;
   }
 
   &__progress {
-    margin-top: .5rem;
-    width: 100%;
     height: 8px;
-    border-radius: 9999px;
+    width: 100%;
     background: #E5E7EB;
+    border-radius: 9999px;
     overflow: hidden;
   }
 
@@ -232,67 +275,11 @@
     background: #2A3B8F;
   }
 
-  &__competency-grid {
-    display: grid;
-    gap: .75rem;
-    grid-template-columns: 1fr;
-  }
-
-  &__passport {
-    margin-top: 1.5rem;
-    background: linear-gradient(90deg, rgb(255 204 41 / .2), rgb(105 171 74 / .2));
-    border: 1px solid rgb(255 204 41 / .4);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    justify-content: space-between;
-  }
-
-  &__passport-title {
-    margin: 0 0 .25rem;
-    color: #2A3B8F;
-    font-size: 1.125rem;
-    font-weight: 700;
-  }
-
-  &__passport-description {
-    margin: 0;
-    color: #505B95;
-    font-size: .875rem;
-  }
-
-  &__passport-btn {
-    height: 40px;
-    border: 0;
-    border-radius: .5rem;
-    background: #2A3B8F;
-    color: #FFFFFF;
-    font-size: .875rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-    padding: 0 1rem;
-    width: fit-content;
-    text-decoration: none;
-
-    &:hover {
-      opacity: .92;
-      text-decoration: none;
-    }
-  }
-
-  &__assigned {
-    margin-bottom: 1.5rem;
-  }
-
   &__assigned-head {
     display: flex;
-    gap: 1rem;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 1rem;
     flex-wrap: wrap;
   }
@@ -305,7 +292,10 @@
     color: #FFFFFF;
     border: 0;
     font-size: .875rem;
-    font-weight: 600;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
   }
 
   &__assigned-list {
@@ -336,7 +326,7 @@
   &__assigned-link {
     display: inline-block;
     color: #2A3B8F;
-    font-weight: 600;
+    font-weight: 700;
     font-size: .875rem;
     text-decoration: none;
 
@@ -358,13 +348,78 @@
     border: 0;
     background: transparent;
     color: #DC2626;
-    font-size: 1.25rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
 
     &:hover {
       background: #FEF2F2;
+    }
+  }
+
+  &__passport {
+    margin-top: 1.5rem;
+    background: linear-gradient(90deg, rgb(255 204 41 / .2), rgb(105 171 74 / .2));
+    border: 1px solid rgb(255 204 41 / .4);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+
+    @media (width >= 1024px) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  &__passport-left {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  &__passport-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: .75rem;
+    background: #FFCC29;
+    color: #2A3B8F;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__passport-title {
+    margin: 0 0 .25rem;
+    color: #2A3B8F;
+    font-size: 1.125rem;
+    font-weight: 800;
+  }
+
+  &__passport-desc {
+    margin: 0;
+    color: #505B95;
+    font-size: .875rem;
+  }
+
+  &__passport-btn {
+    height: 44px;
+    border-radius: .75rem;
+    border: 0;
+    padding: 0 1.5rem;
+    font-size: .875rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    background: #2A3B8F;
+    color: #FFFFFF;
+    text-decoration: none;
+
+    &:hover {
+      opacity: .92;
+      text-decoration: none;
     }
   }
 
@@ -373,58 +428,17 @@
     width: min(720px, 100%);
   }
 
-  &__assign-modal-body {
+  &__assign-body {
     padding-top: .5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
 
-  &__assign-modal-description {
+  &__assign-desc {
     margin: 0;
     color: #6B7280;
     font-size: .875rem;
-  }
-
-  &__assign-list {
-    max-height: 360px;
-    overflow-y: auto;
-    border: 1px solid #E5E7EB;
-    border-radius: .75rem;
-    padding: .5rem;
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-  }
-
-  &__assign-item {
-    display: flex;
-    gap: .75rem;
-    align-items: flex-start;
-    padding: .75rem;
-    border-radius: .625rem;
-    cursor: pointer;
-
-    &:hover {
-      background: rgb(42 59 143 / .04);
-    }
-
-    input {
-      margin-top: .25rem;
-    }
-  }
-
-  &__assign-item-title {
-    margin: 0;
-    color: #2A3B8F;
-    font-weight: 600;
-    font-size: .875rem;
-  }
-
-  &__assign-item-subtitle {
-    margin: .125rem 0 0;
-    color: #6B7280;
-    font-size: .75rem;
   }
 
   &__assign-actions {
@@ -432,6 +446,12 @@
     flex-direction: column-reverse;
     gap: .5rem;
     justify-content: flex-end;
+
+    @media (width >= 640px) {
+      flex-direction: row;
+      align-items: center;
+      gap: .75rem;
+    }
   }
 
   &__assign-cancel {
@@ -441,7 +461,7 @@
     background: transparent;
     color: #2A3B8F;
     font-size: .875rem;
-    font-weight: 600;
+    font-weight: 700;
     padding: 0 1.5rem;
   }
 
@@ -452,7 +472,7 @@
     background: #2A3B8F;
     color: #FFFFFF;
     font-size: .875rem;
-    font-weight: 600;
+    font-weight: 700;
     padding: 0 1.5rem;
 
     &:disabled {
@@ -462,42 +482,3 @@
   }
 }
 
-@media (width >= 640px) {
-  .user-detail {
-    &__assign-actions {
-      flex-direction: row;
-      align-items: center;
-      gap: .75rem;
-    }
-  }
-}
-
-@media (width >= 768px) {
-  .user-detail {
-    &__stats {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-}
-
-@media (width >= 1024px) {
-  .user-detail {
-    &__hero-row {
-      flex-direction: row;
-      align-items: center;
-    }
-
-    &__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    &__competency-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    &__passport {
-      flex-direction: row;
-      align-items: center;
-    }
-  }
-}

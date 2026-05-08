@@ -116,6 +116,11 @@
     font-weight: 500;
   }
 
+  &__competency-role {
+    color: #2A3B8F;
+    font-size: .875rem;
+  }
+
   &__row-actions {
     display: inline-flex;
     align-items: center;
@@ -146,31 +151,16 @@
     padding: .875rem 1.5rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: .75rem;
     font-size: .875rem;
     color: #6B7280;
+    position: relative;
   }
 
-  &__pagination-actions {
-    display: inline-flex;
-    gap: .5rem;
-  }
-
-  &__page-button {
-    height: 36px;
-    border-radius: .5rem;
-    border: 1px solid #2A3B8F;
-    background: #FFFFFF;
-    color: #2A3B8F;
-    font-size: .875rem;
-    font-weight: 600;
-    padding: 0 .875rem;
-
-    &:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
+  &__pagination-left {
+    position: absolute;
+    left: 1.5rem;
   }
 }
 

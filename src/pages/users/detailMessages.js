@@ -16,6 +16,73 @@ const detailMessages = defineMessages({
   competencyPending: { id: 'app.users.detail.competencyPending', defaultMessage: 'Not completed', description: 'Pending competency status' },
   passportTitle: { id: 'app.users.detail.passportTitle', defaultMessage: 'Regulatory Passport', description: 'Passport CTA title' },
   passportButton: { id: 'app.users.detail.passportButton', defaultMessage: 'View Regulatory Passport', description: 'Passport CTA button' },
+  assignedTrainingsTitle: {
+    id: 'app.users.detail.assignedTrainingsTitle',
+    defaultMessage: 'Assigned Trainings ({count})',
+    description: 'Assigned trainings section title',
+  },
+  assignTraining: {
+    id: 'app.users.detail.assignTraining',
+    defaultMessage: 'Assign Training',
+    description: 'Assign training button label',
+  },
+  removeAssignedTraining: {
+    id: 'app.users.detail.removeAssignedTraining',
+    defaultMessage: 'Remove assigned training',
+    description: 'Remove assigned training icon label',
+  },
+  assignModalTitle: {
+    id: 'app.users.detail.assignModalTitle',
+    defaultMessage: 'Assign Trainings to {name}',
+    description: 'Assign trainings modal title',
+  },
+  assignModalDescription: {
+    id: 'app.users.detail.assignModalDescription',
+    defaultMessage: 'Search and select one or more trainings to assign.',
+    description: 'Assign trainings modal description',
+  },
+  assignModalSearchPlaceholder: {
+    id: 'app.users.detail.assignModalSearchPlaceholder',
+    defaultMessage: 'Search trainings...',
+    description: 'Assign trainings modal search placeholder',
+  },
+  cancel: { id: 'app.common.cancel', defaultMessage: 'Cancel', description: 'Cancel button label' },
+  assign: { id: 'app.users.detail.assign', defaultMessage: 'Assign', description: 'Assign button label' },
+  toastAssignedTitle: {
+    id: 'app.users.detail.toastAssignedTitle',
+    defaultMessage: 'Trainings assigned',
+    description: 'Toast title when trainings are assigned',
+  },
+  toastAssignedDescription: {
+    id: 'app.users.detail.toastAssignedDescription',
+    defaultMessage: 'Trainings were assigned successfully.',
+    description: 'Toast description when trainings are assigned',
+  },
+  removeAssignedDialogTitle: {
+    id: 'app.users.detail.removeAssignedDialogTitle',
+    defaultMessage: 'Remove assigned training?',
+    description: 'Confirm dialog title for removing assigned training',
+  },
+  removeAssignedDialogDescription: {
+    id: 'app.users.detail.removeAssignedDialogDescription',
+    defaultMessage: 'This will remove {title} from assigned trainings.',
+    description: 'Confirm dialog description for removing assigned training',
+  },
+  removeAssignedConfirm: {
+    id: 'app.users.detail.removeAssignedConfirm',
+    defaultMessage: 'Remove',
+    description: 'Confirm label for removing assigned training',
+  },
+  toastRemovedAssignedTitle: {
+    id: 'app.users.detail.toastRemovedAssignedTitle',
+    defaultMessage: 'Training removed',
+    description: 'Toast title when assigned training removed',
+  },
+  toastRemovedAssignedDescription: {
+    id: 'app.users.detail.toastRemovedAssignedDescription',
+    defaultMessage: 'Assigned training was removed.',
+    description: 'Toast description when assigned training removed',
+  },
 });
 
 export default detailMessages;

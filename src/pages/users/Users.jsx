@@ -9,11 +9,12 @@ import {
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Pagination } from '@openedx/paragon';
 import { Link } from 'react-router-dom';
 import AddUserModal from '../../components/addUserModal/AddUserModal';
 import ImportFrameworkModal from '../../components/competencyFramework/ImportFrameworkModal';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
-import DataTable from '../../components/dataTable/DataTable';
+import EmptyState from '../../components/emptyState/EmptyState';
 import SearchInput from '../../components/searchInput/SearchInput';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { useToast } from '../../components/toast/ToastProvider';
@@ -46,23 +47,15 @@ const Users = () => {
   const [deleteUser, setDeleteUser] = useState(null);
   const [importUsersOpen, setImportUsersOpen] = useState(false);
 
-  const canShowTable = Boolean(componentAccess?.users?.showTable ?? true);
-  const canSearchAndFilter = Boolean(componentAccess?.users?.canSearchAndFilter ?? true);
-  const canDownloadUsersTemplate = Boolean(componentAccess?.users?.canDownloadUsersTemplate ?? false);
-  const canImportUsers = Boolean(componentAccess?.users?.canImportUsers ?? false);
-  const canAddUser = Boolean(componentAccess?.users?.canAddUser ?? true);
-  const canViewUserDetail = Boolean(componentAccess?.users?.canViewUserDetail ?? true);
-  const canEditUser = Boolean(componentAccess?.users?.canEditUser ?? true);
-  const canDeleteUser = Boolean(componentAccess?.users?.canDeleteUser ?? true);
+  const canAddUser = Boolean(componentAccess?.users?.canAddUser ?? false);
+  const canViewUserAbout = Boolean(componentAccess?.users?.canViewUserAbout ?? false);
+  const canEditUser = Boolean(componentAccess?.users?.canEditUser ?? false);
+  const canDeleteUser = Boolean(componentAccess?.users?.canDeleteUser ?? false);
+  const canViewRoleColumn = Boolean(componentAccess?.users?.canViewRoleColumn ?? false);
+  const canViewCompetencyRoleColumn = Boolean(componentAccess?.users?.canViewCompetencyRoleColumn ?? false);
 
-  const canViewUserColumn = Boolean(componentAccess?.users?.canViewUserColumn ?? true);
-  const canViewRoleColumn = Boolean(componentAccess?.users?.canViewRoleColumn ?? true);
-  const canViewCountryColumn = Boolean(componentAccess?.users?.canViewCountryColumn ?? true);
-  const canViewJoinedColumn = Boolean(componentAccess?.users?.canViewJoinedColumn ?? true);
-  const canViewActionsColumn = Boolean(componentAccess?.users?.canViewActionsColumn ?? true);
-
-  const canShowActions = canViewUserDetail || canEditUser || canDeleteUser;
-  const shouldRenderToolbar = canSearchAndFilter || canDownloadUsersTemplate || canImportUsers || canAddUser;
+  const canShowActions = canViewUserAbout || canEditUser || canDeleteUser;
+  const canManageUsers = canAddUser || canEditUser;
 
   const importModalLabels = useMemo(() => ({
     title: formatMessage(messages.importModalTitle),
@@ -81,136 +74,52 @@ const Users = () => {
   ];
 
   const filteredUsers = useMemo(() => usersData.filter((user) => {
-    const matchesRole = !canSearchAndFilter || roleFilter === 'all' || user.role === roleFilter;
-    const query = canSearchAndFilter ? searchText.trim().toLowerCase() : '';
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+    const query = searchText.trim().toLowerCase();
     const matchesSearch = !query
       || user.name.toLowerCase().includes(query)
       || user.email.toLowerCase().includes(query);
 
     return matchesRole && matchesSearch;
-  }), [canSearchAndFilter, roleFilter, searchText]);
+  }), [roleFilter, searchText]);
 
   const totalPages = Math.max(1, Math.ceil(filteredUsers.length / USERS_PER_PAGE));
   const safePage = Math.min(page, totalPages);
   const currentUsers = filteredUsers.slice((safePage - 1) * USERS_PER_PAGE, safePage * USERS_PER_PAGE);
-  const columns = [
-    ...(canViewUserColumn ? [{
-      key: 'user',
-      header: formatMessage(messages.columnUser),
-      renderCell: user => (
-        <div className="users-page__identity">
-          <span className="users-page__avatar">{getInitials(user.name)}</span>
-          <div>
-            {canViewUserDetail ? (
-              <Link to={`/admin/users/${user.id}`} className="users-page__name users-page__name--link">
-                {user.name}
-              </Link>
-            ) : (
-              <p className="users-page__name">{user.name}</p>
-            )}
-            <p className="users-page__email">{user.email}</p>
-          </div>
-        </div>
-      ),
-    }] : []),
-    ...(canViewRoleColumn ? [{
-      key: 'role',
-      header: formatMessage(messages.columnRole),
-      renderCell: user => <span className="users-page__role-pill">{getRoleDisplayLine(user)}</span>,
-    }] : []),
-    ...(canViewCountryColumn ? [{
-      key: 'country',
-      header: formatMessage(messages.columnCountry),
-    }] : []),
-    ...(canViewJoinedColumn ? [{
-      key: 'joined',
-      header: formatMessage(messages.columnJoined),
-    }] : []),
-    ...(canShowActions && canViewActionsColumn ? [{
-      key: 'actions',
-      header: formatMessage(messages.columnActions),
-      align: 'right',
-      renderCell: row => (
-        <div className="users-page__row-actions">
-          {canViewUserDetail && (
-            <Link to={`/admin/users/${row.id}`} className="users-page__icon-button" aria-label={formatMessage(messages.viewAction)}>
-              <FontAwesomeIcon icon={faEye} />
-            </Link>
-          )}
-          {canEditUser && (
-            <button
-              type="button"
-              className="users-page__icon-button"
-              aria-label={formatMessage(messages.editAction)}
-              onClick={() => {
-                setModalMode('edit');
-                setModalInitialValues({
-                  name: row.name,
-                  email: row.email,
-                  country: row.country,
-                  role: row.role,
-                  roleSub: row.roleSub || '',
-                });
-                setAddUserOpen(true);
-              }}
-            >
-              <FontAwesomeIcon icon={faPen} />
-            </button>
-          )}
-          {canDeleteUser && (
-            <button
-              type="button"
-              className="users-page__icon-button users-page__icon-button--danger"
-              aria-label={formatMessage(messages.deleteAction)}
-              onClick={() => setDeleteUser(row)}
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
-          )}
-        </div>
-      ),
-    }] : []),
-  ];
-
   return (
     <section className="users-page">
-      {shouldRenderToolbar && (
-        <div className="users-page__toolbar">
-          {canSearchAndFilter && (
-            <SearchInput
-              value={searchText}
-              placeholder={formatMessage(messages.searchPlaceholder)}
-              onChange={(event) => {
-                setSearchText(event.target.value);
-                setPage(1);
-              }}
-            />
-          )}
+      <div className="users-page__toolbar">
+        <SearchInput
+          value={searchText}
+          placeholder={formatMessage(messages.searchPlaceholder)}
+          onChange={(event) => {
+            setSearchText(event.target.value);
+            setPage(1);
+          }}
+        />
 
-          <div className="users-page__actions">
-            {canSearchAndFilter && (
-              <SearchableDropdown
-                value={roleFilter}
-                options={roleOptions}
-                onChange={(nextValue) => {
-                  setRoleFilter(nextValue);
-                  setPage(1);
-                }}
-                triggerLabel={
-                  roleOptions.find(item => item.value === roleFilter)?.label
-                  || formatMessage(messages.allRoles)
-                }
-                searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
-                noOptionsText={formatMessage(messages.dropdownNoOptions)}
-              />
-            )}
-            {canDownloadUsersTemplate && (
+        <div className="users-page__actions">
+          <SearchableDropdown
+            value={roleFilter}
+            options={roleOptions}
+            onChange={(nextValue) => {
+              setRoleFilter(nextValue);
+              setPage(1);
+            }}
+            triggerLabel={
+              roleOptions.find(item => item.value === roleFilter)?.label
+              || formatMessage(messages.allRoles)
+            }
+            searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
+            noOptionsText={formatMessage(messages.dropdownNoOptions)}
+          />
+
+          {canManageUsers && (
+            <>
               <button type="button" className="competency-framework-page__outline-button">
                 <FontAwesomeIcon icon={faDownload} />
                 {formatMessage(messages.downloadTemplate)}
               </button>
-            )}
-            {canImportUsers && (
               <button
                 type="button"
                 className="competency-framework-page__outline-button"
@@ -219,38 +128,147 @@ const Users = () => {
                 <FontAwesomeIcon icon={faUpload} />
                 {formatMessage(messages.importFromExcel)}
               </button>
-            )}
-            {canAddUser && (
-              <button
-                type="button"
-                className="competency-framework-page__primary-button"
-                onClick={() => {
-                  setModalMode('add');
-                  setModalInitialValues({});
-                  setAddUserOpen(true);
-                }}
-              >
-                <FontAwesomeIcon icon={faPlus} />
-                {formatMessage(messages.addUser)}
-              </button>
-            )}
+            </>
+          )}
+
+          {canAddUser && (
+            <button
+              type="button"
+              className="competency-framework-page__primary-button"
+              onClick={() => {
+                setModalMode('add');
+                setModalInitialValues({});
+                setAddUserOpen(true);
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              {formatMessage(messages.addUser)}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {filteredUsers.length === 0 ? (
+        <div className="users-page__empty">
+          <EmptyState message={formatMessage(messages.empty)} fullSize />
+        </div>
+      ) : (
+        <div className="users-page__table-card">
+          <div className="users-page__table-wrap">
+            <table className="users-page__table">
+              <thead>
+                <tr className="users-page__thead-row">
+                  <th className="users-page__th">{formatMessage(messages.columnUser)}</th>
+                  {canViewRoleColumn && (
+                    <th className="users-page__th">{formatMessage(messages.columnRole)}</th>
+                  )}
+                  {canViewCompetencyRoleColumn && (
+                    <th className="users-page__th">{formatMessage(messages.columnCompetencyRole)}</th>
+                  )}
+                  {canShowActions && (
+                    <th className="users-page__th users-page__th--right">{formatMessage(messages.columnActions)}</th>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {currentUsers.map((user) => (
+                  <tr key={user.id} className="users-page__tbody-row">
+                    <td className="users-page__td">
+                      <div className="users-page__identity">
+                        <span className="users-page__avatar">{getInitials(user.name)}</span>
+                        <div>
+                          {canViewUserAbout ? (
+                            <Link to={`/admin/users/${user.id}`} className="users-page__name users-page__name--link">
+                              {user.name}
+                            </Link>
+                          ) : (
+                            <p className="users-page__name">{user.name}</p>
+                          )}
+                          <p className="users-page__email">{user.email}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    {canViewRoleColumn && (
+                      <td className="users-page__td">
+                        <span className="users-page__role-pill">{getRoleDisplayLine(user)}</span>
+                      </td>
+                    )}
+
+                    {canViewCompetencyRoleColumn && (
+                      <td className="users-page__td">
+                        <span className="users-page__competency-role">{user.competencyRole || ''}</span>
+                      </td>
+                    )}
+
+                    {canShowActions && (
+                      <td className="users-page__td users-page__td--right">
+                        <div className="users-page__row-actions">
+                          {canViewUserAbout && (
+                            <Link
+                              to={`/admin/users/${user.id}`}
+                              className="users-page__icon-button"
+                              aria-label={formatMessage(messages.viewAction)}
+                            >
+                              <FontAwesomeIcon icon={faEye} />
+                            </Link>
+                          )}
+                          {canEditUser && (
+                            <button
+                              type="button"
+                              className="users-page__icon-button"
+                              aria-label={formatMessage(messages.editAction)}
+                              onClick={() => {
+                                setModalMode('edit');
+                                setModalInitialValues({
+                                  name: user.name,
+                                  email: user.email,
+                                  country: user.country,
+                                  role: user.role,
+                                  roleSub: user.roleSub || '',
+                                  competencyRole: user.competencyRole || '',
+                                });
+                                setAddUserOpen(true);
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faPen} />
+                            </button>
+                          )}
+                          {canDeleteUser && (
+                            <button
+                              type="button"
+                              className="users-page__icon-button users-page__icon-button--danger"
+                              aria-label={formatMessage(messages.deleteAction)}
+                              onClick={() => setDeleteUser(user)}
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="users-page__pagination">
+            <div className="users-page__pagination-left">
+              {formatMessage(messages.showingCount, {
+                count: filteredUsers.length,
+                total: usersData.length,
+              })}
+            </div>
+            <Pagination
+              className="data-table__pagination"
+              paginationLabel="Users pagination"
+              pageCount={totalPages}
+              currentPage={safePage}
+              onPageSelect={selectedPage => setPage(selectedPage)}
+            />
           </div>
         </div>
-      )}
-
-      {canShowTable && (
-        <DataTable
-          columns={columns}
-          rows={currentUsers}
-          rowKey="id"
-          currentPage={safePage}
-          totalPages={totalPages}
-          onPageChange={setPage}
-          footerContent={formatMessage(messages.showingCount, {
-            count: filteredUsers.length,
-            total: usersData.length,
-          })}
-        />
       )}
 
       {(canAddUser || canEditUser) && (
@@ -262,7 +280,7 @@ const Users = () => {
         />
       )}
 
-      {canImportUsers && (
+      {canManageUsers && (
         <ImportFrameworkModal
           isOpen={importUsersOpen}
           onClose={() => setImportUsersOpen(false)}
