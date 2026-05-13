@@ -28,11 +28,20 @@ import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import SuggestionsTab from '../../components/competencyFramework/create/SuggestionsTab';
 import builderOptions from '../../mock/competencyFramework/builderOptions.json';
-import frameworkData from '../../mock/competencyFramework/frameworks.json';
+import frameworksNra from '../../mock/competencyFramework/frameworksNra.json';
+import frameworksSearn from '../../mock/competencyFramework/frameworksSearn.json';
+import frameworksWho from '../../mock/competencyFramework/frameworksWho.json';
 import messages from './messages';
 import './CompetencyFramework.scss';
 
 const ITEMS_PER_PAGE = 5;
+
+/** Mock mirrors three tab-specific APIs: each returns `{ results: [...] }` with no `tabId` on items. */
+const FRAMEWORK_RESULTS_BY_TAB = {
+  who: frameworksWho.results || [],
+  searn: frameworksSearn.results || [],
+  nra: frameworksNra.results || [],
+};
 const BUILDER_TABS_CONFIG = [
   { id: 'general', messageKey: 'tabGeneralInformation', accessKey: 'showBuilderGeneralTab' },
   { id: 'introduction', messageKey: 'tabIntroduction', accessKey: 'showBuilderIntroductionTab' },
@@ -151,7 +160,7 @@ const CompetencyFramework = () => {
     || (activeTabSafe === 'nra' && access.canDeleteFrameworkNraTab),
   );
   const frameworks = useMemo(
-    () => frameworkData.frameworks.filter(item => item.tabId === activeTabSafe),
+    () => (activeTabSafe ? FRAMEWORK_RESULTS_BY_TAB[activeTabSafe] || [] : []),
     [activeTabSafe],
   );
   const totalPages = Math.max(1, Math.ceil(frameworks.length / ITEMS_PER_PAGE));

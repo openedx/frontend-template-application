@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import EmptyState from '../../components/emptyState/EmptyState';
 import providersData from '../../mock/trainingCatalog/providers.json';
+import brandPlaceholder from '../../assets/images/brand-placeholder.svg';
 import './SearnTrainingProvider.scss';
 
 const ArrowLeftIcon = (props) => (
@@ -67,13 +68,14 @@ const SearnTrainingProvider = () => {
       </button>
 
       <div className="provider-page__hero">
-        <div
-          className="provider-page__hero-top"
-          style={{ background: `linear-gradient(90deg, ${provider.headerFrom}, ${provider.headerTo})` }}
-        >
+        <div className="provider-page__hero-top">
           <div className="provider-page__hero-row">
-            <div className="provider-page__logo" style={{ background: provider.brandColor }}>
-              {provider.initials}
+            <div className="provider-page__logo" aria-hidden="true">
+              <img
+                className="provider-page__logo-img"
+                src={provider.logo_url || brandPlaceholder}
+                alt=""
+              />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <p className="provider-page__hero-subtitle">Training Provider</p>

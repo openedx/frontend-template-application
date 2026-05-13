@@ -5,7 +5,6 @@
     "description": "Full administrative access to all platform features and settings",
     "userCount": 5,
     "permissionCount": 10,
-    "iconBackground": "#2A3B8F",
     "permissions": [
       "Add/Onboard new user",
       "Edit/Delete user",
@@ -25,7 +24,6 @@
     "description": "Top-level NRA administrator with full access to NRA management and configuration",
     "userCount": 10,
     "permissionCount": 9,
-    "iconBackground": "#DC2626",
     "permissions": [
       "Add/Onboard new user",
       "Edit/Delete user",
@@ -44,7 +42,6 @@
     "description": "Technical support, system maintenance, and user account management",
     "userCount": 6,
     "permissionCount": 4,
-    "iconBackground": "#F97316",
     "permissions": [
       "View user list",
       "Edit/Delete user",
@@ -58,7 +55,6 @@
     "description": "Creates and manages training content, courses, and assessments",
     "userCount": 24,
     "permissionCount": 4,
-    "iconBackground": "#059669",
     "permissions": [
       "Manage training catalog",
       "Manage activities",

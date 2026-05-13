@@ -82,7 +82,6 @@ const RoleFormModal = ({
               permissions,
               userCount: role?.userCount || 0,
               permissionCount: permissions.length,
-              iconBackground: role?.iconBackground || '#2A3B8F',
             })}
           >
             {mode === 'edit' ? labels.save : labels.create}

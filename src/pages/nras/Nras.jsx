@@ -181,7 +181,7 @@ const Nras = () => {
   const [adminDeleteTarget, setAdminDeleteTarget] = useState(null);
 
   const countryOptions = useMemo(() => (
-    searnCountries.map(c => ({ value: c.name, label: c.name }))
+    searnCountries.map(c => ({ value: c.label, label: c.label }))
   ), []);
 
   const filtered = useMemo(() => {

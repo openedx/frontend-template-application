@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "id": "searn-regional-1",
+      "title": "SEARN regional medicines registration competency framework",
+      "description": "Shared competencies for harmonised assessment and dossier review across SEARN member NRAs.",
+      "domains": 6,
+      "subDomains": 18,
+      "createdAt": "2024-02-01"
+    },
+    {
+      "id": "searn-regional-2",
+      "title": "SEARN inspection collaboration framework",
+      "description": "Cross-border inspection readiness, joint planning, and reporting aligned to SEARN standards.",
+      "domains": 5,
+      "subDomains": 14,
+      "createdAt": "2024-03-10"
+    },
+    {
+      "id": "searn-regional-3",
+      "title": "SEARN pharmacovigilance network framework",
+      "description": "Competencies for signal sharing, periodic reporting, and coordinated safety communication.",
+      "domains": 5,
+      "subDomains": 12,
+      "createdAt": "2024-04-05"
+    }
+  ]
+}

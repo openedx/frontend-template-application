@@ -69,13 +69,17 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #FFFFFF;
-    font-weight: 900;
-    font-size: 1.25rem;
+    background: #FFFFFF;
     flex-shrink: 0;
     box-shadow:
       0 10px 15px -3px rgb(0 0 0 / .2),
       0 0 0 4px rgb(255 255 255 / .2);
+  }
+
+  &__logo-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
   }
 
   &__hero-title {

@@ -3,7 +3,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMemo, useRef, useState } from 'react';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { useToast } from '../../components/toast/ToastProvider';
-import allCountries from '../../mock/countries/allCountries.json';
+import masterCountryOptions from '../../mock/countries/masterCountryOptions.json';
 import profileData from '../../mock/profile/profile.json';
 import messages from './messages';
 import './Profile.scss';
@@ -122,19 +122,21 @@ const Profile = () => {
     country: profileData.country || '',
     language: profileData.language || '',
     about: profileData.about || '',
+    profile_image_url: profileData.profile_image_url || '',
   }), []);
 
+  /** Local preview after file pick; falls back to `initial.profile_image_url` when cleared. */
   const [photoUrl, setPhotoUrl] = useState('');
+  const displayAvatarSrc = photoUrl || initial.profile_image_url;
   const [fullName, setFullName] = useState(initial.fullName);
   const [country, setCountry] = useState(initial.country);
   const [language, setLanguage] = useState(initial.language);
   const [about, setAbout] = useState(initial.about);
 
   const countryOptions = useMemo(() => (
-    allCountries
-      .slice()
-      .sort((a, b) => a.localeCompare(b))
-      .map(name => ({ value: name, label: name }))
+    [...masterCountryOptions]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map(({ label }) => ({ value: label, label }))
   ), []);
 
   const languageOptions = useMemo(() => (
@@ -172,8 +174,8 @@ const Profile = () => {
         <div className="profile-page__card-inner">
           <div className="profile-page__summary">
             <div className="profile-page__avatar">
-              {photoUrl ? (
-                <img className="profile-page__avatar-img" src={photoUrl} alt="" />
+              {displayAvatarSrc ? (
+                <img className="profile-page__avatar-img" src={displayAvatarSrc} alt="" />
               ) : (
                 <div className="profile-page__avatar-fallback">{initials}</div>
               )}

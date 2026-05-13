@@ -7,7 +7,7 @@ import PopupDialog from '../../components/popupDialog/PopupDialog';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
-import allCountries from '../../mock/countries/allCountries.json';
+import masterCountryOptions from '../../mock/countries/masterCountryOptions.json';
 import initialProviders from '../../mock/trainingProviders/providers.json';
 import messages from './messages';
 import './TrainingProviders.scss';
@@ -202,10 +202,9 @@ const TrainingProviders = () => {
   const [adminDeleteTarget, setAdminDeleteTarget] = useState(null);
 
   const countryOptions = useMemo(() => (
-    allCountries
-      .slice()
-      .sort((a, b) => a.localeCompare(b))
-      .map(name => ({ value: name, label: name }))
+    [...masterCountryOptions]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map(({ label }) => ({ value: label, label }))
   ), []);
 
   const filtered = useMemo(() => {

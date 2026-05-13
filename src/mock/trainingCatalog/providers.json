@@ -2,10 +2,7 @@
   {
     "slug": "who-prequalification",
     "name": "WHO Prequalification",
-    "initials": "WHO",
-    "brandColor": "#0093D5",
-    "headerFrom": "#2A3B8F",
-    "headerTo": "#3A4FA8",
+    "logo_url": "",
     "website": "https://extranet.who.int/prequal/",
     "websiteLabel": "extranet.who.int/prequal/",
     "overview": "The World Health Organization Prequalification Programme works to ensure that medicines, vaccines, in-vitro diagnostics and other health products supplied by international procurement agencies meet acceptable standards of quality, safety and efficacy."
@@ -13,10 +10,7 @@
   {
     "slug": "uppsala-monitoring-centre",
     "name": "Uppsala Monitoring Centre",
-    "initials": "UMC",
-    "brandColor": "#2563EB",
-    "headerFrom": "#2A3B8F",
-    "headerTo": "#3A4FA8",
+    "logo_url": "",
     "website": "https://who-umc.org/",
     "websiteLabel": "who-umc.org",
     "overview": "Uppsala Monitoring Centre is a WHO Collaborating Centre providing global pharmacovigilance services and tools."
@@ -24,10 +18,7 @@
   {
     "slug": "searn-secretariat",
     "name": "SEARN Secretariat",
-    "initials": "SEA",
-    "brandColor": "#2A3B8F",
-    "headerFrom": "#2A3B8F",
-    "headerTo": "#3A4FA8",
+    "logo_url": "",
     "website": "https://example.org/searn",
     "websiteLabel": "example.org/searn",
     "overview": "SEARN Secretariat provides coordination, guidance, and training support across member regulatory agencies."
@@ -35,10 +26,7 @@
   {
     "slug": "usp",
     "name": "USP",
-    "initials": "USP",
-    "brandColor": "#059669",
-    "headerFrom": "#2A3B8F",
-    "headerTo": "#3A4FA8",
+    "logo_url": "",
     "website": "https://www.usp.org/",
     "websiteLabel": "usp.org",
     "overview": "USP advances public health by setting quality standards for medicines, dietary supplements and food ingredients."
@@ -46,10 +34,7 @@
   {
     "slug": "pics",
     "name": "PIC/S",
-    "initials": "PIC",
-    "brandColor": "#DC2626",
-    "headerFrom": "#2A3B8F",
-    "headerTo": "#3A4FA8",
+    "logo_url": "",
     "website": "https://picscheme.org/",
     "websiteLabel": "picscheme.org",
     "overview": "PIC/S is a non-binding, informal cooperative arrangement between regulatory authorities in the field of GMP."
@@ -57,10 +42,7 @@
   {
     "slug": "swissmedic",
     "name": "Swissmedic",
-    "initials": "SWI",
-    "brandColor": "#7C3AED",
-    "headerFrom": "#2A3B8F",
-    "headerTo": "#3A4FA8",
+    "logo_url": "",
     "website": "https://www.swissmedic.ch/",
     "websiteLabel": "swissmedic.ch",
     "overview": "Swissmedic is the Swiss Agency for Therapeutic Products responsible for authorisation and supervision of medicines."

@@ -1,0 +1,44 @@
+{
+  "results": [
+    {
+      "id": "nra-national-1",
+      "title": "National competency framework baseline",
+      "description": "Baseline competency framework for national regulator teams across inspection, licensing, and surveillance.",
+      "domains": 5,
+      "subDomains": 14,
+      "createdAt": "2024-03-01"
+    },
+    {
+      "id": "nra-national-2",
+      "title": "NRA inspection supervisor framework",
+      "description": "National competency baseline for inspection supervisors and field decision-making.",
+      "domains": 4,
+      "subDomains": 10,
+      "createdAt": "2024-03-15"
+    },
+    {
+      "id": "nra-national-3",
+      "title": "NRA product quality review framework",
+      "description": "Supports national-level competency development for product quality and consistency checks.",
+      "domains": 4,
+      "subDomains": 9,
+      "createdAt": "2024-04-02"
+    },
+    {
+      "id": "nra-national-4",
+      "title": "NRA post-market surveillance framework",
+      "description": "Competencies for adverse event tracking, incident follow-up, and market surveillance operations.",
+      "domains": 5,
+      "subDomains": 13,
+      "createdAt": "2024-04-18"
+    },
+    {
+      "id": "nra-national-5",
+      "title": "NRA regulatory intelligence framework",
+      "description": "Framework for policy scanning, intelligence collection, and regulatory response planning.",
+      "domains": 3,
+      "subDomains": 8,
+      "createdAt": "2024-04-30"
+    }
+  ]
+}

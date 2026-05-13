@@ -40,7 +40,7 @@ const RoleCard = ({
   return (
     <article className="roles-page__card" key={role.id} onClick={() => canViewRole && onView(role)}>
       <div className="roles-page__card-head">
-        <div className="roles-page__icon-wrap" style={{ backgroundColor: role.iconBackground }}>
+        <div className="roles-page__icon-wrap">
           <FontAwesomeIcon icon={faShieldAlt} />
         </div>
 

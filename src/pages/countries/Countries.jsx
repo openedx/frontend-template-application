@@ -7,7 +7,7 @@ import PopupDialog from '../../components/popupDialog/PopupDialog';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
-import allCountries from '../../mock/countries/allCountries.json';
+import masterCountryOptions from '../../mock/countries/masterCountryOptions.json';
 import initialSearnCountries from '../../mock/countries/searnCountries.json';
 import messages from './messages';
 import './Countries.scss';
@@ -127,7 +127,8 @@ const Countries = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCountryId, setEditingCountryId] = useState(null);
-  const [selectedCountryName, setSelectedCountryName] = useState('');
+  /** Master catalog `value` (slug); maps to display `label` via `masterCountryOptions`. */
+  const [selectedMasterValue, setSelectedMasterValue] = useState('');
 
   const [deleteTarget, setDeleteTarget] = useState(null);
 
@@ -136,66 +137,71 @@ const Countries = () => {
     if (!trimmed) {
       return countries;
     }
-    return countries.filter(item => item.name.toLowerCase().includes(trimmed));
+    return countries.filter(item => item.label.toLowerCase().includes(trimmed));
   }, [countries, searchText]);
 
-  const countryOptions = useMemo(() => (
-    allCountries
-      .slice()
-      .sort((a, b) => a.localeCompare(b))
-      .map(name => ({ value: name, label: name }))
+  const masterDropdownOptions = useMemo(() => (
+    [...masterCountryOptions]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map(({ value, label }) => ({ value, label }))
   ), []);
 
   const availableOptions = useMemo(() => {
     const existing = new Set(
       countries
         .filter(item => item.id !== editingCountryId)
-        .map(item => item.name.toLowerCase()),
+        .map(item => item.label.toLowerCase()),
     );
-    return countryOptions.filter(opt => !existing.has(opt.value.toLowerCase()));
-  }, [countries, editingCountryId, countryOptions]);
+    return masterDropdownOptions.filter(opt => !existing.has(opt.label.toLowerCase()));
+  }, [countries, editingCountryId, masterDropdownOptions]);
 
   const openAdd = () => {
     setEditingCountryId(null);
-    setSelectedCountryName('');
+    setSelectedMasterValue('');
     setModalOpen(true);
   };
 
   const openEdit = (country) => {
     setEditingCountryId(country.id);
-    setSelectedCountryName(country.name);
+    const master = masterCountryOptions.find(
+      o => o.label.toLowerCase() === country.label.toLowerCase(),
+    );
+    setSelectedMasterValue(master?.value || '');
     setModalOpen(true);
   };
 
   const closeModal = () => {
     setModalOpen(false);
     setEditingCountryId(null);
-    setSelectedCountryName('');
+    setSelectedMasterValue('');
   };
 
+  /** Local mock save. Real API: POST/PATCH body `{ country_name: "<master label>" }` (see .cursor/rules/countries-management-api.mdc). */
   const onSave = () => {
-    const name = selectedCountryName.trim();
-    if (!name) {
+    const master = masterCountryOptions.find(o => o.value === selectedMasterValue);
+    if (!master) {
       return;
     }
+    const { label: nextLabel } = master;
 
     if (editingCountryId) {
       setCountries(prev => prev.map(item => (
-        item.id === editingCountryId ? { ...item, name } : item
+        item.id === editingCountryId ? { ...item, label: nextLabel } : item
       )));
       showToast({
         title: formatMessage(messages.toastUpdatedTitle),
-        description: formatMessage(messages.toastUpdatedDescription, { name }),
+        description: formatMessage(messages.toastUpdatedDescription, { name: nextLabel }),
       });
       closeModal();
       return;
     }
 
-    const newItem = { id: `cty-${Date.now()}`, name };
+    const newId = `cty-${Date.now()}`;
+    const newItem = { id: newId, value: newId, label: nextLabel };
     setCountries(prev => [newItem, ...prev]);
     showToast({
       title: formatMessage(messages.toastAddedTitle),
-      description: formatMessage(messages.toastAddedDescription, { name }),
+      description: formatMessage(messages.toastAddedDescription, { name: nextLabel }),
     });
     closeModal();
   };
@@ -205,12 +211,12 @@ const Countries = () => {
       return;
     }
 
-    const { id, name } = deleteTarget;
+    const { id, label } = deleteTarget;
     setCountries(prev => prev.filter(item => item.id !== id));
     setDeleteTarget(null);
     showToast({
       title: formatMessage(messages.toastDeletedTitle),
-      description: formatMessage(messages.toastDeletedDescription, { name }),
+      description: formatMessage(messages.toastDeletedDescription, { name: label }),
     });
   };
 
@@ -255,7 +261,7 @@ const Countries = () => {
               </div>
 
               <div style={{ minWidth: 0, flex: 1 }}>
-                <p className="countries-page__name" title={country.name}>{country.name}</p>
+                <p className="countries-page__name" title={country.label}>{country.label}</p>
               </div>
 
               <div className="countries-page__actions">
@@ -300,10 +306,12 @@ const Countries = () => {
           </span>
 
           <SearchableDropdown
-            value={selectedCountryName}
+            value={selectedMasterValue}
             options={availableOptions}
-            onChange={setSelectedCountryName}
-            triggerLabel={selectedCountryName || (
+            onChange={setSelectedMasterValue}
+            triggerLabel={(
+              masterCountryOptions.find(o => o.value === selectedMasterValue)?.label
+            ) || (
               <span className="countries-modal__placeholder">
                 {formatMessage(messages.modalPlaceholderCountry)}
               </span>
@@ -321,7 +329,7 @@ const Countries = () => {
             type="button"
             className="countries-modal__primary-button"
             onClick={onSave}
-            disabled={!selectedCountryName.trim()}
+            disabled={!selectedMasterValue.trim()}
           >
             {formatMessage(editingCountryId ? messages.modalConfirmEdit : messages.modalConfirmAdd)}
           </button>
@@ -331,7 +339,7 @@ const Countries = () => {
       <ConfirmActionDialog
         isOpen={Boolean(deleteTarget)}
         title={formatMessage(messages.confirmDeleteTitle)}
-        description={formatMessage(messages.confirmDeleteDescription, { name: deleteTarget?.name || '' })}
+        description={formatMessage(messages.confirmDeleteDescription, { name: deleteTarget?.label || '' })}
         cancelLabel={formatMessage(messages.confirmDeleteCancel)}
         confirmLabel={formatMessage(messages.confirmDeleteConfirm)}
         onCancel={() => setDeleteTarget(null)}

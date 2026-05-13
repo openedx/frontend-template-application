@@ -145,33 +145,6 @@
     flex-wrap: wrap;
   }
 
-  &__tag {
-    font-size: 11px;
-    font-weight: 500;
-    padding: .125rem .5rem;
-    border-radius: 9999px;
-
-    &--primary {
-      background: rgb(42 59 143 / .1);
-      color: #2A3B8F;
-    }
-
-    &--success {
-      background: #DCFCE7;
-      color: #15803D;
-    }
-
-    &--warning {
-      background: #FEF3C7;
-      color: #B45309;
-    }
-
-    &--purple {
-      background: #F3E8FF;
-      color: #7E22CE;
-    }
-  }
-
   &__time {
     font-size: 11px;
     color: #6B7280;

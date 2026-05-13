@@ -125,7 +125,7 @@ const Roles = () => {
                 description: formatMessage(messages.toastRoleUpdatedDescription, { name: nextRole.name }),
               });
             } else {
-              setRoles(prev => [{ ...nextRole, iconBackground: '#2A3B8F' }, ...prev]);
+              setRoles(prev => [nextRole, ...prev]);
               showToast({
                 title: formatMessage(messages.toastRoleCreatedTitle),
                 description: formatMessage(messages.toastRoleCreatedDescription, { name: nextRole.name }),

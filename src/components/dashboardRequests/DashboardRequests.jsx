@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import Badge from '../badge/Badge';
 import pageMessages from '../../pages/messages';
 import messages from './messages';
 import './DashboardRequests.scss';
@@ -74,7 +75,7 @@ const PendingRequestsCard = ({ items = [] }) => {
               <p className="pending-request__title">{item.title}</p>
               <p className="pending-request__description">{item.description}</p>
               <div className="pending-request__meta">
-                <span className={`pending-request__tag pending-request__tag--${item.tagVariant}`}>{item.tag}</span>
+                <Badge>{item.tag}</Badge>
                 <span className="pending-request__time">{item.timeAgo}</span>
               </div>
             </div>
