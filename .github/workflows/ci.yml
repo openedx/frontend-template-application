@@ -30,7 +30,7 @@ jobs:
     - name: i18n_extract
       run: npm run i18n_extract
     - name: Coverage
-      uses: codecov/codecov-action@75cd11691c0faa626561e295848008c8a7dddffe # v5.5.4
+      uses: codecov/codecov-action@e79a6962e0d4c0c17b229090214935d2e33f8354 # v6.0.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
