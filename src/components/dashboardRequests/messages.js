@@ -21,6 +21,16 @@ const dashboardRequestsMessages = defineMessages({
     defaultMessage: 'Items awaiting Secretariat action',
     description: 'Description for pending requests card',
   },
+  pendingRequestsEmpty: {
+    id: 'app.dashboard.requests.pending.empty',
+    defaultMessage: 'No pending requests to display.',
+    description: 'Empty state when pending requests list has no displayable rows',
+  },
+  topRequestedEmpty: {
+    id: 'app.dashboard.requests.topRequested.empty',
+    defaultMessage: 'No top requested activities to display.',
+    description: 'Empty state when top requested activities list has no displayable rows',
+  },
   requestsUnit: {
     id: 'app.dashboard.requests.unit',
     defaultMessage: 'requests',

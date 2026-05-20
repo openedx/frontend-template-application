@@ -71,6 +71,61 @@ const messages = defineMessages({
     defaultMessage: 'Your profile changes have been saved.',
     description: 'Toast description for profile save',
   },
+  profileLoadError: {
+    id: 'app.profile.load.error',
+    defaultMessage: 'Unable to load your profile. Please try again.',
+    description: 'Fallback when profile GET API fails',
+  },
+  languagesLoadError: {
+    id: 'app.profile.languages.loadError',
+    defaultMessage: 'Unable to load languages. Please try again.',
+    description: 'Fallback when languages API fails',
+  },
+  profileSaveError: {
+    id: 'app.profile.save.error',
+    defaultMessage: 'Unable to save your profile. Please try again.',
+    description: 'Fallback when profile PATCH API fails',
+  },
+  profileErrorTitle: {
+    id: 'app.profile.error.title',
+    defaultMessage: 'Profile unavailable',
+    description: 'Toast title when profile load fails',
+  },
+  saveErrorTitle: {
+    id: 'app.profile.save.errorTitle',
+    defaultMessage: 'Save failed',
+    description: 'Toast title when profile save fails',
+  },
+  countryPlaceholder: {
+    id: 'app.profile.fields.country.placeholder',
+    defaultMessage: 'Select country',
+    description: 'Placeholder for country dropdown',
+  },
+  countrySearchPlaceholder: {
+    id: 'app.profile.fields.country.search',
+    defaultMessage: 'Search countries...',
+    description: 'Search placeholder for country dropdown',
+  },
+  countryNoOptions: {
+    id: 'app.profile.fields.country.empty',
+    defaultMessage: 'No countries found.',
+    description: 'Empty state for country dropdown',
+  },
+  languagePlaceholder: {
+    id: 'app.profile.fields.language.placeholder',
+    defaultMessage: 'Select language',
+    description: 'Placeholder for language dropdown',
+  },
+  languageSearchPlaceholder: {
+    id: 'app.profile.fields.language.search',
+    defaultMessage: 'Search languages...',
+    description: 'Search placeholder for language dropdown',
+  },
+  languageNoOptions: {
+    id: 'app.profile.fields.language.empty',
+    defaultMessage: 'No languages found.',
+    description: 'Empty state for language dropdown',
+  },
 });
 
 export default messages;

@@ -1,5 +1,4 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Pagination } from '@openedx/paragon';
 import {
   faChevronLeft,
   faDownload,
@@ -22,26 +21,18 @@ import ProficiencyLevelTab, { createProficiencyLevelItem } from '../../component
 import RoleSpecificCompetenciesTab, { createRscRoleItem } from '../../components/competencyFramework/create/RoleSpecificCompetenciesTab';
 import RoleTab, { createFrameworkRoleItem } from '../../components/competencyFramework/create/RoleTab';
 import SubDomainTab, { createSubDomainCompetencyTypeItem } from '../../components/competencyFramework/create/SubDomainTab';
-import EmptyState from '../../components/emptyState/EmptyState';
+import { TablePaginationFooter } from '../../components/dataTable';
+import { EmptyState } from '../../components/emptyState';
+import { SkeletonCard } from '../../components/skeleton';
 import Tabs from '../../components/tabs/Tabs';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import SuggestionsTab from '../../components/competencyFramework/create/SuggestionsTab';
+import { SOURCE_FRAMEWORK_BY_TAB } from '../../api/competencyFramework/competencyFrameworkConstants';
+import useCompetencyFrameworkList from '../../hooks/competencyFramework/useCompetencyFrameworkList';
 import builderOptions from '../../mock/competencyFramework/builderOptions.json';
-import frameworksNra from '../../mock/competencyFramework/frameworksNra.json';
-import frameworksSearn from '../../mock/competencyFramework/frameworksSearn.json';
-import frameworksWho from '../../mock/competencyFramework/frameworksWho.json';
 import messages from './messages';
 import './CompetencyFramework.scss';
-
-const ITEMS_PER_PAGE = 5;
-
-/** Mock mirrors three tab-specific APIs: each returns `{ results: [...] }` with no `tabId` on items. */
-const FRAMEWORK_RESULTS_BY_TAB = {
-  who: frameworksWho.results || [],
-  searn: frameworksSearn.results || [],
-  nra: frameworksNra.results || [],
-};
 const BUILDER_TABS_CONFIG = [
   { id: 'general', messageKey: 'tabGeneralInformation', accessKey: 'showBuilderGeneralTab' },
   { id: 'introduction', messageKey: 'tabIntroduction', accessKey: 'showBuilderIntroductionTab' },
@@ -159,20 +150,38 @@ const CompetencyFramework = () => {
     || (activeTabSafe === 'searn' && access.canDeleteFrameworkSearnTab)
     || (activeTabSafe === 'nra' && access.canDeleteFrameworkNraTab),
   );
-  const frameworks = useMemo(
-    () => (activeTabSafe ? FRAMEWORK_RESULTS_BY_TAB[activeTabSafe] || [] : []),
-    [activeTabSafe],
-  );
-  const totalPages = Math.max(1, Math.ceil(frameworks.length / ITEMS_PER_PAGE));
-  const safePage = Math.min(page, totalPages);
-  const paginatedFrameworks = useMemo(
-    () => frameworks.slice((safePage - 1) * ITEMS_PER_PAGE, safePage * ITEMS_PER_PAGE),
-    [frameworks, safePage],
-  );
+  const sourceFramework = activeTabSafe ? SOURCE_FRAMEWORK_BY_TAB[activeTabSafe] : null;
+  const {
+    frameworks,
+    totalPages,
+    isLoading: isFrameworkListLoading,
+    isError: isFrameworkListError,
+    errorMessage: frameworkListErrorMessage,
+  } = useCompetencyFrameworkList({
+    sourceFramework,
+    page,
+    enabled: !isCreateMode && Boolean(sourceFramework),
+  });
 
   useEffect(() => {
     setPage(1);
   }, [activeTabSafe]);
+
+  useEffect(() => {
+    if (!isFrameworkListError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.frameworkListErrorTitle),
+      description: frameworkListErrorMessage || formatMessage(messages.frameworkListLoadError),
+    });
+  }, [
+    formatMessage,
+    frameworkListErrorMessage,
+    isFrameworkListError,
+    showToast,
+  ]);
   const cardLabels = {
     viewAction: formatMessage(messages.viewAction),
     editAction: formatMessage(messages.editAction),
@@ -808,15 +817,42 @@ const CompetencyFramework = () => {
             onChange={setActiveTabId}
           />
 
-          <div className="competency-framework-page__list">
-            {frameworks.length === 0 && (
-              <EmptyState
-                fullSize
-                className="competency-framework-page__empty"
-                message={formatMessage(messages.noFrameworkFound)}
-              />
-            )}
-            {paginatedFrameworks.map(item => (
+          {isFrameworkListLoading && (
+            <div
+              className="competency-framework-page__list"
+              aria-busy="true"
+              aria-label={formatMessage(messages.frameworkListLoading)}
+            >
+              {Array.from({ length: 5 }).map((_, index) => (
+                <SkeletonCard
+                  key={`framework-skeleton-${index}`}
+                  hasHeader={false}
+                  bodyLines={3}
+                  className="competency-framework-page__card-skeleton"
+                />
+              ))}
+            </div>
+          )}
+
+          {!isFrameworkListLoading && isFrameworkListError && (
+            <EmptyState
+              fullSize
+              className="competency-framework-page__empty"
+              message={frameworkListErrorMessage || formatMessage(messages.frameworkListLoadError)}
+            />
+          )}
+
+          {!isFrameworkListLoading && !isFrameworkListError && frameworks.length === 0 && (
+            <EmptyState
+              fullSize
+              className="competency-framework-page__empty"
+              message={formatMessage(messages.noFrameworkFound)}
+            />
+          )}
+
+          {!isFrameworkListLoading && !isFrameworkListError && frameworks.length > 0 && (
+            <div className="competency-framework-page__list">
+              {frameworks.map(item => (
               <FrameworkCard
                 key={item.id}
                 item={item}
@@ -845,18 +881,16 @@ const CompetencyFramework = () => {
                 }}
               />
             ))}
-          </div>
-
-          {frameworks.length > ITEMS_PER_PAGE && (
-            <div className="competency-framework-page__pagination-wrap">
-              <Pagination
-                className="competency-framework-page__pagination"
-                paginationLabel="Competency framework pagination"
-                pageCount={totalPages}
-                currentPage={safePage}
-                onPageSelect={setPage}
-              />
             </div>
+          )}
+
+          {!isFrameworkListLoading && !isFrameworkListError && (
+            <TablePaginationFooter
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+              paginationLabel="Competency framework pagination"
+            />
           )}
 
           {canShowDownloadAndImport && (

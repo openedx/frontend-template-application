@@ -1,14 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
-import EmptyState from '../../components/emptyState/EmptyState';
+import { EmptyState } from '../../components/emptyState';
 import PopupDialog from '../../components/popupDialog/PopupDialog';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
+import { TablePaginationFooter } from '../../components/dataTable';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
-import masterCountryOptions from '../../mock/countries/masterCountryOptions.json';
-import initialProviders from '../../mock/trainingProviders/providers.json';
+import { buildTrainingProviderPayload } from '../../api/trainingProviders/trainingProvidersUtils';
+import useCountriesList from '../../hooks/countries/useCountriesList';
+import useTrainingProviderDetail from '../../hooks/trainingProviders/useTrainingProviderDetail';
+import useTrainingProviderMutations from '../../hooks/trainingProviders/useTrainingProviderMutations';
+import useTrainingProvidersList from '../../hooks/trainingProviders/useTrainingProvidersList';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import messages from './messages';
 import './TrainingProviders.scss';
 
@@ -182,13 +188,15 @@ const TrainingProviders = () => {
   const canEdit = Boolean(componentAccess?.trainingProviders?.canEditTrainingProvider ?? false);
   const canDelete = Boolean(componentAccess?.trainingProviders?.canDeleteTrainingProvider ?? false);
 
-  const [providers, setProviders] = useState(initialProviders);
+  const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProviderId, setEditingProviderId] = useState(null);
   const [orgName, setOrgName] = useState('');
-  const [country, setCountry] = useState('');
+  const [providerEmail, setProviderEmail] = useState('');
+  const [countryValue, setCountryValue] = useState('');
   const [admins, setAdmins] = useState([]);
 
   const [adminDraftName, setAdminDraftName] = useState('');
@@ -201,29 +209,113 @@ const TrainingProviders = () => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [adminDeleteTarget, setAdminDeleteTarget] = useState(null);
 
-  const countryOptions = useMemo(() => (
-    [...masterCountryOptions]
-      .sort((a, b) => a.label.localeCompare(b.label))
-      .map(({ label }) => ({ value: label, label }))
-  ), []);
+  const {
+    items: providers,
+    totalPages,
+    isLoading: isProvidersLoading,
+    isError: isProvidersError,
+    errorMessage: providersErrorMessage,
+  } = useTrainingProvidersList({
+    page,
+    search: searchQuery,
+    enabled: canShowTable,
+  });
 
-  const filtered = useMemo(() => {
-    const trimmed = searchText.trim().toLowerCase();
-    if (!trimmed) {
-      return providers;
+  const isEditing = editingProviderId != null && editingProviderId !== '';
+
+  const {
+    detail,
+    isLoading: isDetailLoading,
+    isError: isDetailError,
+    errorMessage: detailErrorMessage,
+  } = useTrainingProviderDetail({
+    providerId: editingProviderId,
+    enabled: modalOpen && isEditing,
+  });
+
+  const {
+    items: allCountries,
+    isLoading: isCountriesLoading,
+    isError: isCountriesError,
+    errorMessage: countriesErrorMessage,
+  } = useCountriesList({
+    isSearnCountry: undefined,
+    enabled: modalOpen,
+  });
+
+  const { createMutation, updateMutation, deleteMutation } = useTrainingProviderMutations();
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setSearchQuery(searchText.trim());
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [searchText]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (!isProvidersError) {
+      return;
     }
-    return providers.filter(p => (
-      p.name.toLowerCase().includes(trimmed)
-      || (p.email || '').toLowerCase().includes(trimmed)
-      || (p.country || '').toLowerCase().includes(trimmed)
-    ));
-  }, [providers, searchText]);
+
+    showToast({
+      title: formatMessage(messages.listErrorTitle),
+      description: providersErrorMessage || formatMessage(messages.listLoadError),
+    });
+  }, [formatMessage, isProvidersError, providersErrorMessage, showToast]);
+
+  useEffect(() => {
+    if (!modalOpen || !isCountriesError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.countriesErrorTitle),
+      description: countriesErrorMessage,
+    });
+  }, [countriesErrorMessage, formatMessage, isCountriesError, modalOpen, showToast]);
+
+  useEffect(() => {
+    if (!modalOpen || !isEditing || !isDetailError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.detailErrorTitle),
+      description: detailErrorMessage || formatMessage(messages.detailLoadError),
+    });
+  }, [detailErrorMessage, formatMessage, isDetailError, isEditing, modalOpen, showToast]);
+
+  useEffect(() => {
+    if (!isEditing || !detail) {
+      return;
+    }
+
+    setOrgName(hasDisplayValue(detail.name) ? detail.name : '');
+    setProviderEmail(hasDisplayValue(detail.email) ? detail.email : '');
+    setCountryValue(hasDisplayValue(detail.countryName) ? String(detail.countryName) : '');
+    setAdmins(detail.admins.map((admin) => ({
+      id: admin.id ?? `tpa-${admin.email}`,
+      name: admin.name,
+      email: admin.email,
+    })));
+  }, [detail, isEditing]);
+
+  const countryOptions = useMemo(
+    () => allCountries.map((country) => ({ value: country.value, label: country.label })),
+    [allCountries],
+  );
 
   const closeModal = () => {
     setModalOpen(false);
     setEditingProviderId(null);
     setOrgName('');
-    setCountry('');
+    setProviderEmail('');
+    setCountryValue('');
     setAdmins([]);
     setAdminDraftName('');
     setAdminDraftEmail('');
@@ -235,14 +327,19 @@ const TrainingProviders = () => {
 
   const openAdd = () => {
     setEditingProviderId(null);
+    setOrgName('');
+    setProviderEmail('');
+    setCountryValue('');
+    setAdmins([]);
     setModalOpen(true);
   };
 
   const openEdit = (provider) => {
     setEditingProviderId(provider.id);
-    setOrgName(provider.name);
-    setCountry(provider.country || '');
-    setAdmins(provider.admins || []);
+    setOrgName('');
+    setProviderEmail('');
+    setCountryValue('');
+    setAdmins([]);
     setModalOpen(true);
   };
 
@@ -252,7 +349,7 @@ const TrainingProviders = () => {
     if (!name || !email) {
       return;
     }
-    setAdmins(prev => [...prev, { id: `tpa-${Date.now()}`, name, email }]);
+    setAdmins((prev) => [...prev, { id: `tpa-${Date.now()}`, name, email }]);
     setAdminDraftName('');
     setAdminDraftEmail('');
   };
@@ -275,8 +372,10 @@ const TrainingProviders = () => {
     if (!editingAdminId || !name || !email) {
       return;
     }
-    setAdmins(prev => prev.map(a => (a.id === editingAdminId ? {
-      ...a, name, email,
+    setAdmins((prev) => prev.map((a) => (a.id === editingAdminId ? {
+      ...a,
+      name,
+      email,
     } : a)));
     cancelEditAdmin();
   };
@@ -290,7 +389,7 @@ const TrainingProviders = () => {
       return;
     }
     const { id, name } = adminDeleteTarget;
-    setAdmins(prev => prev.filter(a => a.id !== id));
+    setAdmins((prev) => prev.filter((a) => a.id !== id));
     setAdminDeleteTarget(null);
     if (editingAdminId === id) {
       cancelEditAdmin();
@@ -301,65 +400,98 @@ const TrainingProviders = () => {
     });
   };
 
-  const onSaveProvider = () => {
+  const onSaveProvider = async () => {
     const name = orgName.trim();
-    if (!name) {
+    const email = providerEmail.trim();
+    if (!name || !email || !countryValue || admins.length === 0) {
       return;
     }
 
-    if (editingProviderId) {
-      setProviders(prev => prev.map(p => (p.id === editingProviderId ? {
-        ...p,
-        name,
-        country,
-        admins,
-      } : p)));
-      showToast({
-        title: formatMessage(messages.toastUpdatedTitle),
-        description: formatMessage(messages.toastUpdatedDescription, { name }),
-      });
-      closeModal();
-      return;
-    }
-
-    const newItem = {
-      id: `tp-${Date.now()}`,
+    const selectedCountry = allCountries.find((country) => country.value === countryValue);
+    const payload = buildTrainingProviderPayload({
+      id: editingProviderId,
       name,
-      country,
-      email: '',
-      courses: 0,
+      email,
+      countryName: selectedCountry?.label || countryValue,
       admins,
-    };
-    setProviders(prev => [newItem, ...prev]);
-    showToast({
-      title: formatMessage(messages.toastAddedTitle),
-      description: formatMessage(messages.toastAddedDescription, { name }),
+      includeIds: isEditing,
     });
-    closeModal();
-  };
 
-  const confirmDeleteProvider = () => {
-    if (!deleteTarget) {
+    const isSaving = createMutation.isPending || updateMutation.isPending;
+    if (isSaving) {
       return;
     }
-    const { id, name } = deleteTarget;
-    setProviders(prev => prev.filter(p => p.id !== id));
-    setDeleteTarget(null);
-    showToast({
-      title: formatMessage(messages.toastDeletedTitle),
-      description: formatMessage(messages.toastDeletedDescription, { name }),
-    });
+
+    try {
+      if (isEditing) {
+        const result = await updateMutation.mutateAsync({
+          providerId: editingProviderId,
+          payload,
+        });
+
+        showToast({
+          title: formatMessage(messages.toastUpdatedTitle),
+          description: hasDisplayValue(result.message)
+            ? result.message
+            : formatMessage(messages.toastUpdatedDescription, { name }),
+        });
+      } else {
+        const result = await createMutation.mutateAsync(payload);
+
+        showToast({
+          title: formatMessage(messages.toastAddedTitle),
+          description: hasDisplayValue(result.message)
+            ? result.message
+            : formatMessage(messages.toastAddedDescription, { name }),
+        });
+      }
+
+      closeModal();
+    } catch (error) {
+      showToast({
+        title: formatMessage(isEditing ? messages.updateErrorTitle : messages.createErrorTitle),
+        description: error?.message || formatMessage(isEditing ? messages.updateError : messages.createError),
+      });
+    }
   };
 
-  const isEditing = Boolean(editingProviderId);
-  const canSubmit = Boolean(orgName.trim());
+  const confirmDeleteProvider = async () => {
+    if (!deleteTarget || deleteMutation.isPending) {
+      return;
+    }
+
+    try {
+      const result = await deleteMutation.mutateAsync(deleteTarget.id);
+      showToast({
+        title: formatMessage(messages.toastDeletedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.toastDeletedDescription, { name: deleteTarget.name }),
+      });
+      setDeleteTarget(null);
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.deleteErrorTitle),
+        description: error?.message || formatMessage(messages.deleteError),
+      });
+    }
+  };
+
+  const canSubmit = Boolean(orgName.trim() && providerEmail.trim() && countryValue && admins.length > 0);
   const canAddAdmin = Boolean(adminDraftName.trim() && adminDraftEmail.trim());
 
-  const modalCountryTrigger = country || (
+  const selectedCountryLabel = countryOptions.find((option) => option.value === countryValue)?.label;
+  const modalCountryTrigger = selectedCountryLabel || (
     <span className="training-providers-modal__placeholder">
       {formatMessage(messages.countryPlaceholder)}
     </span>
   );
+
+  const isModalLoading = isEditing && isDetailLoading;
+  const isModalBlocked = isModalLoading
+    || (isEditing && isDetailError)
+    || isCountriesLoading
+    || isCountriesError;
 
   const emptyState = (
     <div className="training-providers-page__empty">
@@ -377,7 +509,7 @@ const TrainingProviders = () => {
               className="training-providers-page__search-input"
               placeholder={formatMessage(messages.searchPlaceholder)}
               value={searchText}
-              onChange={e => setSearchText(e.target.value)}
+              onChange={(e) => setSearchText(e.target.value)}
               type="text"
             />
           </div>
@@ -391,87 +523,104 @@ const TrainingProviders = () => {
         )}
       </div>
 
-      {(!canShowTable || filtered.length === 0) ? (
+      {isProvidersLoading ? (
+        <SkeletonScreen
+          variant={SKELETON_VARIANTS.TABLE}
+          tablePreset="trainingProviders"
+          rows={6}
+          ariaLabel={formatMessage(messages.listLoading)}
+        />
+      ) : (!canShowTable || providers.length === 0 || isProvidersError) ? (
         emptyState
       ) : (
-        <div className="training-providers-page__table-card">
-          <div className="training-providers-page__table-wrap">
-            <table className="training-providers-page__table">
-              <thead>
-                <tr className="training-providers-page__thead-row">
-                  <th className="training-providers-page__th">{formatMessage(messages.tableProvider)}</th>
-                  <th className="training-providers-page__th training-providers-page__th--center">
-                    {formatMessage(messages.tableAdmins)}
-                  </th>
-                  <th className="training-providers-page__th training-providers-page__th--center">
-                    {formatMessage(messages.tableCourses)}
-                  </th>
-                  <th className="training-providers-page__th training-providers-page__th--right">
-                    {formatMessage(messages.tableActions)}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map(provider => (
-                  <tr className="training-providers-page__tbody-row" key={provider.id}>
-                    <td className="training-providers-page__td">
-                      <div className="training-providers-page__provider-cell">
-                        <div className="training-providers-page__provider-icon">
-                          <BuildingIcon className="h-5 w-5" />
+        <>
+          <div className="training-providers-page__table-card">
+            <div className="training-providers-page__table-wrap">
+              <table className="training-providers-page__table">
+                <thead>
+                  <tr className="training-providers-page__thead-row">
+                    <th className="training-providers-page__th">{formatMessage(messages.tableProvider)}</th>
+                    <th className="training-providers-page__th training-providers-page__th--center">
+                      {formatMessage(messages.tableAdmins)}
+                    </th>
+                    <th className="training-providers-page__th training-providers-page__th--center">
+                      {formatMessage(messages.tableCourses)}
+                    </th>
+                    <th className="training-providers-page__th training-providers-page__th--right">
+                      {formatMessage(messages.tableActions)}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {providers.map((provider) => (
+                    <tr className="training-providers-page__tbody-row" key={provider.id}>
+                      <td className="training-providers-page__td">
+                        <div className="training-providers-page__provider-cell">
+                          <div className="training-providers-page__provider-icon">
+                            <BuildingIcon className="h-5 w-5" />
+                          </div>
+                          <div style={{ minWidth: 0 }}>
+                            {hasDisplayValue(provider.name) && (
+                              <p className="training-providers-page__provider-name">{provider.name}</p>
+                            )}
+                            {hasDisplayValue(provider.email) && (
+                              <p className="training-providers-page__provider-email">
+                                <MailIcon className="h-3 w-3" />
+                                {provider.email}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                        <div style={{ minWidth: 0 }}>
-                          <p className="training-providers-page__provider-name">{provider.name}</p>
-                          {provider.email && (
-                            <p className="training-providers-page__provider-email">
-                              <MailIcon className="h-3 w-3" />
-                              {provider.email}
-                            </p>
+                      </td>
+                      <td className="training-providers-page__td training-providers-page__td--center">
+                        {typeof provider.adminCount === 'number' ? provider.adminCount : 0}
+                      </td>
+                      <td className="training-providers-page__td training-providers-page__td--center">
+                        {provider.courses ?? 0}
+                      </td>
+                      <td className="training-providers-page__td training-providers-page__td--right">
+                        <div className="training-providers-page__row-actions">
+                          {canEdit && (
+                            <button
+                              type="button"
+                              className="training-providers-page__icon-button"
+                              aria-label={formatMessage(messages.edit)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openEdit(provider);
+                              }}
+                            >
+                              <PencilIcon className="h-4 w-4" />
+                            </button>
+                          )}
+                          {canDelete && (
+                            <button
+                              type="button"
+                              className="training-providers-page__icon-button training-providers-page__icon-button--danger"
+                              aria-label={formatMessage(messages.delete)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteTarget(provider);
+                              }}
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                            </button>
                           )}
                         </div>
-                      </div>
-                    </td>
-                    <td className="training-providers-page__td training-providers-page__td--center">
-                      {(provider.admins || []).length}
-                    </td>
-                    <td className="training-providers-page__td training-providers-page__td--center">
-                      {provider.courses ?? 0}
-                    </td>
-                    <td className="training-providers-page__td training-providers-page__td--right">
-                      <div className="training-providers-page__row-actions">
-                        {canEdit && (
-                          <button
-                            type="button"
-                            className="training-providers-page__icon-button"
-                            aria-label={formatMessage(messages.edit)}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openEdit(provider);
-                            }}
-                          >
-                            <PencilIcon className="h-4 w-4" />
-                          </button>
-                        )}
-                        {canDelete && (
-                          <button
-                            type="button"
-                            className="training-providers-page__icon-button training-providers-page__icon-button--danger"
-                            aria-label={formatMessage(messages.delete)}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setDeleteTarget(provider);
-                            }}
-                          >
-                            <TrashIcon className="h-4 w-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <TablePaginationFooter
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+              paginationLabel="Training providers pagination"
+            />
           </div>
-        </div>
+        </>
       )}
 
       <PopupDialog
@@ -480,155 +629,199 @@ const TrainingProviders = () => {
         onClose={closeModal}
         contentClassName="training-providers-modal"
       >
-        <p className="training-providers-modal__description">{formatMessage(messages.modalDescription)}</p>
-
-        <div className="training-providers-modal__fields">
-          <div className="training-providers-modal__field">
-            <span className="training-providers-modal__label">
-              {formatMessage(messages.orgNameLabel)}
-              <span className="training-providers-modal__required">*</span>
-            </span>
-            <input
-              className="training-providers-modal__input"
-              placeholder={formatMessage(messages.orgNamePlaceholder)}
-              value={orgName}
-              onChange={e => setOrgName(e.target.value)}
-              type="text"
-            />
-          </div>
-
-          <div className="training-providers-modal__field">
-            <span className="training-providers-modal__label">{formatMessage(messages.countryLabel)}</span>
-            <SearchableDropdown
-              value={country}
-              options={countryOptions}
-              onChange={setCountry}
-              triggerLabel={modalCountryTrigger}
-              searchPlaceholder={formatMessage(messages.countryPlaceholder)}
-              noOptionsText={formatMessage(messages.empty)}
-            />
-          </div>
-
-          <div className="training-providers-modal__field">
-            <span className="training-providers-modal__label">{formatMessage(messages.adminsLabel)}</span>
-
-            <div className="training-providers-modal__admins">
-              {admins.map(admin => {
-                const isAdminEditing = editingAdminId === admin.id;
-                return (
-                  <div className="training-providers-modal__admin-card" key={admin.id}>
-                    {isAdminEditing ? (
-                      <>
-                        <div style={{
-                          flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '.5rem',
-                        }}
-                        >
-                          <input
-                            className="training-providers-modal__input"
-                            placeholder="Name"
-                            value={editingAdminName}
-                            onChange={e => setEditingAdminName(e.target.value)}
-                            type="text"
-                          />
-                          <input
-                            className="training-providers-modal__input"
-                            placeholder="Email"
-                            value={editingAdminEmail}
-                            onChange={e => setEditingAdminEmail(e.target.value)}
-                            type="email"
-                          />
-                        </div>
-                        <div className="training-providers-modal__admin-actions">
-                          <button
-                            type="button"
-                            className="training-providers-page__icon-button"
-                            aria-label="Save admin"
-                            onClick={saveEditAdmin}
-                          >
-                            <CheckIcon className="h-4 w-4" />
-                          </button>
-                          <button
-                            type="button"
-                            className="training-providers-page__icon-button"
-                            aria-label="Cancel edit"
-                            onClick={cancelEditAdmin}
-                          >
-                            <XIcon className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="training-providers-modal__admin-display">
-                          <p className="training-providers-modal__admin-name" title={admin.name}>{admin.name}</p>
-                          <p className="training-providers-modal__admin-email" title={admin.email}>{admin.email}</p>
-                        </div>
-                        <div className="training-providers-modal__admin-actions">
-                          <button
-                            type="button"
-                            className="training-providers-page__icon-button"
-                            aria-label="Edit admin"
-                            onClick={() => startEditAdmin(admin)}
-                          >
-                            <PencilIcon className="h-4 w-4" />
-                          </button>
-                          <button
-                            type="button"
-                            className="training-providers-page__icon-button training-providers-page__icon-button--danger"
-                            aria-label="Delete admin"
-                            onClick={() => requestDeleteAdmin(admin)}
-                          >
-                            <TrashIcon className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-
-              <div className="training-providers-modal__add-row">
-                <input
-                  className="training-providers-modal__input"
-                  placeholder={formatMessage(messages.adminNamePlaceholder)}
-                  value={adminDraftName}
-                  onChange={e => setAdminDraftName(e.target.value)}
-                  type="text"
-                />
-                <input
-                  className="training-providers-modal__input"
-                  placeholder={formatMessage(messages.adminEmailPlaceholder)}
-                  value={adminDraftEmail}
-                  onChange={e => setAdminDraftEmail(e.target.value)}
-                  type="email"
-                />
-                <button
-                  type="button"
-                  className="training-providers-modal__add-admin-button"
-                  onClick={addAdmin}
-                  disabled={!canAddAdmin}
-                >
-                  <PlusIcon className="h-4 w-4" />
-                  {formatMessage(messages.addAdmin)}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="training-providers-modal__footer">
-          <button type="button" className="training-providers-modal__outline-button" onClick={closeModal}>
-            {formatMessage(messages.cancel)}
-          </button>
-          <button
-            type="button"
-            className="training-providers-modal__confirm-button"
-            onClick={onSaveProvider}
-            disabled={!canSubmit}
+        {isModalLoading ? (
+          <div
+            className="training-providers-modal__loading"
+            aria-busy="true"
+            aria-label={formatMessage(messages.detailLoading)}
           >
-            {formatMessage(isEditing ? messages.confirmSave : messages.confirmAdd)}
-          </button>
-        </div>
+            <SkeletonScreen variant={SKELETON_VARIANTS.CARD} hasHeader={false} bodyLines={4} />
+          </div>
+        ) : (
+          <>
+            <p className="training-providers-modal__description">{formatMessage(messages.modalDescription)}</p>
+
+            {isEditing && isDetailError && (
+              <EmptyState message={detailErrorMessage || formatMessage(messages.detailLoadError)} />
+            )}
+
+            {!isDetailError && (
+              <>
+                <div className="training-providers-modal__fields">
+                  <div className="training-providers-modal__field">
+                    <span className="training-providers-modal__label">
+                      {formatMessage(messages.orgNameLabel)}
+                      <span className="training-providers-modal__required">*</span>
+                    </span>
+                    <input
+                      className="training-providers-modal__input"
+                      placeholder={formatMessage(messages.orgNamePlaceholder)}
+                      value={orgName}
+                      onChange={(e) => setOrgName(e.target.value)}
+                      type="text"
+                    />
+                  </div>
+
+                  <div className="training-providers-modal__field">
+                    <span className="training-providers-modal__label">
+                      {formatMessage(messages.emailLabel)}
+                      <span className="training-providers-modal__required">*</span>
+                    </span>
+                    <input
+                      className="training-providers-modal__input"
+                      placeholder={formatMessage(messages.emailPlaceholder)}
+                      value={providerEmail}
+                      onChange={(e) => setProviderEmail(e.target.value)}
+                      type="email"
+                    />
+                  </div>
+
+                  <div className="training-providers-modal__field">
+                    <span className="training-providers-modal__label">
+                      {formatMessage(messages.countryLabel)}
+                      <span className="training-providers-modal__required">*</span>
+                    </span>
+                    <SearchableDropdown
+                      value={countryValue}
+                      options={countryOptions}
+                      onChange={setCountryValue}
+                      triggerLabel={modalCountryTrigger}
+                      searchPlaceholder={formatMessage(messages.countryPlaceholder)}
+                      noOptionsText={formatMessage(messages.empty)}
+                    />
+                  </div>
+
+                  <div className="training-providers-modal__field">
+                    <span className="training-providers-modal__label">
+                      {formatMessage(messages.adminsLabel)}
+                      <span className="training-providers-modal__required">*</span>
+                    </span>
+
+                    <div className="training-providers-modal__admins">
+                      {admins.map((admin) => {
+                        const isAdminEditing = editingAdminId === admin.id;
+                        return (
+                          <div className="training-providers-modal__admin-card" key={admin.id}>
+                            {isAdminEditing ? (
+                              <>
+                                <div style={{
+                                  flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '.5rem',
+                                }}
+                                >
+                                  <input
+                                    className="training-providers-modal__input"
+                                    placeholder="Name"
+                                    value={editingAdminName}
+                                    onChange={(e) => setEditingAdminName(e.target.value)}
+                                    type="text"
+                                  />
+                                  <input
+                                    className="training-providers-modal__input"
+                                    placeholder="Email"
+                                    value={editingAdminEmail}
+                                    onChange={(e) => setEditingAdminEmail(e.target.value)}
+                                    type="email"
+                                  />
+                                </div>
+                                <div className="training-providers-modal__admin-actions">
+                                  <button
+                                    type="button"
+                                    className="training-providers-page__icon-button"
+                                    aria-label="Save admin"
+                                    onClick={saveEditAdmin}
+                                  >
+                                    <CheckIcon className="h-4 w-4" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="training-providers-page__icon-button"
+                                    aria-label="Cancel edit"
+                                    onClick={cancelEditAdmin}
+                                  >
+                                    <XIcon className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="training-providers-modal__admin-display">
+                                  {hasDisplayValue(admin.name) && (
+                                    <p className="training-providers-modal__admin-name" title={admin.name}>{admin.name}</p>
+                                  )}
+                                  {hasDisplayValue(admin.email) && (
+                                    <p className="training-providers-modal__admin-email" title={admin.email}>{admin.email}</p>
+                                  )}
+                                </div>
+                                <div className="training-providers-modal__admin-actions">
+                                  <button
+                                    type="button"
+                                    className="training-providers-page__icon-button"
+                                    aria-label="Edit admin"
+                                    onClick={() => startEditAdmin(admin)}
+                                  >
+                                    <PencilIcon className="h-4 w-4" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="training-providers-page__icon-button training-providers-page__icon-button--danger"
+                                    aria-label="Delete admin"
+                                    onClick={() => requestDeleteAdmin(admin)}
+                                  >
+                                    <TrashIcon className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        );
+                      })}
+
+                      <div className="training-providers-modal__add-row">
+                        <input
+                          className="training-providers-modal__input"
+                          placeholder={formatMessage(messages.adminNamePlaceholder)}
+                          value={adminDraftName}
+                          onChange={(e) => setAdminDraftName(e.target.value)}
+                          type="text"
+                        />
+                        <input
+                          className="training-providers-modal__input"
+                          placeholder={formatMessage(messages.adminEmailPlaceholder)}
+                          value={adminDraftEmail}
+                          onChange={(e) => setAdminDraftEmail(e.target.value)}
+                          type="email"
+                        />
+                        <button
+                          type="button"
+                          className="training-providers-modal__add-admin-button"
+                          onClick={addAdmin}
+                          disabled={!canAddAdmin}
+                        >
+                          <PlusIcon className="h-4 w-4" />
+                          {formatMessage(messages.addAdmin)}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="training-providers-modal__footer">
+                  <button type="button" className="training-providers-modal__outline-button" onClick={closeModal}>
+                    {formatMessage(messages.cancel)}
+                  </button>
+                  <button
+                    type="button"
+                    className="training-providers-modal__confirm-button"
+                    onClick={onSaveProvider}
+                    disabled={!canSubmit || isModalBlocked}
+                  >
+                    {formatMessage(isEditing ? messages.confirmSave : messages.confirmAdd)}
+                  </button>
+                </div>
+              </>
+            )}
+          </>
+        )}
       </PopupDialog>
 
       <ConfirmActionDialog

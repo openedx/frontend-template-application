@@ -1,3 +1,42 @@
+// Shared footer + pagination (DataTable and standalone page tables via TablePagination)
+.data-table__footer {
+  border-top: 1px solid #E5E7EB;
+  padding: .875rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+  font-size: .875rem;
+  color: #6B7280;
+  position: relative;
+
+  > div:first-child {
+    position: absolute;
+    left: 1.5rem;
+  }
+}
+
+.data-table__pagination {
+  margin: 0;
+
+  .page-link {
+    color: #2A3B8F;
+    border-color: #2A3B8F;
+  }
+
+  .page-item.active .page-link {
+    background: #2A3B8F;
+    border-color: #2A3B8F;
+    color: #FFFFFF;
+  }
+
+  .page-link:hover {
+    background: #2A3B8F;
+    border-color: #2A3B8F;
+    color: #FFFFFF;
+  }
+}
+
 .data-table {
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
@@ -46,76 +85,38 @@
       text-align: right;
     }
   }
-
-  &__footer {
-    border-top: 1px solid #E5E7EB;
-    padding: .875rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: .75rem;
-    font-size: .875rem;
-    color: #6B7280;
-    position: relative;
-  }
-
-  &__footer > div:first-child {
-    position: absolute;
-    left: 1.5rem;
-  }
-
-  &__pagination {
-    margin: 0;
-
-    .page-link {
-      color: #2A3B8F;
-      border-color: #2A3B8F;
-    }
-
-    .page-item.active .page-link {
-      background: #2A3B8F;
-      border-color: #2A3B8F;
-      color: #FFFFFF;
-    }
-
-    .page-link:hover {
-      background: #2A3B8F;
-      border-color: #2A3B8F;
-      color: #FFFFFF;
-    }
-  }
 }
 
 @media (width <= 767px) {
   .data-table {
     overflow: visible;
+  }
 
-    &__footer {
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
-    }
+  .data-table__footer {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
 
-    &__footer > div:first-child {
+    > div:first-child {
       position: static;
       text-align: center;
     }
+  }
 
-    &__pagination {
-      width: 100%;
-      overflow-x: hidden;
-      display: flex;
-      justify-content: center;
-    }
+  .data-table__pagination {
+    width: 100%;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
 
-    &__pagination .pagination-default {
+    .pagination-default {
       flex-wrap: wrap;
       justify-content: center;
       gap: .25rem;
       margin: 0;
     }
 
-    &__pagination .page-link {
+    .page-link {
       min-width: 30px;
       height: 30px;
       padding: 0 .5rem;
@@ -123,8 +124,8 @@
       line-height: 1;
     }
 
-    &__pagination .page-item:first-child .page-link,
-    &__pagination .page-item:last-child .page-link {
+    .page-item:first-child .page-link,
+    .page-item:last-child .page-link {
       font-size: .6875rem;
       padding: 0 .375rem;
     }

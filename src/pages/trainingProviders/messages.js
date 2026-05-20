@@ -71,6 +71,16 @@ const messages = defineMessages({
     defaultMessage: 'e.g. WHO Training Center',
     description: 'Placeholder for organization name',
   },
+  emailLabel: {
+    id: 'app.trainingProviders.fields.email.label',
+    defaultMessage: 'Email',
+    description: 'Label for training provider email field',
+  },
+  emailPlaceholder: {
+    id: 'app.trainingProviders.fields.email.placeholder',
+    defaultMessage: 'provider@example.org',
+    description: 'Placeholder for training provider email field',
+  },
   countryLabel: {
     id: 'app.trainingProviders.fields.country.label',
     defaultMessage: 'Country',
@@ -185,6 +195,71 @@ const messages = defineMessages({
     id: 'app.trainingProviders.toast.adminDeleted.description',
     defaultMessage: '{name} has been removed.',
     description: 'Toast description after deleting an admin',
+  },
+  listLoadError: {
+    id: 'app.trainingProviders.list.loadError',
+    defaultMessage: 'Unable to load training providers. Please try again.',
+    description: 'Fallback when training providers list API fails',
+  },
+  listErrorTitle: {
+    id: 'app.trainingProviders.list.errorToast.title',
+    defaultMessage: 'Failed to load training providers',
+    description: 'Toast title when training providers list API fails',
+  },
+  listLoading: {
+    id: 'app.trainingProviders.list.loading',
+    defaultMessage: 'Loading training providers',
+    description: 'Aria label for training providers list skeleton',
+  },
+  detailLoadError: {
+    id: 'app.trainingProviders.detail.loadError',
+    defaultMessage: 'Unable to load training provider details. Please try again.',
+    description: 'Fallback when training provider detail API fails',
+  },
+  detailErrorTitle: {
+    id: 'app.trainingProviders.detail.errorToast.title',
+    defaultMessage: 'Failed to load training provider',
+    description: 'Toast title when training provider detail API fails',
+  },
+  detailLoading: {
+    id: 'app.trainingProviders.detail.loading',
+    defaultMessage: 'Loading training provider details',
+    description: 'Aria label while training provider detail loads',
+  },
+  createError: {
+    id: 'app.trainingProviders.create.error',
+    defaultMessage: 'Unable to add training provider. Please try again.',
+    description: 'Fallback when create training provider API fails',
+  },
+  createErrorTitle: {
+    id: 'app.trainingProviders.create.errorToast.title',
+    defaultMessage: 'Add provider failed',
+    description: 'Toast title when create training provider fails',
+  },
+  updateError: {
+    id: 'app.trainingProviders.update.error',
+    defaultMessage: 'Unable to update training provider. Please try again.',
+    description: 'Fallback when update training provider API fails',
+  },
+  updateErrorTitle: {
+    id: 'app.trainingProviders.update.errorToast.title',
+    defaultMessage: 'Update provider failed',
+    description: 'Toast title when update training provider fails',
+  },
+  deleteError: {
+    id: 'app.trainingProviders.delete.error',
+    defaultMessage: 'Unable to delete training provider. Please try again.',
+    description: 'Fallback when delete training provider API fails',
+  },
+  deleteErrorTitle: {
+    id: 'app.trainingProviders.delete.errorToast.title',
+    defaultMessage: 'Delete provider failed',
+    description: 'Toast title when delete training provider fails',
+  },
+  countriesErrorTitle: {
+    id: 'app.trainingProviders.countries.errorToast.title',
+    defaultMessage: 'Failed to load countries',
+    description: 'Toast title when countries list API fails in provider modal',
   },
 });
 

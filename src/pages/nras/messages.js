@@ -181,6 +181,76 @@ const messages = defineMessages({
     defaultMessage: '{name} has been removed.',
     description: 'Toast description after deleting an NRA admin',
   },
+  listLoadError: {
+    id: 'app.nras.list.loadError',
+    defaultMessage: 'Unable to load NRAs. Please try again.',
+    description: 'Fallback when NRA list API fails',
+  },
+  listErrorTitle: {
+    id: 'app.nras.list.errorToast.title',
+    defaultMessage: 'Failed to load NRAs',
+    description: 'Toast title when NRA list API fails',
+  },
+  listLoading: {
+    id: 'app.nras.list.loading',
+    defaultMessage: 'Loading NRAs',
+    description: 'Aria label for NRA table skeleton',
+  },
+  detailLoadError: {
+    id: 'app.nras.detail.loadError',
+    defaultMessage: 'Unable to load NRA details. Please try again.',
+    description: 'Fallback when NRA detail API fails',
+  },
+  detailErrorTitle: {
+    id: 'app.nras.detail.errorToast.title',
+    defaultMessage: 'Failed to load NRA',
+    description: 'Toast title when NRA detail API fails',
+  },
+  detailLoading: {
+    id: 'app.nras.detail.loading',
+    defaultMessage: 'Loading NRA details',
+    description: 'Aria label while NRA detail loads in modal',
+  },
+  createError: {
+    id: 'app.nras.create.error',
+    defaultMessage: 'Unable to onboard NRA. Please try again.',
+    description: 'Fallback when create NRA API fails',
+  },
+  createErrorTitle: {
+    id: 'app.nras.create.errorToast.title',
+    defaultMessage: 'Onboard failed',
+    description: 'Toast title when create NRA fails',
+  },
+  updateError: {
+    id: 'app.nras.update.error',
+    defaultMessage: 'Unable to update NRA. Please try again.',
+    description: 'Fallback when update NRA API fails',
+  },
+  updateErrorTitle: {
+    id: 'app.nras.update.errorToast.title',
+    defaultMessage: 'Update failed',
+    description: 'Toast title when update NRA fails',
+  },
+  deleteError: {
+    id: 'app.nras.delete.error',
+    defaultMessage: 'Unable to delete NRA. Please try again.',
+    description: 'Fallback when delete NRA API fails',
+  },
+  deleteErrorTitle: {
+    id: 'app.nras.delete.errorToast.title',
+    defaultMessage: 'Delete failed',
+    description: 'Toast title when delete NRA fails',
+  },
+  countriesErrorTitle: {
+    id: 'app.nras.countries.errorToast.title',
+    defaultMessage: 'Failed to load countries',
+    description: 'Toast title when countries API fails in NRA modal',
+  },
+  adminCount: {
+    id: 'app.nras.table.adminCount',
+    defaultMessage: '{count, plural, one {# admin} other {# admins}}',
+    description: 'Admin count label in NRA table',
+  },
 });
 
 export default messages;

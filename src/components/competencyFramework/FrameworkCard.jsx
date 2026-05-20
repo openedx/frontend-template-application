@@ -6,6 +6,7 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 
 const FrameworkCard = ({
   item,
@@ -23,12 +24,22 @@ const FrameworkCard = ({
         <FontAwesomeIcon icon={faBookOpen} />
       </div>
       <div className="competency-framework-page__card-text">
-        <h3 className="competency-framework-page__card-title">{item.title}</h3>
-        <p className="competency-framework-page__card-description">{item.description}</p>
+        {hasDisplayValue(item.title) && (
+          <h3 className="competency-framework-page__card-title">{item.title}</h3>
+        )}
+        {hasDisplayValue(item.description) && (
+          <p className="competency-framework-page__card-description">{item.description}</p>
+        )}
         <div className="competency-framework-page__card-meta">
-          <span>{labels.domains(item.domains)}</span>
-          <span>{labels.subDomains(item.subDomains)}</span>
-          <span>{labels.created(item.createdAt)}</span>
+          {hasDisplayValue(item.domains) && (
+            <span>{labels.domains(item.domains)}</span>
+          )}
+          {hasDisplayValue(item.subDomains) && (
+            <span>{labels.subDomains(item.subDomains)}</span>
+          )}
+          {hasDisplayValue(item.createdAt) && (
+            <span>{labels.created(item.createdAt)}</span>
+          )}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Pagination } from '@openedx/paragon';
+import { TablePaginationFooter } from '../../components/dataTable';
 import { Navigate, useParams } from 'react-router-dom';
 import AccessRestrictedPage from '../AccessRestrictedPage';
 import { useUserRole } from '../../contexts/UserRoleContext';
@@ -148,15 +148,12 @@ const UserRegulatoryPassport = () => {
               </tbody>
             </table>
           </div>
-          <div className="user-passport-page__pagination">
-            <Pagination
-              className="data-table__pagination"
-              paginationLabel="Regulatory passport pagination"
-              pageCount={3}
-              currentPage={1}
-              onPageSelect={() => {}}
-            />
-          </div>
+          <TablePaginationFooter
+            currentPage={1}
+            totalPages={3}
+            onPageChange={() => {}}
+            paginationLabel="Regulatory passport pagination"
+          />
         </div>
 
         <div className="user-passport-page__export">

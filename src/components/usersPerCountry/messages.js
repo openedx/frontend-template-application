@@ -11,6 +11,11 @@ const usersPerCountryMessages = defineMessages({
     defaultMessage: 'Distribution of registered NRA users across the SEAR network',
     description: 'Description for dashboard users per country component',
   },
+  empty: {
+    id: 'app.usersPerCountry.empty',
+    defaultMessage: 'No user distribution data available.',
+    description: 'Empty state when chart has no displayable rows',
+  },
   usersUnit: {
     id: 'app.dashboard.usersPerCountry.usersUnit',
     defaultMessage: 'users',

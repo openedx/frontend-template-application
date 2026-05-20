@@ -23,7 +23,6 @@
     },
     "countries": {
       "canAddCountry": false,
-      "canEditCountry": false,
       "canDeleteCountry": false
     },
     "trainingProviders": {

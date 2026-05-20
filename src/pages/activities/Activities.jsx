@@ -2,7 +2,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { faChartLine, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useState } from 'react';
-import DataTable from '../../components/dataTable/DataTable';
+import { DataTable } from '../../components/dataTable';
 import EmptyState from '../../components/emptyState/EmptyState';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import activitiesData from '../../mock/activities/activities.json';

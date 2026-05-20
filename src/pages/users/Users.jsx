@@ -9,8 +9,8 @@ import {
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Pagination } from '@openedx/paragon';
 import { Link } from 'react-router-dom';
+import { TablePaginationFooter } from '../../components/dataTable';
 import AddUserModal from '../../components/addUserModal/AddUserModal';
 import ImportFrameworkModal from '../../components/competencyFramework/ImportFrameworkModal';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
@@ -253,21 +253,16 @@ const Users = () => {
             </table>
           </div>
 
-          <div className="users-page__pagination">
-            <div className="users-page__pagination-left">
-              {formatMessage(messages.showingCount, {
-                count: filteredUsers.length,
-                total: usersData.length,
-              })}
-            </div>
-            <Pagination
-              className="data-table__pagination"
-              paginationLabel="Users pagination"
-              pageCount={totalPages}
-              currentPage={safePage}
-              onPageSelect={selectedPage => setPage(selectedPage)}
-            />
-          </div>
+          <TablePaginationFooter
+            currentPage={safePage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            paginationLabel="Users pagination"
+            footerContent={formatMessage(messages.showingCount, {
+              count: filteredUsers.length,
+              total: usersData.length,
+            })}
+          />
         </div>
       )}
 

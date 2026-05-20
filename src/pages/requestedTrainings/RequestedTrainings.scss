@@ -216,6 +216,14 @@
     flex: 1;
     min-height: 0;
   }
+
+  &__pagination-wrap {
+    margin-top: 1rem;
+  }
+
+  &__pagination {
+    justify-content: center;
+  }
 }
 
 .request-training-modal {

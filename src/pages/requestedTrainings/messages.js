@@ -101,6 +101,76 @@ const messages = defineMessages({
     defaultMessage: 'Your training request has been submitted.',
     description: 'Toast description after submit request',
   },
+  filtersLoadError: {
+    id: 'app.requestedTrainings.filters.loadError',
+    defaultMessage: 'Unable to load status filters. Please try again.',
+    description: 'Fallback when requested training filters API fails',
+  },
+  listLoadError: {
+    id: 'app.requestedTrainings.list.loadError',
+    defaultMessage: 'Unable to load requested trainings. Please try again.',
+    description: 'Fallback when requested trainings list API fails',
+  },
+  activitiesLoadError: {
+    id: 'app.requestedTrainings.activities.loadError',
+    defaultMessage: 'Unable to load activities. Please try again.',
+    description: 'Fallback when requested training activities API fails',
+  },
+  createError: {
+    id: 'app.requestedTrainings.create.error',
+    defaultMessage: 'Unable to submit this training request. Please try again.',
+    description: 'Fallback when create requested training API fails',
+  },
+  statusError: {
+    id: 'app.requestedTrainings.status.error',
+    defaultMessage: 'Unable to update this training request. Please try again.',
+    description: 'Fallback when requested training status PATCH fails',
+  },
+  listErrorTitle: {
+    id: 'app.requestedTrainings.list.errorTitle',
+    defaultMessage: 'Requested trainings unavailable',
+    description: 'Toast title when list API fails',
+  },
+  filtersErrorTitle: {
+    id: 'app.requestedTrainings.filters.errorTitle',
+    defaultMessage: 'Filters unavailable',
+    description: 'Toast title when filters API fails',
+  },
+  activitiesErrorTitle: {
+    id: 'app.requestedTrainings.activities.errorTitle',
+    defaultMessage: 'Activities unavailable',
+    description: 'Toast title when activities API fails',
+  },
+  createErrorTitle: {
+    id: 'app.requestedTrainings.create.errorTitle',
+    defaultMessage: 'Request failed',
+    description: 'Toast title when create API fails',
+  },
+  statusErrorTitle: {
+    id: 'app.requestedTrainings.status.errorTitle',
+    defaultMessage: 'Update failed',
+    description: 'Toast title when status PATCH fails',
+  },
+  statusOpen: {
+    id: 'app.requestedTrainings.status.open',
+    defaultMessage: 'Open',
+    description: 'Status label for open requests',
+  },
+  statusClosed: {
+    id: 'app.requestedTrainings.status.closed',
+    defaultMessage: 'Closed',
+    description: 'Status label for closed requests',
+  },
+  toastClosedTitle: {
+    id: 'app.requestedTrainings.toast.closed.title',
+    defaultMessage: 'Request closed',
+    description: 'Toast title when request closed',
+  },
+  toastReopenedTitle: {
+    id: 'app.requestedTrainings.toast.reopened.title',
+    defaultMessage: 'Request reopened',
+    description: 'Toast title when request reopened',
+  },
 });
 
 export default messages;

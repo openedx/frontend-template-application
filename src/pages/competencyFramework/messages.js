@@ -91,6 +91,21 @@ const competencyFrameworkMessages = defineMessages({
     defaultMessage: 'No frameworks available for this tab.',
     description: 'Empty state for framework list',
   },
+  frameworkListLoadError: {
+    id: 'app.competencyFramework.list.loadError',
+    defaultMessage: 'Unable to load competency frameworks. Please try again.',
+    description: 'Fallback when competency framework list API fails',
+  },
+  frameworkListErrorTitle: {
+    id: 'app.competencyFramework.list.errorToast.title',
+    defaultMessage: 'Failed to load frameworks',
+    description: 'Toast title when competency framework list API fails',
+  },
+  frameworkListLoading: {
+    id: 'app.competencyFramework.list.loading',
+    defaultMessage: 'Loading competency frameworks',
+    description: 'Aria label for competency framework list skeleton',
+  },
   importModalTitle: {
     id: 'app.competencyFramework.import.modal.title',
     defaultMessage: 'Import Framework from Excel',

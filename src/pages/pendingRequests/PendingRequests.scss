@@ -213,6 +213,22 @@
     &--rejected {
       background: #DC2626;
     }
+
+    &--pending {
+      background: #F59E0B;
+    }
+
+    &--closed {
+      background: #6B7280;
+    }
+  }
+
+  &__pagination-wrap {
+    margin-top: 1rem;
+  }
+
+  &__pagination {
+    justify-content: center;
   }
 
   &__icon-button {

@@ -1,0 +1,58 @@
+/* eslint-disable react/prop-types */
+import { Pagination } from '@openedx/paragon';
+import './DataTable.scss';
+
+/**
+ * Shared Paragon pagination with global `data-table__pagination` styles.
+ * Renders nothing when `totalPages <= 1`.
+ */
+export const TablePagination = ({
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
+  paginationLabel = 'Table pagination',
+}) => {
+  if (!totalPages || totalPages <= 1) {
+    return null;
+  }
+
+  return (
+    <Pagination
+      className="data-table__pagination"
+      paginationLabel={paginationLabel}
+      pageCount={totalPages}
+      currentPage={currentPage}
+      onPageSelect={onPageChange}
+    />
+  );
+};
+
+/**
+ * Footer row with optional left summary and shared pagination on the right.
+ * Renders nothing when `totalPages <= 1`.
+ */
+export const TablePaginationFooter = ({
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
+  paginationLabel = 'Table pagination',
+  footerContent = null,
+}) => {
+  if (!totalPages || totalPages <= 1) {
+    return null;
+  }
+
+  return (
+    <div className="data-table__footer">
+      <div>{footerContent}</div>
+      <TablePagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        paginationLabel={paginationLabel}
+      />
+    </div>
+  );
+};
+
+export default TablePagination;

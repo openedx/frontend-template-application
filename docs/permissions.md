@@ -192,8 +192,6 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
 
 - **`canAddCountry`**
   - **Controls**: "Add New SEARN Country" button + modal open
-- **`canEditCountry`**
-  - **Controls**: edit action/button on country card
 - **`canDeleteCountry`**
   - **Controls**: delete action/button + confirmation + toast
 

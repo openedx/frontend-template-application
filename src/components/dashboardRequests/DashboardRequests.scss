@@ -32,6 +32,11 @@
     flex-direction: column;
   }
 
+  &__empty {
+    padding: 1.5rem;
+    min-height: 120px;
+  }
+
   &__item {
     padding: 1rem 1.5rem;
     display: flex;

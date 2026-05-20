@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import EmptyState from '../../components/emptyState/EmptyState';
+import { EmptyState } from '../../components/emptyState';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
+import { TablePaginationFooter } from '../../components/dataTable';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
+import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
-import requestTypes from '../../mock/pendingRequests/requestTypes.json';
-import pendingRequests from '../../mock/pendingRequests/pendingRequests.json';
+import usePendingRequestFilters from '../../hooks/pendingRequests/usePendingRequestFilters';
+import usePendingRequestsList from '../../hooks/pendingRequests/usePendingRequestsList';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import messages from './messages';
 import './PendingRequests.scss';
 
@@ -70,12 +74,14 @@ const PencilIcon = ({ className }) => (
 const statusClass = (status) => {
   if (status === 'approved') return 'pending-requests-page__status-pill--approved';
   if (status === 'rejected') return 'pending-requests-page__status-pill--rejected';
-  return 'pending-requests-page__status-pill--approved';
+  if (status === 'closed') return 'pending-requests-page__status-pill--closed';
+  return 'pending-requests-page__status-pill--pending';
 };
 
 const PendingRequests = () => {
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const { componentAccess } = useUserRole();
 
   const canEditPendingRequest = Boolean(componentAccess?.pendingRequests?.canEditPendingRequest);
@@ -83,64 +89,119 @@ const PendingRequests = () => {
   const canSearch = true;
   const canFilter = true;
 
+  const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
 
-  const typeOptions = useMemo(() => requestTypes, []);
+  const {
+    dropdownOptions: typeOptions,
+    isLoading: isFiltersLoading,
+    isError: isFiltersError,
+    errorMessage: filtersErrorMessage,
+  } = usePendingRequestFilters({ enabled: canFilter });
 
-  const filtered = useMemo(() => {
-    const trimmed = searchText.trim().toLowerCase();
-    return pendingRequests.filter(item => {
-      const matchesType = typeFilter === 'all' || item.type === typeFilter;
-      if (!matchesType) return false;
-      if (!trimmed) return true;
-      return (
-        item.title.toLowerCase().includes(trimmed)
-        || item.subtitle.toLowerCase().includes(trimmed)
-        || item.type.toLowerCase().includes(trimmed)
-      );
+  const {
+    items,
+    totalPages,
+    isLoading: isListLoading,
+    isError: isListError,
+    errorMessage: listErrorMessage,
+  } = usePendingRequestsList({
+    page,
+    search: searchQuery,
+    type: typeFilter,
+    enabled: canShowTable,
+  });
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setSearchQuery(searchText.trim());
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [searchText]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, typeFilter]);
+
+  useEffect(() => {
+    if (!isListError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.listErrorTitle),
+      description: listErrorMessage || formatMessage(messages.listLoadError),
     });
-  }, [searchText, typeFilter]);
+  }, [formatMessage, isListError, listErrorMessage, showToast]);
 
-  const emptyState = (
-    <div className="pending-requests-page__empty">
-      <EmptyState message={formatMessage(messages.empty)} fullSize />
-    </div>
-  );
+  useEffect(() => {
+    if (!isFiltersError) {
+      return;
+    }
 
-  return (
-    <section className="pending-requests-page">
-      <div className="pending-requests-page__toolbar">
-        {canSearch && (
-          <div className="pending-requests-page__search">
-            <SearchIcon className="pending-requests-page__search-icon" />
-            <input
-              className="pending-requests-page__search-input"
-              placeholder={formatMessage(messages.searchPlaceholder)}
-              value={searchText}
-              onChange={e => setSearchText(e.target.value)}
-              type="text"
-            />
-          </div>
-        )}
+    showToast({
+      title: formatMessage(messages.filtersErrorTitle),
+      description: filtersErrorMessage || formatMessage(messages.filtersLoadError),
+    });
+  }, [filtersErrorMessage, formatMessage, isFiltersError, showToast]);
 
-        {canFilter && (
-          <div className="pending-requests-page__filter">
-            <SearchableDropdown
-              value={typeFilter}
-              options={typeOptions}
-              onChange={setTypeFilter}
-              triggerLabel={typeOptions.find(o => o.value === typeFilter)?.label || formatMessage(messages.filterPlaceholder)}
-              searchPlaceholder={formatMessage(messages.filterPlaceholder)}
-              noOptionsText={formatMessage(messages.empty)}
-            />
-          </div>
-        )}
-      </div>
+  const statusLabel = useMemo(() => ({
+    pending: formatMessage(messages.statusPending),
+    approved: formatMessage(messages.statusApproved),
+    rejected: formatMessage(messages.statusRejected),
+    closed: formatMessage(messages.statusClosed),
+  }), [formatMessage]);
 
-      {(!canShowTable || filtered.length === 0) ? (
-        emptyState
-      ) : (
+  const filterTriggerLabel = useMemo(() => {
+    const match = typeOptions.find((option) => option.value === typeFilter);
+    return match?.label || formatMessage(messages.filterPlaceholder);
+  }, [formatMessage, typeFilter, typeOptions]);
+
+  const renderStatusLabel = (status) => {
+    if (!hasDisplayValue(status)) {
+      return null;
+    }
+
+    const normalized = String(status).toLowerCase();
+    return statusLabel[normalized] || status;
+  };
+
+  const renderTableBody = () => {
+    if (isListLoading || isFiltersLoading) {
+      return (
+        <SkeletonScreen
+          variant={SKELETON_VARIANTS.toolbarTable}
+          tablePreset="pendingRequests"
+          rows={6}
+          showFilter
+        />
+      );
+    }
+
+    if (isListError) {
+      return (
+        <div className="pending-requests-page__empty">
+          <EmptyState
+            message={listErrorMessage || formatMessage(messages.listLoadError)}
+            fullSize
+          />
+        </div>
+      );
+    }
+
+    if (items.length === 0) {
+      return (
+        <div className="pending-requests-page__empty">
+          <EmptyState message={formatMessage(messages.empty)} fullSize />
+        </div>
+      );
+    }
+
+    return (
+      <>
         <div className="pending-requests-page__table-card">
           <div className="pending-requests-page__table-wrap">
             <table className="pending-requests-page__table">
@@ -156,65 +217,118 @@ const PendingRequests = () => {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(item => (
-                  <tr
-                    className={[
-                      'pending-requests-page__row',
-                      canEditPendingRequest ? 'pending-requests-page__row--clickable' : '',
-                    ].filter(Boolean).join(' ')}
-                    key={item.id}
-                    onClick={canEditPendingRequest ? () => navigate(`/admin/pending-requests/${item.id}`) : undefined}
-                    role={canEditPendingRequest ? 'button' : undefined}
-                    tabIndex={canEditPendingRequest ? 0 : undefined}
-                    onKeyDown={canEditPendingRequest ? (e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        navigate(`/admin/pending-requests/${item.id}`);
-                      }
-                    } : undefined}
-                  >
-                    <td className="pending-requests-page__td">
-                      <div className="pending-requests-page__request-cell">
-                        <div className="pending-requests-page__icon-box">
-                          <InboxIcon className="h-5 w-5" />
+                {items.map((item) => {
+                  const rowKey = hasDisplayValue(item.id) ? String(item.id) : `pending-request-${item.title}`;
+
+                  return (
+                    <tr
+                      className={[
+                        'pending-requests-page__row',
+                        canEditPendingRequest ? 'pending-requests-page__row--clickable' : '',
+                      ].filter(Boolean).join(' ')}
+                      key={rowKey}
+                      onClick={canEditPendingRequest ? () => navigate(`/admin/pending-requests/${item.id}`) : undefined}
+                      role={canEditPendingRequest ? 'button' : undefined}
+                      tabIndex={canEditPendingRequest ? 0 : undefined}
+                      onKeyDown={canEditPendingRequest ? (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          navigate(`/admin/pending-requests/${item.id}`);
+                        }
+                      } : undefined}
+                    >
+                      <td className="pending-requests-page__td">
+                        <div className="pending-requests-page__request-cell">
+                          <div className="pending-requests-page__icon-box">
+                            <InboxIcon className="h-5 w-5" />
+                          </div>
+                          <div style={{ minWidth: 0 }}>
+                            {hasDisplayValue(item.title) && (
+                              <p className="pending-requests-page__title">{item.title}</p>
+                            )}
+                            {hasDisplayValue(item.subtitle) && (
+                              <p className="pending-requests-page__subtitle">{item.subtitle}</p>
+                            )}
+                          </div>
                         </div>
-                        <div style={{ minWidth: 0 }}>
-                          <p className="pending-requests-page__title">{item.title}</p>
-                          <p className="pending-requests-page__subtitle">{item.subtitle}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pending-requests-page__td">{item.type}</td>
-                    <td className="pending-requests-page__td pending-requests-page__td--center">
-                      <span className={`pending-requests-page__status-pill ${statusClass(item.status)}`}>
-                        {item.status === 'approved' ? 'Approved' : 'Rejected'}
-                      </span>
-                    </td>
-                    <td className="pending-requests-page__td">{item.submittedRelative}</td>
-                    {canEditPendingRequest && (
-                      <td className="pending-requests-page__td pending-requests-page__td--right">
-                        <button
-                          type="button"
-                          className="pending-requests-page__icon-button"
-                          aria-label={formatMessage(messages.viewRequest)}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/admin/pending-requests/${item.id}`);
-                          }}
-                        >
-                          <PencilIcon className="h-4 w-4" />
-                        </button>
                       </td>
-                    )}
-                  </tr>
-                ))}
+                      <td className="pending-requests-page__td">
+                        {hasDisplayValue(item.type) ? item.type : null}
+                      </td>
+                      <td className="pending-requests-page__td pending-requests-page__td--center">
+                        {hasDisplayValue(item.status) && (
+                          <span className={`pending-requests-page__status-pill ${statusClass(item.status)}`}>
+                            {renderStatusLabel(item.status)}
+                          </span>
+                        )}
+                      </td>
+                      <td className="pending-requests-page__td">
+                        {hasDisplayValue(item.submittedRelative) ? item.submittedRelative : null}
+                      </td>
+                      {canEditPendingRequest && (
+                        <td className="pending-requests-page__td pending-requests-page__td--right">
+                          <button
+                            type="button"
+                            className="pending-requests-page__icon-button"
+                            aria-label={formatMessage(messages.viewRequest)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/admin/pending-requests/${item.id}`);
+                            }}
+                          >
+                            <PencilIcon className="h-4 w-4" />
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
+          <TablePaginationFooter
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            paginationLabel="Pending requests pagination"
+          />
         </div>
-      )}
+      </>
+    );
+  };
+
+  return (
+    <section className="pending-requests-page">
+      <div className="pending-requests-page__toolbar">
+        {canSearch && (
+          <div className="pending-requests-page__search">
+            <SearchIcon className="pending-requests-page__search-icon" />
+            <input
+              className="pending-requests-page__search-input"
+              placeholder={formatMessage(messages.searchPlaceholder)}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              type="text"
+            />
+          </div>
+        )}
+
+        {canFilter && typeOptions.length > 0 && (
+          <div className="pending-requests-page__filter">
+            <SearchableDropdown
+              value={typeFilter}
+              options={typeOptions}
+              onChange={setTypeFilter}
+              triggerLabel={filterTriggerLabel}
+              searchPlaceholder={formatMessage(messages.filterPlaceholder)}
+              noOptionsText={formatMessage(messages.empty)}
+            />
+          </div>
+        )}
+      </div>
+
+      {renderTableBody()}
     </section>
   );
 };
 
 export default PendingRequests;
-

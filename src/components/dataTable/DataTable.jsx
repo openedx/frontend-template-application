@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Pagination } from '@openedx/paragon';
+import { TablePaginationFooter } from './TablePagination';
 import './DataTable.scss';
 
 const DataTable = ({
@@ -44,16 +44,13 @@ const DataTable = ({
       </table>
     </div>
 
-    <div className="data-table__footer">
-      <div>{footerContent}</div>
-      <Pagination
-        className="data-table__pagination"
-        paginationLabel="Table pagination"
-        pageCount={totalPages}
-        currentPage={currentPage}
-        onPageSelect={selectedPage => onPageChange(selectedPage)}
-      />
-    </div>
+    <TablePaginationFooter
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={onPageChange}
+      paginationLabel="Table pagination"
+      footerContent={footerContent}
+    />
   </div>
 );
 

@@ -230,6 +230,16 @@
     flex: 1;
     min-height: 0;
   }
+
+  &__pagination-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  &__pagination {
+    margin: 0;
+  }
 }
 
 .training-providers-modal {
@@ -421,6 +431,10 @@
     border: 0;
     background: #2A3B8F;
     color: #FFFFFF;
+  }
+
+  &__loading {
+    padding: .5rem 0;
   }
 }
 

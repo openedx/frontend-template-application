@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { useMemo } from 'react';
 import {
   Bar,
   BarChart,
@@ -9,7 +10,13 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import EmptyState from '../emptyState/EmptyState';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import messages from './messages';
+import {
+  getUsersPerCountryXAxisConfig,
+  normalizeUsersPerCountryChartData,
+} from './usersPerCountryChartUtils';
 import './UsersPerCountry.scss';
 
 const CustomTooltip = ({
@@ -22,29 +29,66 @@ const CustomTooltip = ({
     return null;
   }
 
+  const value = payload[0]?.value;
+
   return (
     <div className="users-country__tooltip">
-      <p className="users-country__tooltip-label">{label}</p>
-      <p className="users-country__tooltip-value">
-        Users :
-        {' '}
-        {payload[0].value}
-        {' '}
-        {usersUnit}
-      </p>
+      {hasDisplayValue(label) && (
+        <p className="users-country__tooltip-label">{label}</p>
+      )}
+      {hasDisplayValue(value) && (
+        <p className="users-country__tooltip-value">
+          Users :
+          {' '}
+          {value}
+          {' '}
+          {usersUnit}
+        </p>
+      )}
     </div>
   );
 };
 
-const UsersPerCountry = ({ items = [] }) => {
+const UsersPerCountry = ({ items = [], emptyMessage }) => {
   const { formatMessage } = useIntl();
   const usersUnit = formatMessage(messages.usersUnit);
+
+  const chartData = useMemo(
+    () => normalizeUsersPerCountryChartData(items),
+    [items],
+  );
+
+  const xAxisConfig = useMemo(
+    () => getUsersPerCountryXAxisConfig(chartData),
+    [chartData],
+  );
+
+  if (chartData.length === 0) {
+    return (
+      <section className="users-country">
+        <div className="users-country__header">
+          <h2 className="users-country__title">{formatMessage(messages.title)}</h2>
+          {hasDisplayValue(formatMessage(messages.description)) && (
+            <p className="users-country__description">{formatMessage(messages.description)}</p>
+          )}
+        </div>
+        <div className="users-country__body">
+          <EmptyState
+            message={emptyMessage || formatMessage(messages.empty)}
+            className="users-country__empty"
+          />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="users-country">
       <div className="users-country__header">
         <h2 className="users-country__title">{formatMessage(messages.title)}</h2>
-        <p className="users-country__description">{formatMessage(messages.description)}</p>
+        {hasDisplayValue(formatMessage(messages.description)) && (
+          <p className="users-country__description">{formatMessage(messages.description)}</p>
+        )}
       </div>
 
       <div className="users-country__body">
@@ -52,7 +96,7 @@ const UsersPerCountry = ({ items = [] }) => {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               layout="vertical"
-              data={items}
+              data={chartData}
               margin={{
                 top: 8, right: 32, left: 8, bottom: 8,
               }}
@@ -63,8 +107,8 @@ const UsersPerCountry = ({ items = [] }) => {
                 tick={{ fill: '#2A398D', fontSize: 12 }}
                 axisLine={{ stroke: '#E5E7EB' }}
                 tickLine={{ stroke: '#E5E7EB' }}
-                domain={[0, 320]}
-                ticks={[0, 80, 160, 240, 320]}
+                domain={xAxisConfig.domain}
+                ticks={xAxisConfig.ticks}
               />
               <YAxis
                 type="category"

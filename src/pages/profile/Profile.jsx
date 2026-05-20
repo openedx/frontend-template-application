@@ -1,10 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { EmptyState } from '../../components/emptyState';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
-import masterCountryOptions from '../../mock/countries/masterCountryOptions.json';
-import profileData from '../../mock/profile/profile.json';
+import {
+  getCountryLabelByValue,
+  getLanguageLabelByValue,
+  resolveCountryDropdownValue,
+} from '../../api/profile/profileUtils';
+import useCurrentUserProfile from '../../hooks/profile/useCurrentUserProfile';
+import useProfileCountries from '../../hooks/profile/useProfileCountries';
+import useProfileLanguages from '../../hooks/profile/useProfileLanguages';
+import useProfileMutation from '../../hooks/profile/useProfileMutation';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import messages from './messages';
 import './Profile.scss';
 
@@ -116,57 +126,175 @@ const Profile = () => {
 
   const fileRef = useRef(null);
 
-  const initial = useMemo(() => ({
-    fullName: profileData.fullName || '',
-    email: profileData.email || '',
-    country: profileData.country || '',
-    language: profileData.language || '',
-    about: profileData.about || '',
-    profile_image_url: profileData.profile_image_url || '',
-  }), []);
+  const {
+    profile,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+    errorMessage: profileErrorMessage,
+    refetch: refetchProfile,
+  } = useCurrentUserProfile();
 
-  /** Local preview after file pick; falls back to `initial.profile_image_url` when cleared. */
-  const [photoUrl, setPhotoUrl] = useState('');
-  const displayAvatarSrc = photoUrl || initial.profile_image_url;
-  const [fullName, setFullName] = useState(initial.fullName);
-  const [country, setCountry] = useState(initial.country);
-  const [language, setLanguage] = useState(initial.language);
-  const [about, setAbout] = useState(initial.about);
+  const {
+    dropdownOptions: countryOptions,
+    isLoading: isCountriesLoading,
+    isError: isCountriesError,
+    errorMessage: countriesErrorMessage,
+  } = useProfileCountries();
 
-  const countryOptions = useMemo(() => (
-    [...masterCountryOptions]
-      .sort((a, b) => a.label.localeCompare(b.label))
-      .map(({ label }) => ({ value: label, label }))
-  ), []);
+  const {
+    dropdownOptions: languageOptions,
+    isLoading: isLanguagesLoading,
+    isError: isLanguagesError,
+    errorMessage: languagesErrorMessage,
+  } = useProfileLanguages();
 
-  const languageOptions = useMemo(() => (
-    ['English', 'Bangla', 'Hindi', 'Thai', 'Dzongkha', 'Nepali', 'Sinhala', 'Burmese']
-      .map(l => ({ value: l, label: l }))
-  ), []);
+  const { updateMutation } = useProfileMutation();
+
+  const [photoPreview, setPhotoPreview] = useState('');
+  const [pendingImageFile, setPendingImageFile] = useState(null);
+  const [savedProfileImageUrl, setSavedProfileImageUrl] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [country, setCountry] = useState('');
+  const [language, setLanguage] = useState('');
+  const [about, setAbout] = useState('');
+
+  const isPageLoading = isProfileLoading || isCountriesLoading || isLanguagesLoading;
+  const isPickerError = isCountriesError || isLanguagesError;
+  const isSaveDisabled = !canEdit
+    || updateMutation.isPending
+    || isPageLoading
+    || isProfileError
+    || isPickerError;
+
+  const applyProfileToForm = (profileData) => {
+    if (!profileData) {
+      return;
+    }
+
+    setFullName(hasDisplayValue(profileData.fullName) ? profileData.fullName : '');
+    setAbout(hasDisplayValue(profileData.about) ? profileData.about : '');
+    setLanguage(hasDisplayValue(profileData.language) ? String(profileData.language) : '');
+    setSavedProfileImageUrl(hasDisplayValue(profileData.profileImageUrl) ? profileData.profileImageUrl : '');
+    setPhotoPreview('');
+    setPendingImageFile(null);
+    setCountry(resolveCountryDropdownValue(profileData.country, countryOptions));
+  };
+
+  useEffect(() => {
+    if (!profile) {
+      return;
+    }
+
+    applyProfileToForm(profile);
+  }, [profile, countryOptions]);
+
+  useEffect(() => {
+    if (!isProfileError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.profileErrorTitle),
+      description: profileErrorMessage || formatMessage(messages.profileLoadError),
+    });
+  }, [formatMessage, isProfileError, profileErrorMessage, showToast]);
+
+  useEffect(() => {
+    if (!isCountriesError && !isLanguagesError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.profileErrorTitle),
+      description: countriesErrorMessage || languagesErrorMessage,
+    });
+  }, [
+    countriesErrorMessage,
+    formatMessage,
+    isCountriesError,
+    isLanguagesError,
+    languagesErrorMessage,
+    showToast,
+  ]);
+
+  const displayAvatarSrc = photoPreview || savedProfileImageUrl;
+
+  const countryLabel = useMemo(
+    () => getCountryLabelByValue(country, countryOptions),
+    [country, countryOptions],
+  );
+
+  const languageLabel = useMemo(
+    () => getLanguageLabelByValue(language, languageOptions),
+    [language, languageOptions],
+  );
 
   const onCancel = () => {
-    setPhotoUrl('');
-    setFullName(initial.fullName);
-    setCountry(initial.country);
-    setLanguage(initial.language);
-    setAbout(initial.about);
+    applyProfileToForm(profile);
   };
 
-  const onSave = () => {
-    showToast({
-      title: formatMessage(messages.toastSavedTitle),
-      description: formatMessage(messages.toastSavedDescription),
-    });
+  const onSave = async () => {
+    if (isSaveDisabled) {
+      return;
+    }
+
+    try {
+      const result = await updateMutation.mutateAsync({
+        fullName,
+        country,
+        language,
+        about,
+        profileImageFile: pendingImageFile,
+      });
+
+      showToast({
+        title: formatMessage(messages.toastSavedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.toastSavedDescription),
+      });
+
+      await refetchProfile();
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.saveErrorTitle),
+        description: error?.message || formatMessage(messages.profileSaveError),
+      });
+    }
   };
 
-  const initials = (fullName || initial.fullName || 'U').trim().slice(0, 1).toUpperCase();
+  const initials = (fullName || profile?.fullName || profile?.name || 'U').trim().slice(0, 1).toUpperCase();
 
-  const countryTrigger = country ? country : (
-    <span className="profile-page__placeholder">{initial.country || 'Select country'}</span>
+  const countryTrigger = countryLabel ? (
+    countryLabel
+  ) : (
+    <span className="profile-page__placeholder">{formatMessage(messages.countryPlaceholder)}</span>
   );
-  const languageTrigger = language ? language : (
-    <span className="profile-page__placeholder">{initial.language || 'Select language'}</span>
+
+  const languageTrigger = languageLabel ? (
+    languageLabel
+  ) : (
+    <span className="profile-page__placeholder">{formatMessage(messages.languagePlaceholder)}</span>
   );
+
+  if (isPageLoading) {
+    return (
+      <section className="profile-page">
+        <SkeletonScreen variant={SKELETON_VARIANTS.PAGE} />
+      </section>
+    );
+  }
+
+  if (isProfileError || !profile) {
+    return (
+      <section className="profile-page">
+        <EmptyState
+          message={profileErrorMessage || formatMessage(messages.profileLoadError)}
+          fullSize
+        />
+      </section>
+    );
+  }
 
   return (
     <section className="profile-page">
@@ -174,7 +302,7 @@ const Profile = () => {
         <div className="profile-page__card-inner">
           <div className="profile-page__summary">
             <div className="profile-page__avatar">
-              {displayAvatarSrc ? (
+              {hasDisplayValue(displayAvatarSrc) ? (
                 <img className="profile-page__avatar-img" src={displayAvatarSrc} alt="" />
               ) : (
                 <div className="profile-page__avatar-fallback">{initials}</div>
@@ -197,9 +325,11 @@ const Profile = () => {
                     className="profile-page__file"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
-                      if (!file) return;
-                      const url = URL.createObjectURL(file);
-                      setPhotoUrl(url);
+                      if (!file) {
+                        return;
+                      }
+                      setPendingImageFile(file);
+                      setPhotoPreview(URL.createObjectURL(file));
                     }}
                   />
                 </>
@@ -207,20 +337,28 @@ const Profile = () => {
             </div>
 
             <div className="profile-page__summary-body">
-              <h2 className="profile-page__name">{fullName || initial.fullName}</h2>
+              {hasDisplayValue(fullName) && (
+                <h2 className="profile-page__name">{fullName}</h2>
+              )}
               <div className="profile-page__meta">
-                <span className="profile-page__meta-item">
-                  <UserIcon className="h-3.5 w-3.5" />
-                  {initial.email}
-                </span>
-                <span className="profile-page__meta-item">
-                  <PinIcon className="h-3.5 w-3.5" />
-                  {country || initial.country}
-                </span>
-                <span className="profile-page__meta-item">
-                  <LanguagesIcon className="h-3.5 w-3.5" />
-                  {language || initial.language}
-                </span>
+                {hasDisplayValue(profile.email) && (
+                  <span className="profile-page__meta-item">
+                    <UserIcon className="h-3.5 w-3.5" />
+                    {profile.email}
+                  </span>
+                )}
+                {hasDisplayValue(countryLabel) && (
+                  <span className="profile-page__meta-item">
+                    <PinIcon className="h-3.5 w-3.5" />
+                    {countryLabel}
+                  </span>
+                )}
+                {hasDisplayValue(languageLabel) && (
+                  <span className="profile-page__meta-item">
+                    <LanguagesIcon className="h-3.5 w-3.5" />
+                    {languageLabel}
+                  </span>
+                )}
               </div>
               <p className="profile-page__hint">{formatMessage(messages.headerHint)}</p>
             </div>
@@ -242,8 +380,8 @@ const Profile = () => {
                 className="profile-page__input"
                 placeholder={formatMessage(messages.fullNamePlaceholder)}
                 value={fullName}
-                onChange={e => setFullName(e.target.value)}
-                disabled={!canEdit}
+                onChange={(e) => setFullName(e.target.value)}
+                disabled={!canEdit || isSaveDisabled}
                 type="text"
               />
             </div>
@@ -255,8 +393,8 @@ const Profile = () => {
                 options={countryOptions}
                 onChange={setCountry}
                 triggerLabel={countryTrigger}
-                searchPlaceholder="Search countries..."
-                noOptionsText="No countries found."
+                searchPlaceholder={formatMessage(messages.countrySearchPlaceholder)}
+                noOptionsText={formatMessage(messages.countryNoOptions)}
               />
             </div>
 
@@ -267,8 +405,8 @@ const Profile = () => {
                 options={languageOptions}
                 onChange={setLanguage}
                 triggerLabel={languageTrigger}
-                searchPlaceholder="Search languages..."
-                noOptionsText="No languages found."
+                searchPlaceholder={formatMessage(messages.languageSearchPlaceholder)}
+                noOptionsText={formatMessage(messages.languageNoOptions)}
               />
             </div>
 
@@ -282,18 +420,28 @@ const Profile = () => {
                 rows={5}
                 placeholder={formatMessage(messages.aboutPlaceholder)}
                 value={about}
-                onChange={e => setAbout(e.target.value)}
-                disabled={!canEdit}
+                onChange={(e) => setAbout(e.target.value)}
+                disabled={!canEdit || isSaveDisabled}
               />
               <p className="profile-page__helper">{formatMessage(messages.aboutHelper)}</p>
             </div>
           </div>
 
           <div className="profile-page__footer">
-            <button type="button" className="profile-page__outline-button" onClick={onCancel} disabled={!canEdit}>
+            <button
+              type="button"
+              className="profile-page__outline-button"
+              onClick={onCancel}
+              disabled={isSaveDisabled}
+            >
               {formatMessage(messages.cancel)}
             </button>
-            <button type="button" className="profile-page__primary-button" onClick={onSave} disabled={!canEdit}>
+            <button
+              type="button"
+              className="profile-page__primary-button"
+              onClick={onSave}
+              disabled={isSaveDisabled}
+            >
               <SaveIcon className="h-4 w-4" />
               {formatMessage(messages.save)}
             </button>
@@ -305,4 +453,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

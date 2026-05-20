@@ -1,5 +1,5 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Pagination } from '@openedx/paragon';
+import { TablePaginationFooter } from '../../components/dataTable';
 import {
   faArrowLeft, faBookOpen, faStar,
 } from '@fortawesome/free-solid-svg-icons';
@@ -307,22 +307,17 @@ const SearnTrainingProviderCatalog = () => {
               </tbody>
             </table>
           </div>
-          <div className="data-table__footer">
-            <div>
-              {formatMessage(messages.showingRange, {
-                start: rangeStart,
-                end: rangeEnd,
-                total: filteredTrainings.length,
-              })}
-            </div>
-            <Pagination
-              className="data-table__pagination"
-              paginationLabel="Table pagination"
-              pageCount={totalPages}
-              currentPage={safePage}
-              onPageSelect={(selected) => setPage(selected)}
-            />
-          </div>
+          <TablePaginationFooter
+            currentPage={safePage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            paginationLabel="Table pagination"
+            footerContent={formatMessage(messages.showingRange, {
+              start: rangeStart,
+              end: rangeEnd,
+              total: filteredTrainings.length,
+            })}
+          />
         </div>
       )}
     </section>

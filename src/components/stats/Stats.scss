@@ -33,6 +33,10 @@
     justify-content: center;
     color: #FFFFFF;
     font-size: 1.5rem;
+
+    &--missing {
+      opacity: .92;
+    }
   }
 
   &__value {

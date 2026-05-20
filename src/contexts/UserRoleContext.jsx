@@ -30,7 +30,6 @@ const DEFAULT_COMPONENT_ACCESS = {
   },
   countries: {
     canAddCountry: false,
-    canEditCountry: false,
     canDeleteCountry: false,
   },
   trainingProviders: {
