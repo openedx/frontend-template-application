@@ -116,7 +116,7 @@ const usersPageMessages = defineMessages({
   },
   addUserModalCountryPlaceholder: {
     id: 'app.users.addUser.modal.country.placeholder',
-    defaultMessage: 'Select SEARN country',
+    defaultMessage: 'Select country',
     description: 'Placeholder for country dropdown in add user modal',
   },
   addUserModalRole: {
@@ -198,6 +198,96 @@ const usersPageMessages = defineMessages({
     id: 'app.users.toast.deleted.description',
     defaultMessage: '{name} has been removed.',
     description: 'Toast description when a user is deleted',
+  },
+  allProviders: {
+    id: 'app.users.filter.allProviders',
+    defaultMessage: 'All Providers',
+    description: 'Default provider sub-filter when a role has provider options',
+  },
+  listLoadError: {
+    id: 'app.users.list.loadError',
+    defaultMessage: 'Unable to load users. Please try again.',
+    description: 'Fallback when users list API fails',
+  },
+  listErrorTitle: {
+    id: 'app.users.list.errorToast.title',
+    defaultMessage: 'Failed to load users',
+    description: 'Toast title when users list API fails',
+  },
+  listLoading: {
+    id: 'app.users.list.loading',
+    defaultMessage: 'Loading users',
+    description: 'Aria label for users table skeleton',
+  },
+  noUsersFound: {
+    id: 'app.users.list.empty',
+    defaultMessage: 'No users found.',
+    description: 'Empty state when users list has no results',
+  },
+  roleOptionsLoadError: {
+    id: 'app.users.roleOptions.loadError',
+    defaultMessage: 'Unable to load roles. Please try again.',
+    description: 'Fallback when role options API fails',
+  },
+  roleOptionsErrorTitle: {
+    id: 'app.users.roleOptions.errorToast.title',
+    defaultMessage: 'Failed to load roles',
+    description: 'Toast title when role options API fails',
+  },
+  countriesLoadError: {
+    id: 'app.users.countries.loadError',
+    defaultMessage: 'Unable to load countries. Please try again.',
+    description: 'Fallback when countries API fails in user form',
+  },
+  countriesErrorTitle: {
+    id: 'app.users.countries.errorToast.title',
+    defaultMessage: 'Failed to load countries',
+    description: 'Toast title when countries API fails in user form',
+  },
+  detailLoadError: {
+    id: 'app.users.detail.loadError',
+    defaultMessage: 'Unable to load user details. Please try again.',
+    description: 'Fallback when user detail API fails',
+  },
+  detailErrorTitle: {
+    id: 'app.users.detail.errorToast.title',
+    defaultMessage: 'Failed to load user',
+    description: 'Toast title when user detail API fails',
+  },
+  createError: {
+    id: 'app.users.create.error',
+    defaultMessage: 'Unable to create user. Please try again.',
+    description: 'Fallback when create user API fails',
+  },
+  createErrorTitle: {
+    id: 'app.users.create.errorToast.title',
+    defaultMessage: 'Failed to create user',
+    description: 'Toast title when create user API fails',
+  },
+  updateError: {
+    id: 'app.users.update.error',
+    defaultMessage: 'Unable to update user. Please try again.',
+    description: 'Fallback when update user API fails',
+  },
+  updateErrorTitle: {
+    id: 'app.users.update.errorToast.title',
+    defaultMessage: 'Failed to update user',
+    description: 'Toast title when update user API fails',
+  },
+  deleteError: {
+    id: 'app.users.delete.error',
+    defaultMessage: 'Unable to delete user. Please try again.',
+    description: 'Fallback when delete user API fails',
+  },
+  deleteErrorTitle: {
+    id: 'app.users.delete.errorToast.title',
+    defaultMessage: 'Failed to delete user',
+    description: 'Toast title when delete user API fails',
+  },
+  paginationLabel: {
+    id: 'app.users.pagination.label',
+    defaultMessage: 'Users pagination',
+    description: 'Accessible label for users list pagination',
   },
 });
 

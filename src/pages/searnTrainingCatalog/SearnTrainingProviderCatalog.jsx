@@ -11,6 +11,7 @@ import SearchInput from '../../components/searchInput/SearchInput';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import trainingsData from '../../mock/trainingCatalog/trainings.json';
 import providersData from '../../mock/trainingCatalog/providers.json';
+import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from './messages';
 import { getStarFill } from './starUtils';
 import './SearnTrainingCatalog.scss';
@@ -312,11 +313,10 @@ const SearnTrainingProviderCatalog = () => {
             totalPages={totalPages}
             onPageChange={setPage}
             paginationLabel="Table pagination"
-            footerContent={formatMessage(messages.showingRange, {
-              start: rangeStart,
-              end: rangeEnd,
-              total: filteredTrainings.length,
-            })}
+            footerContent={formatMessage(
+              messages.showingCount,
+              buildPaginationShowingParams(pageRows, filteredTrainings.length),
+            )}
           />
         </div>
       )}

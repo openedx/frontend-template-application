@@ -74,7 +74,12 @@ const messages = defineMessages({
   showingRange: {
     id: 'app.searnTrainingCatalog.pagination.showingRange',
     defaultMessage: 'Showing {start}–{end} of {total}',
-    description: 'Pagination range summary for SEARN training catalog table',
+    description: 'Pagination range summary for SEARN training catalog table (legacy range format)',
+  },
+  showingCount: {
+    id: 'app.searnTrainingCatalog.pagination.showing',
+    defaultMessage: 'Showing {count} of {total} trainings',
+    description: 'Pagination summary for SEARN training catalog table',
   },
   backToCatalog: {
     id: 'app.searnTrainingCatalog.backToCatalog',

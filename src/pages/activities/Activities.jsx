@@ -1,144 +1,170 @@
+/* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { faChartLine, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DataTable } from '../../components/dataTable';
 import EmptyState from '../../components/emptyState/EmptyState';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
-import activitiesData from '../../mock/activities/activities.json';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
+import { useToast } from '../../components/toast/ToastProvider';
+import {
+  ACTIVITY_FILTER_ALL,
+  ACTIVITY_FRAMEWORK_FILTER_ALL,
+  ACTIVITY_FRAMEWORK_FILTER_NONE,
+} from '../../api/activities/activitiesConstants';
+import { buildActivityTrainingStatusDropdownOptions } from '../../api/activities/activitiesTrainingStatusOptions';
+import useActivitiesList from '../../hooks/activities/useActivitiesList';
+import useActivityCompetencyFrameworkOptions from '../../hooks/activities/useActivityCompetencyFrameworkOptions';
+import useActivityFilterOptions from '../../hooks/activities/useActivityFilterOptions';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from './messages';
 import './Activities.scss';
 
-const ACTIVITIES_PER_PAGE = 20;
-
 const Activities = () => {
   const { formatMessage } = useIntl();
+  const { showToast } = useToast();
+
   const [searchText, setSearchText] = useState('');
-  const [frameworkFilter, setFrameworkFilter] = useState('all');
-  const [roleFilter, setRoleFilter] = useState('all');
-  const [domainFilter, setDomainFilter] = useState('all');
-  const [subDomainFilter, setSubDomainFilter] = useState('all');
-  const [levelFilter, setLevelFilter] = useState('all');
-  const [streamFilter, setStreamFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [frameworkFilter, setFrameworkFilter] = useState(ACTIVITY_FRAMEWORK_FILTER_NONE);
+  const [roleFilter, setRoleFilter] = useState(ACTIVITY_FILTER_ALL);
+  const [domainFilter, setDomainFilter] = useState(ACTIVITY_FILTER_ALL);
+  const [subDomainFilter, setSubDomainFilter] = useState(ACTIVITY_FILTER_ALL);
+  const [levelFilter, setLevelFilter] = useState(ACTIVITY_FILTER_ALL);
+  const [trainingStatusFilter, setTrainingStatusFilter] = useState(ACTIVITY_FILTER_ALL);
   const [page, setPage] = useState(1);
 
   const emptyLabel = formatMessage(messages.emptyCell);
 
-  const frameworkOptions = useMemo(() => {
-    const unique = [...new Set(activitiesData.map(a => a.framework))].sort();
-    return [
-      { value: 'all', label: formatMessage(messages.allFrameworks) },
-      ...unique.map(f => ({ value: f, label: f })),
-    ];
-  }, [formatMessage]);
+  const trainingStatusOptions = useMemo(
+    () => buildActivityTrainingStatusDropdownOptions(formatMessage),
+    [formatMessage],
+  );
 
-  const roleOptions = useMemo(() => {
-    const unique = [...new Set(
-      activitiesData.map(a => a.targetRole).filter(Boolean),
-    )].sort();
-    return [
-      { value: 'all', label: formatMessage(messages.allRoles) },
-      ...unique.map(r => ({ value: r, label: r })),
-    ];
-  }, [formatMessage]);
+  const {
+    dropdownOptions: frameworkApiOptions,
+    isLoading: isFrameworkOptionsLoading,
+    isError: isFrameworkOptionsError,
+    errorMessage: frameworkOptionsErrorMessage,
+  } = useActivityCompetencyFrameworkOptions();
 
-  const domainOptions = useMemo(() => {
-    const unique = [...new Set(activitiesData.map(a => a.domain))].sort();
-    return [
-      { value: 'all', label: formatMessage(messages.allDomains) },
-      ...unique.map(d => ({ value: d, label: d })),
-    ];
-  }, [formatMessage]);
+  const frameworkOptions = useMemo(() => [
+    {
+      value: ACTIVITY_FRAMEWORK_FILTER_NONE,
+      label: formatMessage(messages.selectFramework),
+    },
+    {
+      value: ACTIVITY_FRAMEWORK_FILTER_ALL,
+      label: formatMessage(messages.allFrameworks),
+    },
+    ...frameworkApiOptions,
+  ], [formatMessage, frameworkApiOptions]);
 
-  const subDomainOptions = useMemo(() => {
-    const unique = [...new Set(
-      activitiesData.map(a => a.subDomain).filter(Boolean),
-    )].sort();
-    return [
-      { value: 'all', label: formatMessage(messages.allSubDomains) },
-      ...unique.map(s => ({ value: s, label: s })),
-    ];
-  }, [formatMessage]);
+  const {
+    roleOptions,
+    domainOptions,
+    subDomainOptions,
+    proficiencyOptions,
+    isLoading: isFilterOptionsLoading,
+    isError: isFilterOptionsError,
+    errorMessage: filterOptionsErrorMessage,
+  } = useActivityFilterOptions({ frameworkFilter });
 
-  const levelOptions = useMemo(() => {
-    const unique = [...new Set(activitiesData.map(a => a.proficiencyLevel))].sort();
-    return [
-      { value: 'all', label: formatMessage(messages.allLevels) },
-      ...unique.map(l => ({ value: l, label: l })),
-    ];
-  }, [formatMessage]);
+  const {
+    items,
+    count,
+    totalPages,
+    isLoading: isListLoading,
+    isError: isListError,
+    errorMessage: listErrorMessage,
+  } = useActivitiesList({
+    page,
+    search: searchQuery,
+    competencyFramework: frameworkFilter,
+    role: roleFilter,
+    domain: domainFilter,
+    subDomain: subDomainFilter,
+    proficiencyLevel: levelFilter,
+    trainingStatus: trainingStatusFilter,
+  });
 
-  const streamOptions = useMemo(() => {
-    const unique = [...new Set(activitiesData.map(a => a.stream))].sort();
-    return [
-      { value: 'all', label: formatMessage(messages.allStreams) },
-      ...unique.map(s => ({ value: s, label: s })),
-    ];
-  }, [formatMessage]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setSearchQuery(searchText.trim());
+    }, 300);
 
-  const filteredActivities = useMemo(() => {
-    const query = searchText.trim().toLowerCase();
+    return () => window.clearTimeout(timer);
+  }, [searchText]);
 
-    return activitiesData.filter((row) => {
-      if (frameworkFilter !== 'all' && row.framework !== frameworkFilter) {
-        return false;
-      }
-      if (roleFilter !== 'all' && row.targetRole !== roleFilter) {
-        return false;
-      }
-      if (domainFilter !== 'all' && row.domain !== domainFilter) {
-        return false;
-      }
-      if (subDomainFilter !== 'all') {
-        if (!row.subDomain || row.subDomain !== subDomainFilter) {
-          return false;
-        }
-      }
-      if (levelFilter !== 'all' && row.proficiencyLevel !== levelFilter) {
-        return false;
-      }
-      if (streamFilter !== 'all' && row.stream !== streamFilter) {
-        return false;
-      }
-      if (!query) {
-        return true;
-      }
-      const haystack = [
-        row.title,
-        row.description,
-        row.domain,
-        row.subDomain,
-        row.targetRole,
-        row.framework,
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-      return haystack.includes(query);
-    });
+  useEffect(() => {
+    setPage(1);
   }, [
-    searchText,
+    searchQuery,
     frameworkFilter,
     roleFilter,
     domainFilter,
     subDomainFilter,
     levelFilter,
-    streamFilter,
+    trainingStatusFilter,
   ]);
 
-  const shouldRenderToolbar = true;
+  useEffect(() => {
+    setRoleFilter(ACTIVITY_FILTER_ALL);
+    setDomainFilter(ACTIVITY_FILTER_ALL);
+    setSubDomainFilter(ACTIVITY_FILTER_ALL);
+    setLevelFilter(ACTIVITY_FILTER_ALL);
+  }, [frameworkFilter]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredActivities.length / ACTIVITIES_PER_PAGE));
-  const safePage = Math.min(page, totalPages);
-  const startIndex = (safePage - 1) * ACTIVITIES_PER_PAGE;
-  const endIndex = startIndex + ACTIVITIES_PER_PAGE;
-  const pageRows = filteredActivities.slice(startIndex, endIndex);
+  useEffect(() => {
+    if (!isListError) {
+      return;
+    }
 
-  const rangeStart = filteredActivities.length === 0 ? 0 : startIndex + 1;
-  const rangeEnd = Math.min(endIndex, filteredActivities.length);
+    showToast({
+      title: formatMessage(messages.listErrorTitle),
+      description: listErrorMessage || formatMessage(messages.listLoadError),
+    });
+  }, [formatMessage, isListError, listErrorMessage, showToast]);
+
+  useEffect(() => {
+    if (!isFrameworkOptionsError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.frameworkOptionsErrorTitle),
+      description: frameworkOptionsErrorMessage || formatMessage(messages.frameworkOptionsLoadError),
+    });
+  }, [
+    formatMessage,
+    frameworkOptionsErrorMessage,
+    isFrameworkOptionsError,
+    showToast,
+  ]);
+
+  useEffect(() => {
+    if (!isFilterOptionsError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.filterOptionsErrorTitle),
+      description: filterOptionsErrorMessage || formatMessage(messages.filterOptionsLoadError),
+    });
+  }, [filterOptionsErrorMessage, formatMessage, isFilterOptionsError, showToast]);
+
+  const isInitialLoading = isListLoading && items.length === 0;
+  const filtersDisabled = isFrameworkOptionsLoading || isFilterOptionsLoading;
+
+  const getTriggerLabel = (options, value, fallbackMessage) => (
+    options.find((option) => String(option.value) === String(value))?.label
+    ?? formatMessage(fallbackMessage)
+  );
 
   const columns = [
-    ...([{
+    {
       key: 'activity',
       header: formatMessage(messages.columnActivity),
       renderCell: (row) => (
@@ -147,153 +173,153 @@ const Activities = () => {
             <FontAwesomeIcon icon={faChartLine} />
           </span>
           <div className="activities-page__activity-text">
-            <p className="activities-page__activity-title">{row.title}</p>
-            <p className="activities-page__activity-desc">{row.description}</p>
+            {hasDisplayValue(row.title) && (
+              <p className="activities-page__activity-title">{row.title}</p>
+            )}
+            {hasDisplayValue(row.description) && (
+              <p className="activities-page__activity-desc">{row.description}</p>
+            )}
           </div>
         </div>
       ),
-    }]),
-    ...([{
+    },
+    {
       key: 'domain',
       header: formatMessage(messages.columnDomain),
-      renderCell: row => <span className="activities-page__text">{row.domain}</span>,
-    }]),
-    ...([{
+      renderCell: (row) => (
+        hasDisplayValue(row.domain)
+          ? <span className="activities-page__text">{row.domain}</span>
+          : <span className="activities-page__muted">{emptyLabel}</span>
+      ),
+    },
+    {
       key: 'subDomain',
       header: formatMessage(messages.columnSubDomain),
-      renderCell: row => (
-        <span className={row.subDomain ? 'activities-page__text' : 'activities-page__muted'}>
-          {row.subDomain || emptyLabel}
+      renderCell: (row) => (
+        <span className={hasDisplayValue(row.subDomain) ? 'activities-page__text' : 'activities-page__muted'}>
+          {hasDisplayValue(row.subDomain) ? row.subDomain : emptyLabel}
         </span>
       ),
-    }]),
-    ...([{
+    },
+    {
       key: 'proficiencyLevel',
       header: formatMessage(messages.columnProficiency),
-      renderCell: row => <span className="activities-page__text">{row.proficiencyLevel}</span>,
-    }]),
-    ...([{
+      renderCell: (row) => (
+        hasDisplayValue(row.proficiencyLevel)
+          ? <span className="activities-page__text">{row.proficiencyLevel}</span>
+          : <span className="activities-page__muted">{emptyLabel}</span>
+      ),
+    },
+    {
       key: 'targetRole',
       header: formatMessage(messages.columnRole),
-      renderCell: row => (
-        <span className={row.targetRole ? 'activities-page__text' : 'activities-page__muted'}>
-          {row.targetRole || emptyLabel}
+      renderCell: (row) => (
+        <span className={hasDisplayValue(row.targetRole) ? 'activities-page__text' : 'activities-page__muted'}>
+          {hasDisplayValue(row.targetRole) ? row.targetRole : emptyLabel}
         </span>
       ),
-    }]),
+    },
   ];
+
+  const showEmptyState = !isInitialLoading && !isListError && items.length === 0;
+  const showErrorState = !isInitialLoading && isListError;
+  const showTable = !isInitialLoading && !isListError && items.length > 0;
 
   return (
     <section className="activities-page">
-      {shouldRenderToolbar && (
-        <div className="activities-page__toolbar">
-          <div className="activities-page__search-row">
-            <div className="activities-page__search">
-              <FontAwesomeIcon icon={faSearch} className="activities-page__search-icon" />
-              <input
-                type="search"
-                className="activities-page__search-input"
-                placeholder={formatMessage(messages.searchPlaceholder)}
-                value={searchText}
-                onChange={(e) => {
-                  setSearchText(e.target.value);
-                  setPage(1);
-                }}
-                aria-label={formatMessage(messages.searchPlaceholder)}
-              />
-            </div>
-          </div>
-
-          <div className="activities-page__filters">
-            <SearchableDropdown
-              value={frameworkFilter}
-              options={frameworkOptions}
-              onChange={(v) => {
-                setFrameworkFilter(v);
-                setPage(1);
-              }}
-              triggerLabel={
-                frameworkOptions.find(o => o.value === frameworkFilter)?.label
-                || formatMessage(messages.allFrameworks)
-              }
-              searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
-              noOptionsText={formatMessage(messages.dropdownNoOptions)}
-            />
-            <SearchableDropdown
-              value={roleFilter}
-              options={roleOptions}
-              onChange={(v) => {
-                setRoleFilter(v);
-                setPage(1);
-              }}
-              triggerLabel={
-                roleOptions.find(o => o.value === roleFilter)?.label
-                || formatMessage(messages.allRoles)
-              }
-              searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
-              noOptionsText={formatMessage(messages.dropdownNoOptions)}
-            />
-            <SearchableDropdown
-              value={domainFilter}
-              options={domainOptions}
-              onChange={(v) => {
-                setDomainFilter(v);
-                setPage(1);
-              }}
-              triggerLabel={
-                domainOptions.find(o => o.value === domainFilter)?.label
-                || formatMessage(messages.allDomains)
-              }
-              searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
-              noOptionsText={formatMessage(messages.dropdownNoOptions)}
-            />
-            <SearchableDropdown
-              value={subDomainFilter}
-              options={subDomainOptions}
-              onChange={(v) => {
-                setSubDomainFilter(v);
-                setPage(1);
-              }}
-              triggerLabel={
-                subDomainOptions.find(o => o.value === subDomainFilter)?.label
-                || formatMessage(messages.allSubDomains)
-              }
-              searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
-              noOptionsText={formatMessage(messages.dropdownNoOptions)}
-            />
-            <SearchableDropdown
-              value={levelFilter}
-              options={levelOptions}
-              onChange={(v) => {
-                setLevelFilter(v);
-                setPage(1);
-              }}
-              triggerLabel={
-                levelOptions.find(o => o.value === levelFilter)?.label
-                || formatMessage(messages.allLevels)
-              }
-              searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
-              noOptionsText={formatMessage(messages.dropdownNoOptions)}
-            />
-            <SearchableDropdown
-              value={streamFilter}
-              options={streamOptions}
-              onChange={(v) => {
-                setStreamFilter(v);
-                setPage(1);
-              }}
-              triggerLabel={
-                streamOptions.find(o => o.value === streamFilter)?.label
-                || formatMessage(messages.allStreams)
-              }
-              searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
-              noOptionsText={formatMessage(messages.dropdownNoOptions)}
+      <div className="activities-page__toolbar">
+        <div className="activities-page__search-row">
+          <div className="activities-page__search">
+            <FontAwesomeIcon icon={faSearch} className="activities-page__search-icon" />
+            <input
+              type="search"
+              className="activities-page__search-input"
+              placeholder={formatMessage(messages.searchPlaceholder)}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              aria-label={formatMessage(messages.searchPlaceholder)}
             />
           </div>
         </div>
+
+        <div className="activities-page__filters">
+          <SearchableDropdown
+            value={frameworkFilter}
+            options={frameworkOptions}
+            disabled={filtersDisabled}
+            onChange={setFrameworkFilter}
+            triggerLabel={getTriggerLabel(
+              frameworkOptions,
+              frameworkFilter,
+              messages.selectFramework,
+            )}
+            searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
+            noOptionsText={formatMessage(messages.dropdownNoOptions)}
+          />
+          <SearchableDropdown
+            value={roleFilter}
+            options={roleOptions}
+            disabled={filtersDisabled}
+            onChange={setRoleFilter}
+            triggerLabel={getTriggerLabel(roleOptions, roleFilter, messages.allRoles)}
+            searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
+            noOptionsText={formatMessage(messages.dropdownNoOptions)}
+          />
+          <SearchableDropdown
+            value={domainFilter}
+            options={domainOptions}
+            disabled={filtersDisabled}
+            onChange={setDomainFilter}
+            triggerLabel={getTriggerLabel(domainOptions, domainFilter, messages.allDomains)}
+            searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
+            noOptionsText={formatMessage(messages.dropdownNoOptions)}
+          />
+          <SearchableDropdown
+            value={subDomainFilter}
+            options={subDomainOptions}
+            disabled={filtersDisabled}
+            onChange={setSubDomainFilter}
+            triggerLabel={getTriggerLabel(subDomainOptions, subDomainFilter, messages.allSubDomains)}
+            searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
+            noOptionsText={formatMessage(messages.dropdownNoOptions)}
+          />
+          <SearchableDropdown
+            value={levelFilter}
+            options={proficiencyOptions}
+            disabled={filtersDisabled}
+            onChange={setLevelFilter}
+            triggerLabel={getTriggerLabel(proficiencyOptions, levelFilter, messages.allLevels)}
+            searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
+            noOptionsText={formatMessage(messages.dropdownNoOptions)}
+          />
+          <SearchableDropdown
+            value={trainingStatusFilter}
+            options={trainingStatusOptions}
+            onChange={setTrainingStatusFilter}
+            triggerLabel={getTriggerLabel(
+              trainingStatusOptions,
+              trainingStatusFilter,
+              messages.trainingStatusAll,
+            )}
+            searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
+            noOptionsText={formatMessage(messages.dropdownNoOptions)}
+          />
+        </div>
+      </div>
+
+      {isInitialLoading && (
+        <SkeletonScreen variant={SKELETON_VARIANTS.TOOLBAR_TABLE} />
       )}
 
-      {columns.length > 0 && filteredActivities.length === 0 && (
+      {showErrorState && (
+        <EmptyState
+          fullSize
+          className="activities-page__empty"
+          message={listErrorMessage || formatMessage(messages.listLoadError)}
+        />
+      )}
+
+      {showEmptyState && (
         <EmptyState
           fullSize
           className="activities-page__empty"
@@ -301,19 +327,18 @@ const Activities = () => {
         />
       )}
 
-      {columns.length > 0 && filteredActivities.length > 0 && (
+      {showTable && (
         <DataTable
           columns={columns}
-          rows={pageRows}
+          rows={items}
           rowKey="id"
-          currentPage={safePage}
+          currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}
-          footerContent={formatMessage(messages.showingRange, {
-            start: rangeStart,
-            end: rangeEnd,
-            total: filteredActivities.length,
-          })}
+          footerContent={formatMessage(
+            messages.showingCount,
+            buildPaginationShowingParams(items, count),
+          )}
           minWidth={960}
         />
       )}

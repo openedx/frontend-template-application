@@ -11,7 +11,9 @@
     display: flex;
     gap: .75rem;
     flex-wrap: wrap;
+    align-items: stretch;
     min-width: 0;
+    flex: 1 1 auto;
   }
 
   &__table-card {
@@ -141,6 +143,11 @@
     background: transparent;
     color: #2A3B8F;
 
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
     &--danger {
       color: #DC2626;
     }
@@ -170,12 +177,31 @@
       width: 100%;
     }
 
-    &__actions .searchable-dropdown,
+    &__actions .users-role-filter,
     &__actions .competency-framework-page__outline-button,
     &__actions .competency-framework-page__primary-button {
       width: 100%;
       justify-content: center;
     }
+
+    &__actions .users-role-filter .role-option-dropdown-group__field {
+      max-width: none;
+    }
+  }
+}
+
+@media (width >= 768px) {
+  .users-page__toolbar--with-subfilter .search-input {
+    flex: 1 1 200px;
+    min-width: 160px;
+    max-width: 360px;
+  }
+}
+
+@media (width >= 1024px) {
+  .users-page__toolbar--with-subfilter .search-input {
+    flex: 1 1 280px;
+    max-width: 480px;
   }
 }
 
@@ -200,14 +226,7 @@
       justify-content: flex-end;
     }
 
-    &__actions .searchable-dropdown {
-      flex: 0 1 180px;
-      width: auto;
-      max-width: 220px;
-      min-width: 140px;
-    }
-
-    &__actions > * {
+    &__actions > *:not(.users-role-filter) {
       flex: 0 1 auto;
       min-width: 0;
     }
@@ -232,10 +251,5 @@
       flex: 0 1 auto;
     }
 
-    &__actions .searchable-dropdown {
-      flex: 0 0 160px;
-      min-width: 140px;
-      max-width: 180px;
-    }
   }
 }

@@ -1,7 +1,12 @@
 .searchable-dropdown {
   position: relative;
   width: 100%;
-  min-width: 0;
+  min-width: 180px;
+
+  &.is-disabled {
+    opacity: .6;
+    pointer-events: none;
+  }
 
   &__trigger {
     width: 100%;

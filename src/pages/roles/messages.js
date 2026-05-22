@@ -141,6 +141,91 @@ const rolesMessages = defineMessages({
     defaultMessage: '{name} has been removed.',
     description: 'Toast message when role is deleted',
   },
+  listLoadError: {
+    id: 'app.roles.list.loadError',
+    defaultMessage: 'Unable to load roles. Please try again.',
+    description: 'Fallback when roles list API fails',
+  },
+  listErrorTitle: {
+    id: 'app.roles.list.errorToast.title',
+    defaultMessage: 'Failed to load roles',
+    description: 'Toast title when roles list API fails',
+  },
+  listLoading: {
+    id: 'app.roles.list.loading',
+    defaultMessage: 'Loading roles',
+    description: 'Aria label for roles grid skeleton',
+  },
+  noRolesFound: {
+    id: 'app.roles.list.empty',
+    defaultMessage: 'No roles found.',
+    description: 'Empty state when roles list has no results',
+  },
+  detailLoadError: {
+    id: 'app.roles.detail.loadError',
+    defaultMessage: 'Unable to load role details. Please try again.',
+    description: 'Fallback when role detail API fails',
+  },
+  detailErrorTitle: {
+    id: 'app.roles.detail.errorToast.title',
+    defaultMessage: 'Failed to load role',
+    description: 'Toast title when role detail API fails',
+  },
+  detailLoading: {
+    id: 'app.roles.detail.loading',
+    defaultMessage: 'Loading role details…',
+    description: 'Text shown in view modal while role detail loads',
+  },
+  permissionsLoadError: {
+    id: 'app.roles.permissions.loadError',
+    defaultMessage: 'Unable to load permissions. Please try again.',
+    description: 'Fallback when permissions API fails',
+  },
+  permissionsErrorTitle: {
+    id: 'app.roles.permissions.errorToast.title',
+    defaultMessage: 'Failed to load permissions',
+    description: 'Toast title when permissions API fails',
+  },
+  createError: {
+    id: 'app.roles.create.error',
+    defaultMessage: 'Unable to create role. Please try again.',
+    description: 'Fallback when create role API fails',
+  },
+  createErrorTitle: {
+    id: 'app.roles.create.errorToast.title',
+    defaultMessage: 'Failed to create role',
+    description: 'Toast title when create role API fails',
+  },
+  updateError: {
+    id: 'app.roles.update.error',
+    defaultMessage: 'Unable to update role. Please try again.',
+    description: 'Fallback when update role API fails',
+  },
+  updateErrorTitle: {
+    id: 'app.roles.update.errorToast.title',
+    defaultMessage: 'Failed to update role',
+    description: 'Toast title when update role API fails',
+  },
+  deleteError: {
+    id: 'app.roles.delete.error',
+    defaultMessage: 'Unable to delete role. Please try again.',
+    description: 'Fallback when delete role API fails',
+  },
+  deleteErrorTitle: {
+    id: 'app.roles.delete.errorToast.title',
+    defaultMessage: 'Failed to delete role',
+    description: 'Toast title when delete role API fails',
+  },
+  paginationLabel: {
+    id: 'app.roles.pagination.label',
+    defaultMessage: 'Roles pagination',
+    description: 'Accessible label for roles list pagination',
+  },
+  showingCount: {
+    id: 'app.roles.pagination.showing',
+    defaultMessage: 'Showing {count} of {total} roles',
+    description: 'Pagination summary for roles list',
+  },
 });
 
 export default rolesMessages;

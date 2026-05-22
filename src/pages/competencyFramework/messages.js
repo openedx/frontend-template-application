@@ -106,6 +106,11 @@ const competencyFrameworkMessages = defineMessages({
     defaultMessage: 'Loading competency frameworks',
     description: 'Aria label for competency framework list skeleton',
   },
+  showingCount: {
+    id: 'app.competencyFramework.pagination.showing',
+    defaultMessage: 'Showing {count} of {total} frameworks',
+    description: 'Pagination summary for competency framework list',
+  },
   importModalTitle: {
     id: 'app.competencyFramework.import.modal.title',
     defaultMessage: 'Import Framework from Excel',

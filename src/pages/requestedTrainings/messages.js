@@ -171,6 +171,11 @@ const messages = defineMessages({
     defaultMessage: 'Request reopened',
     description: 'Toast title when request reopened',
   },
+  showingCount: {
+    id: 'app.requestedTrainings.pagination.showing',
+    defaultMessage: 'Showing {count} of {total} requested trainings',
+    description: 'Pagination summary for requested trainings table',
+  },
 });
 
 export default messages;

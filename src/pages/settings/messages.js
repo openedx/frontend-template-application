@@ -61,6 +61,26 @@ const messages = defineMessages({
     defaultMessage: 'Your settings have been updated.',
     description: 'Toast description after saving settings',
   },
+  loadError: {
+    id: 'app.settings.load.error',
+    defaultMessage: 'Unable to load organization settings. Please try again.',
+    description: 'Fallback when organization details GET fails',
+  },
+  saveError: {
+    id: 'app.settings.save.error',
+    defaultMessage: 'Unable to save organization settings. Please try again.',
+    description: 'Fallback when organization details PATCH fails',
+  },
+  loadErrorTitle: {
+    id: 'app.settings.load.errorTitle',
+    defaultMessage: 'Settings unavailable',
+    description: 'Toast title when organization details load fails',
+  },
+  saveErrorTitle: {
+    id: 'app.settings.save.errorTitle',
+    defaultMessage: 'Save failed',
+    description: 'Toast title when organization details save fails',
+  },
 });
 
 export default messages;

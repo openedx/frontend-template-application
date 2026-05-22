@@ -38,19 +38,24 @@ export const TablePaginationFooter = ({
   paginationLabel = 'Table pagination',
   footerContent = null,
 }) => {
-  if (!totalPages || totalPages <= 1) {
+  const showPagination = totalPages > 1;
+  const hasFooterContent = footerContent != null && footerContent !== '';
+
+  if (!showPagination && !hasFooterContent) {
     return null;
   }
 
   return (
     <div className="data-table__footer">
-      <div>{footerContent}</div>
-      <TablePagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
-        paginationLabel={paginationLabel}
-      />
+      {hasFooterContent && <div>{footerContent}</div>}
+      {showPagination && (
+        <TablePagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+          paginationLabel={paginationLabel}
+        />
+      )}
     </div>
   );
 };

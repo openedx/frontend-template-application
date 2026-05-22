@@ -251,6 +251,11 @@ const messages = defineMessages({
     defaultMessage: '{count, plural, one {# admin} other {# admins}}',
     description: 'Admin count label in NRA table',
   },
+  showingCount: {
+    id: 'app.nras.pagination.showing',
+    defaultMessage: 'Showing {count} of {total} NRAs',
+    description: 'Pagination summary for NRA table',
+  },
 });
 
 export default messages;

@@ -111,6 +111,11 @@ const messages = defineMessages({
     defaultMessage: 'Closed',
     description: 'Status label for closed requests',
   },
+  showingCount: {
+    id: 'app.pendingRequests.pagination.showing',
+    defaultMessage: 'Showing {count} of {total} requests',
+    description: 'Pagination summary for pending requests table',
+  },
 });
 
 export default messages;

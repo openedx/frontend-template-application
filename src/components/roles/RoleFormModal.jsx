@@ -2,12 +2,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import PopupDialog from '../popupDialog/PopupDialog';
 import MultiSelectInput from '../multiSelectInput/MultiSelectInput';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 
 const RoleFormModal = ({
   isOpen,
   mode,
   role,
   permissionOptions,
+  isLoadingDetail = false,
+  isPermissionsLoading = false,
+  isSaving = false,
   labels,
   onClose,
   onSave,
@@ -17,15 +21,39 @@ const RoleFormModal = ({
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-    if (isOpen) {
-      setName(role?.name || '');
-      setDescription(role?.description || '');
-      setPermissions(role?.permissions || []);
+    if (!isOpen) {
+      return;
     }
-  }, [isOpen, role]);
+
+    if (mode === 'edit' && role) {
+      setName(hasDisplayValue(role.name) ? role.name : '');
+      setDescription(role.description ?? '');
+      setPermissions(Array.isArray(role.permissions) ? role.permissions : []);
+      return;
+    }
+
+    if (mode === 'add') {
+      setName('');
+      setDescription('');
+      setPermissions([]);
+    }
+  }, [isOpen, mode, role]);
+
   const isSubmitDisabled = useMemo(() => (
-    !name.trim() || !description.trim() || permissions.length === 0
-  ), [description, name, permissions.length]);
+    isLoadingDetail
+    || isPermissionsLoading
+    || isSaving
+    || !name.trim()
+    || permissions.length === 0
+  ), [isLoadingDetail, isPermissionsLoading, isSaving, name, permissions.length]);
+
+  const handleSubmit = async () => {
+    await onSave({
+      name,
+      description,
+      permissions,
+    });
+  };
 
   return (
     <PopupDialog
@@ -42,6 +70,7 @@ const RoleFormModal = ({
             className="roles-page__field-input"
             value={name}
             placeholder={labels.roleNamePlaceholder}
+            disabled={isLoadingDetail || isSaving}
             onChange={event => setName(event.target.value)}
           />
         </div>
@@ -54,6 +83,7 @@ const RoleFormModal = ({
             value={description}
             placeholder={labels.roleDescriptionPlaceholder}
             rows={3}
+            disabled={isLoadingDetail || isSaving}
             onChange={event => setDescription(event.target.value)}
           />
         </div>
@@ -63,26 +93,20 @@ const RoleFormModal = ({
           <MultiSelectInput
             options={permissionOptions}
             selectedValues={permissions}
+            disabled={isLoadingDetail || isPermissionsLoading || isSaving}
             onChange={setPermissions}
           />
         </div>
 
         <div className="roles-page__form-actions">
-          <button type="button" className="roles-page__cancel-button" onClick={onClose}>
+          <button type="button" className="roles-page__cancel-button" onClick={onClose} disabled={isSaving}>
             {labels.cancel}
           </button>
           <button
             type="button"
             className="roles-page__submit-button"
             disabled={isSubmitDisabled}
-            onClick={() => onSave({
-              id: role?.id || `role-${Date.now()}`,
-              name,
-              description,
-              permissions,
-              userCount: role?.userCount || 0,
-              permissionCount: permissions.length,
-            })}
+            onClick={handleSubmit}
           >
             {mode === 'edit' ? labels.save : labels.create}
           </button>

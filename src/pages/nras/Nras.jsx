@@ -15,6 +15,7 @@ import useNraDetail from '../../hooks/nras/useNraDetail';
 import useNraMutations from '../../hooks/nras/useNraMutations';
 import useNrasList from '../../hooks/nras/useNrasList';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from './messages';
 import './Nras.scss';
 
@@ -183,6 +184,7 @@ const Nras = () => {
 
   const {
     items,
+    count: nrasCount,
     totalPages,
     isLoading: isListLoading,
     isError: isListError,
@@ -568,6 +570,10 @@ const Nras = () => {
             totalPages={totalPages}
             onPageChange={setPage}
             paginationLabel="NRA pagination"
+            footerContent={formatMessage(
+              messages.showingCount,
+              buildPaginationShowingParams(items, nrasCount),
+            )}
           />
         </div>
       </>

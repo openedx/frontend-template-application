@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { resolveDropdownDisplayContent } from '../../utils/dropdownUtils';
 import './SearchableDropdown.scss';
 
 const SearchableDropdown = ({
@@ -15,8 +16,10 @@ const SearchableDropdown = ({
   options = [],
   onChange,
   triggerLabel,
+  placeholder,
   searchPlaceholder,
   noOptionsText,
+  disabled = false,
 }) => {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,6 +27,16 @@ const SearchableDropdown = ({
   const [menuMaxHeight, setMenuMaxHeight] = useState(null);
   const wrapperRef = useRef(null);
   const menuRef = useRef(null);
+
+  const displayContent = useMemo(
+    () => resolveDropdownDisplayContent({
+      options,
+      value,
+      triggerLabel,
+      placeholder,
+    }),
+    [options, placeholder, triggerLabel, value],
+  );
 
   useEffect(() => {
     const onClickOutside = (event) => {
@@ -81,18 +94,23 @@ const SearchableDropdown = ({
   }, [open, updateMenuPlacement]);
 
   return (
-    <div className="searchable-dropdown" ref={wrapperRef}>
+    <div className={`searchable-dropdown ${disabled ? 'is-disabled' : ''}`} ref={wrapperRef}>
       <button
         type="button"
         className="searchable-dropdown__trigger"
-        onClick={() => setOpen(prev => !prev)}
+        onClick={() => {
+          if (!disabled) {
+            setOpen(prev => !prev);
+          }
+        }}
         aria-expanded={open}
+        disabled={disabled}
       >
-        <span className="searchable-dropdown__trigger-label">{triggerLabel}</span>
+        <span className="searchable-dropdown__trigger-label">{displayContent}</span>
         <FontAwesomeIcon className="searchable-dropdown__icon" icon={faChevronDown} />
       </button>
 
-      {open && (
+      {open && !disabled && (
         <div
           className={`searchable-dropdown__menu ${openUpward ? 'is-open-upward' : ''}`}
           ref={menuRef}
@@ -113,7 +131,7 @@ const SearchableDropdown = ({
               <button
                 key={option.value}
                 type="button"
-                className={`searchable-dropdown__option ${value === option.value ? 'is-selected' : ''}`}
+                className={`searchable-dropdown__option ${String(value) === String(option.value) ? 'is-selected' : ''}`}
                 onClick={() => {
                   onChange(option.value);
                   setOpen(false);

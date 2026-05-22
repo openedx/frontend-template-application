@@ -1,14 +1,7 @@
-import userFormOptions from '../../mock/users/formOptions.json';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 
 /**
- * @param {{ role: string, roleSub?: string }} user
+ * @param {{ role?: string }} user
  * @returns {string}
  */
-export const getRoleDisplayLine = (user) => {
-  if (!user?.roleSub) {
-    return user.role;
-  }
-  const roleDef = userFormOptions.roleOptions.find(r => r.value === user.role);
-  const subLabel = roleDef?.subOptions?.find(s => s.value === user.roleSub)?.label;
-  return subLabel ? `${user.role} — ${subLabel}` : user.role;
-};
+export const getRoleDisplayLine = (user) => (hasDisplayValue(user?.role) ? user.role : '');

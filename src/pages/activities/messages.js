@@ -31,10 +31,55 @@ const messages = defineMessages({
     defaultMessage: 'All Levels',
     description: 'Proficiency level filter all option label',
   },
-  allStreams: {
-    id: 'app.activities.filter.allStreams',
+  selectFramework: {
+    id: 'app.activities.filter.selectFramework',
+    defaultMessage: 'Select competency framework',
+    description: 'Placeholder when no competency framework filter is selected',
+  },
+  trainingStatusAll: {
+    id: 'app.activities.filter.trainingStatus.all',
     defaultMessage: 'All',
-    description: 'Activity stream / group filter all option label',
+    description: 'Training status filter — all activities',
+  },
+  trainingStatusAvailable: {
+    id: 'app.activities.filter.trainingStatus.available',
+    defaultMessage: 'Training Available',
+    description: 'Training status filter — training available',
+  },
+  trainingStatusNotAvailable: {
+    id: 'app.activities.filter.trainingStatus.notAvailable',
+    defaultMessage: 'Training Not Available',
+    description: 'Training status filter — training not available',
+  },
+  listLoadError: {
+    id: 'app.activities.list.loadError',
+    defaultMessage: 'Unable to load activities. Please try again.',
+    description: 'Fallback when activities list API fails',
+  },
+  listErrorTitle: {
+    id: 'app.activities.list.errorTitle',
+    defaultMessage: 'Activities unavailable',
+    description: 'Toast title when activities list API fails',
+  },
+  frameworkOptionsLoadError: {
+    id: 'app.activities.options.framework.loadError',
+    defaultMessage: 'Unable to load competency frameworks. Please try again.',
+    description: 'Fallback when competency framework options API fails',
+  },
+  frameworkOptionsErrorTitle: {
+    id: 'app.activities.options.framework.errorTitle',
+    defaultMessage: 'Framework filters unavailable',
+    description: 'Toast title when competency framework options API fails',
+  },
+  filterOptionsLoadError: {
+    id: 'app.activities.options.filters.loadError',
+    defaultMessage: 'Unable to load filter options. Please try again.',
+    description: 'Fallback when role/domain/sub-domain/level options API fails',
+  },
+  filterOptionsErrorTitle: {
+    id: 'app.activities.options.filters.errorTitle',
+    defaultMessage: 'Filters unavailable',
+    description: 'Toast title when dependent filter options API fails',
   },
   columnActivity: {
     id: 'app.activities.column.activity',
@@ -69,6 +114,11 @@ const messages = defineMessages({
   showingRange: {
     id: 'app.activities.pagination.showingRange',
     defaultMessage: 'Showing {start}–{end} of {total}',
+    description: 'Pagination summary for activities table (legacy range format)',
+  },
+  showingCount: {
+    id: 'app.activities.pagination.showing',
+    defaultMessage: 'Showing {count} of {total} activities',
     description: 'Pagination summary for activities table',
   },
   dropdownSearchPlaceholder: {

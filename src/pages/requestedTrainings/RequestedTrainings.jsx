@@ -12,6 +12,7 @@ import useRequestedTrainingFilters from '../../hooks/requestedTrainings/useReque
 import useRequestedTrainingMutations from '../../hooks/requestedTrainings/useRequestedTrainingMutations';
 import useRequestedTrainingsList from '../../hooks/requestedTrainings/useRequestedTrainingsList';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from './messages';
 import './RequestedTrainings.scss';
 
@@ -408,6 +409,10 @@ const RequestedTrainings = () => {
             totalPages={totalPages}
             onPageChange={setPage}
             paginationLabel="Requested trainings pagination"
+            footerContent={formatMessage(
+              messages.showingCount,
+              buildPaginationShowingParams(items, trainingsCount),
+            )}
           />
         </div>
       </>

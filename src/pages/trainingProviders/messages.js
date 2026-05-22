@@ -261,6 +261,11 @@ const messages = defineMessages({
     defaultMessage: 'Failed to load countries',
     description: 'Toast title when countries list API fails in provider modal',
   },
+  showingCount: {
+    id: 'app.trainingProviders.pagination.showing',
+    defaultMessage: 'Showing {count} of {total} training providers',
+    description: 'Pagination summary for training providers table',
+  },
 });
 
 export default messages;

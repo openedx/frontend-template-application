@@ -11,6 +11,7 @@ import { useUserRole } from '../../contexts/UserRoleContext';
 import usePendingRequestFilters from '../../hooks/pendingRequests/usePendingRequestFilters';
 import usePendingRequestsList from '../../hooks/pendingRequests/usePendingRequestsList';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from './messages';
 import './PendingRequests.scss';
 
@@ -103,6 +104,7 @@ const PendingRequests = () => {
 
   const {
     items,
+    count: requestsCount,
     totalPages,
     isLoading: isListLoading,
     isError: isListError,
@@ -290,6 +292,10 @@ const PendingRequests = () => {
             totalPages={totalPages}
             onPageChange={setPage}
             paginationLabel="Pending requests pagination"
+            footerContent={formatMessage(
+              messages.showingCount,
+              buildPaginationShowingParams(items, requestsCount),
+            )}
           />
         </div>
       </>

@@ -47,18 +47,18 @@
     },
     "users": {
       "canAddUser": true,
-      "canViewUserAbout": true,
+      "canViewUserAbout": false,
       "canEditUser": true,
       "canDeleteUser": true,
       "canViewRoleColumn": true,
-      "canViewCompetencyRoleColumn": true,
-      "canAssignTrainings": true,
-      "canRemoveAssignedTrainings": true,
-      "canViewRegulatoryPassport": true,
+      "canViewCompetencyRoleColumn": false,
+      "canAssignTrainings": false,
+      "canRemoveAssignedTrainings": false,
+      "canViewRegulatoryPassport": false,
       "userFormFields": {
         "showRoleField": true,
-        "showManagerField": true,
-        "showCompetencyRoleField": true,
+        "showManagerField": false,
+        "showCompetencyRoleField": false,
         "showCountryField": true
       }
     },

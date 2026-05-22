@@ -9,6 +9,7 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 
 const RoleCard = ({
   role,
@@ -106,8 +107,10 @@ const RoleCard = ({
         </div>
       </div>
 
-      <h3 className="roles-page__name">{role.name}</h3>
-      <p className="roles-page__description">{role.description}</p>
+      {hasDisplayValue(role.name) && <h3 className="roles-page__name">{role.name}</h3>}
+      {hasDisplayValue(role.description) && (
+        <p className="roles-page__description">{role.description}</p>
+      )}
 
       <div className="roles-page__meta">
         <div className="roles-page__meta-item">

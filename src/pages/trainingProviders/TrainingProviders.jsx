@@ -15,6 +15,7 @@ import useTrainingProviderDetail from '../../hooks/trainingProviders/useTraining
 import useTrainingProviderMutations from '../../hooks/trainingProviders/useTrainingProviderMutations';
 import useTrainingProvidersList from '../../hooks/trainingProviders/useTrainingProvidersList';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from './messages';
 import './TrainingProviders.scss';
 
@@ -211,6 +212,7 @@ const TrainingProviders = () => {
 
   const {
     items: providers,
+    count: providersCount,
     totalPages,
     isLoading: isProvidersLoading,
     isError: isProvidersError,
@@ -618,6 +620,10 @@ const TrainingProviders = () => {
               totalPages={totalPages}
               onPageChange={setPage}
               paginationLabel="Training providers pagination"
+              footerContent={formatMessage(
+                messages.showingCount,
+                buildPaginationShowingParams(providers, providersCount),
+              )}
             />
           </div>
         </>

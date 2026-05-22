@@ -1,8 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { EmptyState } from '../../components/emptyState';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
-import settingsData from '../../mock/settings/settings.json';
+import useOrganizationDetails from '../../hooks/settings/useOrganizationDetails';
+import useOrganizationDetailsMutation from '../../hooks/settings/useOrganizationDetailsMutation';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import messages from './messages';
 import './Settings.scss';
 
@@ -74,22 +78,101 @@ const Settings = () => {
 
   const fileRef = useRef(null);
 
-  const initial = useMemo(() => ({
-    platformName: settingsData.platformName || '',
-    supportEmail: settingsData.supportEmail || '',
-    organisationName: settingsData.organisationName || '',
-  }), []);
+  const {
+    details,
+    isLoading,
+    isError,
+    errorMessage,
+    refetch,
+  } = useOrganizationDetails();
 
-  const [supportEmail, setSupportEmail] = useState(initial.supportEmail);
-  const [organisationName, setOrganisationName] = useState(initial.organisationName);
-  const [logoUrl, setLogoUrl] = useState('');
+  const { updateMutation } = useOrganizationDetailsMutation();
 
-  const onSave = () => {
-    showToast({
-      title: formatMessage(messages.toastSavedTitle),
-      description: formatMessage(messages.toastSavedDescription),
-    });
+  const [platformName, setPlatformName] = useState('');
+  const [supportEmail, setSupportEmail] = useState('');
+  const [organisationName, setOrganisationName] = useState('');
+  const [logoPreview, setLogoPreview] = useState('');
+  const [pendingLogoFile, setPendingLogoFile] = useState(null);
+  const [savedLogoUrl, setSavedLogoUrl] = useState('');
+
+  const isSaveDisabled = !canEdit || updateMutation.isPending || isLoading || isError;
+
+  const applyDetailsToForm = (data) => {
+    if (!data) {
+      return;
+    }
+
+    setPlatformName(hasDisplayValue(data.platformName) ? data.platformName : '');
+    setSupportEmail(hasDisplayValue(data.supportEmail) ? data.supportEmail : '');
+    setOrganisationName(hasDisplayValue(data.organisationName) ? data.organisationName : '');
+    setSavedLogoUrl(hasDisplayValue(data.logoUrl) ? data.logoUrl : '');
+    setLogoPreview('');
+    setPendingLogoFile(null);
   };
+
+  useEffect(() => {
+    applyDetailsToForm(details);
+  }, [details]);
+
+  useEffect(() => {
+    if (!isError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.loadErrorTitle),
+      description: errorMessage || formatMessage(messages.loadError),
+    });
+  }, [errorMessage, formatMessage, isError, showToast]);
+
+  const displayLogoSrc = logoPreview || savedLogoUrl;
+
+  const onSave = async () => {
+    if (isSaveDisabled) {
+      return;
+    }
+
+    try {
+      const result = await updateMutation.mutateAsync({
+        supportEmail,
+        organisationName,
+        logoFile: pendingLogoFile,
+      });
+
+      showToast({
+        title: formatMessage(messages.toastSavedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.toastSavedDescription),
+      });
+
+      await refetch();
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.saveErrorTitle),
+        description: error?.message || formatMessage(messages.saveError),
+      });
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <section className="settings-page">
+        <SkeletonScreen variant={SKELETON_VARIANTS.PAGE} />
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className="settings-page">
+        <EmptyState
+          message={errorMessage || formatMessage(messages.loadError)}
+          fullSize
+        />
+      </section>
+    );
+  }
 
   return (
     <section className="settings-page">
@@ -99,7 +182,12 @@ const Settings = () => {
           <div className="settings-page__stack">
             <div className="settings-page__field">
               <span className="settings-page__label">{formatMessage(messages.platformName)}</span>
-              <input className="settings-page__input" value={initial.platformName} disabled type="text" />
+              <input
+                className="settings-page__input"
+                value={platformName}
+                disabled
+                type="text"
+              />
             </div>
 
             <div className="settings-page__field">
@@ -107,8 +195,8 @@ const Settings = () => {
               <input
                 className="settings-page__input"
                 value={supportEmail}
-                onChange={e => setSupportEmail(e.target.value)}
-                disabled={!canEdit}
+                onChange={(e) => setSupportEmail(e.target.value)}
+                disabled={!canEdit || isSaveDisabled}
                 type="email"
               />
             </div>
@@ -125,8 +213,8 @@ const Settings = () => {
                 className="settings-page__input"
                 placeholder={formatMessage(messages.organisationNamePlaceholder)}
                 value={organisationName}
-                onChange={e => setOrganisationName(e.target.value)}
-                disabled={!canEdit}
+                onChange={(e) => setOrganisationName(e.target.value)}
+                disabled={!canEdit || isSaveDisabled}
                 type="text"
               />
             </div>
@@ -135,8 +223,8 @@ const Settings = () => {
               <span className="settings-page__label">{formatMessage(messages.organisationLogo)}</span>
               <div className="settings-page__logo-row">
                 <div className="settings-page__logo-box" aria-hidden="true">
-                  {logoUrl ? (
-                    <img className="settings-page__logo-img" src={logoUrl} alt="" />
+                  {hasDisplayValue(displayLogoSrc) ? (
+                    <img className="settings-page__logo-img" src={displayLogoSrc} alt="" />
                   ) : (
                     <ImageIcon className="h-8 w-8" />
                   )}
@@ -146,20 +234,22 @@ const Settings = () => {
                   <input
                     ref={fileRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/png,image/jpeg,image/jpg,image/svg+xml"
                     className="settings-page__file"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
-                      if (!file) return;
-                      const url = URL.createObjectURL(file);
-                      setLogoUrl(url);
+                      if (!file) {
+                        return;
+                      }
+                      setPendingLogoFile(file);
+                      setLogoPreview(URL.createObjectURL(file));
                     }}
                   />
                   <button
                     type="button"
                     className="settings-page__outline-button"
                     onClick={() => fileRef.current?.click()}
-                    disabled={!canUploadLogo || !canEdit}
+                    disabled={!canUploadLogo || !canEdit || isSaveDisabled}
                   >
                     <UploadIcon className="h-4 w-4" />
                     {formatMessage(messages.uploadLogo)}
@@ -171,7 +261,12 @@ const Settings = () => {
           </div>
         </div>
 
-        <button type="button" className="settings-page__primary-button" onClick={onSave} disabled={!canEdit}>
+        <button
+          type="button"
+          className="settings-page__primary-button"
+          onClick={onSave}
+          disabled={isSaveDisabled}
+        >
           <SaveIcon className="h-4 w-4" />
           {formatMessage(messages.save)}
         </button>
@@ -181,4 +276,3 @@ const Settings = () => {
 };
 
 export default Settings;
-

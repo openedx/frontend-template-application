@@ -30,6 +30,7 @@ import { useUserRole } from '../../contexts/UserRoleContext';
 import SuggestionsTab from '../../components/competencyFramework/create/SuggestionsTab';
 import { SOURCE_FRAMEWORK_BY_TAB } from '../../api/competencyFramework/competencyFrameworkConstants';
 import useCompetencyFrameworkList from '../../hooks/competencyFramework/useCompetencyFrameworkList';
+import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import builderOptions from '../../mock/competencyFramework/builderOptions.json';
 import messages from './messages';
 import './CompetencyFramework.scss';
@@ -153,6 +154,7 @@ const CompetencyFramework = () => {
   const sourceFramework = activeTabSafe ? SOURCE_FRAMEWORK_BY_TAB[activeTabSafe] : null;
   const {
     frameworks,
+    count: frameworksCount,
     totalPages,
     isLoading: isFrameworkListLoading,
     isError: isFrameworkListError,
@@ -890,6 +892,10 @@ const CompetencyFramework = () => {
               totalPages={totalPages}
               onPageChange={setPage}
               paginationLabel="Competency framework pagination"
+              footerContent={formatMessage(
+                messages.showingCount,
+                buildPaginationShowingParams(frameworks, frameworksCount),
+              )}
             />
           )}
 

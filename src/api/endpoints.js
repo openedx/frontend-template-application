@@ -23,3 +23,26 @@ export const REQUESTED_TRAININGS_ACTIVITIES = '/api/v1/requested-trainings/activ
 
 export const ROLE_ASSIGNMENT_PROFILE = '/api/v1/role-assignment/profile/';
 export const ROLE_ASSIGNMENT_LANGUAGES = '/api/v1/role-assignment/languages/';
+export const ROLE_ASSIGNMENT_ROLES = '/api/v1/role-assignment/roles/';
+export const ROLE_ASSIGNMENT_ROLE_OPTIONS = '/api/v1/role-assignment/roles/options/';
+export const ROLE_ASSIGNMENT_PERMISSIONS = '/api/v1/role-assignment/permissions/';
+export const ROLE_ASSIGNMENT_USERS = '/api/v1/role-assignment/users/';
+
+export const ORGANIZATION_DETAILS = '/api/v1/options/organization/details/';
+
+export const ACTIVITIES_LIST = '/api/v1/activities/';
+
+export const OPTIONS_COMPETENCY_FRAMEWORKS = '/api/v1/options/competency-frameworks/';
+export const OPTIONS_FRAMEWORK_ROLES = '/api/v1/options/framework/roles/';
+export const OPTIONS_DOMAINS = '/api/v1/options/domains/';
+export const OPTIONS_SUB_DOMAINS = '/api/v1/options/sub-domains/';
+export const OPTIONS_PROFICIENCY_LEVELS = '/api/v1/options/proficiency-levels/';
+
+/** @param {string} identifier Framework UUID or `all`. */
+export const optionsFrameworkRoles = (identifier) => `/api/v1/options/framework/${identifier}/roles/`;
+/** @param {string} identifier Framework UUID or `all`. */
+export const optionsFrameworkDomains = (identifier) => `/api/v1/options/framework/${identifier}/domains/`;
+/** @param {string} identifier Framework UUID or `all`. */
+export const optionsFrameworkSubDomains = (identifier) => `/api/v1/options/framework/${identifier}/sub-domains/`;
+/** @param {string} identifier Framework UUID or `all`. */
+export const optionsFrameworkProficiencyLevels = (identifier) => `/api/v1/options/framework/${identifier}/proficiency-levels/`;
