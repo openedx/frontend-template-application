@@ -2,6 +2,8 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useState } from 'react';
+import { hasRoleCompetenciesSectionData } from '../../../api/competencyFramework/competencyFrameworkRoleSpecificUtils';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../skeleton';
 import AddNewDomainModal from '../AddNewDomainModal';
 import AddNewSubDomainModal from '../AddNewSubDomainModal';
 import ConfirmActionDialog from '../../confirmActionDialog/ConfirmActionDialog';
@@ -45,11 +47,18 @@ const isDomainBlockInvalid = (d) => {
   return d.flatCompetencies.some(comp => !comp.text.trim());
 };
 
-const filterSubDomainsForDomain = (subDomainOptions, domainValue) => {
+const filterSubDomainsForDomain = (subDomainOptions, domainValue, subDomainOptionsByDomain) => {
   if (!domainValue) {
-    return subDomainOptions;
+    return [];
   }
-  return subDomainOptions.filter(o => !o.parentDomain || o.parentDomain === domainValue);
+
+  if (subDomainOptionsByDomain?.[domainValue]?.length) {
+    return subDomainOptionsByDomain[domainValue];
+  }
+
+  return subDomainOptions.filter(
+    (option) => !option.parentDomain || option.parentDomain === domainValue,
+  );
 };
 
 const RoleSpecificCompetenciesTab = ({
@@ -59,10 +68,15 @@ const RoleSpecificCompetenciesTab = ({
   onChangeItems,
   domainOptions,
   subDomainOptions,
+  subDomainOptionsByDomain = {},
   proficiencyLevelOptions,
   roleOptions,
   onAddDomainOption,
   onAddSubDomainOption,
+  onSave,
+  isSaving = false,
+  isPrefilling = false,
+  optionsLoading = false,
 }) => {
   const { showToast } = useToast();
   const [pendingDelete, setPendingDelete] = useState(null);
@@ -77,6 +91,11 @@ const RoleSpecificCompetenciesTab = ({
     () => items.some(roleRow => !roleRow.role || roleRow.domains.some(isDomainBlockInvalid)),
     [items],
   );
+  const isUpdateMode = hasRoleCompetenciesSectionData(items);
+  const submitLabel = isUpdateMode ? labels.update : labels.save;
+  const savingLabel = isUpdateMode ? labels.updating : labels.saving;
+  const isSaveDisabled = !canEdit || isSaving || isPrefilling || hasInvalid;
+  const dropdownDisabled = !canEdit || optionsLoading || isPrefilling;
 
   const removeWithGuard = (guardPassed, onRemove, name = '') => {
     if (!guardPassed) {
@@ -102,18 +121,14 @@ const RoleSpecificCompetenciesTab = ({
     }
   };
 
-  const handleSave = () => {
-    try {
-      showToast({ title: labels.saveSuccessTitle, description: labels.saveSuccessDescription });
-    } catch (error) {
-      showToast({ title: labels.saveFailedTitle, description: labels.saveFailedDescription });
-    }
-  };
-
   const openAddSubDomain = (parentDomain) => {
     setSubDomainModalParent(parentDomain || '');
     setAddSubDomainOpen(true);
   };
+
+  if (isPrefilling) {
+    return <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />;
+  }
 
   return (
     <div className="framework-builder__section-card framework-builder__section-card--form">
@@ -153,6 +168,7 @@ const RoleSpecificCompetenciesTab = ({
                     triggerLabel={roleLabel || labels.selectRolePlaceholder}
                     searchPlaceholder={labels.dropdownSearchPlaceholder}
                     noOptionsText={labels.dropdownNoOptions}
+                    disabled={dropdownDisabled}
                   />
                 </div>
                 <button
@@ -178,7 +194,11 @@ const RoleSpecificCompetenciesTab = ({
                 <div className="framework-builder__org-domain-list">
                   {roleItem.domains.map((domainItem) => {
                     const canDeleteDomain = roleItem.domains.length > 1;
-                    const subOptions = filterSubDomainsForDomain(subDomainOptions, domainItem.domain);
+                    const subOptions = filterSubDomainsForDomain(
+                      subDomainOptions,
+                      domainItem.domain,
+                      subDomainOptionsByDomain,
+                    );
                     const domainTriggerLabel = domainOptions.find(o => o.value === domainItem.domain)?.label
                       || labels.selectDomainPlaceholder;
                     const subDomainTriggerLabel = subOptions.find(o => o.value === domainItem.subDomain)?.label
@@ -215,7 +235,11 @@ const RoleSpecificCompetenciesTab = ({
                                         if (d.id !== domainItem.id) {
                                           return d;
                                         }
-                                        const filtered = filterSubDomainsForDomain(subDomainOptions, next);
+                                        const filtered = filterSubDomainsForDomain(
+                                          subDomainOptions,
+                                          next,
+                                          subDomainOptionsByDomain,
+                                        );
                                         const keepSub = Boolean(
                                           d.subDomain && filtered.some(o => o.value === d.subDomain),
                                         );
@@ -227,6 +251,7 @@ const RoleSpecificCompetenciesTab = ({
                                 triggerLabel={domainTriggerLabel}
                                 searchPlaceholder={labels.dropdownSearchPlaceholder}
                                 noOptionsText={labels.dropdownNoOptions}
+                                disabled={dropdownDisabled}
                               />
                             </div>
                             <button
@@ -299,6 +324,7 @@ const RoleSpecificCompetenciesTab = ({
                                 triggerLabel={subDomainTriggerLabel}
                                 searchPlaceholder={labels.dropdownSearchPlaceholder}
                                 noOptionsText={labels.dropdownNoOptions}
+                                disabled={dropdownDisabled}
                               />
                             </div>
                             <button
@@ -349,6 +375,7 @@ const RoleSpecificCompetenciesTab = ({
                                           triggerLabel={levelTriggerLabel}
                                           searchPlaceholder={labels.dropdownSearchPlaceholder}
                                           noOptionsText={labels.dropdownNoOptions}
+                                          disabled={dropdownDisabled}
                                         />
                                       </div>
                                       <div className="framework-builder__org-inline-actions">
@@ -620,22 +647,24 @@ const RoleSpecificCompetenciesTab = ({
         })}
       </div>
 
-      <div className="framework-builder__actions">
-        <button
-          type="button"
-          className="competency-framework-page__primary-button"
-          disabled={!canEdit || hasInvalid}
-          onClick={handleSave}
-        >
-          {labels.save}
-        </button>
-      </div>
+      {canEdit && (
+        <div className="framework-builder__actions">
+          <button
+            type="button"
+            className="competency-framework-page__primary-button"
+            disabled={isSaveDisabled}
+            onClick={onSave}
+          >
+            {isSaving ? savingLabel : submitLabel}
+          </button>
+        </div>
+      )}
 
       <AddNewDomainModal
         isOpen={addDomainOpen}
         onClose={() => setAddDomainOpen(false)}
         labels={labels.addDomainModal}
-        onAdd={onAddDomainOption}
+        onSubmit={onAddDomainOption}
       />
       <AddNewSubDomainModal
         isOpen={addSubDomainOpen}
@@ -646,7 +675,7 @@ const RoleSpecificCompetenciesTab = ({
         labels={labels.addSubDomainModal}
         parentDomainOptions={domainOptions}
         defaultParentDomain={subDomainModalParent}
-        onAdd={onAddSubDomainOption}
+        onSubmit={onAddSubDomainOption}
       />
 
       <ConfirmActionDialog

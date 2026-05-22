@@ -2,6 +2,8 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useState } from 'react';
+import { hasSubDomainsSectionData } from '../../../api/competencyFramework/competencyFrameworkSubDomainsUtils';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../skeleton';
 import ConfirmActionDialog from '../../confirmActionDialog/ConfirmActionDialog';
 import MultiSelectInput from '../../multiSelectInput/MultiSelectInput';
 import { useToast } from '../../toast/ToastProvider';
@@ -19,8 +21,12 @@ const SubDomainTab = ({
   competencyTypes,
   onChangeCompetencyTypes,
   subDomainOptions,
-  onAddSubDomainOption,
+  onCreateSubDomain,
+  isCreatingSubDomain = false,
   parentDomainOptions,
+  onSave,
+  isSaving = false,
+  isPrefilling = false,
 }) => {
   const { showToast } = useToast();
   const [isAddSubDomainOpen, setIsAddSubDomainOpen] = useState(false);
@@ -30,6 +36,10 @@ const SubDomainTab = ({
   const hasInvalidRow = competencyTypes.some(
     item => !item.competencyType.trim() || item.subDomains.length === 0,
   );
+  const isUpdateMode = hasSubDomainsSectionData(competencyTypes);
+  const submitLabel = isUpdateMode ? labels.update : labels.save;
+  const savingLabel = isUpdateMode ? labels.updating : labels.saving;
+  const isSaveDisabled = !canEdit || isSaving || isPrefilling || hasInvalidRow;
 
   const pendingDeleteName = useMemo(
     () => competencyTypes.find(item => item.id === pendingDeleteId)?.competencyType || '',
@@ -85,6 +95,10 @@ const SubDomainTab = ({
       setIsDeleting(false);
     }
   };
+
+  if (isPrefilling) {
+    return <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />;
+  }
 
   return (
     <div className="framework-builder__section-card framework-builder__section-card--form">
@@ -155,21 +169,25 @@ const SubDomainTab = ({
         </button>
       </div>
 
-      <div className="framework-builder__actions">
-        <button
-          type="button"
-          className="competency-framework-page__primary-button"
-          disabled={!canEdit || hasInvalidRow}
-        >
-          {labels.save}
-        </button>
-      </div>
+      {canEdit && (
+        <div className="framework-builder__actions">
+          <button
+            type="button"
+            className="competency-framework-page__primary-button"
+            disabled={isSaveDisabled}
+            onClick={onSave}
+          >
+            {isSaving ? savingLabel : submitLabel}
+          </button>
+        </div>
+      )}
 
       <AddNewSubDomainModal
         isOpen={isAddSubDomainOpen}
         onClose={() => setIsAddSubDomainOpen(false)}
         labels={labels.addSubDomainModal}
-        onAdd={onAddSubDomainOption}
+        onSubmit={onCreateSubDomain}
+        isSubmitting={isCreatingSubDomain}
         parentDomainOptions={parentDomainOptions}
       />
 

@@ -2,6 +2,8 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useState } from 'react';
+import { hasProficiencyLevelsSectionData } from '../../../api/competencyFramework/competencyFrameworkProficiencyUtils';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../skeleton';
 import ConfirmActionDialog from '../../confirmActionDialog/ConfirmActionDialog';
 import { useToast } from '../../toast/ToastProvider';
 
@@ -16,12 +18,19 @@ const ProficiencyLevelTab = ({
   canEdit,
   levels,
   onChangeLevels,
+  onSave,
+  isSaving = false,
+  isPrefilling = false,
 }) => {
   const { showToast } = useToast();
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const canDelete = levels.length > 1;
   const hasInvalidLevel = levels.some(item => !item.code.trim() || !item.name.trim());
+  const isUpdateMode = hasProficiencyLevelsSectionData(levels);
+  const submitLabel = isUpdateMode ? labels.update : labels.save;
+  const savingLabel = isUpdateMode ? labels.updating : labels.saving;
+  const isSaveDisabled = !canEdit || isSaving || isPrefilling || hasInvalidLevel;
   const pendingDeleteName = useMemo(
     () => levels.find(item => item.id === pendingDeleteId)?.name || '',
     [levels, pendingDeleteId],
@@ -75,19 +84,9 @@ const ProficiencyLevelTab = ({
     }
   };
 
-  const handleSave = () => {
-    try {
-      showToast({
-        title: labels.saveSuccessTitle,
-        description: labels.saveSuccessDescription,
-      });
-    } catch (error) {
-      showToast({
-        title: labels.saveFailedTitle,
-        description: labels.saveFailedDescription,
-      });
-    }
-  };
+  if (isPrefilling) {
+    return <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />;
+  }
 
   return (
     <div className="framework-builder__section-card framework-builder__section-card--form">
@@ -148,16 +147,18 @@ const ProficiencyLevelTab = ({
         ))}
       </div>
 
-      <div className="framework-builder__actions">
-        <button
-          type="button"
-          className="competency-framework-page__primary-button"
-          disabled={!canEdit || hasInvalidLevel}
-          onClick={handleSave}
-        >
-          {labels.save}
-        </button>
-      </div>
+      {canEdit && (
+        <div className="framework-builder__actions">
+          <button
+            type="button"
+            className="competency-framework-page__primary-button"
+            disabled={isSaveDisabled}
+            onClick={onSave}
+          >
+            {isSaving ? savingLabel : submitLabel}
+          </button>
+        </div>
+      )}
 
       <ConfirmActionDialog
         isOpen={Boolean(pendingDeleteId)}

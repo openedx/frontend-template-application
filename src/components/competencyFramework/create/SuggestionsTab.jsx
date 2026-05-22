@@ -6,89 +6,172 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  buildSuggestionCreatePayload,
+  buildSuggestionUpdatePayload,
+  mapSuggestionToFormState,
+} from '../../../api/competencyFramework/competencyFrameworkSuggestionsUtils';
+import { EmptyState } from '../../emptyState';
 import ConfirmActionDialog from '../../confirmActionDialog/ConfirmActionDialog';
 import PopupDialog from '../../popupDialog/PopupDialog';
 import SearchableDropdown from '../../searchableDropdown/SearchableDropdown';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../skeleton';
 import { useToast } from '../../toast/ToastProvider';
 import { useUserRole } from '../../../contexts/UserRoleContext';
+import useCompetencyFrameworkSuggestionsMutations from '../../../hooks/competencyFramework/useCompetencyFrameworkSuggestionsMutations';
+import useFrameworkSuggestionDetail from '../../../hooks/competencyFramework/useFrameworkSuggestionDetail';
+import useFrameworkSuggestions from '../../../hooks/competencyFramework/useFrameworkSuggestions';
 import messages from '../../../pages/competencyFramework/messages';
 import pageMessages from '../../../pages/messages';
+import { hasDisplayValue } from '../../../utils/hasDisplayValue';
 import './SuggestionsTab.scss';
 
-const SUGGESTION_STATUS_OPTIONS = [
-  { value: 'pending', label: 'Pending' },
-  { value: 'approved', label: 'Approved' },
-];
-
-const SUGGESTION_TYPE_OPTIONS = [
-  { value: 'competency', label: 'Competency' },
-  { value: 'domain', label: 'Domain' },
-  { value: 'sub-domain', label: 'Sub-domain' },
-  { value: 'activity', label: 'Activity' },
-];
-
-const createMockSuggestions = () => ([
-  {
-    id: 'sug-1',
-    type: 'competency',
-    name: 'Risk-based decision making',
-    description: 'Apply risk-based judgement during product reviews.',
-    status: 'pending',
-  },
-  {
-    id: 'sug-2',
-    type: 'domain',
-    name: 'Digital health regulation',
-    description: 'Coverage for software-as-a-medical-device.',
-    status: 'pending',
-  },
-]);
+const DEFAULT_FORM = {
+  type: 'competency',
+  name: '',
+  description: '',
+  status: 'pending',
+};
 
 const statusClass = (status) => {
   if (status === 'approved') {
     return 'suggestions-tab__badge--approved';
   }
+  if (status === 'rejected') {
+    return 'suggestions-tab__badge--rejected';
+  }
   return 'suggestions-tab__badge--pending';
 };
 
-const SuggestionsTab = ({ canEdit }) => {
+const SuggestionsTab = ({ frameworkUuid, canEdit, actionsLocked = false }) => {
+  const actionsEnabled = canEdit && !actionsLocked;
+  const showActions = canEdit || actionsLocked;
   const { formatMessage } = useIntl();
   const { showToast } = useToast();
   const { navbarAccess } = useUserRole();
 
-  // Local mock state (no API integration yet).
-  const [suggestions, setSuggestions] = useState(() => createMockSuggestions());
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('add'); // 'add' | 'edit'
-  const [activeSuggestionId, setActiveSuggestionId] = useState(null);
-
-  const activeSuggestion = useMemo(
-    () => suggestions.find(s => s.id === activeSuggestionId) || null,
-    [suggestions, activeSuggestionId],
-  );
-
-  const [form, setForm] = useState({
-    type: SUGGESTION_TYPE_OPTIONS[0].value,
-    name: '',
-    description: '',
-    status: SUGGESTION_STATUS_OPTIONS[0].value,
+  const {
+    suggestions,
+    isLoading: isSuggestionsLoading,
+    isError: isSuggestionsError,
+    errorMessage: suggestionsErrorMessage,
+  } = useFrameworkSuggestions({
+    frameworkUuid,
+    enabled: hasDisplayValue(frameworkUuid),
   });
 
-  const typeOptions = useMemo(() => SUGGESTION_TYPE_OPTIONS, []);
-  const statusOptions = useMemo(() => SUGGESTION_STATUS_OPTIONS, []);
+  const {
+    createSuggestionMutation,
+    updateSuggestionMutation,
+    deleteSuggestionMutation,
+  } = useCompetencyFrameworkSuggestionsMutations();
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState('add');
+  const [activeSuggestionId, setActiveSuggestionId] = useState(null);
+  const [form, setForm] = useState(DEFAULT_FORM);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const isEditModal = modalOpen && modalMode === 'edit' && hasDisplayValue(activeSuggestionId);
+
+  const {
+    detail: editSuggestionDetail,
+    isLoading: isEditDetailLoading,
+    isError: isEditDetailError,
+    errorMessage: editDetailErrorMessage,
+  } = useFrameworkSuggestionDetail({
+    suggestionId: activeSuggestionId,
+    enabled: isEditModal,
+  });
+
+  const typeOptions = useMemo(() => ([
+    { value: 'competency', label: formatMessage(messages.suggestionTypeCompetency) },
+    { value: 'domain', label: formatMessage(messages.suggestionTypeDomain) },
+    { value: 'sub_domain', label: formatMessage(messages.suggestionTypeSubDomain) },
+    { value: 'activity', label: formatMessage(messages.suggestionTypeActivity) },
+    { value: 'role', label: formatMessage(messages.suggestionTypeRole) },
+    { value: 'other', label: formatMessage(messages.suggestionTypeOther) },
+  ]), [formatMessage]);
+
+  const statusOptions = useMemo(() => ([
+    { value: 'pending', label: formatMessage(messages.suggestionStatusPending) },
+    { value: 'approved', label: formatMessage(messages.suggestionStatusApproved) },
+    { value: 'rejected', label: formatMessage(messages.suggestionStatusRejected) },
+  ]), [formatMessage]);
 
   const resetForm = () => {
     setForm({
-      type: typeOptions[0].value,
+      type: typeOptions[0]?.value ?? DEFAULT_FORM.type,
       name: '',
       description: '',
-      status: statusOptions[0].value,
+      status: statusOptions[0]?.value ?? DEFAULT_FORM.status,
     });
   };
 
+  const pendingDelete = useMemo(
+    () => suggestions.find(s => s.id === pendingDeleteId) || null,
+    [suggestions, pendingDeleteId],
+  );
+
+  const isSaving = createSuggestionMutation.isPending || updateSuggestionMutation.isPending;
+  const isSaveDisabled = !form.name.trim() || !form.type || !form.status || isSaving;
+  const isModalFormLoading = isEditModal && isEditDetailLoading;
+
+  useEffect(() => {
+    if (!isSuggestionsError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.suggestionsLoadErrorTitle),
+      description: suggestionsErrorMessage || formatMessage(messages.suggestionsLoadError),
+    });
+  }, [
+    formatMessage,
+    isSuggestionsError,
+    showToast,
+    suggestionsErrorMessage,
+  ]);
+
+  useEffect(() => {
+    if (!isEditModal || isEditDetailLoading || isEditDetailError || !editSuggestionDetail) {
+      return;
+    }
+
+    setForm(mapSuggestionToFormState(editSuggestionDetail));
+  }, [
+    editSuggestionDetail,
+    isEditDetailError,
+    isEditDetailLoading,
+    isEditModal,
+  ]);
+
+  useEffect(() => {
+    if (!isEditModal || !isEditDetailError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.suggestionsLoadErrorTitle),
+      description: editDetailErrorMessage || formatMessage(messages.suggestionDetailLoadError),
+    });
+    setModalOpen(false);
+    setActiveSuggestionId(null);
+  }, [
+    editDetailErrorMessage,
+    formatMessage,
+    isEditDetailError,
+    isEditModal,
+    showToast,
+  ]);
+
   const openAdd = () => {
+    if (!actionsEnabled) {
+      return;
+    }
+
     setModalMode('add');
     setActiveSuggestionId(null);
     resetForm();
@@ -96,72 +179,182 @@ const SuggestionsTab = ({ canEdit }) => {
   };
 
   const openEdit = (suggestion) => {
-    setModalMode('edit');
-    setActiveSuggestionId(suggestion.id);
-    setForm({
-      type: suggestion.type,
-      name: suggestion.name,
-      description: suggestion.description,
-      status: suggestion.status,
-    });
-    setModalOpen(true);
-  };
-
-  const [pendingDeleteId, setPendingDeleteId] = useState(null);
-  const pendingDelete = useMemo(
-    () => suggestions.find(s => s.id === pendingDeleteId) || null,
-    [suggestions, pendingDeleteId],
-  );
-
-  const isSaveDisabled = !form.name.trim() || !form.type || !form.status;
-
-  const handleSave = () => {
-    if (isSaveDisabled) {
+    if (!actionsEnabled || !hasDisplayValue(suggestion?.id)) {
       return;
     }
 
-    // Basic route-level guard (in addition to `canEdit`)
+    setModalMode('edit');
+    setActiveSuggestionId(suggestion.id);
+    resetForm();
+    setModalOpen(true);
+  };
+
+  const requestDelete = (suggestionId) => {
+    if (!actionsEnabled) {
+      return;
+    }
+
+    setPendingDeleteId(suggestionId);
+  };
+
+  const handleSave = async () => {
+    if (!actionsEnabled || isSaveDisabled || isModalFormLoading) {
+      return;
+    }
+
     if (!navbarAccess?.accessCompetencyFramework) {
       showToast({
-        title: 'Access restricted',
+        title: formatMessage(messages.suggestionsLoadErrorTitle),
         description: formatMessage(pageMessages.accessRestrictedMessage),
       });
       setModalOpen(false);
       return;
     }
 
-    if (modalMode === 'add') {
-      const newSuggestion = {
-        id: `sug-${Date.now()}`,
-        type: form.type,
-        name: form.name.trim(),
-        description: form.description.trim(),
-        status: form.status,
-      };
-      setSuggestions(prev => [newSuggestion, ...prev]);
+    try {
+      if (modalMode === 'add') {
+        const result = await createSuggestionMutation.mutateAsync({
+          frameworkUuid,
+          payload: buildSuggestionCreatePayload(form),
+        });
+
+        showToast({
+          title: formatMessage(messages.suggestionSavedToastTitle),
+          description: result.message || formatMessage(messages.suggestionSavedToastDescription),
+        });
+      } else if (modalMode === 'edit' && hasDisplayValue(activeSuggestionId)) {
+        const result = await updateSuggestionMutation.mutateAsync({
+          frameworkUuid,
+          suggestionId: activeSuggestionId,
+          payload: buildSuggestionUpdatePayload(form),
+        });
+
+        showToast({
+          title: formatMessage(messages.suggestionSavedToastTitle),
+          description: result.message || formatMessage(messages.suggestionSavedToastDescription),
+        });
+      }
+
+      setModalOpen(false);
+      setActiveSuggestionId(null);
+    } catch (error) {
+      const fallback = modalMode === 'add'
+        ? messages.suggestionCreateError
+        : messages.suggestionUpdateError;
+
       showToast({
-        title: formatMessage(messages.suggestionSavedToastTitle),
-        description: formatMessage(messages.suggestionSavedToastDescription),
-      });
-    } else if (modalMode === 'edit' && activeSuggestion) {
-      setSuggestions(prev => prev.map(s => (
-        s.id === activeSuggestion.id
-          ? {
-            ...s,
-            type: form.type,
-            name: form.name.trim(),
-            description: form.description.trim(),
-            status: form.status,
-          }
-          : s
-      )));
-      showToast({
-        title: formatMessage(messages.suggestionSavedToastTitle),
-        description: formatMessage(messages.suggestionSavedToastDescription),
+        title: formatMessage(messages.frameworkSectionSaveErrorTitle),
+        description: error?.message || formatMessage(fallback),
       });
     }
+  };
 
-    setModalOpen(false);
+  const confirmDelete = async () => {
+    if (!pendingDelete || !hasDisplayValue(pendingDelete.id)) {
+      setPendingDeleteId(null);
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      const result = await deleteSuggestionMutation.mutateAsync({
+        frameworkUuid,
+        suggestionId: pendingDelete.id,
+      });
+
+      showToast({
+        title: formatMessage(messages.suggestionDeletedToastTitle),
+        description: result.message || formatMessage(messages.suggestionDeletedToastDescription, {
+          name: pendingDelete.name,
+        }),
+      });
+      setPendingDeleteId(null);
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.suggestionDeletedToastTitle),
+        description: error?.message || formatMessage(messages.suggestionDeleteError),
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const getTypeLabel = (typeValue) => typeOptions.find(o => o.value === typeValue)?.label || typeValue;
+  const getStatusLabel = (statusValue) => statusOptions.find(o => o.value === statusValue)?.label || statusValue;
+
+  const listContent = () => {
+    if (isSuggestionsLoading) {
+      return <SkeletonScreen variant={SKELETON_VARIANTS.CARD_LIST} />;
+    }
+
+    if (isSuggestionsError) {
+      return (
+        <EmptyState
+          message={suggestionsErrorMessage || formatMessage(messages.suggestionsLoadError)}
+        />
+      );
+    }
+
+    if (suggestions.length === 0) {
+      return <EmptyState message={formatMessage(messages.suggestionsEmpty)} />;
+    }
+
+    return (
+      <div className="suggestions-tab__list">
+        {suggestions.map(suggestion => (
+          <div className="suggestions-tab__item" key={suggestion.id}>
+            <div className="suggestions-tab__item-main">
+              <div className="suggestions-tab__item-top">
+                {hasDisplayValue(suggestion.type) && (
+                  <span className="suggestions-tab__badge suggestions-tab__badge--type">
+                    {getTypeLabel(suggestion.type)}
+                  </span>
+                )}
+                {hasDisplayValue(suggestion.status) && (
+                  <span className={`suggestions-tab__badge ${statusClass(suggestion.status)}`}>
+                    {getStatusLabel(suggestion.status)}
+                  </span>
+                )}
+              </div>
+              {hasDisplayValue(suggestion.name) && (
+                <h4 className="suggestions-tab__item-name">{suggestion.name}</h4>
+              )}
+              {hasDisplayValue(suggestion.description) && (
+                <p className="suggestions-tab__item-description">{suggestion.description}</p>
+              )}
+            </div>
+
+            {showActions && (
+              <div className="suggestions-tab__actions">
+                <button
+                  type="button"
+                  className={`suggestions-tab__icon-button ${actionsLocked ? 'is-disabled' : ''}`}
+                  aria-label={formatMessage(messages.suggestionModalTitleEdit)}
+                  onClick={() => openEdit(suggestion)}
+                  title={formatMessage(messages.suggestionModalTitleEdit)}
+                  disabled={!actionsEnabled}
+                  aria-disabled={!actionsEnabled}
+                >
+                  <FontAwesomeIcon icon={faPen} />
+                </button>
+                <button
+                  type="button"
+                  className={`suggestions-tab__icon-button suggestions-tab__icon-button--danger ${actionsLocked ? 'is-disabled' : ''}`}
+                  aria-label={formatMessage(messages.suggestionDeleteDialogTitle)}
+                  onClick={() => requestDelete(suggestion.id)}
+                  title={formatMessage(messages.suggestionDeleteDialogTitle)}
+                  disabled={!actionsEnabled || deleteSuggestionMutation.isPending}
+                  aria-disabled={!actionsEnabled}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -172,11 +365,13 @@ const SuggestionsTab = ({ canEdit }) => {
             <h3 className="suggestions-tab__title">{formatMessage(messages.tabSuggestions)}</h3>
             <p className="suggestions-tab__subtitle">{formatMessage(messages.suggestionsSubtitle)}</p>
           </div>
-          {canEdit && (
+          {showActions && (
             <button
               type="button"
-              className="competency-framework-page__primary-button suggestions-tab__add-button"
+              className={`competency-framework-page__primary-button suggestions-tab__add-button ${actionsLocked ? 'is-disabled' : ''}`}
               onClick={openAdd}
+              disabled={!actionsEnabled || isSuggestionsLoading}
+              aria-disabled={!actionsEnabled}
             >
               <FontAwesomeIcon icon={faPlus} />
               {formatMessage(messages.addSuggestion)}
@@ -184,119 +379,101 @@ const SuggestionsTab = ({ canEdit }) => {
           )}
         </div>
 
-        <div className="suggestions-tab__list">
-          {suggestions.map(suggestion => {
-            const typeLabel = typeOptions.find(o => o.value === suggestion.type)?.label || suggestion.type;
-            return (
-              <div className="suggestions-tab__item" key={suggestion.id}>
-                <div className="suggestions-tab__item-main">
-                  <div className="suggestions-tab__item-top">
-                    <span className="suggestions-tab__badge suggestions-tab__badge--type">{typeLabel}</span>
-                    <span className={`suggestions-tab__badge ${statusClass(suggestion.status)}`}>{suggestion.status === 'approved' ? 'Approved' : 'Pending'}</span>
-                  </div>
-                  <h4 className="suggestions-tab__item-name">{suggestion.name}</h4>
-                  <p className="suggestions-tab__item-description">{suggestion.description}</p>
-                </div>
-
-                {canEdit && (
-                  <div className="suggestions-tab__actions">
-                    <button
-                      type="button"
-                      className="suggestions-tab__icon-button"
-                      aria-label="Edit suggestion"
-                      onClick={() => openEdit(suggestion)}
-                      title="Edit suggestion"
-                    >
-                      <FontAwesomeIcon icon={faPen} />
-                    </button>
-                    <button
-                      type="button"
-                      className="suggestions-tab__icon-button suggestions-tab__icon-button--danger"
-                      aria-label="Delete suggestion"
-                      onClick={() => setPendingDeleteId(suggestion.id)}
-                      title="Delete suggestion"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        {listContent()}
       </div>
 
       <PopupDialog
         isOpen={modalOpen}
         title={modalMode === 'edit' ? formatMessage(messages.suggestionModalTitleEdit) : formatMessage(messages.suggestionModalTitleAdd)}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {
+          if (!isSaving) {
+            setModalOpen(false);
+            setActiveSuggestionId(null);
+          }
+        }}
         contentClassName="suggestions-tab__dialog-content"
       >
-        <div className="suggestions-tab__form">
-          <div className="suggestions-tab__field">
-            <label className="suggestions-tab__label">{formatMessage(messages.suggestionTypeLabel)}</label>
-            <SearchableDropdown
-              value={form.type}
-              options={typeOptions}
-              onChange={next => setForm(prev => ({ ...prev, type: next }))}
-              triggerLabel={typeOptions.find(o => o.value === form.type)?.label || ''}
-              searchPlaceholder={formatMessage(messages.builderDropdownSearchPlaceholder)}
-              noOptionsText={formatMessage(messages.builderDropdownNoOptions)}
-            />
-          </div>
+        {isModalFormLoading ? (
+          <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />
+        ) : (
+          <div className="suggestions-tab__form">
+            <div className="suggestions-tab__field">
+              <label className="suggestions-tab__label">{formatMessage(messages.suggestionTypeLabel)}</label>
+              <SearchableDropdown
+                value={form.type}
+                options={typeOptions}
+                onChange={next => setForm(prev => ({ ...prev, type: next }))}
+                triggerLabel={typeOptions.find(o => o.value === form.type)?.label || ''}
+                searchPlaceholder={formatMessage(messages.builderDropdownSearchPlaceholder)}
+                noOptionsText={formatMessage(messages.builderDropdownNoOptions)}
+                disabled={!actionsEnabled}
+              />
+            </div>
 
-          <div className="suggestions-tab__field">
-            <label className="suggestions-tab__label">{formatMessage(messages.suggestionNameLabel)}</label>
-            <input
-              className="suggestions-tab__input"
-              type="text"
-              placeholder={formatMessage(messages.suggestionNamePlaceholder)}
-              value={form.name}
-              onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
-            />
-          </div>
+            <div className="suggestions-tab__field">
+              <label className="suggestions-tab__label">{formatMessage(messages.suggestionNameLabel)}</label>
+              <input
+                className="suggestions-tab__input"
+                type="text"
+                placeholder={formatMessage(messages.suggestionNamePlaceholder)}
+                value={form.name}
+                onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
+                disabled={!actionsEnabled}
+              />
+            </div>
 
-          <div className="suggestions-tab__field">
-            <label className="suggestions-tab__label">{formatMessage(messages.suggestionDescriptionLabel)}</label>
-            <textarea
-              className="suggestions-tab__textarea"
-              placeholder={formatMessage(messages.suggestionDescriptionPlaceholder)}
-              rows={4}
-              value={form.description}
-              onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
-            />
-          </div>
+            <div className="suggestions-tab__field">
+              <label className="suggestions-tab__label">{formatMessage(messages.suggestionDescriptionLabel)}</label>
+              <textarea
+                className="suggestions-tab__textarea"
+                placeholder={formatMessage(messages.suggestionDescriptionPlaceholder)}
+                rows={4}
+                value={form.description}
+                onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
+                disabled={!actionsEnabled}
+              />
+            </div>
 
-          <div className="suggestions-tab__field">
-            <label className="suggestions-tab__label">{formatMessage(messages.suggestionStatusLabel)}</label>
-            <SearchableDropdown
-              value={form.status}
-              options={statusOptions}
-              onChange={next => setForm(prev => ({ ...prev, status: next }))}
-              triggerLabel={statusOptions.find(o => o.value === form.status)?.label || ''}
-              searchPlaceholder={formatMessage(messages.builderDropdownSearchPlaceholder)}
-              noOptionsText={formatMessage(messages.builderDropdownNoOptions)}
-            />
-          </div>
+            <div className="suggestions-tab__field">
+              <label className="suggestions-tab__label">{formatMessage(messages.suggestionStatusLabel)}</label>
+              <SearchableDropdown
+                value={form.status}
+                options={statusOptions}
+                onChange={next => setForm(prev => ({ ...prev, status: next }))}
+                triggerLabel={statusOptions.find(o => o.value === form.status)?.label || ''}
+                searchPlaceholder={formatMessage(messages.builderDropdownSearchPlaceholder)}
+                noOptionsText={formatMessage(messages.builderDropdownNoOptions)}
+                disabled={!actionsEnabled}
+              />
+            </div>
 
-          <div className="suggestions-tab__dialog-actions">
-            <button
-              type="button"
-              className="competency-framework-page__outline-button suggestions-tab__dialog-cancel"
-              onClick={() => setModalOpen(false)}
-            >
-              {formatMessage(messages.cancel)}
-            </button>
-            <button
-              type="button"
-              className="competency-framework-page__primary-button"
-              disabled={isSaveDisabled}
-              onClick={handleSave}
-            >
-              {modalMode === 'edit' ? formatMessage(messages.save) : formatMessage(messages.add)}
-            </button>
+            <div className="suggestions-tab__dialog-actions">
+              <button
+                type="button"
+                className="competency-framework-page__outline-button suggestions-tab__dialog-cancel"
+                onClick={() => {
+                  if (!isSaving) {
+                    setModalOpen(false);
+                    setActiveSuggestionId(null);
+                  }
+                }}
+                disabled={isSaving}
+              >
+                {formatMessage(messages.cancel)}
+              </button>
+              <button
+                type="button"
+                className="competency-framework-page__primary-button"
+                disabled={isSaveDisabled || !actionsEnabled}
+                onClick={handleSave}
+              >
+                {isSaving
+                  ? formatMessage(messages.suggestionSaving)
+                  : (modalMode === 'edit' ? formatMessage(messages.save) : formatMessage(messages.add))}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </PopupDialog>
 
       <ConfirmActionDialog
@@ -305,20 +482,8 @@ const SuggestionsTab = ({ canEdit }) => {
         description={formatMessage(messages.suggestionDeleteDialogDescription, { name: pendingDelete?.name || '' })}
         cancelLabel={formatMessage(messages.cancel)}
         confirmLabel={formatMessage(messages.suggestionDeleteConfirmLabel)}
-        onCancel={() => setPendingDeleteId(null)}
-        onConfirm={() => {
-          if (!pendingDelete) {
-            setPendingDeleteId(null);
-            return;
-          }
-
-          setSuggestions(prev => prev.filter(s => s.id !== pendingDelete.id));
-          showToast({
-            title: formatMessage(messages.suggestionDeletedToastTitle),
-            description: formatMessage(messages.suggestionDeletedToastDescription, { name: pendingDelete.name }),
-          });
-          setPendingDeleteId(null);
-        }}
+        onCancel={() => !isDeleting && setPendingDeleteId(null)}
+        onConfirm={confirmDelete}
       />
     </section>
   );

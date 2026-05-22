@@ -2,6 +2,8 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useState } from 'react';
+import { hasOrganizationCompetenciesSectionData } from '../../../api/competencyFramework/competencyFrameworkOrganizationCompetenciesUtils';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../skeleton';
 import ConfirmActionDialog from '../../confirmActionDialog/ConfirmActionDialog';
 import SearchableDropdown from '../../searchableDropdown/SearchableDropdown';
 import { useToast } from '../../toast/ToastProvider';
@@ -19,6 +21,10 @@ const OrganizationalCompetenciesTab = ({
   competencyTypeOptions,
   domainOptions,
   proficiencyLevelOptions,
+  onSave,
+  isSaving = false,
+  isPrefilling = false,
+  optionsLoading = false,
 }) => {
   const { showToast } = useToast();
   const [pendingDelete, setPendingDelete] = useState(null);
@@ -34,6 +40,11 @@ const OrganizationalCompetenciesTab = ({
       ))
     ))
   )), [items]);
+  const isUpdateMode = hasOrganizationCompetenciesSectionData(items);
+  const submitLabel = isUpdateMode ? labels.update : labels.save;
+  const savingLabel = isUpdateMode ? labels.updating : labels.saving;
+  const isSaveDisabled = !canEdit || isSaving || isPrefilling || hasInvalid;
+  const dropdownDisabled = !canEdit || optionsLoading || isPrefilling;
 
   const mutate = (updater) => onChangeItems(updater(items));
 
@@ -61,13 +72,9 @@ const OrganizationalCompetenciesTab = ({
     }
   };
 
-  const handleSave = () => {
-    try {
-      showToast({ title: labels.saveSuccessTitle, description: labels.saveSuccessDescription });
-    } catch (error) {
-      showToast({ title: labels.saveFailedTitle, description: labels.saveFailedDescription });
-    }
-  };
+  if (isPrefilling) {
+    return <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />;
+  }
 
   return (
     <div className="framework-builder__section-card framework-builder__section-card--form">
@@ -102,6 +109,7 @@ const OrganizationalCompetenciesTab = ({
                     triggerLabel={competencyTypeOptions.find(o => o.value === typeItem.competencyType)?.label || labels.selectTypePlaceholder}
                     searchPlaceholder={labels.dropdownSearchPlaceholder}
                     noOptionsText={labels.dropdownNoOptions}
+                    disabled={dropdownDisabled}
                   />
                 </div>
                 <button
@@ -138,6 +146,7 @@ const OrganizationalCompetenciesTab = ({
                             triggerLabel={domainOptions.find(o => o.value === domainItem.domain)?.label || labels.selectDomainPlaceholder}
                             searchPlaceholder={labels.dropdownSearchPlaceholder}
                             noOptionsText={labels.dropdownNoOptions}
+                            disabled={dropdownDisabled}
                           />
                         </div>
                         <button
@@ -184,6 +193,7 @@ const OrganizationalCompetenciesTab = ({
                                     triggerLabel={proficiencyLevelOptions.find(o => o.value === levelItem.proficiencyLevel)?.label || labels.selectLevelPlaceholder}
                                     searchPlaceholder={labels.dropdownSearchPlaceholder}
                                     noOptionsText={labels.dropdownNoOptions}
+                                    disabled={dropdownDisabled}
                                   />
                                 </div>
                                 <div className="framework-builder__org-inline-actions">
@@ -335,16 +345,18 @@ const OrganizationalCompetenciesTab = ({
         })}
       </div>
 
-      <div className="framework-builder__actions">
-        <button
-          type="button"
-          className="competency-framework-page__primary-button"
-          disabled={!canEdit || hasInvalid}
-          onClick={handleSave}
-        >
-          {labels.save}
-        </button>
-      </div>
+      {canEdit && (
+        <div className="framework-builder__actions">
+          <button
+            type="button"
+            className="competency-framework-page__primary-button"
+            disabled={isSaveDisabled}
+            onClick={onSave}
+          >
+            {isSaving ? savingLabel : submitLabel}
+          </button>
+        </div>
+      )}
 
       <ConfirmActionDialog
         isOpen={Boolean(pendingDelete)}

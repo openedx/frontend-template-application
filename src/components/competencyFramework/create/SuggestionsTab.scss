@@ -31,6 +31,13 @@
 
   &__add-button {
     gap: .5rem;
+
+    &.is-disabled,
+    &:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+      pointer-events: none;
+    }
   }
 
   &__list {
@@ -91,6 +98,12 @@
       color: #15803D;
       border-color: #86EFAC;
     }
+
+    &--rejected {
+      background: #FEE2E2;
+      color: #B91C1C;
+      border-color: #FCA5A5;
+    }
   }
 
   &__item-name {
@@ -125,15 +138,22 @@
     color: #2A3B8F;
     cursor: pointer;
 
-    &:hover {
+    &:hover:not(:disabled):not(.is-disabled) {
       background: rgb(42 59 143 / .06);
+    }
+
+    &.is-disabled,
+    &:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+      pointer-events: none;
     }
   }
 
   &__icon-button--danger {
     color: #DC2626;
 
-    &:hover {
+    &:hover:not(:disabled):not(.is-disabled) {
       background: rgb(220 38 38 / .06);
     }
   }

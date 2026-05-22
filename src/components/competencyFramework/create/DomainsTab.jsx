@@ -2,6 +2,8 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useState } from 'react';
+import { hasDomainsSectionData } from '../../../api/competencyFramework/competencyFrameworkDomainsUtils';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../skeleton';
 import ConfirmActionDialog from '../../confirmActionDialog/ConfirmActionDialog';
 import MultiSelectInput from '../../multiSelectInput/MultiSelectInput';
 import { useToast } from '../../toast/ToastProvider';
@@ -19,7 +21,11 @@ const DomainsTab = ({
   competencyTypes,
   onChangeCompetencyTypes,
   domainOptions,
-  onAddDomainOption,
+  onCreateDomain,
+  isCreatingDomain = false,
+  onSave,
+  isSaving = false,
+  isPrefilling = false,
 }) => {
   const { showToast } = useToast();
   const [isAddDomainOpen, setIsAddDomainOpen] = useState(false);
@@ -29,6 +35,10 @@ const DomainsTab = ({
   const hasInvalidRow = competencyTypes.some(
     item => !item.competencyType.trim() || item.domains.length === 0,
   );
+  const isUpdateMode = hasDomainsSectionData(competencyTypes);
+  const submitLabel = isUpdateMode ? labels.update : labels.save;
+  const savingLabel = isUpdateMode ? labels.updating : labels.saving;
+  const isSaveDisabled = !canEdit || isSaving || isPrefilling || hasInvalidRow;
 
   const pendingDeleteName = useMemo(
     () => competencyTypes.find(item => item.id === pendingDeleteId)?.competencyType || '',
@@ -84,6 +94,10 @@ const DomainsTab = ({
       setIsDeleting(false);
     }
   };
+
+  if (isPrefilling) {
+    return <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />;
+  }
 
   return (
     <div className="framework-builder__section-card framework-builder__section-card--form">
@@ -154,21 +168,25 @@ const DomainsTab = ({
         </button>
       </div>
 
-      <div className="framework-builder__actions">
-        <button
-          type="button"
-          className="competency-framework-page__primary-button"
-          disabled={!canEdit || hasInvalidRow}
-        >
-          {labels.save}
-        </button>
-      </div>
+      {canEdit && (
+        <div className="framework-builder__actions">
+          <button
+            type="button"
+            className="competency-framework-page__primary-button"
+            disabled={isSaveDisabled}
+            onClick={onSave}
+          >
+            {isSaving ? savingLabel : submitLabel}
+          </button>
+        </div>
+      )}
 
       <AddNewDomainModal
         isOpen={isAddDomainOpen}
         onClose={() => setIsAddDomainOpen(false)}
         labels={labels.addDomainModal}
-        onAdd={onAddDomainOption}
+        onSubmit={onCreateDomain}
+        isSubmitting={isCreatingDomain}
       />
 
       <ConfirmActionDialog

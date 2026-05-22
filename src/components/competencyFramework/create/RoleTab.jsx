@@ -2,6 +2,8 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useState } from 'react';
+import { hasRolesSectionData } from '../../../api/competencyFramework/competencyFrameworkRolesUtils';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../skeleton';
 import ConfirmActionDialog from '../../confirmActionDialog/ConfirmActionDialog';
 import { useToast } from '../../toast/ToastProvider';
 
@@ -15,12 +17,19 @@ const RoleTab = ({
   canEdit,
   roles,
   onChangeRoles,
+  onSave,
+  isSaving = false,
+  isPrefilling = false,
 }) => {
   const { showToast } = useToast();
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const canDelete = roles.length > 1;
   const hasInvalidRole = roles.some(item => !item.name.trim());
+  const isUpdateMode = hasRolesSectionData(roles);
+  const submitLabel = isUpdateMode ? labels.update : labels.save;
+  const savingLabel = isUpdateMode ? labels.updating : labels.saving;
+  const isSaveDisabled = !canEdit || isSaving || isPrefilling || hasInvalidRole;
   const pendingDeleteName = useMemo(
     () => roles.find(item => item.id === pendingDeleteId)?.name || '',
     [pendingDeleteId, roles],
@@ -74,19 +83,9 @@ const RoleTab = ({
     }
   };
 
-  const handleSave = () => {
-    try {
-      showToast({
-        title: labels.saveSuccessTitle,
-        description: labels.saveSuccessDescription,
-      });
-    } catch (error) {
-      showToast({
-        title: labels.saveFailedTitle,
-        description: labels.saveFailedDescription,
-      });
-    }
-  };
+  if (isPrefilling) {
+    return <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />;
+  }
 
   return (
     <div className="framework-builder__section-card framework-builder__section-card--form">
@@ -130,16 +129,18 @@ const RoleTab = ({
         ))}
       </div>
 
-      <div className="framework-builder__actions">
-        <button
-          type="button"
-          className="competency-framework-page__primary-button"
-          disabled={!canEdit || hasInvalidRole}
-          onClick={handleSave}
-        >
-          {labels.save}
-        </button>
-      </div>
+      {canEdit && (
+        <div className="framework-builder__actions">
+          <button
+            type="button"
+            className="competency-framework-page__primary-button"
+            disabled={isSaveDisabled}
+            onClick={onSave}
+          >
+            {isSaving ? savingLabel : submitLabel}
+          </button>
+        </div>
+      )}
 
       <ConfirmActionDialog
         isOpen={Boolean(pendingDeleteId)}

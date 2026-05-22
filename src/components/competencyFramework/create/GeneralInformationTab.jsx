@@ -1,7 +1,12 @@
 /* eslint-disable react/prop-types */
+import {
+  hasGeneralInformationSectionData,
+  hasRichTextContent,
+} from '../../../api/competencyFramework/competencyFrameworkUtils';
 import SearchableDropdown from '../../searchableDropdown/SearchableDropdown';
 import MultiSelectInput from '../../multiSelectInput/MultiSelectInput';
 import RichTextEditor from '../../richTextEditor/RichTextEditor';
+import { hasDisplayValue } from '../../../utils/hasDisplayValue';
 
 const GeneralInformationTab = ({
   labels,
@@ -10,13 +15,36 @@ const GeneralInformationTab = ({
   sourceFrameworkOptions,
   productTypeOptions,
   canEdit,
+  onSave,
+  isSaving = false,
+  isPrefilling = false,
+  optionsLoading = false,
+  hasFrameworkId = false,
 }) => {
+  const sourceFrameworkLabel = sourceFrameworkOptions.find(
+    (option) => String(option.value) === String(values.sourceFramework),
+  )?.label;
+
+  const isUpdateMode = hasFrameworkId && hasGeneralInformationSectionData({
+    name: values.name,
+    description: values.description,
+    sourceFramework: values.sourceFramework,
+    productTypes: values.productTypes,
+  });
+  const submitLabel = isUpdateMode ? labels.update : labels.save;
+  const savingLabel = isUpdateMode ? labels.updating : labels.saving;
+
+  const selectedProductTypes = Array.isArray(values.productTypes) ? values.productTypes : [];
+
   const isSaveDisabled = (
     !canEdit
-    || !values.name.trim()
-    || values.productTypes.length === 0
-    || !values.description.trim()
-    || !values.sourceFramework
+    || isSaving
+    || isPrefilling
+    || optionsLoading
+    || !hasDisplayValue(values.name?.trim())
+    || selectedProductTypes.length === 0
+    || !hasRichTextContent(values.description)
+    || !hasDisplayValue(values.sourceFramework)
   );
 
   return (
@@ -43,7 +71,7 @@ const GeneralInformationTab = ({
       </label>
       <MultiSelectInput
         options={productTypeOptions}
-        selectedValues={values.productTypes}
+        selectedValues={Array.isArray(values.productTypes) ? values.productTypes : []}
         onChange={next => onChange('productTypes', next)}
         disabled={!canEdit}
       />
@@ -87,20 +115,23 @@ const GeneralInformationTab = ({
         />
       ) : (
         <div className="framework-builder__input framework-builder__input--readonly">
-          {values.sourceFramework || labels.sourceFrameworkPlaceholder}
+          {sourceFrameworkLabel || labels.sourceFrameworkPlaceholder}
         </div>
       )}
     </div>
 
+    {canEdit && (
     <div className="framework-builder__actions">
       <button
         type="button"
         className="competency-framework-page__primary-button"
         disabled={isSaveDisabled}
+        onClick={onSave}
       >
-        {labels.save}
+        {isSaving || isPrefilling ? savingLabel : submitLabel}
       </button>
     </div>
+    )}
   </div>
   );
 };

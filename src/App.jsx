@@ -204,8 +204,9 @@ const RoutedLayout = () => {
           path="/admin/dashboard"
           element={<Navigate to={`/admin/dashboard/${ACTIVE_ROLE_DATA.userInfo.userRole}`} replace />}
         />
-        <Route path="/admin/competency-frameworks" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
         <Route path="/admin/competency-frameworks/new" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
+        <Route path="/admin/competency-frameworks/:frameworkId/edit" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
+        <Route path="/admin/competency-frameworks" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
         <Route path="/admin/activities-management" element={withAccess(navbarAccess.accessActivities, <Activities />)} />
         <Route path="/admin/searn-training-catalog" element={<SearnTrainingCatalog />} />
         <Route path="/admin/searn-training-catalog/:trainingId" element={<SearnTrainingDetail />} />

@@ -9,6 +9,42 @@ export const DASHBOARD_TOP_REQUESTED_ACTIVITIES = '/api/v1/dashboard/top-request
 export const DASHBOARD_PENDING_REQUESTS = '/api/v1/dashboard/pending-requests/';
 
 export const COMPETENCY_FRAMEWORKS = '/api/v1/competency-frameworks/';
+export const COMPETENCY_FRAMEWORK_GENERAL_INFORMATION = '/api/v1/competency-framework/general-information/';
+export const OPTIONS_PRODUCT_TYPES = '/api/v1/options/product-types/';
+export const OPTIONS_SOURCE_FRAMEWORK = '/api/v1/options/source-framework/';
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkDetail = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/`;
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkDomains = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/domains/`;
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkSubDomains = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/sub-domains/`;
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkRoles = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/roles/`;
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkProficiencyLevels = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/proficiency-levels/`;
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkOrganizationCompetencies = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/organization-competencies/`;
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkRoleCompetencies = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/role-competencies/`;
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkActivities = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/activities/`;
+
+/** @param {string} frameworkUuid */
+export const competencyFrameworkSuggestions = (frameworkUuid) => `/api/v1/competency-framework/${frameworkUuid}/suggestions/`;
+
+/** @param {string|number} suggestionId */
+export const competencyFrameworkSuggestionDetail = (suggestionId) => `/api/v1/competency-framework/suggestions/${suggestionId}/`;
+
+/** @param {string} frameworkUuid */
+export const optionsCompetencyFrameworkCompetencyTypes = (frameworkUuid) => `/api/v1/options/competency-framework/${frameworkUuid}/competency-types/`;
 
 export const COUNTRIES = '/api/v1/countries/';
 export const NRAS_ONBOARD = '/api/v1/nras-management/onboard/';

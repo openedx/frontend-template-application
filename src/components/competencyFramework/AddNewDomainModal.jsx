@@ -13,31 +13,54 @@ const AddNewDomainModal = ({
   isOpen,
   onClose,
   labels,
+  onSubmit,
   onAdd,
+  isSubmitting = false,
 }) => {
   const [form, setForm] = useState(INITIAL_FORM);
   const isSubmitDisabled = useMemo(
-    () => !form.domainId.trim() || !form.domainName.trim(),
-    [form.domainId, form.domainName],
+    () => isSubmitting || !form.domainId.trim() || !form.domainName.trim(),
+    [form.domainId, form.domainName, isSubmitting],
   );
 
   const handleClose = () => {
+    if (isSubmitting) {
+      return;
+    }
+
     setForm(INITIAL_FORM);
     onClose();
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (isSubmitDisabled) {
       return;
     }
 
-    onAdd({
-      value: form.domainId.trim(),
-      label: form.domainName.trim(),
-      description: form.domainDescription.trim(),
-    });
-    setForm(INITIAL_FORM);
-    onClose();
+    const formValues = {
+      domainId: form.domainId.trim(),
+      domainName: form.domainName.trim(),
+      domainDescription: form.domainDescription.trim(),
+    };
+
+    try {
+      if (onSubmit) {
+        await onSubmit(formValues);
+      } else if (onAdd) {
+        onAdd({
+          value: formValues.domainId,
+          label: formValues.domainName,
+          description: formValues.domainDescription,
+        });
+      } else {
+        return;
+      }
+
+      setForm(INITIAL_FORM);
+      onClose();
+    } catch {
+      // Parent shows error toast; keep modal open for retry.
+    }
   };
 
   return (
@@ -59,6 +82,7 @@ const AddNewDomainModal = ({
             placeholder={labels.domainIdPlaceholder}
             value={form.domainId}
             onChange={event => setForm(prev => ({ ...prev, domainId: event.target.value }))}
+            disabled={isSubmitting}
           />
         </div>
 
@@ -73,6 +97,7 @@ const AddNewDomainModal = ({
             placeholder={labels.domainNamePlaceholder}
             value={form.domainName}
             onChange={event => setForm(prev => ({ ...prev, domainName: event.target.value }))}
+            disabled={isSubmitting}
           />
         </div>
 
@@ -87,6 +112,7 @@ const AddNewDomainModal = ({
             value={form.domainDescription}
             onChange={event => setForm(prev => ({ ...prev, domainDescription: event.target.value }))}
             rows={3}
+            disabled={isSubmitting}
           />
         </div>
       </div>
@@ -96,6 +122,7 @@ const AddNewDomainModal = ({
           type="button"
           className="competency-framework-page__outline-button"
           onClick={handleClose}
+          disabled={isSubmitting}
         >
           {labels.cancel}
         </button>
@@ -105,7 +132,7 @@ const AddNewDomainModal = ({
           onClick={handleAdd}
           disabled={isSubmitDisabled}
         >
-          {labels.confirm}
+          {isSubmitting ? labels.submitting : labels.confirm}
         </button>
       </div>
     </PopupDialog>

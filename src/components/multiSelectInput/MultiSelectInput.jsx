@@ -6,10 +6,11 @@ import './MultiSelectInput.scss';
 
 const MultiSelectInput = ({
   options = [],
-  selectedValues = [],
+  selectedValues: selectedValuesProp = [],
   onChange,
   disabled = false,
 }) => {
+  const selectedValues = Array.isArray(selectedValuesProp) ? selectedValuesProp : [];
   const [searchTerm, setSearchTerm] = useState('');
   const shouldShowSearch = options.length > 5;
   const filteredOptions = useMemo(() => {

@@ -281,6 +281,276 @@ const competencyFrameworkMessages = defineMessages({
     defaultMessage: 'Save',
     description: 'Save button label in general information tab',
   },
+  generalSavingButton: {
+    id: 'app.competencyFramework.builder.general.saving',
+    defaultMessage: 'Saving…',
+    description: 'Save button label while general information is saving',
+  },
+  generalUpdateButton: {
+    id: 'app.competencyFramework.builder.general.update',
+    defaultMessage: 'Update',
+    description: 'Update button label in general information tab after framework exists',
+  },
+  generalUpdatingButton: {
+    id: 'app.competencyFramework.builder.general.updating',
+    defaultMessage: 'Updating…',
+    description: 'Update button label while general information is updating',
+  },
+  generalInformationSaveSuccessTitle: {
+    id: 'app.competencyFramework.builder.general.save.success.title',
+    defaultMessage: 'Framework saved',
+    description: 'Toast title when general information saves successfully',
+  },
+  generalInformationSaveErrorTitle: {
+    id: 'app.competencyFramework.builder.general.save.error.title',
+    defaultMessage: 'Unable to save framework',
+    description: 'Toast title when general information save fails',
+  },
+  generalInformationSaveError: {
+    id: 'app.competencyFramework.builder.general.save.error',
+    defaultMessage: 'Unable to save general information. Please try again.',
+    description: 'Fallback when general information save API fails',
+  },
+  frameworkSectionSaveSuccessTitle: {
+    id: 'app.competencyFramework.builder.section.save.success.title',
+    defaultMessage: 'Framework saved',
+    description: 'Toast title when a builder section saves successfully',
+  },
+  frameworkSectionSaveErrorTitle: {
+    id: 'app.competencyFramework.builder.section.save.error.title',
+    defaultMessage: 'Unable to save',
+    description: 'Toast title when a builder section save fails',
+  },
+  frameworkSectionSaveError: {
+    id: 'app.competencyFramework.builder.section.save.error',
+    defaultMessage: 'Unable to save changes. Please try again.',
+    description: 'Fallback when a builder section PATCH fails',
+  },
+  introductionSaveError: {
+    id: 'app.competencyFramework.builder.introduction.save.error',
+    defaultMessage: 'Unable to save introduction. Please try again.',
+    description: 'Fallback when introduction PATCH fails',
+  },
+  overviewSaveError: {
+    id: 'app.competencyFramework.builder.overview.save.error',
+    defaultMessage: 'Unable to save overview. Please try again.',
+    description: 'Fallback when overview PATCH fails',
+  },
+  domainOptionsLoadError: {
+    id: 'app.competencyFramework.options.domains.loadError',
+    defaultMessage: 'Unable to load domain options. Please try again.',
+    description: 'Fallback when domain options API fails',
+  },
+  domainOptionsErrorTitle: {
+    id: 'app.competencyFramework.options.domains.errorTitle',
+    defaultMessage: 'Domain options unavailable',
+    description: 'Toast title when domain options API fails',
+  },
+  domainCreateError: {
+    id: 'app.competencyFramework.options.domains.createError',
+    defaultMessage: 'Unable to add domain. Please try again.',
+    description: 'Fallback when create domain option API fails',
+  },
+  domainCreateErrorTitle: {
+    id: 'app.competencyFramework.options.domains.createErrorTitle',
+    defaultMessage: 'Unable to add domain',
+    description: 'Toast title when create domain option API fails',
+  },
+  domainsLoadError: {
+    id: 'app.competencyFramework.builder.domains.loadError',
+    defaultMessage: 'Unable to load domains. Please try again.',
+    description: 'Fallback when framework domains GET fails',
+  },
+  domainsLoadErrorTitle: {
+    id: 'app.competencyFramework.builder.domains.loadErrorTitle',
+    defaultMessage: 'Domains unavailable',
+    description: 'Toast title when framework domains GET fails',
+  },
+  domainsSaveError: {
+    id: 'app.competencyFramework.builder.domains.save.error',
+    defaultMessage: 'Unable to save domains. Please try again.',
+    description: 'Fallback when framework domains sync POST fails',
+  },
+  subDomainOptionsLoadError: {
+    id: 'app.competencyFramework.options.subDomains.loadError',
+    defaultMessage: 'Unable to load sub-domain options. Please try again.',
+    description: 'Fallback when sub-domain options API fails',
+  },
+  subDomainOptionsErrorTitle: {
+    id: 'app.competencyFramework.options.subDomains.errorTitle',
+    defaultMessage: 'Sub-domain options unavailable',
+    description: 'Toast title when sub-domain options API fails',
+  },
+  subDomainCreateError: {
+    id: 'app.competencyFramework.options.subDomains.createError',
+    defaultMessage: 'Unable to add sub-domain. Please try again.',
+    description: 'Fallback when create sub-domain option API fails',
+  },
+  subDomainCreateErrorTitle: {
+    id: 'app.competencyFramework.options.subDomains.createErrorTitle',
+    defaultMessage: 'Unable to add sub-domain',
+    description: 'Toast title when create sub-domain option API fails',
+  },
+  subDomainsLoadError: {
+    id: 'app.competencyFramework.builder.subDomains.loadError',
+    defaultMessage: 'Unable to load sub-domains. Please try again.',
+    description: 'Fallback when framework sub-domains GET fails',
+  },
+  subDomainsLoadErrorTitle: {
+    id: 'app.competencyFramework.builder.subDomains.loadErrorTitle',
+    defaultMessage: 'Sub-domains unavailable',
+    description: 'Toast title when framework sub-domains GET fails',
+  },
+  subDomainsSaveError: {
+    id: 'app.competencyFramework.builder.subDomains.save.error',
+    defaultMessage: 'Unable to save sub-domains. Please try again.',
+    description: 'Fallback when framework sub-domains sync POST fails',
+  },
+  rolesLoadError: {
+    id: 'app.competencyFramework.builder.roles.loadError',
+    defaultMessage: 'Unable to load roles. Please try again.',
+    description: 'Fallback when framework roles GET fails',
+  },
+  rolesLoadErrorTitle: {
+    id: 'app.competencyFramework.builder.roles.loadErrorTitle',
+    defaultMessage: 'Roles unavailable',
+    description: 'Toast title when framework roles GET fails',
+  },
+  rolesSaveError: {
+    id: 'app.competencyFramework.builder.roles.save.error',
+    defaultMessage: 'Unable to save roles. Please try again.',
+    description: 'Fallback when framework roles sync POST fails',
+  },
+  proficiencyLoadError: {
+    id: 'app.competencyFramework.builder.proficiency.loadError',
+    defaultMessage: 'Unable to load proficiency levels. Please try again.',
+    description: 'Fallback when framework proficiency levels GET fails',
+  },
+  proficiencyLoadErrorTitle: {
+    id: 'app.competencyFramework.builder.proficiency.loadErrorTitle',
+    defaultMessage: 'Proficiency levels unavailable',
+    description: 'Toast title when framework proficiency levels GET fails',
+  },
+  proficiencySaveError: {
+    id: 'app.competencyFramework.builder.proficiency.save.error',
+    defaultMessage: 'Unable to save proficiency levels. Please try again.',
+    description: 'Fallback when framework proficiency levels sync POST fails',
+  },
+  orgCompetenciesLoadError: {
+    id: 'app.competencyFramework.builder.orgCompetencies.loadError',
+    defaultMessage: 'Unable to load organization competencies. Please try again.',
+    description: 'Fallback when organization competencies GET fails',
+  },
+  orgCompetenciesLoadErrorTitle: {
+    id: 'app.competencyFramework.builder.orgCompetencies.loadErrorTitle',
+    defaultMessage: 'Organization competencies unavailable',
+    description: 'Toast title when organization competencies GET fails',
+  },
+  orgCompetenciesSaveError: {
+    id: 'app.competencyFramework.builder.orgCompetencies.save.error',
+    defaultMessage: 'Unable to save organization competencies. Please try again.',
+    description: 'Fallback when organization competencies sync POST fails',
+  },
+  roleCompetenciesLoadError: {
+    id: 'app.competencyFramework.builder.roleCompetencies.loadError',
+    defaultMessage: 'Unable to load role-specific competencies. Please try again.',
+    description: 'Fallback when role competencies GET fails',
+  },
+  roleCompetenciesLoadErrorTitle: {
+    id: 'app.competencyFramework.builder.roleCompetencies.loadErrorTitle',
+    defaultMessage: 'Role-specific competencies unavailable',
+    description: 'Toast title when role competencies GET fails',
+  },
+  roleCompetenciesSaveError: {
+    id: 'app.competencyFramework.builder.roleCompetencies.save.error',
+    defaultMessage: 'Unable to save role-specific competencies. Please try again.',
+    description: 'Fallback when role competencies sync POST fails',
+  },
+  roleActivitiesLoadError: {
+    id: 'app.competencyFramework.builder.roleActivities.loadError',
+    defaultMessage: 'Unable to load role-specific activities. Please try again.',
+    description: 'Fallback when role activities GET fails',
+  },
+  roleActivitiesLoadErrorTitle: {
+    id: 'app.competencyFramework.builder.roleActivities.loadErrorTitle',
+    defaultMessage: 'Role-specific activities unavailable',
+    description: 'Toast title when role activities GET fails',
+  },
+  roleActivitiesSaveError: {
+    id: 'app.competencyFramework.builder.roleActivities.save.error',
+    defaultMessage: 'Unable to save role-specific activities. Please try again.',
+    description: 'Fallback when role activities sync POST fails',
+  },
+  competencyTypeOptionsLoadError: {
+    id: 'app.competencyFramework.options.competencyTypes.loadError',
+    defaultMessage: 'Unable to load competency types. Please try again.',
+    description: 'Fallback when framework competency type options API fails',
+  },
+  competencyTypeOptionsErrorTitle: {
+    id: 'app.competencyFramework.options.competencyTypes.errorTitle',
+    defaultMessage: 'Competency types unavailable',
+    description: 'Toast title when framework competency type options API fails',
+  },
+  frameworkDomainOptionsLoadError: {
+    id: 'app.competencyFramework.options.frameworkDomains.loadError',
+    defaultMessage: 'Unable to load framework domains. Please try again.',
+    description: 'Fallback when framework-linked domain options API fails',
+  },
+  frameworkDomainOptionsErrorTitle: {
+    id: 'app.competencyFramework.options.frameworkDomains.errorTitle',
+    defaultMessage: 'Framework domains unavailable',
+    description: 'Toast title when framework-linked domain options API fails',
+  },
+  frameworkRoleOptionsLoadError: {
+    id: 'app.competencyFramework.options.frameworkRoles.loadError',
+    defaultMessage: 'Unable to load framework roles. Please try again.',
+    description: 'Fallback when framework role options API fails',
+  },
+  frameworkRoleOptionsErrorTitle: {
+    id: 'app.competencyFramework.options.frameworkRoles.errorTitle',
+    defaultMessage: 'Framework roles unavailable',
+    description: 'Toast title when framework role options API fails',
+  },
+  productTypesLoadError: {
+    id: 'app.competencyFramework.options.productTypes.loadError',
+    defaultMessage: 'Unable to load product types. Please try again.',
+    description: 'Fallback when product type options API fails',
+  },
+  productTypesErrorTitle: {
+    id: 'app.competencyFramework.options.productTypes.errorTitle',
+    defaultMessage: 'Product types unavailable',
+    description: 'Toast title when product type options API fails',
+  },
+  sourceFrameworkOptionsLoadError: {
+    id: 'app.competencyFramework.options.sourceFramework.loadError',
+    defaultMessage: 'Unable to load source framework options. Please try again.',
+    description: 'Fallback when source framework options API fails',
+  },
+  sourceFrameworkOptionsErrorTitle: {
+    id: 'app.competencyFramework.options.sourceFramework.errorTitle',
+    defaultMessage: 'Source framework options unavailable',
+    description: 'Toast title when source framework options API fails',
+  },
+  frameworkDetailLoadError: {
+    id: 'app.competencyFramework.detail.loadError',
+    defaultMessage: 'Unable to load framework details. Please try again.',
+    description: 'Fallback when competency framework detail API fails',
+  },
+  frameworkDetailErrorTitle: {
+    id: 'app.competencyFramework.detail.errorTitle',
+    defaultMessage: 'Framework details unavailable',
+    description: 'Toast title when competency framework detail API fails',
+  },
+  generalInformationLoading: {
+    id: 'app.competencyFramework.builder.general.loading',
+    defaultMessage: 'Loading framework details',
+    description: 'Aria label while general information form loads',
+  },
+  generalInfoRequiredBannerText: {
+    id: 'app.competencyFramework.builder.general.required.banner',
+    defaultMessage: 'Complete and save the General Information tab first to edit this section.',
+    description: 'Banner when other builder tabs are locked until general information is saved',
+  },
   sectionIntroductionTitle: {
     id: 'app.competencyFramework.builder.section.introduction.title',
     defaultMessage: 'Introduction',
@@ -461,6 +731,11 @@ const competencyFrameworkMessages = defineMessages({
     defaultMessage: 'Add Domain',
     description: 'Add domain button label in add domain modal',
   },
+  addDomainModalSubmitting: {
+    id: 'app.competencyFramework.builder.domains.addDomain.modal.submitting',
+    defaultMessage: 'Adding…',
+    description: 'Add domain button label while create API is in progress',
+  },
   addDomainSuccessTitle: {
     id: 'app.competencyFramework.builder.domains.addDomain.success.title',
     defaultMessage: 'Domain added',
@@ -620,6 +895,11 @@ const competencyFrameworkMessages = defineMessages({
     id: 'app.competencyFramework.builder.subDomains.addSubDomain.modal.confirm',
     defaultMessage: 'Add Sub-Domain',
     description: 'Add sub-domain button label in add sub-domain modal',
+  },
+  addSubDomainModalSubmitting: {
+    id: 'app.competencyFramework.builder.subDomains.addSubDomain.modal.submitting',
+    defaultMessage: 'Adding…',
+    description: 'Add sub-domain button label while create API is in progress',
   },
   addSubDomainSuccessTitle: {
     id: 'app.competencyFramework.builder.subDomains.addSubDomain.success.title',
@@ -1475,6 +1755,61 @@ const competencyFrameworkMessages = defineMessages({
     id: 'app.competencyFramework.suggestions.save.toast.description',
     defaultMessage: 'Your suggestion has been saved successfully.',
     description: 'Add/edit suggestion success toast description',
+  },
+  suggestionsLoadError: {
+    id: 'app.competencyFramework.suggestions.load.error',
+    defaultMessage: 'Unable to load suggestions. Please try again.',
+    description: 'Fallback when framework suggestions list GET fails',
+  },
+  suggestionsLoadErrorTitle: {
+    id: 'app.competencyFramework.suggestions.load.errorTitle',
+    defaultMessage: 'Suggestions unavailable',
+    description: 'Toast title when framework suggestions list GET fails',
+  },
+  suggestionsEmpty: {
+    id: 'app.competencyFramework.suggestions.empty',
+    defaultMessage: 'No suggestions yet. Add one to propose a change.',
+    description: 'Empty state when framework has no suggestions',
+  },
+  suggestionDetailLoadError: {
+    id: 'app.competencyFramework.suggestions.detail.load.error',
+    defaultMessage: 'Unable to load suggestion details. Please try again.',
+    description: 'Fallback when suggestion detail GET fails',
+  },
+  suggestionCreateError: {
+    id: 'app.competencyFramework.suggestions.create.error',
+    defaultMessage: 'Unable to create suggestion. Please try again.',
+    description: 'Fallback when suggestion POST fails',
+  },
+  suggestionUpdateError: {
+    id: 'app.competencyFramework.suggestions.update.error',
+    defaultMessage: 'Unable to update suggestion. Please try again.',
+    description: 'Fallback when suggestion PATCH fails',
+  },
+  suggestionDeleteError: {
+    id: 'app.competencyFramework.suggestions.delete.error',
+    defaultMessage: 'Unable to delete suggestion. Please try again.',
+    description: 'Fallback when suggestion DELETE fails',
+  },
+  suggestionSaving: {
+    id: 'app.competencyFramework.suggestions.form.saving',
+    defaultMessage: 'Saving…',
+    description: 'Suggestion modal save button while request is pending',
+  },
+  suggestionTypeRole: {
+    id: 'app.competencyFramework.suggestions.type.role',
+    defaultMessage: 'Role',
+    description: 'Suggestion type option - Role',
+  },
+  suggestionTypeOther: {
+    id: 'app.competencyFramework.suggestions.type.other',
+    defaultMessage: 'Other',
+    description: 'Suggestion type option - Other',
+  },
+  suggestionStatusRejected: {
+    id: 'app.competencyFramework.suggestions.status.rejected',
+    defaultMessage: 'Rejected',
+    description: 'Suggestion status option - Rejected',
   },
   readOnlyBannerText: {
     id: 'app.competencyFramework.builder.readOnly.banner',
