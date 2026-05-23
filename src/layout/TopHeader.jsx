@@ -6,10 +6,8 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
-import { useUserRole } from '../contexts/UserRoleContext';
-import fallbackAvatar from '../assets/images/profile-fallback.svg';
 import layoutMessages from './messages';
+import UserProfileMenu from './UserProfileMenu';
 
 const TopHeader = ({
   title,
@@ -18,18 +16,12 @@ const TopHeader = ({
   onToggleSidebar,
 }) => {
   const { formatMessage } = useIntl();
-  const { userProfileImage } = useUserRole();
-  const [avatarSrc, setAvatarSrc] = useState(userProfileImage || fallbackAvatar);
   let toggleIcon = faChevronLeft;
   if (isMobile) {
     toggleIcon = faBars;
   } else if (collapsed) {
     toggleIcon = faChevronRight;
   }
-
-  useEffect(() => {
-    setAvatarSrc(userProfileImage || fallbackAvatar);
-  }, [userProfileImage]);
 
   return (
     <header className="admin-top-header">
@@ -49,17 +41,7 @@ const TopHeader = ({
         </div>
 
         <div className="admin-top-header__actions">
-          <div
-            className="admin-top-header__avatar"
-            aria-label={formatMessage(layoutMessages.userAvatarLabel)}
-          >
-            <img
-              src={avatarSrc}
-              alt=""
-              onError={() => setAvatarSrc(fallbackAvatar)}
-              referrerPolicy="no-referrer"
-            />
-          </div>
+          <UserProfileMenu />
         </div>
       </div>
     </header>

@@ -13,7 +13,6 @@ export const getBuilderTabSubmitState = ({
   builderMode,
   frameworkUuid,
   tabHasSavedOnce,
-  isDirty,
   isValid,
 }) => {
   const isEditMode = builderMode === 'edit';

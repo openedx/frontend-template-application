@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { useEffect, useState } from 'react';
 import AppSidebar from './AppSidebar';
 import TopHeader from './TopHeader';
+import layoutMessages from './messages';
 
 const AdminLayout = ({
   title,
   children,
 }) => {
+  const { formatMessage } = useIntl();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -55,7 +58,7 @@ const AdminLayout = ({
         <button
           type="button"
           className="admin-sidebar__backdrop"
-          aria-label="Close sidebar"
+          aria-label={formatMessage(layoutMessages.closeSidebar)}
           onClick={() => setMobileSidebarOpen(false)}
         />
       )}

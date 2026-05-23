@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import commonMessages from '../../messages/commonMessages';
 import './ToastProvider.scss';
 
 const ToastContext = createContext({
@@ -9,6 +11,7 @@ const ToastContext = createContext({
 });
 
 const ToastProvider = ({ children }) => {
+  const { formatMessage } = useIntl();
   const [toasts, setToasts] = useState([]);
 
   const removeToast = useCallback((id) => {
@@ -49,7 +52,7 @@ const ToastProvider = ({ children }) => {
               <p className="app-toast__title">{toast.title}</p>
               <p className="app-toast__description">{toast.description}</p>
             </div>
-            <button type="button" className="app-toast__close" aria-label="Close" onClick={() => closeToast(toast.id)}>
+            <button type="button" className="app-toast__close" aria-label={formatMessage(commonMessages.close)} onClick={() => closeToast(toast.id)}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </li>

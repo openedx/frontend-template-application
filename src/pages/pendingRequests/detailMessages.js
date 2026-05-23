@@ -1,11 +1,6 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
-  back: {
-    id: 'app.pendingRequests.detail.back',
-    defaultMessage: 'Back to Pending Requests',
-    description: 'Back button label on pending request detail page',
-  },
   submittedBy: {
     id: 'app.pendingRequests.detail.submittedBy',
     defaultMessage: 'Submitted by',

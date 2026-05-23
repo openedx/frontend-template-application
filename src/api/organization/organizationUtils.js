@@ -1,5 +1,3 @@
-import { hasDisplayValue } from '../../utils/hasDisplayValue';
-
 /**
  * @param {object} payload
  */

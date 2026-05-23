@@ -122,3 +122,16 @@ export const updateCompetencyFrameworkGeneralInformation = ({
   payload,
   fallbackMessage: competencyFrameworkMessages.generalInformationSaveError,
 });
+
+/**
+ * @param {{ formatMessage: Function, frameworkUuid: string }} params
+ */
+export const deleteCompetencyFramework = ({ formatMessage, frameworkUuid }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${competencyFrameworkDetail(frameworkUuid)}`;
+    return httpClient.delete(url);
+  },
+  formatMessage,
+  fallbackMessage: competencyFrameworkMessages.frameworkDeleteFailedDescription,
+});

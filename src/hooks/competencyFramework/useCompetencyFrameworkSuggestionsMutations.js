@@ -6,7 +6,6 @@ import {
   patchFrameworkSuggestion,
 } from '../../api/competencyFramework/competencyFrameworkSuggestionsApi';
 import { parseSuggestionId } from '../../api/competencyFramework/competencyFrameworkSuggestionsUtils';
-import competencyFrameworkMessages from '../../pages/competencyFramework/messages';
 import { frameworkSuggestionDetailQueryKey } from './useFrameworkSuggestionDetail';
 import { frameworkSuggestionsQueryKey } from './useFrameworkSuggestions';
 

@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
+import { useIntl } from '@edx/frontend-platform/i18n';
 import classNames from 'classnames';
+import commonMessages from '../../messages/commonMessages';
 import SkeletonCard from './layouts/SkeletonCard';
 import SkeletonCardList from './layouts/SkeletonCardList';
 import SkeletonChartCard from './layouts/SkeletonChartCard';
@@ -108,10 +110,12 @@ const SkeletonScreen = ({
   variant,
   children,
   className = '',
-  ariaLabel = 'Loading',
+  ariaLabel,
   tablePreset,
   ...presetProps
 }) => {
+  const { formatMessage } = useIntl();
+  const resolvedAriaLabel = ariaLabel ?? formatMessage(commonMessages.loading);
   const resolvedProps = tablePreset && TABLE_COLUMN_PRESETS[tablePreset]
     ? { ...presetProps, columns: TABLE_COLUMN_PRESETS[tablePreset] }
     : presetProps;
@@ -128,7 +132,7 @@ const SkeletonScreen = ({
       role="status"
       aria-busy="true"
       aria-live="polite"
-      aria-label={ariaLabel}
+      aria-label={resolvedAriaLabel}
     >
       {rendered}
     </div>

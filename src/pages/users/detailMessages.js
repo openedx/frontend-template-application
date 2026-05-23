@@ -2,6 +2,11 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const detailMessages = defineMessages({
   backToUsers: { id: 'app.users.detail.back', defaultMessage: 'Back to Users', description: 'Back button on user detail' },
+  statusActiveDefault: {
+    id: 'app.users.detail.statusActiveDefault',
+    defaultMessage: 'Active',
+    description: 'Default user status label when API omits status',
+  },
   edit: { id: 'app.users.detail.edit', defaultMessage: 'Edit', description: 'Edit user button label' },
   delete: { id: 'app.users.detail.delete', defaultMessage: 'Delete', description: 'Delete user button label' },
   createdAt: { id: 'app.users.detail.createdAt', defaultMessage: 'Created at', description: 'Created at label' },

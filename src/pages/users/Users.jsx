@@ -17,10 +17,12 @@ import ImportFrameworkModal from '../../components/competencyFramework/ImportFra
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
 import EmptyState from '../../components/emptyState/EmptyState';
 import SearchInput from '../../components/searchInput/SearchInput';
+import UserListAvatar from '../../components/users/UserListAvatar';
 import UsersRoleFilter, { USERS_ROLE_FILTER_ALL } from '../../components/users/UsersRoleFilter';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
 import { fetchUserDetail } from '../../api/users/usersApi';
 import {
   buildUserWritePayload,
@@ -39,17 +41,6 @@ import messages from './messages';
 import { getRoleDisplayLine } from './roleDisplay';
 import '../competencyFramework/CompetencyFramework.scss';
 import './Users.scss';
-
-const getInitials = (name) => {
-  if (!hasDisplayValue(name)) {
-    return '';
-  }
-  return name.split(' ')
-    .slice(0, 2)
-    .map(part => part.charAt(0))
-    .join('')
-    .toUpperCase();
-};
 
 const Users = () => {
   const { formatMessage } = useIntl();
@@ -392,10 +383,14 @@ const Users = () => {
                   <tr key={user.id} className="users-page__tbody-row">
                     <td className="users-page__td">
                       <div className="users-page__identity">
-                        <span className="users-page__avatar">{getInitials(user.name)}</span>
+                        <UserListAvatar name={user.name} imageUrl={user.userProfileImage} />
                         <div>
                           {canViewUserAbout ? (
-                            <Link to={`/admin/users/${user.id}`} className="users-page__name users-page__name--link">
+                            <Link
+                              to={ADMIN_PATHS.userDetail(user.id)}
+                              state={{ userProfileImage: user.userProfileImage }}
+                              className="users-page__name users-page__name--link"
+                            >
                               {user.name}
                             </Link>
                           ) : (
@@ -429,7 +424,8 @@ const Users = () => {
                         <div className="users-page__row-actions">
                           {canViewUserAbout && (
                             <Link
-                              to={`/admin/users/${user.id}`}
+                              to={ADMIN_PATHS.userDetail(user.id)}
+                              state={{ userProfileImage: user.userProfileImage }}
                               className="users-page__icon-button"
                               aria-label={formatMessage(messages.viewAction)}
                             >

@@ -266,6 +266,11 @@ const messages = defineMessages({
     defaultMessage: 'Showing {count} of {total} training providers',
     description: 'Pagination summary for training providers table',
   },
+  paginationLabel: {
+    id: 'app.trainingProviders.pagination.label',
+    defaultMessage: 'Training providers pagination',
+    description: 'Accessible label for training providers table pagination',
+  },
 });
 
 export default messages;

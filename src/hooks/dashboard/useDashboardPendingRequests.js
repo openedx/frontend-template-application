@@ -1,6 +1,10 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDashboardPendingRequests } from '../../api/dashboard/dashboardApi';
+import {
+  mapPendingRequestToDashboardCard,
+  normalizePendingRequestList,
+} from '../../api/pendingRequests/pendingRequestsUtils';
 
 export const DASHBOARD_PENDING_REQUESTS_QUERY_KEY = ['dashboard', 'pending-requests'];
 
@@ -20,7 +24,8 @@ const useDashboardPendingRequests = ({ enabled = true } = {}) => {
         throw new Error(result.message);
       }
 
-      return result.data?.results ?? [];
+      const rows = normalizePendingRequestList(result.data?.results);
+      return rows.map(mapPendingRequestToDashboardCard);
     },
   });
 

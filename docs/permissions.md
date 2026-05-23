@@ -8,12 +8,27 @@ Update this file whenever permissions change.
 
 ## Overview
 
+### Data source
+
+Permissions are loaded in `src/services/userRoleDataService.js` (edit the **plug-in block** at the top of that file only):
+
+| Setting | Values | Purpose |
+|--------|--------|---------|
+| `ROLE_DATA_SOURCE` | `'api'` \| `'local'` | API calls `GET /api/v1/core-permissions/`; local reads bundled JSON |
+| `LOCAL_ROLE_DATA_KEY` | `'super-user'` \| `'secretariat'` \| `'training-provider'` | Which file under `src/data/userRole/` when source is `local` |
+
+**No fallback between sources.** If `ROLE_DATA_SOURCE` is `'api'`, a failed or empty API response does **not** load local JSON. If source is `'local'` and the file has no `results` row, the API is **not** called.
+
+**Empty permissions:** When the active source returns no data (API error, empty `results`, or empty local file), the app applies deny-all `navbarAccess` / `componentAccess`. Only **public** routes and in-page UI stay available (see `src/utils/publicRoutes.js` and `hasNavbarAccessForPath` in `App.jsx`).
+
+---
+
 There are two permission buckets:
 
 ### `navbarAccess` (route + sidebar visibility)
 
 - **Where checked**: `src/App.jsx` via `withAccess(navbarAccess.<key>, <Page />)` for gated routes
-- **Where used for sidebar visibility**: `src/mock/navigation.js` + `src/layout/AppSidebar.jsx`
+- **Where used for sidebar visibility**: `src/layout/navigation.js` + `src/layout/AppSidebar.jsx`
 - **Effect**:
   - If `false`, user is blocked from navigating to that route (shows `AccessRestrictedPage`)
   - Sidebar item is hidden if `getNavigationItemsByAccess()` filters it out

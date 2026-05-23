@@ -6,7 +6,6 @@ import {
   updateUser,
 } from '../../api/users/usersApi';
 import { userDetailQueryKey } from './useUserDetail';
-import { usersListQueryKey } from './useUsersList';
 
 const useUserMutations = () => {
   const { formatMessage } = useIntl();

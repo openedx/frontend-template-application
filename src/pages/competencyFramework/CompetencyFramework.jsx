@@ -24,7 +24,7 @@ import RoleTab, { createFrameworkRoleItem } from '../../components/competencyFra
 import SubDomainTab, { createSubDomainCompetencyTypeItem } from '../../components/competencyFramework/create/SubDomainTab';
 import { TablePaginationFooter } from '../../components/dataTable';
 import { EmptyState } from '../../components/emptyState';
-import { SkeletonCard } from '../../components/skeleton';
+import { SkeletonCard, SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import Tabs from '../../components/tabs/Tabs';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
@@ -41,24 +41,24 @@ import {
   mapCreatedSubDomainToMultiSelectOption,
   mapSubDomainsSyncResponseToFormRows,
 } from '../../api/competencyFramework/competencyFrameworkSubDomainsUtils';
-import { buildRolesSyncPayload } from '../../api/competencyFramework/competencyFrameworkRolesUtils';
-import { buildProficiencyLevelsSyncPayload } from '../../api/competencyFramework/competencyFrameworkProficiencyUtils';
-import { fetchFrameworkRoles } from '../../api/competencyFramework/competencyFrameworkRolesApi';
-import { fetchFrameworkProficiencyLevels } from '../../api/competencyFramework/competencyFrameworkProficiencyApi';
 import {
+  buildRolesSyncPayload,
   mapFrameworkRolesToFormRows,
   unwrapRolesResultsPayload,
 } from '../../api/competencyFramework/competencyFrameworkRolesUtils';
 import {
+  buildProficiencyLevelsSyncPayload,
   mapFrameworkProficiencyLevelsToFormRows,
   unwrapProficiencyResultsPayload,
 } from '../../api/competencyFramework/competencyFrameworkProficiencyUtils';
-import { buildOrganizationCompetenciesSyncPayload } from '../../api/competencyFramework/competencyFrameworkOrganizationCompetenciesUtils';
-import { fetchFrameworkOrganizationCompetencies } from '../../api/competencyFramework/competencyFrameworkOrganizationCompetenciesApi';
+import { fetchFrameworkRoles } from '../../api/competencyFramework/competencyFrameworkRolesApi';
+import { fetchFrameworkProficiencyLevels } from '../../api/competencyFramework/competencyFrameworkProficiencyApi';
 import {
+  buildOrganizationCompetenciesSyncPayload,
   mapOrganizationCompetenciesToFormItems,
   unwrapOrganizationCompetenciesResultsPayload,
 } from '../../api/competencyFramework/competencyFrameworkOrganizationCompetenciesUtils';
+import { fetchFrameworkOrganizationCompetencies } from '../../api/competencyFramework/competencyFrameworkOrganizationCompetenciesApi';
 import { fetchFrameworkRoleCompetencies } from '../../api/competencyFramework/competencyFrameworkRoleCompetenciesApi';
 import { fetchFrameworkRoleActivities } from '../../api/competencyFramework/competencyFrameworkRoleActivitiesApi';
 import {
@@ -107,9 +107,8 @@ import useCompetencyFrameworkList from '../../hooks/competencyFramework/useCompe
 import useProductTypeOptions from '../../hooks/competencyFramework/useProductTypeOptions';
 import useSourceFrameworkOptions from '../../hooks/competencyFramework/useSourceFrameworkOptions';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
 import { buildPaginationShowingParams } from '../../utils/paginationUtils';
-import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
-import builderOptions from '../../mock/competencyFramework/builderOptions.json';
 import messages from './messages';
 import './CompetencyFramework.scss';
 const BUILDER_TABS_CONFIG = [
@@ -221,7 +220,7 @@ const CompetencyFramework = () => {
     enabled: shouldLoadFrameworkDetail,
   });
 
-  const { createMutation, updateMutation } = useCompetencyFrameworkGeneralMutations();
+  const { createMutation, updateMutation, deleteMutation } = useCompetencyFrameworkGeneralMutations();
   const { createDomainMutation, syncDomainsMutation } = useCompetencyFrameworkDomainsMutations();
   const { createSubDomainMutation, syncSubDomainsMutation } = useCompetencyFrameworkSubDomainsMutations();
   const { syncRolesMutation } = useCompetencyFrameworkRolesMutations();
@@ -359,6 +358,42 @@ const CompetencyFramework = () => {
     subDomains: count => formatMessage(messages.metaSubDomains, { count }),
     created: date => formatMessage(messages.metaCreated, { date }),
   };
+
+  const confirmDeleteFramework = useCallback(async () => {
+    if (!pendingDeleteFramework || deleteMutation.isPending) {
+      return;
+    }
+
+    const { id, title } = pendingDeleteFramework;
+
+    try {
+      const result = await deleteMutation.mutateAsync(id);
+
+      showToast({
+        title: formatMessage(messages.frameworkDeleteSuccessTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.frameworkDeleteSuccessDescription, { name: title || '' }),
+      });
+      setPendingDeleteFramework(null);
+
+      if (frameworks.length === 1 && page > 1) {
+        setPage((currentPage) => Math.max(1, currentPage - 1));
+      }
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.frameworkDeleteFailedTitle),
+        description: error?.message || formatMessage(messages.frameworkDeleteFailedDescription),
+      });
+    }
+  }, [
+    deleteMutation,
+    formatMessage,
+    frameworks.length,
+    page,
+    pendingDeleteFramework,
+    showToast,
+  ]);
   const canShowSuggestionsTab = Boolean(access.showSuggestionsTab);
   const importModalLabels = {
     title: formatMessage(messages.importModalTitle),
@@ -979,7 +1014,7 @@ const CompetencyFramework = () => {
           });
         }
 
-        navigate(`/admin/competency-frameworks/${idString}/edit`, {
+        navigate(ADMIN_PATHS.competencyFrameworkEdit(idString), {
           replace: true,
           state: { tabId: builderTabIdContext },
         });
@@ -2158,8 +2193,8 @@ const CompetencyFramework = () => {
       />
     );
   } else if (builderTabSafe === 'suggestions') {
-    const canEditSuggestions = canShowSuggestionsTab && hasFrameworkUuid && !isReadOnlyMode;
-    const suggestionsActionsLocked = canShowSuggestionsTab && !hasFrameworkUuid && !isReadOnlyMode;
+    const canEditSuggestions = canShowSuggestionsTab && hasFrameworkUuid;
+    const suggestionsActionsLocked = canShowSuggestionsTab && !hasFrameworkUuid;
 
     builderContent = (
       <SuggestionsTab
@@ -2178,7 +2213,7 @@ const CompetencyFramework = () => {
             <button
               type="button"
               className="framework-builder__back-button"
-              onClick={() => navigate('/admin/competency-frameworks')}
+              onClick={() => navigate(ADMIN_PATHS.competencyFrameworks)}
             >
               <FontAwesomeIcon icon={faChevronLeft} />
               {formatMessage(messages.backToFrameworks)}
@@ -2246,7 +2281,7 @@ const CompetencyFramework = () => {
                 <button
                   type="button"
                   className="competency-framework-page__primary-button"
-                  onClick={() => navigate('/admin/competency-frameworks/new', {
+                  onClick={() => navigate(ADMIN_PATHS.competencyFrameworkNew, {
                     state: {
                       mode: 'create',
                       tabId: activeTabSafe || 'who',
@@ -2311,7 +2346,7 @@ const CompetencyFramework = () => {
                 canDeleteFramework={canDeleteFramework}
                 onDeleteClick={setPendingDeleteFramework}
                 onViewClick={(framework) => {
-                  navigate(`/admin/competency-frameworks/${framework.id}/edit`, {
+                  navigate(ADMIN_PATHS.competencyFrameworkEdit(framework.id), {
                     state: {
                       mode: 'view',
                       tabId: activeTabSafe,
@@ -2319,7 +2354,7 @@ const CompetencyFramework = () => {
                   });
                 }}
                 onEditClick={(framework) => {
-                  navigate(`/admin/competency-frameworks/${framework.id}/edit`, {
+                  navigate(ADMIN_PATHS.competencyFrameworkEdit(framework.id), {
                     state: {
                       tabId: activeTabSafe,
                     },
@@ -2335,7 +2370,7 @@ const CompetencyFramework = () => {
               currentPage={page}
               totalPages={totalPages}
               onPageChange={setPage}
-              paginationLabel="Competency framework pagination"
+              paginationLabel={formatMessage(messages.paginationLabel)}
               footerContent={formatMessage(
                 messages.showingCount,
                 buildPaginationShowingParams(frameworks, frameworksCount),
@@ -2358,20 +2393,7 @@ const CompetencyFramework = () => {
               cancelLabel={formatMessage(messages.frameworkDeleteDialogCancel)}
               confirmLabel={formatMessage(messages.frameworkDeleteDialogConfirm)}
               onCancel={() => setPendingDeleteFramework(null)}
-              onConfirm={() => {
-                try {
-                  showToast({
-                    title: formatMessage(messages.frameworkDeleteSuccessTitle),
-                    description: formatMessage(messages.frameworkDeleteSuccessDescription, { name: pendingDeleteFramework?.title || '' }),
-                  });
-                  setPendingDeleteFramework(null);
-                } catch (error) {
-                  showToast({
-                    title: formatMessage(messages.frameworkDeleteFailedTitle),
-                    description: formatMessage(messages.frameworkDeleteFailedDescription),
-                  });
-                }
-              }}
+              onConfirm={confirmDeleteFramework}
             />
           )}
         </>

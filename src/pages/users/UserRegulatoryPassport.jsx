@@ -1,24 +1,21 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { TablePaginationFooter } from '../../components/dataTable';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
+import UserAvatar from '../../components/users/UserAvatar';
 import AccessRestrictedPage from '../AccessRestrictedPage';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
 import usersData from '../../mock/users/users.json';
 import passportData from '../../mock/users/regulatoryPassport.json';
 import brandPlaceholder from '../../assets/images/brand-placeholder.svg';
 import messages from './regulatoryPassportMessages';
 import './UserRegulatoryPassport.scss';
 
-const getInitials = name => name.split(' ')
-  .slice(0, 2)
-  .map(part => part.charAt(0))
-  .join('')
-  .toUpperCase();
-
 const UserRegulatoryPassport = () => {
   const { formatMessage } = useIntl();
   const { userId } = useParams();
+  const location = useLocation();
   const { componentAccess } = useUserRole();
 
   const canViewUserAbout = Boolean(componentAccess?.users?.canViewUserAbout ?? false);
@@ -30,10 +27,11 @@ const UserRegulatoryPassport = () => {
 
   const user = usersData.find(item => item.id === userId);
   if (!user) {
-    return <Navigate to="/admin/users" replace />;
+    return <Navigate to={ADMIN_PATHS.users} replace />;
   }
 
   const detail = passportData[userId] || passportData.default;
+  const profileImageUrl = location.state?.userProfileImage ?? user.userProfileImage ?? '';
 
   return (
     <section className="user-passport-page">
@@ -43,11 +41,11 @@ const UserRegulatoryPassport = () => {
             <img
               className="user-passport-page__brand-img"
               src={brandPlaceholder}
-              alt="SEARN"
+              alt={formatMessage(messages.brandAlt)}
             />
           </div>
           <div className="user-passport-page__identity">
-            <div className="user-passport-page__avatar">{getInitials(user.name)}</div>
+            <UserAvatar variant="passport" name={user.name} imageUrl={profileImageUrl} />
             <div className="user-passport-page__who">
               <h2 className="user-passport-page__name">{user.name}</h2>
               <p className="user-passport-page__job">{detail.jobTitle}</p>
@@ -152,7 +150,7 @@ const UserRegulatoryPassport = () => {
             currentPage={1}
             totalPages={3}
             onPageChange={() => {}}
-            paginationLabel="Regulatory passport pagination"
+            paginationLabel={formatMessage(messages.paginationLabel)}
           />
         </div>
 
@@ -160,12 +158,12 @@ const UserRegulatoryPassport = () => {
           <div className="user-passport-page__export-row">
             <div>
               <p className="user-passport-page__export-title">
-                Export Regulatory Passport — {user.name}
+                {formatMessage(messages.exportTitle, { name: user.name })}
               </p>
             </div>
             <div className="user-passport-page__export-actions">
               <button type="button" className="user-passport-page__export-btn">
-                Download Regulatory Passport
+                {formatMessage(messages.exportDownloadButton)}
               </button>
             </div>
           </div>

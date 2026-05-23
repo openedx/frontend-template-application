@@ -2,7 +2,6 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCountriesForUserForm } from '../../api/users/usersApi';
 import { normalizeCountryOptions, toCountryDropdownOptions } from '../../api/countries/countriesUtils';
-import messages from '../../pages/users/messages';
 
 export const userFormCountriesQueryKey = () => ['users', 'form-countries'];
 

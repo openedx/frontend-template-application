@@ -1,7 +1,6 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { syncFrameworkRoleActivities } from '../../api/competencyFramework/competencyFrameworkRoleActivitiesApi';
-import competencyFrameworkMessages from '../../pages/competencyFramework/messages';
 import { frameworkRoleActivitiesQueryKey } from './useFrameworkRoleActivities';
 
 const useCompetencyFrameworkRoleActivitiesMutations = () => {

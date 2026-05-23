@@ -71,6 +71,11 @@ const appMessages = defineMessages({
     defaultMessage: 'Training Providers',
     description: 'Top header title for training providers route',
   },
+  rolePermissionsLoadError: {
+    id: 'app.rolePermissions.loadError',
+    defaultMessage: 'Unable to load permissions. Please refresh and try again.',
+    description: 'Fallback error when core permissions API fails',
+  },
 });
 
 export default appMessages;

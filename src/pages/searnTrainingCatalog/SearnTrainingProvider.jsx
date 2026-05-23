@@ -1,16 +1,17 @@
-import { useMemo } from 'react';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import EmptyState from '../../components/emptyState/EmptyState';
-import providersData from '../../mock/trainingCatalog/providers.json';
+import { EmptyState } from '../../components/emptyState';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
+import { useToast } from '../../components/toast/ToastProvider';
+import { findTrainingProviderOptionBySlug } from '../../api/searnTrainingCatalog/trainingsCatalogOptionsUtils';
+import useSearnTrainingCatalogProvider from '../../hooks/searnTrainingCatalog/useSearnTrainingCatalogProvider';
+import useTrainingCatalogFilterOptions from '../../hooks/searnTrainingCatalog/useTrainingCatalogFilterOptions';
 import brandPlaceholder from '../../assets/images/brand-placeholder.svg';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import messages from './messages';
 import './SearnTrainingProvider.scss';
-
-const ArrowLeftIcon = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="m12 19-7-7 7-7" />
-    <path d="M19 12H5" />
-  </svg>
-);
 
 const GlobeIcon = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -40,58 +41,119 @@ const Building2Icon = (props) => (
 );
 
 const SearnTrainingProvider = () => {
+  const { formatMessage } = useIntl();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const { providerSlug } = useParams();
 
-  const provider = useMemo(
-    () => providersData.find(p => p.slug === providerSlug),
-    [providerSlug],
-  );
+  const {
+    provider,
+    isLoading,
+    isError,
+    errorMessage,
+  } = useSearnTrainingCatalogProvider({ providerSlug });
 
-  if (!provider) {
+  const { providerOptionsRaw } = useTrainingCatalogFilterOptions();
+
+  const providerFilterId = useMemo(() => {
+    if (!provider) {
+      return null;
+    }
+
+    const matched = findTrainingProviderOptionBySlug(providerOptionsRaw, provider.slug);
+    if (matched?.value) {
+      return matched.value;
+    }
+
+    const byName = providerOptionsRaw.find(
+      (option) => option.label === provider.name || option.value === provider.name,
+    );
+
+    return byName?.value ?? null;
+  }, [provider, providerOptionsRaw]);
+
+  useEffect(() => {
+    if (!isError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.providerLoadErrorTitle),
+      description: errorMessage || formatMessage(messages.providerLoadError),
+    });
+  }, [errorMessage, formatMessage, isError, showToast]);
+
+  const handleViewCatalog = () => {
+    if (hasDisplayValue(providerFilterId)) {
+      navigate(ADMIN_PATHS.trainingCatalogWithProviderFilter(providerFilterId));
+      return;
+    }
+
+    if (provider?.slug) {
+      navigate(ADMIN_PATHS.trainingCatalogProviderCatalog(provider.slug));
+    }
+  };
+
+  if (isLoading) {
     return (
       <section className="provider-page">
-        <button type="button" className="provider-page__back" onClick={() => navigate('/admin/searn-training-catalog')}>
-          <ArrowLeftIcon className="provider-page__back-icon" />
-          Back to SEARN Training Catalog
-        </button>
-        <EmptyState fullSize className="provider-page__empty" message="No provider found." />
+        <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />
       </section>
     );
   }
 
+  if (isError || !provider) {
+    return (
+      <section className="provider-page">
+        <EmptyState
+          fullSize
+          className="provider-page__empty"
+          message={errorMessage || formatMessage(messages.providerNotFound)}
+        />
+      </section>
+    );
+  }
+
+  const websiteHref = hasDisplayValue(provider.website) ? provider.website : null;
+  const websiteLabel = hasDisplayValue(provider.websiteLabel)
+    ? provider.websiteLabel
+    : (websiteHref || '');
+
   return (
     <section className="provider-page">
-      <button type="button" className="provider-page__back" onClick={() => navigate('/admin/searn-training-catalog')}>
-        <ArrowLeftIcon className="provider-page__back-icon" />
-        Back to SEARN Training Catalog
-      </button>
-
       <div className="provider-page__hero">
         <div className="provider-page__hero-top">
           <div className="provider-page__hero-row">
             <div className="provider-page__logo" aria-hidden="true">
               <img
                 className="provider-page__logo-img"
-                src={provider.logo_url || brandPlaceholder}
+                src={hasDisplayValue(provider.logoUrl) ? provider.logoUrl : brandPlaceholder}
                 alt=""
+                onError={(event) => {
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src = brandPlaceholder;
+                }}
               />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <p className="provider-page__hero-subtitle">Training Provider</p>
-              <h1 className="provider-page__hero-title">{provider.name}</h1>
-              <a className="provider-page__hero-link" href={provider.website} target="_blank" rel="noreferrer">
-                <GlobeIcon className="provider-page__link-icon" />
-                {provider.websiteLabel || provider.website}
-              </a>
+              <p className="provider-page__hero-subtitle">{formatMessage(messages.providerSubtitle)}</p>
+              {hasDisplayValue(provider.name) && (
+                <h1 className="provider-page__hero-title">{provider.name}</h1>
+              )}
+              {websiteHref && (
+                <a className="provider-page__hero-link" href={websiteHref} target="_blank" rel="noreferrer">
+                  <GlobeIcon className="provider-page__link-icon" />
+                  {websiteLabel}
+                </a>
+              )}
             </div>
             <button
               type="button"
               className="provider-page__hero-action"
-              onClick={() => navigate(`/admin/searn-training-catalog/providers/${provider.slug}/catalog`)}
+              onClick={handleViewCatalog}
             >
               <BookOpenIcon className="provider-page__action-icon" />
-              View Catalog
+              {formatMessage(messages.viewCatalog)}
             </button>
           </div>
         </div>
@@ -101,19 +163,25 @@ const SearnTrainingProvider = () => {
         <div className="provider-page__panel-body">
           <div className="provider-page__h2-row">
             <Building2Icon className="provider-page__h2-icon" />
-            <h2 className="provider-page__h2">Overview</h2>
+            <h2 className="provider-page__h2">{formatMessage(messages.providerOverview)}</h2>
           </div>
-          <p className="provider-page__text">{provider.overview}</p>
+          {hasDisplayValue(provider.overview) && (
+            <p className="provider-page__text">{provider.overview}</p>
+          )}
 
-          <div className="provider-page__divider" />
+          {websiteHref && (
+            <>
+              <div className="provider-page__divider" />
 
-          <div className="provider-page__h2-row provider-page__h2-row--tight">
-            <GlobeIcon className="provider-page__h2-icon" />
-            <h2 className="provider-page__h2">Website</h2>
-          </div>
-          <a className="provider-page__link" href={provider.website} target="_blank" rel="noreferrer">
-            {provider.website}
-          </a>
+              <div className="provider-page__h2-row provider-page__h2-row--tight">
+                <GlobeIcon className="provider-page__h2-icon" />
+                <h2 className="provider-page__h2">{formatMessage(messages.providerWebsite)}</h2>
+              </div>
+              <a className="provider-page__link" href={websiteHref} target="_blank" rel="noreferrer">
+                {websiteLabel}
+              </a>
+            </>
+          )}
         </div>
       </div>
     </section>
@@ -121,4 +189,3 @@ const SearnTrainingProvider = () => {
 };
 
 export default SearnTrainingProvider;
-

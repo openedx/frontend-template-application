@@ -2,6 +2,7 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { EmptyState } from '../../components/emptyState';
+import ProfilePageAvatar from '../../components/users/ProfilePageAvatar';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
@@ -263,7 +264,7 @@ const Profile = () => {
     }
   };
 
-  const initials = (fullName || profile?.fullName || profile?.name || 'U').trim().slice(0, 1).toUpperCase();
+  const profileDisplayName = fullName || profile?.fullName || profile?.name;
 
   const countryTrigger = countryLabel ? (
     countryLabel
@@ -301,13 +302,7 @@ const Profile = () => {
       <div className="profile-page__card">
         <div className="profile-page__card-inner">
           <div className="profile-page__summary">
-            <div className="profile-page__avatar">
-              {hasDisplayValue(displayAvatarSrc) ? (
-                <img className="profile-page__avatar-img" src={displayAvatarSrc} alt="" />
-              ) : (
-                <div className="profile-page__avatar-fallback">{initials}</div>
-              )}
-
+            <ProfilePageAvatar name={profileDisplayName} imageUrl={displayAvatarSrc}>
               {canUploadPhoto && (
                 <>
                   <button
@@ -334,7 +329,7 @@ const Profile = () => {
                   />
                 </>
               )}
-            </div>
+            </ProfilePageAvatar>
 
             <div className="profile-page__summary-body">
               {hasDisplayValue(fullName) && (

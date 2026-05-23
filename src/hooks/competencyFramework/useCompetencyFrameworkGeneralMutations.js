@@ -2,6 +2,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createCompetencyFrameworkGeneralInformation,
+  deleteCompetencyFramework,
   patchCompetencyFramework,
 } from '../../api/competencyFramework/competencyFrameworkApi';
 import competencyFrameworkMessages from '../../pages/competencyFramework/messages';
@@ -53,9 +54,28 @@ const useCompetencyFrameworkGeneralMutations = () => {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (frameworkUuid) => {
+      const result = await deleteCompetencyFramework({
+        formatMessage,
+        frameworkUuid,
+      });
+
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      return result;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['competency-frameworks'] });
+    },
+  });
+
   return {
     createMutation,
     updateMutation,
+    deleteMutation,
     resolveFrameworkIdFromApiResponse,
   };
 };

@@ -11,6 +11,7 @@ import { useUserRole } from '../../contexts/UserRoleContext';
 import usePendingRequestFilters from '../../hooks/pendingRequests/usePendingRequestFilters';
 import usePendingRequestsList from '../../hooks/pendingRequests/usePendingRequestsList';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
 import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from './messages';
 import './PendingRequests.scss';
@@ -229,12 +230,12 @@ const PendingRequests = () => {
                         canEditPendingRequest ? 'pending-requests-page__row--clickable' : '',
                       ].filter(Boolean).join(' ')}
                       key={rowKey}
-                      onClick={canEditPendingRequest ? () => navigate(`/admin/pending-requests/${item.id}`) : undefined}
+                      onClick={canEditPendingRequest ? () => navigate(ADMIN_PATHS.pendingRequestDetail(item.id)) : undefined}
                       role={canEditPendingRequest ? 'button' : undefined}
                       tabIndex={canEditPendingRequest ? 0 : undefined}
                       onKeyDown={canEditPendingRequest ? (e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
-                          navigate(`/admin/pending-requests/${item.id}`);
+                          navigate(ADMIN_PATHS.pendingRequestDetail(item.id));
                         }
                       } : undefined}
                     >
@@ -274,7 +275,7 @@ const PendingRequests = () => {
                             aria-label={formatMessage(messages.viewRequest)}
                             onClick={(e) => {
                               e.stopPropagation();
-                              navigate(`/admin/pending-requests/${item.id}`);
+                              navigate(ADMIN_PATHS.pendingRequestDetail(item.id));
                             }}
                           >
                             <PencilIcon className="h-4 w-4" />
@@ -291,7 +292,7 @@ const PendingRequests = () => {
             currentPage={page}
             totalPages={totalPages}
             onPageChange={setPage}
-            paginationLabel="Pending requests pagination"
+            paginationLabel={formatMessage(messages.paginationLabel)}
             footerContent={formatMessage(
               messages.showingCount,
               buildPaginationShowingParams(items, requestsCount),

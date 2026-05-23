@@ -106,23 +106,6 @@ button:disabled,
   min-width: 0;
 }
 
-.admin-sidebar__logo {
-  min-width: 30px;
-  height: 40px;
-  border-radius: 10px;
-  background: #2A3B8F;
-  color: #FFFFFF;
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.admin-sidebar.is-collapsed .admin-sidebar__logo {
-  min-width: unset;
-}
-
 .admin-sidebar__brand-text {
   font-size: .875rem;
   line-height: 1.25rem;
@@ -204,7 +187,6 @@ button:disabled,
   width: 100%;
   border: 0;
   background: transparent;
-  color: #4B5563;
   text-align: left;
   cursor: pointer;
 }
@@ -316,40 +298,6 @@ button:disabled,
   background: rgb(0 0 0 / .45);
   border: 0;
   z-index: 35;
-}
-
-.admin-sidebar__footer {
-  margin-top: auto;
-  padding: 16px;
-  border-top: 1px solid #E0E6EB;
-}
-
-.admin-sidebar__back-link {
-  height: 24.5px;
-  line-height: unset !important;
-  border-radius: 10px;  
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: #6B7280;
-  font-size: 14px;
-  transition: color .2s ease, background-color .2s ease;
-}
-
-.admin-sidebar__back-link:hover {
-  text-decoration: none;
-  color: #2A3B8F;
-}
-
-.admin-sidebar__back-icon {
-  width: 16px;
-  height: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  flex-shrink: 0;
 }
 
 .admin-top-header {

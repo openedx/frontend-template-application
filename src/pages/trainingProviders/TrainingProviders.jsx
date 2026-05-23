@@ -16,6 +16,7 @@ import useTrainingProviderMutations from '../../hooks/trainingProviders/useTrain
 import useTrainingProvidersList from '../../hooks/trainingProviders/useTrainingProvidersList';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import { buildPaginationShowingParams } from '../../utils/paginationUtils';
+import commonMessages from '../../messages/commonMessages';
 import messages from './messages';
 import './TrainingProviders.scss';
 
@@ -619,7 +620,7 @@ const TrainingProviders = () => {
               currentPage={page}
               totalPages={totalPages}
               onPageChange={setPage}
-              paginationLabel="Training providers pagination"
+              paginationLabel={formatMessage(messages.paginationLabel)}
               footerContent={formatMessage(
                 messages.showingCount,
                 buildPaginationShowingParams(providers, providersCount),
@@ -716,14 +717,14 @@ const TrainingProviders = () => {
                                 >
                                   <input
                                     className="training-providers-modal__input"
-                                    placeholder="Name"
+                                    placeholder={formatMessage(messages.adminNamePlaceholder)}
                                     value={editingAdminName}
                                     onChange={(e) => setEditingAdminName(e.target.value)}
                                     type="text"
                                   />
                                   <input
                                     className="training-providers-modal__input"
-                                    placeholder="Email"
+                                    placeholder={formatMessage(messages.adminEmailPlaceholder)}
                                     value={editingAdminEmail}
                                     onChange={(e) => setEditingAdminEmail(e.target.value)}
                                     type="email"
@@ -733,7 +734,7 @@ const TrainingProviders = () => {
                                   <button
                                     type="button"
                                     className="training-providers-page__icon-button"
-                                    aria-label="Save admin"
+                                    aria-label={formatMessage(commonMessages.adminSaveAriaLabel)}
                                     onClick={saveEditAdmin}
                                   >
                                     <CheckIcon className="h-4 w-4" />
@@ -741,7 +742,7 @@ const TrainingProviders = () => {
                                   <button
                                     type="button"
                                     className="training-providers-page__icon-button"
-                                    aria-label="Cancel edit"
+                                    aria-label={formatMessage(commonMessages.adminCancelEditAriaLabel)}
                                     onClick={cancelEditAdmin}
                                   >
                                     <XIcon className="h-4 w-4" />
@@ -762,7 +763,7 @@ const TrainingProviders = () => {
                                   <button
                                     type="button"
                                     className="training-providers-page__icon-button"
-                                    aria-label="Edit admin"
+                                    aria-label={formatMessage(commonMessages.adminEditAriaLabel)}
                                     onClick={() => startEditAdmin(admin)}
                                   >
                                     <PencilIcon className="h-4 w-4" />
@@ -770,7 +771,7 @@ const TrainingProviders = () => {
                                   <button
                                     type="button"
                                     className="training-providers-page__icon-button training-providers-page__icon-button--danger"
-                                    aria-label="Delete admin"
+                                    aria-label={formatMessage(commonMessages.adminDeleteAriaLabel)}
                                     onClick={() => requestDeleteAdmin(admin)}
                                   >
                                     <TrashIcon className="h-4 w-4" />

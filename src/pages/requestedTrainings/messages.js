@@ -176,6 +176,11 @@ const messages = defineMessages({
     defaultMessage: 'Showing {count} of {total} requested trainings',
     description: 'Pagination summary for requested trainings table',
   },
+  paginationLabel: {
+    id: 'app.requestedTrainings.pagination.label',
+    defaultMessage: 'Requested trainings pagination',
+    description: 'Accessible label for requested trainings table pagination',
+  },
 });
 
 export default messages;

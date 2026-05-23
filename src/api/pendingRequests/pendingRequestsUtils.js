@@ -26,6 +26,18 @@ export const mapPendingRequestListRow = (row) => ({
 });
 
 /**
+ * Maps a pending-requests list row to the dashboard card shape.
+ * @param {object} row
+ */
+export const mapPendingRequestToDashboardCard = (row) => ({
+  id: row?.id,
+  title: row?.title,
+  description: row?.subtitle ?? row?.description,
+  tag: row?.type ?? row?.tag,
+  timeAgo: row?.submitted_relative ?? row?.submittedRelative ?? row?.time_ago ?? row?.timeAgo,
+});
+
+/**
  * @param {Array<object>} results
  */
 export const normalizePendingRequestList = (results) => {

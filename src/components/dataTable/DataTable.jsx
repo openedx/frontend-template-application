@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import { useIntl } from '@edx/frontend-platform/i18n';
+import commonMessages from '../../messages/commonMessages';
 import { TablePaginationFooter } from './TablePagination';
 import './DataTable.scss';
 
@@ -11,7 +13,12 @@ const DataTable = ({
   onPageChange,
   footerContent = null,
   minWidth = 900,
-}) => (
+  paginationLabel,
+}) => {
+  const { formatMessage } = useIntl();
+  const resolvedPaginationLabel = paginationLabel ?? formatMessage(commonMessages.tablePagination);
+
+  return (
   <div className="data-table">
     <div className="data-table__wrap">
       <table className="data-table__table" style={{ minWidth }}>
@@ -48,10 +55,11 @@ const DataTable = ({
       currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={onPageChange}
-      paginationLabel="Table pagination"
+      paginationLabel={resolvedPaginationLabel}
       footerContent={footerContent}
     />
   </div>
-);
+  );
+};
 
 export default DataTable;

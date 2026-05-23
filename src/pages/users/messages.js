@@ -134,6 +134,31 @@ const usersPageMessages = defineMessages({
     defaultMessage: 'Select option',
     description: 'Placeholder for sub-role dropdown when the selected role has sub-options',
   },
+  addUserModalManager: {
+    id: 'app.users.addUser.modal.manager.label',
+    defaultMessage: 'Manager',
+    description: 'Label for manager field in add user modal',
+  },
+  addUserModalManagerPlaceholder: {
+    id: 'app.users.addUser.modal.manager.placeholder',
+    defaultMessage: 'Select manager',
+    description: 'Placeholder for manager dropdown in add user modal',
+  },
+  addUserModalCompetencyRole: {
+    id: 'app.users.addUser.modal.competencyRole.label',
+    defaultMessage: 'Competency Role',
+    description: 'Label for competency role field in add user modal',
+  },
+  addUserModalCompetencyRolePlaceholder: {
+    id: 'app.users.addUser.modal.competencyRole.placeholder',
+    defaultMessage: 'e.g. Reviewer, Inspector, Laboratory Analyst',
+    description: 'Placeholder for competency role input in add user modal',
+  },
+  addUserModalCompetencyRoleHelper: {
+    id: 'app.users.addUser.modal.competencyRole.helper',
+    defaultMessage: 'Separate multiple roles with commas.',
+    description: 'Helper text for competency role input in add user modal',
+  },
   addUserModalCreateButton: {
     id: 'app.users.addUser.modal.create.button',
     defaultMessage: 'Create User',

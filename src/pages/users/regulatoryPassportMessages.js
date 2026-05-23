@@ -1,6 +1,11 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const regulatoryPassportMessages = defineMessages({
+  brandAlt: {
+    id: 'app.users.regulatoryPassport.brandAlt',
+    defaultMessage: 'SEARN',
+    description: 'Accessible label for SEARN brand mark on regulatory passport',
+  },
   backToUser: {
     id: 'app.users.regulatoryPassport.backToUser',
     defaultMessage: 'Back to User',
@@ -58,6 +63,21 @@ const regulatoryPassportMessages = defineMessages({
   tableRemoteType: { id: 'app.users.regulatoryPassport.table.remoteType', defaultMessage: 'Remote Type', description: 'Table header' },
   tableCertificate: { id: 'app.users.regulatoryPassport.table.certificate', defaultMessage: 'Cert.', description: 'Table header' },
   certificateView: { id: 'app.users.regulatoryPassport.certificate.view', defaultMessage: 'View', description: 'Certificate link label' },
+  paginationLabel: {
+    id: 'app.users.regulatoryPassport.pagination.label',
+    defaultMessage: 'Regulatory passport pagination',
+    description: 'Accessible label for regulatory passport table pagination',
+  },
+  exportTitle: {
+    id: 'app.users.regulatoryPassport.export.title',
+    defaultMessage: 'Export Regulatory Passport — {name}',
+    description: 'Export section title on regulatory passport page',
+  },
+  exportDownloadButton: {
+    id: 'app.users.regulatoryPassport.export.downloadButton',
+    defaultMessage: 'Download Regulatory Passport',
+    description: 'Download button label on regulatory passport page',
+  },
 });
 
 export default regulatoryPassportMessages;

@@ -10,6 +10,7 @@ import Badge from '../badge/Badge';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import pageMessages from '../../pages/messages';
 import messages from './messages';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
 import { normalizePendingRequests } from './pendingRequestsUtils';
 import {
   hasValidRank,
@@ -103,7 +104,7 @@ const PendingRequestsCard = ({ items = [], emptyMessage }) => {
                   });
                   return;
                 }
-                navigate(`/admin/pending-requests/${item.id}`);
+                navigate(ADMIN_PATHS.pendingRequestDetail(item.id));
               }}
             >
               <div className="pending-request__main">

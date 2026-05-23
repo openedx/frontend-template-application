@@ -10,6 +10,7 @@ import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import { buildNraOnboardPayload } from '../../api/nras/nrasUtils';
+import commonMessages from '../../messages/commonMessages';
 import useSearnCountries from '../../hooks/countries/useSearnCountries';
 import useNraDetail from '../../hooks/nras/useNraDetail';
 import useNraMutations from '../../hooks/nras/useNraMutations';
@@ -569,7 +570,7 @@ const Nras = () => {
             currentPage={page}
             totalPages={totalPages}
             onPageChange={setPage}
-            paginationLabel="NRA pagination"
+            paginationLabel={formatMessage(messages.paginationLabel)}
             footerContent={formatMessage(
               messages.showingCount,
               buildPaginationShowingParams(items, nrasCount),
@@ -682,14 +683,14 @@ const Nras = () => {
                                 <div className="nras-modal__admin-edit">
                                   <input
                                     className="nras-modal__input"
-                                    placeholder="Name"
+                                    placeholder={formatMessage(messages.adminNamePlaceholder)}
                                     value={editingAdminName}
                                     onChange={(e) => setEditingAdminName(e.target.value)}
                                     type="text"
                                   />
                                   <input
                                     className="nras-modal__input"
-                                    placeholder="Email"
+                                    placeholder={formatMessage(messages.adminEmailPlaceholder)}
                                     value={editingAdminEmail}
                                     onChange={(e) => setEditingAdminEmail(e.target.value)}
                                     type="email"
@@ -699,7 +700,7 @@ const Nras = () => {
                                   <button
                                     type="button"
                                     className="nras-page__icon-button"
-                                    aria-label="Save admin"
+                                    aria-label={formatMessage(commonMessages.adminSaveAriaLabel)}
                                     onClick={saveEditAdmin}
                                   >
                                     <CheckIcon className="h-4 w-4" />
@@ -707,7 +708,7 @@ const Nras = () => {
                                   <button
                                     type="button"
                                     className="nras-page__icon-button"
-                                    aria-label="Cancel edit"
+                                    aria-label={formatMessage(commonMessages.adminCancelEditAriaLabel)}
                                     onClick={cancelEditAdmin}
                                   >
                                     <XIcon className="h-4 w-4" />
@@ -728,7 +729,7 @@ const Nras = () => {
                                   <button
                                     type="button"
                                     className="nras-page__icon-button"
-                                    aria-label="Edit admin"
+                                    aria-label={formatMessage(commonMessages.adminEditAriaLabel)}
                                     onClick={() => startEditAdmin(admin)}
                                   >
                                     <PencilIcon className="h-4 w-4" />
@@ -736,7 +737,7 @@ const Nras = () => {
                                   <button
                                     type="button"
                                     className="nras-page__icon-button nras-page__icon-button--danger"
-                                    aria-label="Delete admin"
+                                    aria-label={formatMessage(commonMessages.adminDeleteAriaLabel)}
                                     onClick={() => requestDeleteAdmin(admin)}
                                   >
                                     <TrashIcon className="h-4 w-4" />

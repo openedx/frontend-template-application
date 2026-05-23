@@ -110,6 +110,7 @@ export const mapUserDetail = (payload) => {
     country: data.country != null ? String(data.country) : '',
     role: data.role ?? '',
     provider: data.provider != null ? String(data.provider) : '',
+    userProfileImage: data.user_profile_image ?? '',
   };
 };
 

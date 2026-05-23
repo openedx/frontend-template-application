@@ -116,6 +116,11 @@ const messages = defineMessages({
     defaultMessage: 'Showing {count} of {total} requests',
     description: 'Pagination summary for pending requests table',
   },
+  paginationLabel: {
+    id: 'app.pendingRequests.pagination.label',
+    defaultMessage: 'Pending requests pagination',
+    description: 'Accessible label for pending requests table pagination',
+  },
 });
 
 export default messages;

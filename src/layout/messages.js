@@ -13,13 +13,8 @@ const layoutMessages = defineMessages({
   },
   sidebarBrand: {
     id: 'app.layout.sidebar.brand.text',
-    defaultMessage: 'Admin Portal',
+    defaultMessage: 'SEARN Portal',
     description: 'Brand label displayed in the sidebar',
-  },
-  sidebarLogoInitials: {
-    id: 'app.layout.sidebar.brand.initials',
-    defaultMessage: 'SA',
-    description: 'Sidebar logo initials',
   },
   navDashboard: {
     id: 'app.layout.sidebar.nav.dashboard',
@@ -126,11 +121,6 @@ const layoutMessages = defineMessages({
     defaultMessage: 'Management',
     description: 'Section label displayed above sidebar navigation items',
   },
-  sidebarBackToPlatform: {
-    id: 'app.layout.sidebar.footer.backToPlatform',
-    defaultMessage: 'Back to Platform',
-    description: 'Label for sidebar footer back link',
-  },
   searchPlaceholder: {
     id: 'app.layout.header.search.placeholder',
     defaultMessage: 'Search...',
@@ -145,6 +135,31 @@ const layoutMessages = defineMessages({
     id: 'app.layout.header.userAvatar.label',
     defaultMessage: 'User avatar',
     description: 'Accessible label for user avatar in top header',
+  },
+  userMenuLabel: {
+    id: 'app.layout.header.userMenu.label',
+    defaultMessage: 'User menu',
+    description: 'Accessible label for header user profile dropdown trigger',
+  },
+  profileMenuProfile: {
+    id: 'app.layout.header.profileMenu.profile',
+    defaultMessage: 'Profile',
+    description: 'Profile menu item in header user dropdown',
+  },
+  profileMenuSignOut: {
+    id: 'app.layout.header.profileMenu.signOut',
+    defaultMessage: 'Sign Out',
+    description: 'Sign out menu item in header user dropdown',
+  },
+  permissionsLoading: {
+    id: 'app.layout.permissions.loading',
+    defaultMessage: 'Loading application',
+    description: 'Accessible label for full app shell while permissions are loading',
+  },
+  closeSidebar: {
+    id: 'app.layout.sidebar.close',
+    defaultMessage: 'Close sidebar',
+    description: 'Accessible label for mobile sidebar backdrop close control',
   },
 });
 

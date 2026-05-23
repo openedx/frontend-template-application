@@ -5,22 +5,6 @@
   flex: 1;
   min-height: 0;
 
-  &__back {
-    height: 36px;
-    border: 0;
-    background: transparent;
-    color: #6B7280;
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-    font-size: .875rem;
-    padding: 0;
-
-    &:hover {
-      color: #2A3B8F;
-    }
-  }
-
   &__card {
     background: #FFFFFF;
     border: 1px solid #E5E7EB;

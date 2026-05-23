@@ -81,15 +81,225 @@ const messages = defineMessages({
     defaultMessage: 'Showing {count} of {total} trainings',
     description: 'Pagination summary for SEARN training catalog table',
   },
-  backToCatalog: {
-    id: 'app.searnTrainingCatalog.backToCatalog',
-    defaultMessage: 'Back to SEARN Training Catalog',
-    description: 'Back button label to return to SEARN training catalog list',
+  paginationLabel: {
+    id: 'app.searnTrainingCatalog.pagination.label',
+    defaultMessage: 'SEARN training catalog pagination',
+    description: 'Accessible label for SEARN training catalog table pagination',
   },
   userFeedback: {
     id: 'app.searnTrainingCatalog.badge.userFeedback',
     defaultMessage: 'User Feedback',
     description: 'Badge label for user feedback',
+  },
+  listLoadError: {
+    id: 'app.searnTrainingCatalog.list.loadError',
+    defaultMessage: 'Unable to load trainings. Please try again.',
+    description: 'Fallback when SEARN training catalog list GET fails',
+  },
+  listLoadErrorTitle: {
+    id: 'app.searnTrainingCatalog.list.loadErrorTitle',
+    defaultMessage: 'Trainings unavailable',
+    description: 'Toast title when SEARN training catalog list GET fails',
+  },
+  detailLoadError: {
+    id: 'app.searnTrainingCatalog.detail.loadError',
+    defaultMessage: 'Unable to load training details. Please try again.',
+    description: 'Fallback when SEARN training catalog detail GET fails',
+  },
+  detailLoadErrorTitle: {
+    id: 'app.searnTrainingCatalog.detail.loadErrorTitle',
+    defaultMessage: 'Training unavailable',
+    description: 'Toast title when SEARN training catalog detail GET fails',
+  },
+  feedbackLoadError: {
+    id: 'app.searnTrainingCatalog.feedback.loadError',
+    defaultMessage: 'Unable to load feedback. Please try again.',
+    description: 'Fallback when SEARN training catalog feedback GET fails',
+  },
+  feedbackLoadErrorTitle: {
+    id: 'app.searnTrainingCatalog.feedback.loadErrorTitle',
+    defaultMessage: 'Feedback unavailable',
+    description: 'Toast title when SEARN training catalog feedback GET fails',
+  },
+  providerLoadError: {
+    id: 'app.searnTrainingCatalog.provider.loadError',
+    defaultMessage: 'Unable to load provider details. Please try again.',
+    description: 'Fallback when SEARN training catalog provider GET fails',
+  },
+  providerLoadErrorTitle: {
+    id: 'app.searnTrainingCatalog.provider.loadErrorTitle',
+    defaultMessage: 'Provider unavailable',
+    description: 'Toast title when SEARN training catalog provider GET fails',
+  },
+  providerNotFound: {
+    id: 'app.searnTrainingCatalog.provider.notFound',
+    defaultMessage: 'No provider found.',
+    description: 'Empty state when provider detail is missing',
+  },
+  detailNotFound: {
+    id: 'app.searnTrainingCatalog.detail.notFound',
+    defaultMessage: 'No training found.',
+    description: 'Empty state when training detail is missing',
+  },
+  feedbackNotFound: {
+    id: 'app.searnTrainingCatalog.feedback.notFound',
+    defaultMessage: 'No feedback found.',
+    description: 'Empty state when training feedback is missing',
+  },
+  frameworkOptionsLoadError: {
+    id: 'app.searnTrainingCatalog.options.framework.loadError',
+    defaultMessage: 'Unable to load competency frameworks.',
+    description: 'Fallback when competency framework options GET fails',
+  },
+  roleOptionsLoadError: {
+    id: 'app.searnTrainingCatalog.options.role.loadError',
+    defaultMessage: 'Unable to load roles.',
+    description: 'Fallback when role options GET fails',
+  },
+  domainOptionsLoadError: {
+    id: 'app.searnTrainingCatalog.options.domain.loadError',
+    defaultMessage: 'Unable to load domains.',
+    description: 'Fallback when domain options GET fails',
+  },
+  subDomainOptionsLoadError: {
+    id: 'app.searnTrainingCatalog.options.subDomain.loadError',
+    defaultMessage: 'Unable to load sub-domains.',
+    description: 'Fallback when sub-domain options GET fails',
+  },
+  activityOptionsLoadError: {
+    id: 'app.searnTrainingCatalog.options.activity.loadError',
+    defaultMessage: 'Unable to load activities.',
+    description: 'Fallback when mapped activity options GET fails',
+  },
+  nraObjectiveOptionsLoadError: {
+    id: 'app.searnTrainingCatalog.options.nraObjective.loadError',
+    defaultMessage: 'Unable to load NRA objectives.',
+    description: 'Fallback when NRA objective options GET fails',
+  },
+  providerOptionsLoadError: {
+    id: 'app.searnTrainingCatalog.options.provider.loadError',
+    defaultMessage: 'Unable to load training providers.',
+    description: 'Fallback when training provider options GET fails',
+  },
+  filterOptionsErrorTitle: {
+    id: 'app.searnTrainingCatalog.options.errorTitle',
+    defaultMessage: 'Filter options unavailable',
+    description: 'Toast title when catalog filter options fail to load',
+  },
+  dropdownSearchPlaceholder: {
+    id: 'app.searnTrainingCatalog.dropdown.searchPlaceholder',
+    defaultMessage: 'Search…',
+    description: 'Search placeholder for catalog filter dropdowns',
+  },
+  dropdownNoOptions: {
+    id: 'app.searnTrainingCatalog.dropdown.noOptions',
+    defaultMessage: 'No matches',
+    description: 'Empty text for catalog filter dropdowns',
+  },
+  backToProvider: {
+    id: 'app.searnTrainingCatalog.backToProvider',
+    defaultMessage: 'Back to Provider',
+    description: 'Back button from provider-scoped catalog to provider profile',
+  },
+  viewCatalog: {
+    id: 'app.searnTrainingCatalog.provider.viewCatalog',
+    defaultMessage: 'View Catalog',
+    description: 'Button on provider page to open catalog filtered by provider',
+  },
+  providerSubtitle: {
+    id: 'app.searnTrainingCatalog.provider.subtitle',
+    defaultMessage: 'Training Provider',
+    description: 'Subtitle on provider profile hero',
+  },
+  providerOverview: {
+    id: 'app.searnTrainingCatalog.provider.overview',
+    defaultMessage: 'Overview',
+    description: 'Overview section heading on provider page',
+  },
+  providerWebsite: {
+    id: 'app.searnTrainingCatalog.provider.website',
+    defaultMessage: 'Website',
+    description: 'Website section heading on provider page',
+  },
+  basedOnReviews: {
+    id: 'app.searnTrainingCatalog.feedback.basedOnReviews',
+    defaultMessage: 'Based on {count} anonymous reviews',
+    description: 'Review count summary on feedback page',
+  },
+  overallRating: {
+    id: 'app.searnTrainingCatalog.feedback.overallRating',
+    defaultMessage: 'Overall Rating',
+    description: 'Overall rating card title on feedback page',
+  },
+  ratingDistribution: {
+    id: 'app.searnTrainingCatalog.feedback.ratingDistribution',
+    defaultMessage: 'Rating Distribution',
+    description: 'Rating distribution card title on feedback page',
+  },
+  userFeedbackSection: {
+    id: 'app.searnTrainingCatalog.feedback.userFeedbackSection',
+    defaultMessage: 'User Feedback',
+    description: 'User feedback list section title',
+  },
+  detailStatProvider: {
+    id: 'app.searnTrainingCatalog.detail.stat.provider',
+    defaultMessage: 'Provider',
+    description: 'Provider stat label on training detail page',
+  },
+  detailStatLanguage: {
+    id: 'app.searnTrainingCatalog.detail.stat.language',
+    defaultMessage: 'Language',
+    description: 'Language stat label on training detail page',
+  },
+  detailStatDuration: {
+    id: 'app.searnTrainingCatalog.detail.stat.duration',
+    defaultMessage: 'Duration',
+    description: 'Duration stat label on training detail page',
+  },
+  detailStatCost: {
+    id: 'app.searnTrainingCatalog.detail.stat.cost',
+    defaultMessage: 'Cost',
+    description: 'Cost stat label on training detail page',
+  },
+  detailSectionTrainingDetails: {
+    id: 'app.searnTrainingCatalog.detail.section.trainingDetails',
+    defaultMessage: 'Training Details',
+    description: 'Training details panel title on training detail page',
+  },
+  detailFieldApproach: {
+    id: 'app.searnTrainingCatalog.detail.field.approach',
+    defaultMessage: 'Approach',
+    description: 'Approach field label on training detail page',
+  },
+  detailFieldMode: {
+    id: 'app.searnTrainingCatalog.detail.field.mode',
+    defaultMessage: 'Mode',
+    description: 'Mode field label on training detail page',
+  },
+  detailFieldEvaluation: {
+    id: 'app.searnTrainingCatalog.detail.field.evaluation',
+    defaultMessage: 'Evaluation',
+    description: 'Evaluation field label on training detail page',
+  },
+  detailFieldOutcome: {
+    id: 'app.searnTrainingCatalog.detail.field.outcome',
+    defaultMessage: 'Outcome',
+    description: 'Outcome field label on training detail page',
+  },
+  detailSectionNraObjectives: {
+    id: 'app.searnTrainingCatalog.detail.section.nraObjectives',
+    defaultMessage: 'NRA Objectives',
+    description: 'NRA objectives panel title on training detail page',
+  },
+  detailSectionMappedCompetencies: {
+    id: 'app.searnTrainingCatalog.detail.section.mappedCompetencies',
+    defaultMessage: 'Mapped Competencies',
+    description: 'Mapped competencies panel title on training detail page',
+  },
+  detailSectionMappedActivities: {
+    id: 'app.searnTrainingCatalog.detail.section.mappedActivities',
+    defaultMessage: 'Mapped Activities',
+    description: 'Mapped activities panel title on training detail page',
   },
 });
 

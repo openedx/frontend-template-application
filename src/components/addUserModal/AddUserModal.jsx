@@ -200,13 +200,13 @@ const AddUserModal = ({
 
         {canShowManagerField && (
           <div className="add-user-modal__field">
-            <label className="add-user-modal__label">Manager</label>
+            <label className="add-user-modal__label">{formatMessage(messages.addUserModalManager)}</label>
             <SearchableDropdown
               value={managerId}
               options={[]}
               onChange={setManagerId}
               disabled={isLoadingDetail || isSaving}
-              triggerLabel="Select manager"
+              triggerLabel={formatMessage(messages.addUserModalManagerPlaceholder)}
               searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
               noOptionsText={formatMessage(messages.dropdownNoOptions)}
             />
@@ -215,13 +215,13 @@ const AddUserModal = ({
 
         {canShowCompetencyRoleField && (
           <div className="add-user-modal__field">
-            <label className="add-user-modal__label">Competency Role</label>
+            <label className="add-user-modal__label">{formatMessage(messages.addUserModalCompetencyRole)}</label>
             <CommaSeparatedInput
               value={competencyRole}
               onChange={setCompetencyRole}
               disabled={isLoadingDetail || isSaving}
-              placeholder="e.g. Reviewer, Inspector, Laboratory Analyst"
-              helperText="Separate multiple roles with commas."
+              placeholder={formatMessage(messages.addUserModalCompetencyRolePlaceholder)}
+              helperText={formatMessage(messages.addUserModalCompetencyRoleHelper)}
             />
           </div>
         )}

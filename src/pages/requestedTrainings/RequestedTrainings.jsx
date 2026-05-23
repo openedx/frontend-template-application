@@ -140,6 +140,7 @@ const RequestedTrainings = () => {
 
   const {
     items,
+    count: trainingsCount,
     totalPages,
     isLoading: isListLoading,
     isError: isListError,
@@ -408,7 +409,7 @@ const RequestedTrainings = () => {
             currentPage={page}
             totalPages={totalPages}
             onPageChange={setPage}
-            paginationLabel="Requested trainings pagination"
+            paginationLabel={formatMessage(messages.paginationLabel)}
             footerContent={formatMessage(
               messages.showingCount,
               buildPaginationShowingParams(items, trainingsCount),

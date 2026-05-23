@@ -6,7 +6,6 @@ import {
   updateRole,
 } from '../../api/roles/rolesApi';
 import { roleDetailQueryKey } from './useRoleDetail';
-import { rolesListQueryKey } from './useRolesList';
 
 const useRoleMutations = () => {
   const { formatMessage } = useIntl();

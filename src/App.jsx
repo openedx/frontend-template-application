@@ -34,16 +34,22 @@ import PlaceholderPage from './pages/PlaceholderPage';
 import appMessages from './messages/appMessages';
 import { ToastProvider } from './components/toast/ToastProvider';
 import { UserRoleProvider, useUserRole } from './contexts/UserRoleContext';
-import { ACTIVE_ROLE_DATA } from './services/userRoleDataService';
+import TrailingSlashRedirect from './components/routing/TrailingSlashRedirect';
+import { ADMIN_PATHS } from './utils/adminPaths';
+import { isPublicAdminRoute } from './utils/publicRoutes';
 
 const queryClient = new QueryClient();
 
 const DashboardRoleRoute = ({ children }) => {
   const { role: routeRole } = useParams();
-  const activeRole = ACTIVE_ROLE_DATA.userInfo.userRole;
+  const { role: activeRole } = useUserRole();
+
+  if (!activeRole) {
+    return <Navigate to={ADMIN_PATHS.dashboard} replace />;
+  }
 
   if (routeRole !== activeRole) {
-    return <Navigate to={`/admin/dashboard/${activeRole}`} replace />;
+    return <Navigate to={ADMIN_PATHS.dashboardRole(activeRole)} replace />;
   }
 
   return children;
@@ -141,17 +147,7 @@ const getHeaderMeta = (pathname, formatMessage, userName) => {
 };
 
 const hasNavbarAccessForPath = (pathname, navbarAccess) => {
-  // Public nav-items (no navbar permission gating):
-  if (pathname.startsWith('/admin/dashboard')) {
-    return true;
-  }
-  if (pathname.startsWith('/admin/searn-training-catalog')) {
-    return true;
-  }
-  if (pathname.startsWith('/admin/requested-trainings')) {
-    return true;
-  }
-  if (pathname.startsWith('/admin/profile')) {
+  if (isPublicAdminRoute(pathname)) {
     return true;
   }
 
@@ -192,7 +188,8 @@ const hasNavbarAccessForPath = (pathname, navbarAccess) => {
 const RoutedLayout = () => {
   const { formatMessage } = useIntl();
   const location = useLocation();
-  const { userName, navbarAccess, componentAccess } = useUserRole();
+  const { userName, role, navbarAccess, componentAccess } = useUserRole();
+  const dashboardPath = role ? ADMIN_PATHS.dashboardRole(role) : ADMIN_PATHS.dashboard;
   const headerMeta = getHeaderMeta(location.pathname, formatMessage, userName);
   const canShowHeaderTitle = hasNavbarAccessForPath(location.pathname, navbarAccess);
   const withAccess = (hasAccess, component) => (hasAccess ? component : <AccessRestrictedPage />);
@@ -201,48 +198,45 @@ const RoutedLayout = () => {
     <AdminLayout title={canShowHeaderTitle ? headerMeta.title : ''}>
       <Routes>
         <Route
-          path="/admin/dashboard"
-          element={<Navigate to={`/admin/dashboard/${ACTIVE_ROLE_DATA.userInfo.userRole}`} replace />}
+          path={ADMIN_PATHS.dashboard}
+          element={role ? <Navigate to={dashboardPath} replace /> : <Dashboard />}
         />
-        <Route path="/admin/competency-frameworks/new" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
-        <Route path="/admin/competency-frameworks/:frameworkId/edit" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
-        <Route path="/admin/competency-frameworks" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
-        <Route path="/admin/activities-management" element={withAccess(navbarAccess.accessActivities, <Activities />)} />
-        <Route path="/admin/searn-training-catalog" element={<SearnTrainingCatalog />} />
-        <Route path="/admin/searn-training-catalog/:trainingId" element={<SearnTrainingDetail />} />
-        <Route path="/admin/searn-training-catalog/:trainingId/feedback" element={<SearnTrainingFeedback />} />
-        <Route path="/admin/searn-training-catalog/providers/:providerSlug" element={<SearnTrainingProvider />} />
-        <Route path="/admin/searn-training-catalog/providers/:providerSlug/catalog" element={<SearnTrainingProviderCatalog />} />
-        <Route path="/admin/nras" element={withAccess(navbarAccess.accessNrasManagement, <Nras />)} />
-        <Route path="/admin/countries" element={withAccess(navbarAccess.accessCountries, <Countries />)} />
-        <Route path="/admin/training-providers" element={withAccess(navbarAccess.accessTrainingProviders, <TrainingProviders />)} />
-        <Route path="/admin/pending-requests" element={withAccess(navbarAccess.accessPendingRequests, <PendingRequests />)} />
-        <Route path="/admin/pending-requests/:requestId" element={withAccess(navbarAccess.accessPendingRequests, <PendingRequestDetail />)} />
-        <Route path="/admin/requested-trainings" element={<RequestedTrainings />} />
-        <Route path="/admin/profile" element={<Profile />} />
-        <Route path="/admin/users" element={withAccess(navbarAccess.accessUsers, <Users />)} />
-        <Route path="/admin/users/:userId" element={withAccess(navbarAccess.accessUsers, <UserDetailPage />)} />
+        <Route path={ADMIN_PATHS.competencyFrameworkNew} element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
+        <Route path="/admin/competency-frameworks/:frameworkId/edit/" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
+        <Route path={ADMIN_PATHS.competencyFrameworks} element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
+        <Route path={ADMIN_PATHS.activities} element={withAccess(navbarAccess.accessActivities, <Activities />)} />
+        <Route path="/admin/searn-training-catalog/providers/:providerSlug/catalog/" element={<SearnTrainingProviderCatalog />} />
+        <Route path="/admin/searn-training-catalog/providers/:providerSlug/" element={<SearnTrainingProvider />} />
+        <Route path="/admin/searn-training-catalog/:trainingId/feedback/" element={<SearnTrainingFeedback />} />
+        <Route path="/admin/searn-training-catalog/:trainingId/" element={<SearnTrainingDetail />} />
+        <Route path={ADMIN_PATHS.trainingCatalog} element={<SearnTrainingCatalog />} />
+        <Route path={ADMIN_PATHS.nras} element={withAccess(navbarAccess.accessNrasManagement, <Nras />)} />
+        <Route path={ADMIN_PATHS.countries} element={withAccess(navbarAccess.accessCountries, <Countries />)} />
+        <Route path={ADMIN_PATHS.trainingProviders} element={withAccess(navbarAccess.accessTrainingProviders, <TrainingProviders />)} />
+        <Route path="/admin/pending-requests/:requestId/" element={withAccess(navbarAccess.accessPendingRequests, <PendingRequestDetail />)} />
+        <Route path={ADMIN_PATHS.pendingRequests} element={withAccess(navbarAccess.accessPendingRequests, <PendingRequests />)} />
+        <Route path={ADMIN_PATHS.requestedTrainings} element={<RequestedTrainings />} />
+        <Route path={ADMIN_PATHS.profile} element={<Profile />} />
+        <Route path="/admin/users/:userId/regulatory-passport/" element={withAccess(Boolean(navbarAccess.accessUsers && componentAccess?.users?.canViewRegulatoryPassport), <UserRegulatoryPassport />)} />
+        <Route path="/admin/users/:userId/" element={withAccess(navbarAccess.accessUsers, <UserDetailPage />)} />
+        <Route path={ADMIN_PATHS.users} element={withAccess(navbarAccess.accessUsers, <Users />)} />
+        <Route path={ADMIN_PATHS.roles} element={withAccess(navbarAccess.accessRoles, <Roles />)} />
+        <Route path={ADMIN_PATHS.reportsStaffTrained} element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path={ADMIN_PATHS.reportsTrainingOffers} element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path={ADMIN_PATHS.reportsCompetencyCoverage} element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path={ADMIN_PATHS.reportsStaffPerTraining} element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path={ADMIN_PATHS.reportsTraineeSatisfaction} element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path={ADMIN_PATHS.reportsPriorityFeedback} element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
+        <Route path={ADMIN_PATHS.settings} element={withAccess(navbarAccess.accessSettings, <Settings />)} />
         <Route
-          path="/admin/users/:userId/regulatory-passport"
-          element={withAccess(Boolean(navbarAccess.accessUsers && componentAccess?.users?.canViewRegulatoryPassport), <UserRegulatoryPassport />)}
-        />
-        <Route path="/admin/roles" element={withAccess(navbarAccess.accessRoles, <Roles />)} />
-        <Route path="/admin/reports/staff-trained" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
-        <Route path="/admin/reports/training-offers" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
-        <Route path="/admin/reports/competency-coverage" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
-        <Route path="/admin/reports/staff-per-training" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
-        <Route path="/admin/reports/trainee-satisfaction" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
-        <Route path="/admin/reports/priority-feedback" element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
-        <Route path="/admin/settings" element={withAccess(navbarAccess.accessSettings, <Settings />)} />
-        <Route
-          path="/admin/dashboard/:role"
+          path="/admin/dashboard/:role/"
           element={(
             <DashboardRoleRoute>
               <Dashboard />
             </DashboardRoleRoute>
           )}
         />
-        <Route path="*" element={<Navigate to={`/admin/dashboard/${ACTIVE_ROLE_DATA.userInfo.userRole}`} replace />} />
+        <Route path="*" element={<Navigate to={dashboardPath} replace />} />
       </Routes>
     </AdminLayout>
   );
@@ -252,6 +246,7 @@ const App = () => (
   <BrowserRouter>
     <AppProvider wrapWithRouter={false}>
       <UserRoleProvider>
+        <TrailingSlashRedirect />
         <ToastProvider>
           <QueryClientProvider client={queryClient}>
             <Routes>

@@ -3,10 +3,14 @@
 /** Default `page_size` for paginated list endpoints. */
 export const API_PAGE_SIZE = 20;
 
+export const CORE_PERMISSIONS = '/api/v1/core-permissions/';
+
 export const DASHBOARD_STATS = '/api/v1/dashboard/stats/';
 export const DASHBOARD_USERS_PER_COUNTRY = '/api/v1/dashboard/users-per-country/';
 export const DASHBOARD_TOP_REQUESTED_ACTIVITIES = '/api/v1/dashboard/top-requested-activities/?limit=5';
-export const DASHBOARD_PENDING_REQUESTS = '/api/v1/dashboard/pending-requests/';
+
+/** `page_size` for pending requests on the dashboard card. */
+export const DASHBOARD_PENDING_REQUESTS_PAGE_SIZE = 4;
 
 export const COMPETENCY_FRAMEWORKS = '/api/v1/competency-frameworks/';
 export const COMPETENCY_FRAMEWORK_GENERAL_INFORMATION = '/api/v1/competency-framework/general-information/';
@@ -67,6 +71,29 @@ export const ROLE_ASSIGNMENT_USERS = '/api/v1/role-assignment/users/';
 export const ORGANIZATION_DETAILS = '/api/v1/options/organization/details/';
 
 export const ACTIVITIES_LIST = '/api/v1/activities/';
+
+export const SEARN_TRAINING_CATALOG = '/api/v1/searn-training-catalog/';
+
+/** @param {string|number} trainingId */
+export const searnTrainingCatalogDetail = (trainingId) => `/api/v1/searn-training-catalog/${trainingId}/`;
+
+/** @param {string|number} trainingId */
+export const searnTrainingCatalogFeedback = (trainingId) => `/api/v1/searn-training-catalog/${trainingId}/feedback/`;
+
+/** @param {string} providerSlug */
+export const searnTrainingCatalogProviderDetail = (providerSlug) => `/api/v1/searn-training-catalog/providers/${providerSlug}/`;
+
+export const TRAININGS_CATALOG_OPTIONS_COMPETENCY_FRAMEWORKS = '/api/v1/trainings-catalog/options/competency-frameworks/';
+export const TRAININGS_CATALOG_OPTIONS_MAPPED_ACTIVITIES = '/api/v1/trainings-catalog/options/mapped-activities/';
+export const TRAININGS_CATALOG_OPTIONS_NRA_OBJECTIVES = '/api/v1/trainings-catalog/options/nra-objectives/';
+export const TRAININGS_CATALOG_OPTIONS_TRAINING_PROVIDERS = '/api/v1/trainings-catalog/options/training-providers/';
+
+/** @param {string} identifier Framework UUID or `all`. */
+export const trainingsCatalogOptionsFrameworkRoles = (identifier) => `/api/v1/trainings-catalog/options/framework/${identifier}/roles/`;
+/** @param {string} identifier Framework UUID or `all`. */
+export const trainingsCatalogOptionsFrameworkDomains = (identifier) => `/api/v1/trainings-catalog/options/framework/${identifier}/domains/`;
+/** @param {string} identifier Framework UUID or `all`. */
+export const trainingsCatalogOptionsFrameworkSubDomains = (identifier) => `/api/v1/trainings-catalog/options/framework/${identifier}/sub-domains/`;
 
 export const OPTIONS_COMPETENCY_FRAMEWORKS = '/api/v1/options/competency-frameworks/';
 export const OPTIONS_FRAMEWORK_ROLES = '/api/v1/options/framework/roles/';

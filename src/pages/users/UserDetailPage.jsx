@@ -10,7 +10,8 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import UserAvatar from '../../components/users/UserAvatar';
 import AddUserModal from '../../components/addUserModal/AddUserModal';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
 import MultiSelectInput from '../../components/multiSelectInput/MultiSelectInput';
@@ -18,32 +19,28 @@ import PopupDialog from '../../components/popupDialog/PopupDialog';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import AccessRestrictedPage from '../AccessRestrictedPage';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
 import trainingCatalog from '../../mock/trainingCatalog/trainings.json';
 import userDetailsData from '../../mock/users/userDetails.json';
 import usersData from '../../mock/users/users.json';
-import profileFallback from '../../assets/images/profile-fallback.svg';
 import detailMessages from './detailMessages';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import usersMessages from './messages';
 import { getRoleDisplayLine } from './roleDisplay';
 import './UserDetailPage.scss';
-
-const getInitials = name => name.split(' ')
-  .slice(0, 2)
-  .map(part => part.charAt(0))
-  .join('')
-  .toUpperCase();
 
 const UserDetailPage = () => {
   const { formatMessage } = useIntl();
   const { showToast } = useToast();
   const { userId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [assignOpen, setAssignOpen] = useState(false);
   const [selectedTrainingIds, setSelectedTrainingIds] = useState([]);
   const [removeAssigned, setRemoveAssigned] = useState(null);
-  const { componentAccess, userProfileImage } = useUserRole();
+  const { componentAccess } = useUserRole();
   const canViewUserAbout = Boolean(componentAccess?.users?.canViewUserAbout ?? false);
   const canEditUser = Boolean(componentAccess?.users?.canEditUser ?? false);
   const canDeleteUser = Boolean(componentAccess?.users?.canDeleteUser ?? false);
@@ -57,7 +54,7 @@ const UserDetailPage = () => {
 
   const user = usersData.find(item => item.id === userId);
   if (!user) {
-    return <Navigate to="/admin/users" replace />;
+    return <Navigate to={ADMIN_PATHS.users} replace />;
   }
 
   const defaultDetail = userDetailsData.find(item => item.id === 'default');
@@ -85,13 +82,16 @@ const UserDetailPage = () => {
 
   const canAssignSubmit = selectedTrainingIds.length > 0;
 
-  const initials = getInitials(user.name);
+  const profileImageUrl = location.state?.userProfileImage ?? user.userProfileImage ?? '';
   const roleLabel = getRoleDisplayLine(user);
+  const statusLabel = hasDisplayValue(detail.status)
+    ? detail.status
+    : formatMessage(detailMessages.statusActiveDefault);
 
   return (
     <section className="user-about-page">
       <div className="user-about-page__back">
-        <button type="button" className="user-about-page__back-btn" onClick={() => navigate('/admin/users')}>
+        <button type="button" className="user-about-page__back-btn" onClick={() => navigate(ADMIN_PATHS.users)}>
           <FontAwesomeIcon icon={faArrowLeft} />
           {formatMessage(detailMessages.backToUsers)}
         </button>
@@ -100,13 +100,7 @@ const UserDetailPage = () => {
       <div className="user-about-page__hero">
         <div className="user-about-page__hero-inner">
           <div className="user-about-page__hero-left">
-            <div className="user-about-page__hero-avatar" aria-hidden="true">
-              <img
-                src={userProfileImage || profileFallback}
-                alt=""
-                className="user-about-page__hero-avatar-img"
-              />
-            </div>
+            <UserAvatar variant="hero" name={user.name} imageUrl={profileImageUrl} />
             <div>
               <h2 className="user-about-page__hero-name">{user.name}</h2>
               <div className="user-about-page__hero-meta">
@@ -121,7 +115,7 @@ const UserDetailPage = () => {
               </div>
               <div className="user-about-page__hero-tags">
                 <span className="user-about-page__hero-tag">{roleLabel}</span>
-                <span className="user-about-page__hero-tag user-about-page__hero-tag--status">{detail.status || 'Active'}</span>
+                <span className="user-about-page__hero-tag user-about-page__hero-tag--status">{statusLabel}</span>
               </div>
             </div>
           </div>
@@ -228,7 +222,7 @@ const UserDetailPage = () => {
           {assignedTrainings.map(item => (
             <div key={item.id} className="user-about-page__assigned-item">
               <div className="user-about-page__assigned-main">
-                <a className="user-about-page__assigned-link" href={`/admin/searn-training-catalog/${item.id}`}>
+                <a className="user-about-page__assigned-link" href={ADMIN_PATHS.trainingCatalogDetail(item.id)}>
                   {item.title}
                 </a>
                 <p className="user-about-page__assigned-sub">{item.providerLine}</p>
@@ -257,7 +251,11 @@ const UserDetailPage = () => {
               <p className="user-about-page__passport-desc">{detail.passportDescription}</p>
             </div>
           </div>
-          <Link to={`/admin/users/${userId}/regulatory-passport`} className="user-about-page__passport-btn">
+          <Link
+            to={ADMIN_PATHS.userRegulatoryPassport(userId)}
+            state={{ userProfileImage: profileImageUrl }}
+            className="user-about-page__passport-btn"
+          >
             {formatMessage(detailMessages.passportButton)}
           </Link>
         </div>

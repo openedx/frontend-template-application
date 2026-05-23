@@ -1,0 +1,136 @@
+.user-profile-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.user-profile-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+}
+
+.user-profile-menu__trigger:focus-visible {
+  outline: 2px solid #2A3B8F;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.user-profile-menu__avatar {
+  flex-shrink: 0;
+}
+
+.user-profile-menu__chevron {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
+  color: #505B95;
+  flex-shrink: 0;
+  transition: transform .2s ease, color .2s ease;
+}
+
+.user-profile-menu__trigger:hover .user-profile-menu__chevron,
+.user-profile-menu__trigger:focus-visible .user-profile-menu__chevron {
+  color: #2A3B8F;
+}
+
+.user-profile-menu__chevron.is-open {
+  transform: rotate(180deg);
+  color: #2A3B8F;
+}
+
+.user-profile-menu__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  min-width: 12rem;
+  padding: 8px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  background: #FFFFFF;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+}
+
+.user-profile-menu__item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s ease;
+}
+
+.user-profile-menu__item--nav {
+  gap: 12px;
+  height: 32px;
+  padding: 10px 16px;
+  border-radius: .75rem;
+  font-size: 14px;
+  line-height: 1.25rem;
+  color: #505B95;
+  background: transparent;
+}
+
+.user-profile-menu__item--nav .user-profile-menu__item-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: currentcolor;
+}
+
+.user-profile-menu__item--nav:hover,
+.user-profile-menu__item--nav:focus-visible {
+  background: #2A3B8F0D;
+  color: #18181B;
+  outline: none;
+}
+
+.user-profile-menu__item--nav.is-active {
+  background: #2A3B8F1A;
+  color: #2A3B8F;
+  font-weight: 600;
+}
+
+.user-profile-menu__item--danger {
+  gap: 8px;
+  border-radius: 6px;
+  padding: 8px;
+  background: transparent;
+  color: #DC2626;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.user-profile-menu__item--danger .user-profile-menu__item-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.user-profile-menu__item--danger:hover,
+.user-profile-menu__item--danger:focus-visible {
+  background: #FEF2F2;
+  color: #DC2626;
+  outline: none;
+}
+
+.user-profile-menu__separator {
+  height: 1px;
+  margin: 4px 0;
+  background: #E5E7EB;
+}
+
+@media (width <= 767px) {
+  .user-profile-menu__dropdown {
+    right: 0;
+    left: auto;
+    max-width: min(12rem, calc(100vw - 24px));
+  }
+}

@@ -111,6 +111,11 @@ const competencyFrameworkMessages = defineMessages({
     defaultMessage: 'Showing {count} of {total} frameworks',
     description: 'Pagination summary for competency framework list',
   },
+  paginationLabel: {
+    id: 'app.competencyFramework.pagination.label',
+    defaultMessage: 'Competency framework pagination',
+    description: 'Accessible label for competency framework list pagination',
+  },
   importModalTitle: {
     id: 'app.competencyFramework.import.modal.title',
     defaultMessage: 'Import Framework from Excel',

@@ -256,6 +256,11 @@ const messages = defineMessages({
     defaultMessage: 'Showing {count} of {total} NRAs',
     description: 'Pagination summary for NRA table',
   },
+  paginationLabel: {
+    id: 'app.nras.pagination.label',
+    defaultMessage: 'NRA pagination',
+    description: 'Accessible label for NRA table pagination',
+  },
 });
 
 export default messages;

@@ -1,60 +1,81 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  faArrowLeft, faBookOpen, faStar, faUsers,
+  faBookOpen, faStar, faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import EmptyState from '../../components/emptyState/EmptyState';
-import feedbackData from '../../mock/trainingCatalog/feedback.json';
-import trainingsData from '../../mock/trainingCatalog/trainings.json';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { EmptyState } from '../../components/emptyState';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
+import { useToast } from '../../components/toast/ToastProvider';
+import useSearnTrainingCatalogFeedback from '../../hooks/searnTrainingCatalog/useSearnTrainingCatalogFeedback';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import messages from './messages';
 import { getStarFill } from './starUtils';
 import './SearnTrainingFeedback.scss';
 
 const SearnTrainingFeedback = () => {
   const { formatMessage } = useIntl();
-  const navigate = useNavigate();
+  const { showToast } = useToast();
   const { trainingId } = useParams();
 
-  const training = useMemo(
-    () => trainingsData.find(t => String(t.id) === String(trainingId)),
-    [trainingId],
-  );
+  const {
+    data,
+    isLoading,
+    isError,
+    errorMessage,
+  } = useSearnTrainingCatalogFeedback({ trainingId });
 
-  const feedback = feedbackData?.[trainingId] || null;
+  useEffect(() => {
+    if (!isError) {
+      return;
+    }
 
-  if (!training || !feedback) {
+    showToast({
+      title: formatMessage(messages.feedbackLoadErrorTitle),
+      description: errorMessage || formatMessage(messages.feedbackLoadError),
+    });
+  }, [errorMessage, formatMessage, isError, showToast]);
+
+  if (isLoading) {
     return (
       <section className="training-feedback">
-        <button type="button" className="training-feedback__back" onClick={() => navigate('/admin/searn-training-catalog')}>
-          <FontAwesomeIcon icon={faArrowLeft} />
-          {formatMessage(messages.backToCatalog)}
-        </button>
-        <EmptyState fullSize className="training-feedback__empty" message="No feedback found." />
+        <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />
       </section>
     );
   }
 
+  if (isError || !data) {
+    return (
+      <section className="training-feedback">
+        <EmptyState
+          fullSize
+          className="training-feedback__empty"
+          message={errorMessage || formatMessage(messages.feedbackNotFound)}
+        />
+      </section>
+    );
+  }
+
+  const { training, feedback } = data;
   const total = feedback.reviewCount || 0;
   const dist = feedback.distribution || {};
   const maxStars = 5;
 
   return (
     <section className="training-feedback">
-      <button type="button" className="training-feedback__back" onClick={() => navigate('/admin/searn-training-catalog')}>
-        <FontAwesomeIcon icon={faArrowLeft} />
-        {formatMessage(messages.backToCatalog)}
-      </button>
-
       <div className="training-feedback__hero">
         <div className="training-feedback__hero-row">
           <div className="training-feedback__hero-icon" aria-hidden>
             <FontAwesomeIcon icon={faBookOpen} size="lg" />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <h1 className="training-feedback__title">{training.title}</h1>
-            <p className="training-feedback__desc">{training.description}</p>
+            {hasDisplayValue(training.title) && (
+              <h1 className="training-feedback__title">{training.title}</h1>
+            )}
+            {hasDisplayValue(training.description) && (
+              <p className="training-feedback__desc">{training.description}</p>
+            )}
           </div>
           <span className="training-feedback__badge">{formatMessage(messages.userFeedback)}</span>
         </div>
@@ -64,7 +85,7 @@ const SearnTrainingFeedback = () => {
         <div className="training-feedback__card">
           <div className="training-feedback__card-head">
             <FontAwesomeIcon icon={faStar} style={{ color: '#F59E0B' }} />
-            Overall Rating
+            {formatMessage(messages.overallRating)}
           </div>
           <div className="training-feedback__card-body training-feedback__overall">
             <div className="training-feedback__overall-score">{Number(feedback.overallRating || 0).toFixed(1)}</div>
@@ -107,13 +128,13 @@ const SearnTrainingFeedback = () => {
               }}
             >
               <FontAwesomeIcon icon={faUsers} />
-              Based on {total} anonymous reviews
+              {formatMessage(messages.basedOnReviews, { count: total })}
             </p>
           </div>
         </div>
 
         <div className="training-feedback__card" style={{ gridColumn: 'span 2' }}>
-          <div className="training-feedback__card-head">Rating Distribution</div>
+          <div className="training-feedback__card-head">{formatMessage(messages.ratingDistribution)}</div>
           <div className="training-feedback__card-body">
             {[5, 4, 3, 2, 1].map(stars => {
               const count = Number(dist[String(stars)] || 0);
@@ -140,7 +161,7 @@ const SearnTrainingFeedback = () => {
       <div className="training-feedback__card">
         <div className="training-feedback__card-head">
           <FontAwesomeIcon icon={faStar} style={{ color: '#2A3B8F' }} />
-          User Feedback
+          {formatMessage(messages.userFeedbackSection)}
           <span
             style={{
               marginLeft: 'auto',
@@ -160,8 +181,12 @@ const SearnTrainingFeedback = () => {
               <div key={r.id} className="training-feedback__review">
                 <div className="training-feedback__review-head">
                   <div>
-                    <p className="training-feedback__review-author">{r.author}</p>
-                    <p className="training-feedback__review-date">{r.date}</p>
+                    {hasDisplayValue(r.author) && (
+                      <p className="training-feedback__review-author">{r.author}</p>
+                    )}
+                    {hasDisplayValue(r.date) && (
+                      <p className="training-feedback__review-date">{r.date}</p>
+                    )}
                   </div>
                   <div aria-hidden>
                     {[1, 2, 3, 4, 5].map((position) => (
@@ -173,7 +198,9 @@ const SearnTrainingFeedback = () => {
                     ))}
                   </div>
                 </div>
-                <p className="training-feedback__comment">{r.comment}</p>
+                {hasDisplayValue(r.comment) && (
+                  <p className="training-feedback__comment">{r.comment}</p>
+                )}
               </div>
             ))}
           </div>
@@ -184,4 +211,3 @@ const SearnTrainingFeedback = () => {
 };
 
 export default SearnTrainingFeedback;
-

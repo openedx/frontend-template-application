@@ -8,29 +8,11 @@ import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import usePendingRequestAction from '../../hooks/pendingRequests/usePendingRequestAction';
 import usePendingRequestDetail from '../../hooks/pendingRequests/usePendingRequestDetail';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import detailMessages from './detailMessages';
 import messages from './messages';
 import './PendingRequestDetail.scss';
-
-const ArrowLeftIcon = ({ className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden="true"
-  >
-    <path d="m12 19-7-7 7-7" />
-    <path d="M19 12H5" />
-  </svg>
-);
 
 const CheckIcon = ({ className }) => (
   <svg
@@ -188,11 +170,6 @@ const PendingRequestDetail = () => {
 
   return (
     <section className="pending-request-detail">
-      <button type="button" className="pending-request-detail__back" onClick={() => navigate('/admin/pending-requests')}>
-        <ArrowLeftIcon className="h-4 w-4" />
-        {formatMessage(detailMessages.back)}
-      </button>
-
       <div className="pending-request-detail__card">
         <div className="pending-request-detail__header">
           {hasDisplayValue(detail.title) && (
@@ -281,7 +258,7 @@ const PendingRequestDetail = () => {
                       title: formatMessage(detailMessages.toastClosedTitle),
                       description: formatMessage(detailMessages.toastClosedDescription, { title: detail.title }),
                     });
-                    navigate('/admin/pending-requests');
+                    navigate(ADMIN_PATHS.pendingRequests);
                   } catch (error) {
                     showToast({
                       title: formatMessage(messages.actionErrorTitle),

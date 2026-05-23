@@ -10,3 +10,4 @@ export { default as SkeletonCardList } from './layouts/SkeletonCardList';
 export { default as SkeletonGridCards } from './layouts/SkeletonGridCards';
 export { default as SkeletonChartCard } from './layouts/SkeletonChartCard';
 export { default as SkeletonDetail } from './layouts/SkeletonDetail';
+export { default as SkeletonAdminShell } from './layouts/SkeletonAdminShell';

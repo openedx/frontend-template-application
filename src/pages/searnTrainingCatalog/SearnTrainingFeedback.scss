@@ -5,25 +5,6 @@
   flex: 1;
   min-height: 0;
 
-  &__back {
-    border: 0;
-    background: transparent;
-    color: #6B7280;
-    height: 44px;
-    padding: 0 1rem;
-    border-radius: .5rem;
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-    font-weight: 700;
-    width: fit-content;
-
-    &:hover {
-      background: rgb(42 59 143 / .06);
-      color: #111827;
-    }
-  }
-
   &__hero {
     background: linear-gradient(135deg, rgb(42 59 143 / .05), #FFFFFF 50%, rgb(124 58 237 / .08));
     border: 1px solid #E5E7EB;

@@ -1,8 +1,15 @@
 /* eslint-disable react/prop-types */
+import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
-import { ACTIVE_ROLE_DATA } from '../services/userRoleDataService';
+import { SkeletonAdminShell } from '../components/skeleton';
+import layoutMessages from '../layout/messages';
+import {
+  fetchActiveRoleData,
+  getInitialRoleData,
+  ROLE_DATA_SOURCE,
+} from '../services/userRoleDataService';
 
 const DEFAULT_NAVBAR_ACCESS = {
   accessCompetencyFramework: false,
@@ -83,91 +90,114 @@ const DEFAULT_COMPONENT_ACCESS = {
   },
 };
 
+const mergeComponentAccess = (roleData) => ({
+  ...DEFAULT_COMPONENT_ACCESS,
+  ...(roleData?.componentAccess || {}),
+  dashboard: {
+    ...DEFAULT_COMPONENT_ACCESS.dashboard,
+    ...(roleData?.componentAccess?.dashboard || {}),
+  },
+  nrasManagement: {
+    ...DEFAULT_COMPONENT_ACCESS.nrasManagement,
+    ...(roleData?.componentAccess?.nrasManagement || {}),
+  },
+  countries: {
+    ...DEFAULT_COMPONENT_ACCESS.countries,
+    ...(roleData?.componentAccess?.countries || {}),
+  },
+  trainingProviders: {
+    ...DEFAULT_COMPONENT_ACCESS.trainingProviders,
+    ...(roleData?.componentAccess?.trainingProviders || {}),
+  },
+  roles: {
+    ...DEFAULT_COMPONENT_ACCESS.roles,
+    ...(roleData?.componentAccess?.roles || {}),
+  },
+  pendingRequests: {
+    ...DEFAULT_COMPONENT_ACCESS.pendingRequests,
+    ...(roleData?.componentAccess?.pendingRequests || {}),
+  },
+  users: {
+    ...DEFAULT_COMPONENT_ACCESS.users,
+    ...(roleData?.componentAccess?.users || {}),
+    userFormFields: {
+      ...DEFAULT_COMPONENT_ACCESS.users.userFormFields,
+      ...(roleData?.componentAccess?.users?.userFormFields || {}),
+    },
+  },
+  competencyFramework: {
+    ...DEFAULT_COMPONENT_ACCESS.competencyFramework,
+    ...(roleData?.componentAccess?.competencyFramework || {}),
+  },
+});
+
+const buildStateFromRoleData = (roleData) => {
+  if (!roleData) {
+    return {
+      userName: '',
+      userProfileImage: '',
+      role: null,
+      navbarAccess: { ...DEFAULT_NAVBAR_ACCESS },
+      componentAccess: mergeComponentAccess(null),
+      hasRolePermissions: false,
+    };
+  }
+
+  return {
+    userName: roleData.userInfo?.userName || '',
+    userProfileImage: roleData.userInfo?.userProfileImage || '',
+    role: roleData.userInfo?.userRole || null,
+    navbarAccess: {
+      ...DEFAULT_NAVBAR_ACCESS,
+      ...(roleData.navbarAccess || {}),
+    },
+    componentAccess: mergeComponentAccess(roleData),
+    hasRolePermissions: true,
+  };
+};
+
+const initialRoleData = getInitialRoleData();
+const initialState = buildStateFromRoleData(initialRoleData);
+
 const UserRoleContext = createContext({
   userName: '',
   userProfileImage: '',
   role: null,
   navbarAccess: DEFAULT_NAVBAR_ACCESS,
   componentAccess: DEFAULT_COMPONENT_ACCESS,
+  isRoleLoading: ROLE_DATA_SOURCE === 'api',
+  hasRolePermissions: false,
   setUserRoleData: () => {},
   setRole: () => {},
   loadUserRole: async () => null,
 });
 
 const UserRoleProvider = ({ children }) => {
-  const [userName, setUserName] = useState(ACTIVE_ROLE_DATA?.userInfo?.userName || '');
-  const [userProfileImage, setUserProfileImage] = useState(ACTIVE_ROLE_DATA?.userInfo?.userProfileImage || '');
-  const [role, setRoleState] = useState(ACTIVE_ROLE_DATA?.userInfo?.userRole || null);
-  const [navbarAccess, setNavbarAccess] = useState(() => ({
-    ...DEFAULT_NAVBAR_ACCESS,
-    ...(ACTIVE_ROLE_DATA?.navbarAccess || {}),
-  }));
-  const [componentAccess, setComponentAccess] = useState(() => ({
-    ...DEFAULT_COMPONENT_ACCESS,
-    ...(ACTIVE_ROLE_DATA?.componentAccess || {}),
-  }));
+  const { formatMessage } = useIntl();
+  const [userName, setUserName] = useState(initialState.userName);
+  const [userProfileImage, setUserProfileImage] = useState(initialState.userProfileImage);
+  const [role, setRoleState] = useState(initialState.role);
+  const [navbarAccess, setNavbarAccess] = useState(initialState.navbarAccess);
+  const [componentAccess, setComponentAccess] = useState(initialState.componentAccess);
+  const [isRoleLoading, setIsRoleLoading] = useState(ROLE_DATA_SOURCE === 'api');
+  const [hasRolePermissions, setHasRolePermissions] = useState(initialState.hasRolePermissions);
+
+  const applyRoleState = useCallback((nextState) => {
+    setUserName(nextState.userName);
+    setUserProfileImage(nextState.userProfileImage);
+    setRoleState(nextState.role);
+    setNavbarAccess(nextState.navbarAccess);
+    setComponentAccess(nextState.componentAccess);
+    setHasRolePermissions(nextState.hasRolePermissions);
+  }, []);
 
   const setUserRoleData = useCallback((roleData) => {
-    if (!roleData) {
-      return;
-    }
+    applyRoleState(buildStateFromRoleData(roleData));
+  }, [applyRoleState]);
 
-    const nextUserName = roleData.userInfo?.userName;
-    const nextUserProfileImage = roleData.userInfo?.userProfileImage;
-    const nextRole = roleData.userInfo?.userRole;
-    const nextNavbarAccess = {
-      ...DEFAULT_NAVBAR_ACCESS,
-      ...(roleData.navbarAccess || {}),
-    };
-    const nextComponentAccess = {
-      ...DEFAULT_COMPONENT_ACCESS,
-      ...(roleData.componentAccess || {}),
-      dashboard: {
-        ...DEFAULT_COMPONENT_ACCESS.dashboard,
-        ...(roleData.componentAccess?.dashboard || {}),
-      },
-      nrasManagement: {
-        ...DEFAULT_COMPONENT_ACCESS.nrasManagement,
-        ...(roleData.componentAccess?.nrasManagement || {}),
-      },
-      countries: {
-        ...DEFAULT_COMPONENT_ACCESS.countries,
-        ...(roleData.componentAccess?.countries || {}),
-      },
-      trainingProviders: {
-        ...DEFAULT_COMPONENT_ACCESS.trainingProviders,
-        ...(roleData.componentAccess?.trainingProviders || {}),
-      },
-      roles: {
-        ...DEFAULT_COMPONENT_ACCESS.roles,
-        ...(roleData.componentAccess?.roles || {}),
-      },
-      pendingRequests: {
-        ...DEFAULT_COMPONENT_ACCESS.pendingRequests,
-        ...(roleData.componentAccess?.pendingRequests || {}),
-      },
-      users: {
-        ...DEFAULT_COMPONENT_ACCESS.users,
-        ...(roleData.componentAccess?.users || {}),
-      },
-      competencyFramework: {
-        ...DEFAULT_COMPONENT_ACCESS.competencyFramework,
-        ...(roleData.componentAccess?.competencyFramework || {}),
-      },
-    };
-
-    if (nextUserName) {
-      setUserName(nextUserName);
-    }
-    if (typeof nextUserProfileImage === 'string') {
-      setUserProfileImage(nextUserProfileImage);
-    }
-    if (nextRole) {
-      setRoleState(nextRole);
-    }
-    setNavbarAccess(nextNavbarAccess);
-    setComponentAccess(nextComponentAccess);
-  }, []);
+  const applyEmptyRolePermissions = useCallback(() => {
+    applyRoleState(buildStateFromRoleData(null));
+  }, [applyRoleState]);
 
   const setRole = useCallback((nextRole) => {
     if (nextRole) {
@@ -176,11 +206,22 @@ const UserRoleProvider = ({ children }) => {
   }, []);
 
   const loadUserRole = useCallback(async () => {
-    // Single active user only: ignore nextRole and always load ACTIVE_ROLE_DATA.
-    const roleData = ACTIVE_ROLE_DATA;
-    setUserRoleData(roleData);
-    return roleData.userInfo?.userRole;
-  }, [setUserRoleData]);
+    setIsRoleLoading(true);
+
+    try {
+      const roleData = await fetchActiveRoleData({ formatMessage });
+
+      if (roleData) {
+        setUserRoleData(roleData);
+        return roleData.userInfo?.userRole ?? null;
+      }
+
+      applyEmptyRolePermissions();
+      return null;
+    } finally {
+      setIsRoleLoading(false);
+    }
+  }, [applyEmptyRolePermissions, formatMessage, setUserRoleData]);
 
   useEffect(() => {
     loadUserRole();
@@ -192,10 +233,31 @@ const UserRoleProvider = ({ children }) => {
     role,
     navbarAccess,
     componentAccess,
+    isRoleLoading,
+    hasRolePermissions,
     setUserRoleData,
     setRole,
     loadUserRole,
-  }), [userName, userProfileImage, role, navbarAccess, componentAccess, setUserRoleData, setRole, loadUserRole]);
+  }), [
+    userName,
+    userProfileImage,
+    role,
+    navbarAccess,
+    componentAccess,
+    isRoleLoading,
+    hasRolePermissions,
+    setUserRoleData,
+    setRole,
+    loadUserRole,
+  ]);
+
+  if (isRoleLoading) {
+    return (
+      <SkeletonAdminShell
+        ariaLabel={formatMessage(layoutMessages.permissionsLoading)}
+      />
+    );
+  }
 
   return (
     <UserRoleContext.Provider value={value}>

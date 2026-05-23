@@ -1,78 +1,82 @@
 {
-  "userInfo": {
-    "userName": "Training Provider",
-    "userRole": "training-provider",
-    "userProfileImage": ""
-  },
-  "navbarAccess": {
-    "accessCompetencyFramework": true,
-    "accessActivities": true,
-    "accessPendingRequests": true,
-    "accessUsers": true
-  },
-  "componentAccess": {
-    "dashboard": {
-      "showUsersPerCountry": true,
-      "showTopRequestedActivities": true,
-      "showPendingRequests": true
-    },
-    "nrasManagement": {
-      "canOnboardNra": false,
-      "canEditNra": false,
-      "canDeleteNra": false
-    },
-    "countries": {
-      "canAddCountry": false,
-      "canDeleteCountry": false
-    },
-    "trainingProviders": {
-      "canAddTrainingProvider": false,
-      "canEditTrainingProvider": false,
-      "canDeleteTrainingProvider": false
-    },
-    "roles": {
-      "canAddRole": false,
-      "canViewRole": false,
-      "canEditRole": false,
-      "canDeleteRole": false
-    },
-    "pendingRequests": {
-      "canEditPendingRequest": false
-    },
-    "users": {
-      "canAddUser": false,
-      "canViewUserAbout": true,
-      "canEditUser": false,
-      "canDeleteUser": false,
-      "canViewRoleColumn": true,
-      "canViewCompetencyRoleColumn": true,
-      "canAssignTrainings": false,
-      "canRemoveAssignedTrainings": false,
-      "canViewRegulatoryPassport": false,
-      "userFormFields": {
-        "showRoleField": false,
-        "showManagerField": false,
-        "showCompetencyRoleField": false,
-        "showCountryField": false
+  "results": [
+    {
+      "userInfo": {
+        "userName": "Training Provider",
+        "userRole": "training-provider",
+        "userProfileImage": ""
+      },
+      "navbarAccess": {
+        "accessCompetencyFramework": true,
+        "accessActivities": true,
+        "accessPendingRequests": true,
+        "accessUsers": true
+      },
+      "componentAccess": {
+        "dashboard": {
+          "showUsersPerCountry": true,
+          "showTopRequestedActivities": true,
+          "showPendingRequests": true
+        },
+        "nrasManagement": {
+          "canOnboardNra": false,
+          "canEditNra": false,
+          "canDeleteNra": false
+        },
+        "countries": {
+          "canAddCountry": false,
+          "canDeleteCountry": false
+        },
+        "trainingProviders": {
+          "canAddTrainingProvider": false,
+          "canEditTrainingProvider": false,
+          "canDeleteTrainingProvider": false
+        },
+        "roles": {
+          "canAddRole": false,
+          "canViewRole": false,
+          "canEditRole": false,
+          "canDeleteRole": false
+        },
+        "pendingRequests": {
+          "canEditPendingRequest": false
+        },
+        "users": {
+          "canAddUser": false,
+          "canViewUserAbout": true,
+          "canEditUser": false,
+          "canDeleteUser": false,
+          "canViewRoleColumn": true,
+          "canViewCompetencyRoleColumn": true,
+          "canAssignTrainings": false,
+          "canRemoveAssignedTrainings": false,
+          "canViewRegulatoryPassport": false,
+          "userFormFields": {
+            "showRoleField": false,
+            "showManagerField": false,
+            "showCompetencyRoleField": false,
+            "showCountryField": false
+          }
+        },
+        "competencyFramework": {
+          "showWhoTab": true,
+          "showSearnTab": true,
+          "showNraTab": false,
+          "canCreateFrameworkWhoTab": false,
+          "canCreateFrameworkSearnTab": false,
+          "canCreateFrameworkNraTab": false,
+          "canViewFrameworkWhoTab": true,
+          "canViewFrameworkSearnTab": true,
+          "canViewFrameworkNraTab": false,
+          "canEditFrameworkWhoTab": false,
+          "canEditFrameworkSearnTab": false,
+          "canEditFrameworkNraTab": false,
+          "canDeleteFrameworkWhoTab": false,
+          "canDeleteFrameworkSearnTab": false,
+          "canDeleteFrameworkNraTab": false,
+          "showSuggestionsTab": false
+        }
       }
-    },
-    "competencyFramework": {
-      "showWhoTab": true,
-      "showSearnTab": true,
-      "showNraTab": false,
-      "canCreateFrameworkWhoTab": false,
-      "canCreateFrameworkSearnTab": false,
-      "canCreateFrameworkNraTab": false,
-      "canViewFrameworkWhoTab": true,
-      "canViewFrameworkSearnTab": true,
-      "canViewFrameworkNraTab": false,
-      "canEditFrameworkWhoTab": false,
-      "canEditFrameworkSearnTab": false,
-      "canEditFrameworkNraTab": false,
-      "canDeleteFrameworkWhoTab": false,
-      "canDeleteFrameworkSearnTab": false,
-      "canDeleteFrameworkNraTab": false,
-      "showSuggestionsTab": false
     }
-  }
+  ]
 }

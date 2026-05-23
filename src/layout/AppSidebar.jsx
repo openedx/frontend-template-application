@@ -7,7 +7,6 @@ import {
   faBuilding,
   faChartLine,
   faChevronDown,
-  faChevronLeft,
   faCog,
   faClipboardList,
   faFileAlt,
@@ -22,7 +21,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useUserRole } from '../contexts/UserRoleContext';
-import { getNavigationItemsByRole } from '../mock/navigation';
+import { ADMIN_PATHS } from '../utils/adminPaths';
+import { getNavigationItemsByRole } from './navigation';
 import layoutMessages from './messages';
 
 const AppSidebar = ({
@@ -60,16 +60,12 @@ const AppSidebar = ({
     }
   }, [isReportsActive]);
 
-  const backLinkPath = '/dashboard';
   const visibleNavigationItems = getNavigationItemsByRole(role, navbarAccess);
 
   return (
     <aside className={`admin-sidebar ${collapsed ? 'is-collapsed' : ''} ${isMobile ? 'is-mobile' : ''} ${mobileOpen ? 'is-mobile-open' : ''}`}>
       <div className="admin-sidebar__top">
         <div className="admin-sidebar__brand">
-          <div className="admin-sidebar__logo">
-            {formatMessage(layoutMessages.sidebarLogoInitials)}
-          </div>
           {!collapsed && (
             <span className="admin-sidebar__brand-text">
               {formatMessage(layoutMessages.sidebarBrand)}
@@ -89,7 +85,7 @@ const AppSidebar = ({
               ? item.children.some(child => location.pathname.startsWith(child.path))
               : location.pathname.startsWith(item.path);
             const navPath = item.key === 'dashboard'
-              ? `/admin/dashboard/${role}`
+              ? (role ? ADMIN_PATHS.dashboardRole(role) : item.path)
               : item.path;
 
             return (
@@ -151,17 +147,6 @@ const AppSidebar = ({
             );
           })}
         </nav>
-      </div>
-
-      <div className="admin-sidebar__footer">
-        <NavLink
-          to={backLinkPath}
-          className="admin-sidebar__back-link"
-          onClick={onNavigate}
-        >
-          <span className="admin-sidebar__back-icon"><FontAwesomeIcon icon={faChevronLeft} /></span>
-          {!collapsed && <span>{formatMessage(layoutMessages.sidebarBackToPlatform)}</span>}
-        </NavLink>
       </div>
     </aside>
   );
