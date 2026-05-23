@@ -515,3 +515,8 @@ button:disabled,
     transform: translateY(0);
   }
 }
+
+// Temporarily hide UI that is not ready for release (keep markup/handlers in place).
+.is-ui-hidden {
+  display: none !important;
+}

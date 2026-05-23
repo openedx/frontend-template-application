@@ -2262,7 +2262,7 @@ const CompetencyFramework = () => {
             <div />
             <div className="competency-framework-page__actions">
               {canShowDownloadAndImport && (
-                <button type="button" className="competency-framework-page__outline-button">
+                <button type="button" className="competency-framework-page__outline-button is-ui-hidden">
                   <FontAwesomeIcon icon={faDownload} />
                   {formatMessage(messages.downloadTemplate)}
                 </button>
@@ -2270,7 +2270,7 @@ const CompetencyFramework = () => {
               {canShowDownloadAndImport && (
                 <button
                   type="button"
-                  className="competency-framework-page__outline-button"
+                  className="competency-framework-page__outline-button is-ui-hidden"
                   onClick={() => setImportOpen(true)}
                 >
                   <FontAwesomeIcon icon={faUpload} />

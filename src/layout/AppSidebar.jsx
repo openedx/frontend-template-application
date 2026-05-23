@@ -89,7 +89,10 @@ const AppSidebar = ({
               : item.path;
 
             return (
-              <div key={item.key} className="admin-sidebar__item-group">
+              <div
+                key={item.key}
+                className={`admin-sidebar__item-group${item.key === 'reports' ? ' is-ui-hidden' : ''}`}
+              >
                 {!item.children && (
                   <NavLink
                     to={navPath}

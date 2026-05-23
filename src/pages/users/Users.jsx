@@ -308,13 +308,13 @@ const Users = () => {
 
           {canManageUsers && (
             <>
-              <button type="button" className="competency-framework-page__outline-button">
+              <button type="button" className="competency-framework-page__outline-button is-ui-hidden">
                 <FontAwesomeIcon icon={faDownload} />
                 {formatMessage(messages.downloadTemplate)}
               </button>
               <button
                 type="button"
-                className="competency-framework-page__outline-button"
+                className="competency-framework-page__outline-button is-ui-hidden"
                 onClick={() => setImportUsersOpen(true)}
               >
                 <FontAwesomeIcon icon={faUpload} />
