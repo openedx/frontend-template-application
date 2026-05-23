@@ -1,0 +1,65 @@
+[
+  {
+    "id": "secretariat",
+    "name": "SEARN Secretariat",
+    "description": "Full administrative access to all platform features and settings",
+    "userCount": 5,
+    "permissionCount": 10,
+    "permissions": [
+      "Add/Onboard new user",
+      "Edit/Delete user",
+      "View user list",
+      "Manage activities",
+      "Manage training catalog",
+      "Manage countries",
+      "View pending requests",
+      "Manage profile",
+      "Manage settings",
+      "Manage reports"
+    ]
+  },
+  {
+    "id": "nra-admin",
+    "name": "NRA Admin",
+    "description": "Top-level NRA administrator with full access to NRA management and configuration",
+    "userCount": 10,
+    "permissionCount": 9,
+    "permissions": [
+      "Add/Onboard new user",
+      "Edit/Delete user",
+      "View user list",
+      "Manage activities",
+      "Manage training catalog",
+      "Manage countries",
+      "View pending requests",
+      "Manage profile",
+      "Manage reports"
+    ]
+  },
+  {
+    "id": "it-support",
+    "name": "IT Support",
+    "description": "Technical support, system maintenance, and user account management",
+    "userCount": 6,
+    "permissionCount": 4,
+    "permissions": [
+      "View user list",
+      "Edit/Delete user",
+      "Manage settings",
+      "Manage reports"
+    ]
+  },
+  {
+    "id": "training-provider",
+    "name": "Training Provider",
+    "description": "Creates and manages training content, courses, and assessments",
+    "userCount": 24,
+    "permissionCount": 4,
+    "permissions": [
+      "Manage training catalog",
+      "Manage activities",
+      "View pending requests",
+      "Manage profile"
+    ]
+  }
+]

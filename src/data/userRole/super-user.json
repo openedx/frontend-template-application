@@ -1,0 +1,88 @@
+{
+  "results": [
+    {
+      "userInfo": {
+        "userName": "Super User",
+        "userRole": "super-user",
+        "userProfileImage": ""
+      },
+      "navbarAccess": {
+        "accessCompetencyFramework": true,
+        "accessActivities": true,
+        "accessNrasManagement": true,
+        "accessCountries": true,
+        "accessTrainingProviders": true,
+        "accessPendingRequests": true,
+        "accessUsers": true,
+        "accessRoles": true,
+        "accessSettings": true,
+        "accessReports": true
+      },
+      "componentAccess": {
+        "dashboard": {
+          "showUsersPerCountry": true,
+          "showTopRequestedActivities": true,
+          "showPendingRequests": true
+        },
+        "nrasManagement": {
+          "canOnboardNra": true,
+          "canEditNra": true,
+          "canDeleteNra": true
+        },
+        "countries": {
+          "canAddCountry": true,
+          "canDeleteCountry": true
+        },
+        "trainingProviders": {
+          "canAddTrainingProvider": true,
+          "canEditTrainingProvider": true,
+          "canDeleteTrainingProvider": true
+        },
+        "roles": {
+          "canAddRole": true,
+          "canViewRole": true,
+          "canEditRole": true,
+          "canDeleteRole": true
+        },
+        "pendingRequests": {
+          "canEditPendingRequest": true
+        },
+        "users": {
+          "canAddUser": true,
+          "canViewUserAbout": false,
+          "canEditUser": true,
+          "canDeleteUser": true,
+          "canViewRoleColumn": true,
+          "canViewCompetencyRoleColumn": false,
+          "canAssignTrainings": false,
+          "canRemoveAssignedTrainings": false,
+          "canViewRegulatoryPassport": false,
+          "userFormFields": {
+            "showRoleField": true,
+            "showManagerField": false,
+            "showCompetencyRoleField": false,
+            "showCountryField": true
+          }
+        },
+        "competencyFramework": {
+          "showWhoTab": true,
+          "showSearnTab": true,
+          "showNraTab": true,
+          "canCreateFrameworkWhoTab": true,
+          "canCreateFrameworkSearnTab": true,
+          "canCreateFrameworkNraTab": true,
+          "canViewFrameworkWhoTab": true,
+          "canViewFrameworkSearnTab": true,
+          "canViewFrameworkNraTab": true,
+          "canEditFrameworkWhoTab": true,
+          "canEditFrameworkSearnTab": true,
+          "canEditFrameworkNraTab": true,
+          "canDeleteFrameworkWhoTab": true,
+          "canDeleteFrameworkSearnTab": true,
+          "canDeleteFrameworkNraTab": true,
+          "showSuggestionsTab": true
+        }
+      }
+    }
+  ]
+}

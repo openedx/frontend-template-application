@@ -1,0 +1,6 @@
+[
+  { "value": "all", "label": "All Statuses" },
+  { "value": "open", "label": "Open" },
+  { "value": "closed", "label": "Closed" }
+]
+

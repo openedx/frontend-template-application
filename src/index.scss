@@ -19,3 +19,504 @@ $enable-dark-mode: false !default;
 /* 4. Paragon CSS (actual component styles) */
 @import "~@openedx/paragon/dist/core.min.css";
 @import "~@openedx/paragon/dist/light.min.css";
+
+html,
+body,
+#root,
+#root * {
+  font-family: Roboto, sans-serif !important;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif !important;
+  background: #F4F6FB;
+  color: #1F2937;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #2A398D !important;
+  opacity: 1;
+}
+
+input,
+textarea,
+select,
+option {
+  color: #2A398D;
+}
+
+button:disabled,
+[role='button'][aria-disabled='true'] {
+  opacity: .5 !important;
+  cursor: not-allowed !important;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #FBFBFC;
+}
+
+.admin-sidebar {
+  width: 255px;
+  max-width: 255px;
+  background: #FFFFFF;
+  border: 0;
+  border-right: 1px solid #E0E6EB;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  gap: 8px;
+  color: #3F3F46;
+  font-size: 18px;
+  line-height: 31.5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  z-index: 30;
+  transition: width .2s ease;
+}
+
+.admin-sidebar.is-collapsed {
+  width: 47px;
+  max-width: 47px;
+}
+
+.admin-sidebar__top {
+  height: 73px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px;
+  border-bottom: 1px solid #E0E6EB;
+}
+
+.admin-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.admin-sidebar__brand-text {
+  font-size: .875rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  color: #2A3B8F;
+  white-space: nowrap;
+}
+
+.admin-sidebar__section-label {
+  display: flex;
+  align-items: center;
+  height: 2rem !important;
+  min-height: 2rem;
+  max-height: 2rem;
+  padding: 0 1rem;
+  font-size: .75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: #505B95;
+  margin: 0;
+  opacity: 1;
+  visibility: visible;
+  overflow: hidden;
+  transition: opacity .2s ease, max-height .2s ease, visibility .2s ease;
+}
+
+.admin-sidebar__nav {
+  width: 100%;
+  min-width: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  flex: 1;
+}
+
+.admin-sidebar__nav-group{
+  padding: 8px;
+}
+
+.admin-sidebar__item-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-sidebar__item,
+.admin-sidebar__subitem {
+  text-decoration: none;
+  color: #505B95;
+}
+
+.admin-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 32px;
+  padding: 10px 16px;
+  border-radius: .75rem;
+  font-size: 14px;
+  transition: all .2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.admin-sidebar.is-collapsed .admin-sidebar__item {
+  padding: 8px;
+}
+
+.admin-sidebar.is-collapsed .admin-sidebar__section-label {
+  display: none;
+  opacity: 0;
+  max-height: 0;
+  visibility: hidden;
+}
+
+.admin-sidebar__item-toggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-sidebar__item-icon {
+  width: 16px;
+  height: 16px;
+  color: currentcolor;
+  font-size: 16px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-sidebar__item-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-sidebar__chevron {
+  font-size: 12px;
+  line-height: 1;
+  transition: transform .2s ease;
+}
+
+.admin-sidebar__chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.admin-sidebar__item.is-active {
+  background: #2A3B8F1A;
+  color: #2A3B8F;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-sidebar__item:hover {
+  background: #2A3B8F0D;
+  color: #18181B;
+  text-decoration: none;
+}
+
+
+.admin-sidebar__subnav {
+  margin-left: 14px;
+  border-left: 1px solid rgb(42 59 143 / .12);
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-sidebar__subnav.is-open {
+  animation: sidebar-submenu-reveal .2s ease;
+}
+
+.admin-sidebar__subitem {
+  font-size: .875rem;
+  height: 1.75rem;
+  padding: .375rem .75rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #505B95;
+}
+
+.admin-sidebar__subitem-icon {
+  font-size: 16px;
+  color: currentcolor;
+  flex-shrink: 0;
+}
+
+.admin-sidebar__subitem:hover {
+  color: #18181B;
+  background: #2A3B8F0D;
+}
+
+.admin-sidebar__subitem.is-active {
+  color: #2A3B8F;
+  background: #EEF2FF;
+}
+
+.admin-main {
+  margin-left: 255px;
+  width: calc(100% - 255px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left .2s ease, width .2s ease;
+}
+
+.admin-shell.sidebar-collapsed .admin-main {
+  margin-left: 47px;
+  width: calc(100% - 47px);
+}
+
+.admin-sidebar__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / .45);
+  border: 0;
+  z-index: 35;
+}
+
+.admin-top-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 73px;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.admin-top-header__content {
+  height: 73px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.admin-top-header__title-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 16px;
+  align-items: center;
+  min-width: 0;
+}
+
+.admin-top-header__sidebar-toggle {
+  border: 0;
+  background: #F3F4F6;
+  color: #2A3B8F;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.admin-top-header__title-wrap h1 {
+  grid-column: 2;
+}
+
+.admin-top-header__title {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  color: #2A3B8F;
+}
+
+.admin-top-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-top-header__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.admin-top-header__avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.admin-content {
+  padding: 24px;
+  overflow: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+@media (width <= 767px) {
+  .admin-main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .admin-top-header__content {
+    padding: 0 12px;
+    gap: 10px;
+  }
+
+  .admin-top-header__title-wrap {
+    column-gap: 10px;
+  }
+
+  .admin-top-header__actions {
+    margin-left: auto;
+  }
+
+  .admin-sidebar {
+    width: 80vw;
+    max-width: 80vw;
+    transform: translateX(-100%);
+    transition: transform .2s ease;
+    z-index: 40;
+  }
+
+  .admin-sidebar.is-mobile-open {
+    transform: translateX(0);
+  }
+
+  .admin-sidebar.is-mobile .admin-sidebar__item,
+  .admin-sidebar.is-mobile .admin-sidebar__subitem {
+    width: 100%;
+  }
+}
+
+.dashboard-panel,
+.dashboard-card,
+.dashboard-list__item {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+}
+
+.dashboard-panel {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.dashboard-panel h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.dashboard-panel p {
+  margin: 0;
+  color: #6B7280;
+}
+
+.dashboard-section {
+  margin-bottom: 20px;
+}
+
+.dashboard-section h3 {
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: #374151;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.dashboard-card {
+  padding: 16px;
+}
+
+.dashboard-card__label {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.dashboard-card__value {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.dashboard-card__trend {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #059669;
+}
+
+.dashboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-list__item {
+  padding: 14px 16px;
+}
+
+.dashboard-list__title {
+  margin: 0;
+  font-size: 14px;
+}
+
+.dashboard-list__meta {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+@keyframes sidebar-submenu-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Temporarily hide UI that is not ready for release (keep markup/handlers in place).
+.is-ui-hidden {
+  display: none !important;
+}

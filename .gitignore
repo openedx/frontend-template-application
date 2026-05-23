@@ -17,5 +17,6 @@ temp/babel-plugin-react-intl
 *~
 /temp
 /.vscode
+/.cursor
 
 webpack.dev-tutor.config.js

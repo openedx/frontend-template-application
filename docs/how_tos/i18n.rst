@@ -3,3 +3,5 @@ React App i18n HOWTO
 ####################
 
 This document has moved to the frontend-platform repo: https://github.com/openedx/frontend-platform/blob/master/docs/how_tos/i18n.rst
+
+Project-specific message ID conventions are documented in ``docs/how_tos/message-id-conventions.rst``.

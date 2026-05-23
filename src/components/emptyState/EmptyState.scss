@@ -1,0 +1,27 @@
+.app-empty-state {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px dashed #D1D5DB;
+  border-radius: .5rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  &.is-full-size {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    flex: 1;
+    min-height: 0;
+    align-self: stretch;
+  }
+
+  &__message {
+    margin: 0;
+    color: #505B95;
+    font-size: .875rem;
+  }
+}

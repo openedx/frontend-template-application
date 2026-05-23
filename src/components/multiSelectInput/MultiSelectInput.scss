@@ -1,0 +1,119 @@
+.multi-select-input {
+  margin-top: .5rem;
+  padding: .75rem;
+  border: 1px solid #E5E7EB;
+  border-radius: .5rem;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+
+  &__search {
+    width: 100%;
+    height: 2.25rem;
+    border: 1px solid #D1D5DB;
+    border-radius: .375rem;
+    padding: .5rem .625rem;
+    font-size: .875rem;
+    color: #2A398D;
+
+    &:focus,
+    &:focus-visible {
+      outline: 0;
+      border-color: #2A398D;
+      box-shadow: 0 0 0 2px rgb(42 57 141 / .15);
+    }
+  }
+
+  &__options {
+    max-height: 12rem;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .375rem;
+  }
+
+  &__clear-all {
+    border: 0;
+    border-radius: .375rem;
+    background: transparent;
+    color: #2A3B8F;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: .25rem .5rem;
+    text-decoration: underline;
+  }
+
+  &__badge {
+    border-radius: .375rem;
+    padding: .25rem .5rem;
+    background: rgb(42 59 143 / .1);
+    color: #2A3B8F;
+    font-size: .75rem;
+    font-weight: 500;
+    line-height: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+  }
+
+  &__badge-remove {
+    width: 1rem;
+    height: 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #2A3B8F;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .625rem;
+    padding: 0;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    border-radius: .375rem;
+    padding: .375rem;
+    transition: background-color .2s ease;
+
+    &:hover {
+      background: #2A3B8F;
+
+      .multi-select-input__label {
+        color: #FFFFFF;
+      }
+    }
+  }
+
+  &__checkbox {
+    width: 1rem;
+    height: 1rem;
+    border-radius: .25rem;
+    border: 1px solid #2A3B8F;
+    background: #FFFFFF;
+    flex-shrink: 0;
+
+    &.is-selected {
+      background: #2A3B8F;
+    }
+  }
+
+  &__label {
+    font-size: .875rem;
+    color: #2A398D;
+    transition: color .2s ease;
+  }
+
+  &.is-disabled {
+    opacity: .65;
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "sourceFrameworkOptions": [
+    { "value": "who-framework", "label": "WHO Global Competency Framework" },
+    { "value": "searn-framework", "label": "SEARN Competency Framework" },
+    { "value": "nra-framework", "label": "NRA Specific Competency Framework" }
+  ],
+  "productTypeOptions": [
+    { "value": "medicines", "label": "Medicines" },
+    { "value": "vaccines", "label": "Vaccines" },
+    { "value": "biologicals", "label": "Biologicals" },
+    { "value": "medical-devices", "label": "Medical Devices" },
+    { "value": "diagnostics", "label": "Diagnostics" },
+    { "value": "blood-products", "label": "Blood Products" },
+    { "value": "herbal-products", "label": "Herbal Products" },
+    { "value": "radiopharmaceuticals", "label": "Radiopharmaceuticals" },
+    { "value": "immunologicals", "label": "Immunologicals" },
+    { "value": "veterinary-products", "label": "Veterinary Products" },
+    { "value": "cosmeceuticals", "label": "Cosmeceuticals" },
+    { "value": "traditional-medicines", "label": "Traditional Medicines" },
+    { "value": "cell-gene-therapy", "label": "Cell & Gene Therapy Products" },
+    { "value": "combination-products", "label": "Combination Products" },
+    { "value": "controlled-substances", "label": "Controlled Substances" }
+  ],
+  "domainOptions": [
+    { "value": "d1", "label": "Regulatory Governance" },
+    { "value": "d2", "label": "Legal Frameworks" },
+    { "value": "d3", "label": "Product Authorization" },
+    { "value": "d4", "label": "Market Surveillance" },
+    { "value": "d5", "label": "Laboratory Systems" },
+    { "value": "d6", "label": "Pharmacovigilance" }
+  ],
+  "subDomainOptions": [
+    { "value": "sd1", "label": "Licensing Pathways" },
+    { "value": "sd2", "label": "Inspection Readiness" },
+    { "value": "sd3", "label": "Quality Risk Management" },
+    { "value": "sd4", "label": "Signal Detection" }
+  ],
+  "competencyTypeOptions": [
+    { "value": "core-competencies", "label": "Core competencies" },
+    { "value": "functional-competencies", "label": "Functional competencies" },
+    { "value": "leadership-competencies", "label": "Leadership competencies" }
+  ],
+  "proficiencyLevelOptions": [
+    { "value": "level-l1", "label": "Foundation (L1)" },
+    { "value": "level-l2", "label": "Intermediate (L2)" },
+    { "value": "level-l3", "label": "Advanced (L3)" },
+    { "value": "level-l4", "label": "Expert (L4)" }
+  ]
+}

@@ -1,0 +1,75 @@
+.users-country {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: .75rem;
+  box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+  margin-bottom: 1.5rem;
+
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: #2A3B8F;
+  }
+
+  &__description {
+    margin: 0;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    color: #505B95;
+  }
+
+  &__body {
+    padding: 1.5rem;
+  }
+
+  &__empty {
+    min-height: 200px;
+  }
+
+  &__chart-wrap {
+    width: 100%;
+    height: 360px;
+  }
+
+  &__tooltip {
+    margin: 0;
+    padding: .625rem;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: .5rem;
+    font-size: .75rem;
+  }
+
+  &__tooltip-label {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: #2A398D;
+  }
+
+  &__tooltip-value {
+    margin: .25rem 0 0;
+    font-size: 12px;
+    color: #2A398D;
+    font-weight: 600;
+  }
+
+  .recharts-cartesian-axis-tick-value {
+    fill: #2A398D;
+  }
+}
+
+@media (width <= 767px) {
+  .users-country {
+    &__chart-wrap {
+      height: 420px;
+    }
+  }
+}

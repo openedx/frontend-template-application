@@ -1,0 +1,6 @@
+[
+  { "value": "all", "label": "All request types" },
+  { "value": "NRA onboarding", "label": "NRA onboarding" },
+  { "value": "Provider onboarding", "label": "Provider onboarding" }
+]
+

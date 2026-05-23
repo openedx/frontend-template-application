@@ -1,0 +1,44 @@
+.role-option-dropdown-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: .5rem;
+  min-width: 0;
+  flex: 0 1 auto;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    flex: 1 1 180px;
+    min-width: 180px;
+    max-width: 200px;
+  }
+
+  &__label {
+    font-size: .875rem;
+    font-weight: 500;
+    color: #2A398D;
+  }
+
+  &--expanded &__field {
+    flex: 1 1 180px;
+    min-width: 180px;
+    max-width: 200px;
+  }
+
+  .searchable-dropdown {
+    width: 100%;
+  }
+}
+
+@media (width <= 767px) {
+  .role-option-dropdown-group {
+    width: 100%;
+
+    &__field {
+      max-width: none;
+      flex: 1 1 100%;
+    }
+  }
+}

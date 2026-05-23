@@ -1,0 +1,35 @@
+[
+  {
+    "id": "nra-001",
+    "name": "Directorate General of Drug Administration",
+    "country": "Bangladesh",
+    "admins": [
+      { "id": "adm-001", "name": "NRA Admin", "email": "admin.dgda@example.com" }
+    ]
+  },
+  {
+    "id": "nra-002",
+    "name": "Drug Regulatory Authority of Bhutan",
+    "country": "Bhutan",
+    "admins": [
+      { "id": "adm-002", "name": "NRA Admin", "email": "admin.drab@example.com" }
+    ]
+  },
+  {
+    "id": "nra-003",
+    "name": "Central Drugs Standard Control Organization",
+    "country": "India",
+    "admins": [
+      { "id": "adm-003", "name": "Admin One", "email": "admin1.cdsc@example.com" },
+      { "id": "adm-004", "name": "Admin Two", "email": "admin2.cdsc@example.com" }
+    ]
+  },
+  {
+    "id": "nra-004",
+    "name": "Thai Food and Drug Administration",
+    "country": "Thailand",
+    "admins": [
+      { "id": "adm-005", "name": "NRA Admin", "email": "admin.fda.th@example.com" }
+    ]
+  }
+]

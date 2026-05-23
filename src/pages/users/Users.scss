@@ -1,0 +1,265 @@
+.users-page {
+  &__toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    min-width: 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+    align-items: stretch;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  &__table-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: .75rem;
+    box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+    overflow: hidden;
+  }
+
+  &__table-wrap {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 640px;
+  }
+
+  &__thead-row {
+    background: rgb(42 59 143 / .05);
+  }
+
+  &__th {
+    text-align: left;
+    padding: .75rem 1.5rem;
+    font-size: .75rem;
+    color: #6B7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+
+    &--right {
+      text-align: right;
+    }
+  }
+
+  &__tbody-row {
+    border-top: 1px solid #E5E7EB;
+  }
+
+  &__td {
+    padding: 1rem 1.5rem;
+    font-size: .875rem;
+    color: #6B7280;
+
+    &--right {
+      text-align: right;
+    }
+  }
+
+  &__identity {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  &__avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+    border-radius: 9999px;
+    background: rgb(42 59 143 / .1);
+    color: #2A3B8F;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: .875rem;
+    color: #2A3B8F;
+    font-weight: 600;
+
+    &--link {
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__email {
+    margin: 0;
+    font-size: .75rem;
+    color: #6B7280;
+  }
+
+  &__role-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: .25rem .625rem;
+    font-size: .8125rem;
+    background: rgb(42 59 143 / .1);
+    color: #2A3B8F;
+    font-weight: 500;
+  }
+
+  &__competency-role {
+    color: #2A3B8F;
+    font-size: .875rem;
+  }
+
+  &__row-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    gap: .25rem;
+  }
+
+  &__icon-button {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .5rem;
+    border: 0;
+    background: transparent;
+    color: #2A3B8F;
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    &--danger {
+      color: #DC2626;
+    }
+  }
+
+  &__pagination {
+    border-top: 1px solid #E5E7EB;
+    padding: .875rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    font-size: .875rem;
+    color: #6B7280;
+    position: relative;
+  }
+
+  &__pagination-left {
+    position: absolute;
+    left: 1.5rem;
+  }
+}
+
+@media (width <= 767px) {
+  .users-page {
+    &__actions {
+      width: 100%;
+    }
+
+    &__actions .users-role-filter,
+    &__actions .competency-framework-page__outline-button,
+    &__actions .competency-framework-page__primary-button {
+      width: 100%;
+      justify-content: center;
+    }
+
+    &__actions .users-role-filter .role-option-dropdown-group__field {
+      max-width: none;
+    }
+  }
+}
+
+@media (width >= 768px) {
+  .users-page__toolbar--with-subfilter .search-input {
+    flex: 1 1 200px;
+    min-width: 160px;
+    max-width: 360px;
+  }
+}
+
+@media (width >= 1024px) {
+  .users-page__toolbar--with-subfilter .search-input {
+    flex: 1 1 280px;
+    max-width: 480px;
+  }
+}
+
+@media (width >= 768px) {
+  .users-page {
+    &__toolbar {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .search-input {
+      flex: 1 1 260px;
+      min-width: min(320px, 100%);
+      max-width: 420px;
+    }
+
+    &__actions {
+      flex: 0 1 auto;
+      justify-content: flex-end;
+    }
+
+    &__actions > *:not(.users-role-filter) {
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+  }
+}
+
+@media (width >= 1024px) {
+  .users-page {
+    &__toolbar {
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1 1 520px;
+      min-width: 220px;
+      max-width: none;
+    }
+
+    &__actions {
+      flex-wrap: wrap;
+      white-space: normal;
+      flex: 0 1 auto;
+    }
+
+  }
+}

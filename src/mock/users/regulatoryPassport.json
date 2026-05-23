@@ -1,0 +1,64 @@
+{
+  "default": {
+    "passportId": "SEARN-RP-2024-IN-00142",
+    "jobTitle": "Senior Regulatory Officer — Medicines",
+    "organisationLine": "Central Drugs Standard Control Organisation · NRA India",
+    "about": "Senior regulatory officer with over 12 years of experience in medicines evaluation, pharmacovigilance and dossier review. Active contributor to SEARN regional working groups on bioequivalence and post-market surveillance.",
+    "competencyRole": "Regulatory Reviewer — Medicines",
+    "stats": {
+      "trainingsCompleted": 18,
+      "assignedTrainings": 24,
+      "completionRate": "75%",
+      "activitiesCovered": 12
+    },
+    "domainCoverage": [
+      {
+        "domain": "Regulatory science & policy",
+        "percent": 85,
+        "tags": ["Regulatory frameworks", "Medicines legislation", "Risk-benefit assessment"]
+      },
+      {
+        "domain": "Market authorisation & dossier review",
+        "percent": 72,
+        "tags": ["CTD submission review", "Bioequivalence assessment", "Biosimilar evaluation"]
+      },
+      {
+        "domain": "Pharmacovigilance & post-market",
+        "percent": 60,
+        "tags": ["Adverse event reporting", "Signal detection", "Periodic safety reporting"]
+      },
+      {
+        "domain": "Good manufacturing practices (GMP)",
+        "percent": 40,
+        "tags": ["GMP inspection planning", "GMP audit conduct", "Deficiency assessment"]
+      }
+    ],
+    "completedTrainings": [
+      {
+        "training": "WHO regulatory systems strengthening",
+        "provider": "WHO AFRO Training Centre",
+        "completed": "12 Jan 2026",
+        "activity": "Regulatory frameworks",
+        "remoteType": "External",
+        "certificateUrl": "/certificate/3"
+      },
+      {
+        "training": "CTD dossier review — advanced",
+        "provider": "CDSCO Training Institute",
+        "completed": "5 Oct 2025",
+        "activity": "CTD submission review",
+        "remoteType": "On-platform",
+        "certificateUrl": "/certificate/4"
+      },
+      {
+        "training": "Pharmacovigilance fundamentals",
+        "provider": "Uppsala Monitoring Centre",
+        "completed": "22 Jun 2025",
+        "activity": "Adverse event reporting",
+        "remoteType": "External",
+        "certificateUrl": "/certificate/5"
+      }
+    ]
+  }
+}
+

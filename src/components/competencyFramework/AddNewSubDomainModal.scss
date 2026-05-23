@@ -1,0 +1,49 @@
+.add-new-sub-domain-modal {
+  max-width: 32rem;
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  &__textarea {
+    width: 100%;
+    border: 1px solid #D1D5DB;
+    border-radius: .375rem;
+    padding: .5rem .75rem;
+    font-size: .875rem;
+    color: #2A398D;
+    background: #FFFFFF;
+    min-height: 5rem;
+    resize: vertical;
+
+    &:focus {
+      outline: 0;
+      border-color: #2A3B8F;
+      box-shadow: 0 0 0 2px rgb(42 59 143 / .15);
+    }
+  }
+
+  &__actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: .5rem;
+  }
+}
+
+@media (width >= 640px) {
+  .add-new-sub-domain-modal {
+    &__actions {
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
+}

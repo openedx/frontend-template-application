@@ -1,0 +1,16 @@
+[
+  { "id": "cty-001", "value": "cty-001", "label": "Bangladesh" },
+  { "id": "cty-002", "value": "cty-002", "label": "Bhutan" },
+  {
+    "id": "cty-003",
+    "value": "cty-003",
+    "label": "Democratic People's Republic of Korea (North Korea)"
+  },
+  { "id": "cty-004", "value": "cty-004", "label": "India" },
+  { "id": "cty-005", "value": "cty-005", "label": "Maldives" },
+  { "id": "cty-006", "value": "cty-006", "label": "Myanmar" },
+  { "id": "cty-007", "value": "cty-007", "label": "Nepal" },
+  { "id": "cty-008", "value": "cty-008", "label": "Sri Lanka" },
+  { "id": "cty-009", "value": "cty-009", "label": "Thailand" },
+  { "id": "cty-010", "value": "cty-010", "label": "Timor-Leste" }
+]

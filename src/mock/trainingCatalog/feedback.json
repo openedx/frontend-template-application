@@ -1,0 +1,30 @@
+{
+  "tr-001": {
+    "overallRating": 4.3,
+    "reviewCount": 14,
+    "distribution": { "5": 8, "4": 3, "3": 2, "2": 1, "1": 0 },
+    "reviews": [
+      {
+        "id": "r-001",
+        "author": "Anonymous Vigilance Officer",
+        "date": "2026-01-22",
+        "rating": 5,
+        "comment": "Outstanding! One of the best regulatory trainings I have attended."
+      },
+      {
+        "id": "r-002",
+        "author": "Anonymous Laboratory Analyst",
+        "date": "2026-02-22",
+        "rating": 3,
+        "comment": "Good training overall, but pace was a bit fast in some sections."
+      },
+      {
+        "id": "r-003",
+        "author": "Anonymous Inspector",
+        "date": "2026-02-05",
+        "rating": 4,
+        "comment": "Practical exercises were the highlight for me."
+      }
+    ]
+  }
+}
