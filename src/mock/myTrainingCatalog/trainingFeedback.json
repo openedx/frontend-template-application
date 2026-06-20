@@ -1,0 +1,36 @@
+{
+  "results": {
+    "training": {
+      "id": "tr-001",
+      "title": "Advanced Pharmacovigilance Masterclass",
+      "description": "Comprehensive training on pharmacovigilance best practices for NRA staff."
+    },
+    "feedback": {
+      "overall_rating": 4.3,
+      "review_count": 14,
+      "distribution": {
+        "5": 8,
+        "4": 3,
+        "3": 2,
+        "2": 1,
+        "1": 0
+      },
+      "reviews": [
+        {
+          "id": "rev-001",
+          "author": "Anonymous Inspector",
+          "date": "2026-02-05",
+          "rating": 4,
+          "comment": "Practical exercises were the highlight for me."
+        },
+        {
+          "id": "rev-002",
+          "author": "Anonymous Laboratory Analyst",
+          "date": "2026-02-22",
+          "rating": 3,
+          "comment": "Good training overall, but pace was a bit fast in some sections."
+        }
+      ]
+    }
+  }
+}

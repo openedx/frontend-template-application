@@ -9,14 +9,17 @@
       "navbarAccess": {
         "accessCompetencyFramework": true,
         "accessActivities": true,
+        "accessMyTrainingCatalog": true,
         "accessPendingRequests": true,
-        "accessUsers": true
+        "accessUsers": true,
+        "accessOrganizationProfile": true
       },
       "componentAccess": {
         "dashboard": {
           "showUsersPerCountry": true,
           "showTopRequestedActivities": true,
-          "showPendingRequests": true
+          "showPendingRequests": true,
+          "showTopTrainings": true
         },
         "nrasManagement": {
           "canOnboardNra": false,
@@ -50,6 +53,8 @@
           "canViewCompetencyRoleColumn": true,
           "canAssignTrainings": false,
           "canRemoveAssignedTrainings": false,
+          "canViewAssignedTrainings": false,
+          "canViewMappedCompetencies": true,
           "canViewRegulatoryPassport": false,
           "userFormFields": {
             "showRoleField": false,
@@ -75,6 +80,15 @@
           "canDeleteFrameworkSearnTab": false,
           "canDeleteFrameworkNraTab": false,
           "showSuggestionsTab": false
+        },
+        "myTrainingCatalog": {
+          "canCreateTraining": true,
+          "canEditTraining": true,
+          "canDeleteTraining": true
+        },
+        "organizationProfile": {
+          "canChangeOrganizationProfile": true,
+          "showAdministratorsSection": true
         }
       }
     }

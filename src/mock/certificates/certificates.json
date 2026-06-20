@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "id": "3",
+      "training": "WHO regulatory systems strengthening",
+      "provider": "WHO AFRO Training Centre",
+      "completed": "12 Jan 2026",
+      "certificate_number": "SEARN-CERT-2026-003"
+    },
+    {
+      "id": "4",
+      "training": "CTD dossier review — advanced",
+      "provider": "CDSCO Training Institute",
+      "completed": "5 Oct 2025",
+      "certificate_number": "SEARN-CERT-2025-004"
+    },
+    {
+      "id": "5",
+      "training": "Pharmacovigilance fundamentals",
+      "provider": "Uppsala Monitoring Centre",
+      "completed": "22 Jun 2025",
+      "certificate_number": "SEARN-CERT-2025-005"
+    }
+  ]
+}

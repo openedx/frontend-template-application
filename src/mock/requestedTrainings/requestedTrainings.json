@@ -4,28 +4,32 @@
     "activity": "Post-Market Surveillance",
     "description": "asdfasf",
     "status": "open",
-    "flags": 0
+    "flags": 0,
+    "is_flagged": false
   },
   {
     "id": "rt-002",
     "activity": "Conduct GMP Inspections",
     "description": "We need a refresher GMP inspections training for our newly hired inspectors.",
     "status": "open",
-    "flags": 2
+    "flags": 2,
+    "is_flagged": true
   },
   {
     "id": "rt-003",
     "activity": "Signal Detection & Analysis",
     "description": "Advanced signal detection workshop required for vigilance personnel.",
     "status": "open",
-    "flags": 0
+    "flags": 0,
+    "is_flagged": false
   },
   {
     "id": "rt-004",
     "activity": "Regulatory Dossier Review",
     "description": "Need a comprehensive course on dossier review for reviewers.",
     "status": "closed",
-    "flags": 1
+    "flags": 1,
+    "is_flagged": false
   }
 ]
 

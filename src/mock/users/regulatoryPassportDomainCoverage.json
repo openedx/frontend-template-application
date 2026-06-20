@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "id": "dc1",
+      "domain": "Regulatory science & policy",
+      "percent": 85,
+      "tags": ["Regulatory frameworks", "Medicines legislation", "Risk-benefit assessment"]
+    },
+    {
+      "id": "dc2",
+      "domain": "Market authorisation & dossier review",
+      "percent": 72,
+      "tags": ["CTD submission review", "Bioequivalence assessment", "Biosimilar evaluation"]
+    },
+    {
+      "id": "dc3",
+      "domain": "Pharmacovigilance & post-market",
+      "percent": 60,
+      "tags": ["Adverse event reporting", "Signal detection", "Periodic safety reporting"]
+    },
+    {
+      "id": "dc4",
+      "domain": "Good manufacturing practices (GMP)",
+      "percent": 40,
+      "tags": ["GMP inspection planning", "GMP audit conduct", "Deficiency assessment"]
+    }
+  ]
+}

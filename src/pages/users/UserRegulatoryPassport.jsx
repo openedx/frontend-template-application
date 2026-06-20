@@ -1,14 +1,23 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { TablePaginationFooter } from '../../components/dataTable';
+import { useMemo } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import UserAvatar from '../../components/users/UserAvatar';
+import {
+  RegulatoryPassportCompletedTrainings,
+  RegulatoryPassportDomainCoverage,
+  RegulatoryPassportStats,
+} from '../../components/users/regulatoryPassport';
 import AccessRestrictedPage from '../AccessRestrictedPage';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import {
+  resolveRegulatoryPassportCompletedTrainingsMock,
+  resolveRegulatoryPassportDomainCoverageMock,
+  resolveUserRegulatoryPassportMock,
+} from '../../api/users/userPageMockData';
 import { ADMIN_PATHS } from '../../utils/adminPaths';
-import usersData from '../../mock/users/users.json';
-import passportData from '../../mock/users/regulatoryPassport.json';
-import brandPlaceholder from '../../assets/images/brand-placeholder.svg';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { HEADER_LOGO_FALLBACK, resolveHeaderLogoSrc } from '../../utils/brandAssets';
 import messages from './regulatoryPassportMessages';
 import './UserRegulatoryPassport.scss';
 
@@ -21,17 +30,28 @@ const UserRegulatoryPassport = () => {
   const canViewUserAbout = Boolean(componentAccess?.users?.canViewUserAbout ?? false);
   const canViewRegulatoryPassport = Boolean(componentAccess?.users?.canViewRegulatoryPassport ?? false);
 
+  const listRowFromState = location.state?.userListRow ?? null;
+
+  const detail = useMemo(
+    () => resolveUserRegulatoryPassportMock(userId, listRowFromState),
+    [listRowFromState, userId],
+  );
+
+  const domainCoverage = useMemo(() => resolveRegulatoryPassportDomainCoverageMock(), []);
+  const completedTrainingsPage = useMemo(
+    () => resolveRegulatoryPassportCompletedTrainingsMock(),
+    [],
+  );
+
   if (!canViewUserAbout || !canViewRegulatoryPassport) {
     return <AccessRestrictedPage />;
   }
 
-  const user = usersData.find(item => item.id === userId);
-  if (!user) {
+  if (!detail) {
     return <Navigate to={ADMIN_PATHS.users} replace />;
   }
 
-  const detail = passportData[userId] || passportData.default;
-  const profileImageUrl = location.state?.userProfileImage ?? user.userProfileImage ?? '';
+  const profileImageUrl = location.state?.userProfileImage ?? detail.userProfileImage ?? '';
 
   return (
     <section className="user-passport-page">
@@ -40,125 +60,70 @@ const UserRegulatoryPassport = () => {
           <div className="user-passport-page__brand">
             <img
               className="user-passport-page__brand-img"
-              src={brandPlaceholder}
+              src={resolveHeaderLogoSrc()}
               alt={formatMessage(messages.brandAlt)}
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = HEADER_LOGO_FALLBACK;
+              }}
             />
           </div>
           <div className="user-passport-page__identity">
-            <UserAvatar variant="passport" name={user.name} imageUrl={profileImageUrl} />
+            <UserAvatar variant="passport" name={detail.name} imageUrl={profileImageUrl} />
             <div className="user-passport-page__who">
-              <h2 className="user-passport-page__name">{user.name}</h2>
-              <p className="user-passport-page__job">{detail.jobTitle}</p>
-              <p className="user-passport-page__org">{detail.organisationLine}</p>
+              <h2 className="user-passport-page__name">{detail.name}</h2>
+              {hasDisplayValue(detail.jobTitle) && (
+                <p className="user-passport-page__job">{detail.jobTitle}</p>
+              )}
+              {hasDisplayValue(detail.organisationLine) && (
+                <p className="user-passport-page__org">{detail.organisationLine}</p>
+              )}
             </div>
           </div>
-          <div className="user-passport-page__passport-id">
-            <p className="user-passport-page__passport-id-value">{detail.passportId}</p>
-            <p className="user-passport-page__passport-id-label">{formatMessage(messages.passportIdLabel)}</p>
-          </div>
+          {hasDisplayValue(detail.passportId) && (
+            <div className="user-passport-page__passport-id">
+              <p className="user-passport-page__passport-id-value">{detail.passportId}</p>
+              <p className="user-passport-page__passport-id-label">{formatMessage(messages.passportIdLabel)}</p>
+            </div>
+          )}
         </div>
 
         <div className="user-passport-page__about">
           <div className="user-passport-page__about-left">
             <h3 className="user-passport-page__section-title">{formatMessage(messages.aboutTitle)}</h3>
-            <p className="user-passport-page__about-text">{detail.about}</p>
+            {hasDisplayValue(detail.about) && (
+              <p className="user-passport-page__about-text">{detail.about}</p>
+            )}
           </div>
-          <div className="user-passport-page__about-right">
-            <p className="user-passport-page__meta-label">{formatMessage(messages.competencyRoleLabel)}</p>
-            <p className="user-passport-page__meta-value">{detail.competencyRole}</p>
-          </div>
+          {hasDisplayValue(detail.competencyRole) && (
+            <div className="user-passport-page__about-right">
+              <p className="user-passport-page__meta-label">{formatMessage(messages.competencyRoleLabel)}</p>
+              <p className="user-passport-page__meta-value">{detail.competencyRole}</p>
+            </div>
+          )}
         </div>
 
-        <div className="user-passport-page__stats">
-          <div className="user-passport-page__stat">
-            <p className="user-passport-page__stat-value">{detail.stats.trainingsCompleted}</p>
-            <p className="user-passport-page__stat-label">{formatMessage(messages.statTrainingsCompleted)}</p>
-          </div>
-          <div className="user-passport-page__stat">
-            <p className="user-passport-page__stat-value">{detail.stats.assignedTrainings}</p>
-            <p className="user-passport-page__stat-label">{formatMessage(messages.statAssignedTrainings)}</p>
-          </div>
-          <div className="user-passport-page__stat">
-            <p className="user-passport-page__stat-value">{detail.stats.completionRate}</p>
-            <p className="user-passport-page__stat-label">{formatMessage(messages.statCompletionRate)}</p>
-          </div>
-          <div className="user-passport-page__stat">
-            <p className="user-passport-page__stat-value">{detail.stats.activitiesCovered}</p>
-            <p className="user-passport-page__stat-label">{formatMessage(messages.statActivitiesCovered)}</p>
-          </div>
-        </div>
+        <RegulatoryPassportStats items={detail.stats} />
 
-        <div className="user-passport-page__domains">
-          <h3 className="user-passport-page__section-title">{formatMessage(messages.domainCoverageTitle)}</h3>
-          <div className="user-passport-page__domain-list">
-            {detail.domainCoverage.map(item => (
-              <div key={item.domain} className="user-passport-page__domain">
-                <div className="user-passport-page__domain-row">
-                  <p className="user-passport-page__domain-name">{item.domain}</p>
-                  <p className="user-passport-page__domain-percent">{item.percent}%</p>
-                </div>
-                <div className="user-passport-page__bar">
-                  <div className="user-passport-page__bar-fill" style={{ width: `${item.percent}%` }} />
-                </div>
-                <div className="user-passport-page__tags">
-                  {item.tags.map(tag => (
-                    <span key={tag} className="user-passport-page__tag">{tag}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <RegulatoryPassportDomainCoverage items={domainCoverage} />
 
-        <div className="user-passport-page__table">
-          <h3 className="user-passport-page__section-title">{formatMessage(messages.completedTrainingTitle)}</h3>
-          <div className="user-passport-page__table-wrap">
-            <table className="user-passport-page__table-el">
-              <thead>
-                <tr>
-                  <th>{formatMessage(messages.tableTraining)}</th>
-                  <th>{formatMessage(messages.tableProvider)}</th>
-                  <th>{formatMessage(messages.tableCompleted)}</th>
-                  <th>{formatMessage(messages.tableActivities)}</th>
-                  <th>{formatMessage(messages.tableRemoteType)}</th>
-                  <th>{formatMessage(messages.tableCertificate)}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {detail.completedTrainings.map(row => (
-                  <tr key={`${row.training}-${row.completed}`}>
-                    <td className="user-passport-page__cell--strong">{row.training}</td>
-                    <td className="user-passport-page__cell--muted">{row.provider}</td>
-                    <td className="user-passport-page__cell--muted">{row.completed}</td>
-                    <td>
-                      <span className="user-passport-page__link">{row.activity}</span>
-                    </td>
-                    <td>
-                      <span className="user-passport-page__pill">{row.remoteType}</span>
-                    </td>
-                    <td>
-                      <a className="user-passport-page__link" href={row.certificateUrl}>
-                        {formatMessage(messages.certificateView)}
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <TablePaginationFooter
-            currentPage={1}
-            totalPages={3}
-            onPageChange={() => {}}
-            paginationLabel={formatMessage(messages.paginationLabel)}
-          />
-        </div>
+        <RegulatoryPassportCompletedTrainings
+          items={completedTrainingsPage.items}
+          page={completedTrainingsPage.page}
+          totalPages={completedTrainingsPage.totalPages}
+          onPageChange={() => {}}
+          certificateLinkState={{
+            userId,
+            userProfileImage: profileImageUrl,
+            userListRow: location.state?.userListRow ?? null,
+          }}
+        />
 
         <div className="user-passport-page__export">
           <div className="user-passport-page__export-row">
             <div>
               <p className="user-passport-page__export-title">
-                {formatMessage(messages.exportTitle, { name: user.name })}
+                {formatMessage(messages.exportTitle, { name: detail.name })}
               </p>
             </div>
             <div className="user-passport-page__export-actions">
@@ -174,4 +139,3 @@ const UserRegulatoryPassport = () => {
 };
 
 export default UserRegulatoryPassport;
-

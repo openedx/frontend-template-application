@@ -41,4 +41,14 @@ export default defineMessages({
     defaultMessage: 'Loading pending requests…',
     description: 'Loading state for pending requests card',
   },
+  topTrainingsLoadError: {
+    id: 'app.dashboard.topTrainings.loadError',
+    defaultMessage: 'Unable to load top trainings.',
+    description: 'Fallback when top-trainings API fails without a detail message',
+  },
+  topTrainingsLoading: {
+    id: 'app.dashboard.topTrainings.loading',
+    defaultMessage: 'Loading top trainings…',
+    description: 'Loading state for top trainings table',
+  },
 });

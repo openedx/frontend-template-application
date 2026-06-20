@@ -1,0 +1,21 @@
+{
+  "results": {
+    "id": "tr-001",
+    "title": "Advanced Pharmacovigilance Masterclass",
+    "description": "Comprehensive training on pharmacovigilance best practices for NRA staff.",
+    "mode": "Virtual",
+    "domain": "Pharmacovigilance",
+    "sub_domain": "Signal Management",
+    "provider": "WHO Prequalification",
+    "provider_slug": "who-prequalification",
+    "language": "English",
+    "duration": "5 days",
+    "cost": "$800",
+    "approach": "Course",
+    "evaluation": "Pre and post evaluation",
+    "outcome": "Certificate of completion",
+    "nra_goals": ["ML3"],
+    "mapped_competencies": ["Regulatory and scientific guidelines relevant to assessment of medicines"],
+    "mapped_activities": ["Signal Detection & Analysis"]
+  }
+}

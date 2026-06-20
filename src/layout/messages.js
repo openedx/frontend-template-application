@@ -36,6 +36,11 @@ const layoutMessages = defineMessages({
     defaultMessage: 'SEARN Training Catalog',
     description: 'Sidebar navigation label for SEARN training catalog',
   },
+  navMyTrainingCatalog: {
+    id: 'app.layout.sidebar.nav.myTrainingCatalog',
+    defaultMessage: 'My Trainings Catalog',
+    description: 'Sidebar navigation label for my trainings catalog',
+  },
   navNras: {
     id: 'app.layout.sidebar.nav.nras',
     defaultMessage: 'NRAs Management',
@@ -70,6 +75,11 @@ const layoutMessages = defineMessages({
     id: 'app.layout.sidebar.nav.users',
     defaultMessage: 'Users',
     description: 'Sidebar navigation label for users',
+  },
+  navOrganizationProfile: {
+    id: 'app.layout.sidebar.nav.organizationProfile',
+    defaultMessage: 'Organization Profile',
+    description: 'Sidebar navigation label for organization profile',
   },
   navRoles: {
     id: 'app.layout.sidebar.nav.roles',

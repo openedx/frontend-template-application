@@ -3,6 +3,7 @@ import {
   DASHBOARD_PENDING_REQUESTS_PAGE_SIZE,
   DASHBOARD_STATS,
   DASHBOARD_TOP_REQUESTED_ACTIVITIES,
+  DASHBOARD_TOP_TRAININGS,
   DASHBOARD_USERS_PER_COUNTRY,
   PENDING_REQUESTS_LIST,
 } from '../endpoints';
@@ -46,6 +47,19 @@ export const fetchDashboardTopRequestedActivities = ({ formatMessage }) => execu
   },
   formatMessage,
   fallbackMessage: dashboardMessages.topRequestedActivitiesLoadError,
+});
+
+/**
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardTopTrainings = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_TOP_TRAININGS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.topTrainingsLoadError,
 });
 
 /**

@@ -7,6 +7,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { getRichTextHtml } from '../../utils/richTextHtml';
+import { hasRichTextContent } from '../../api/competencyFramework/competencyFrameworkUtils';
 
 const FrameworkCard = ({
   item,
@@ -27,8 +29,11 @@ const FrameworkCard = ({
         {hasDisplayValue(item.title) && (
           <h3 className="competency-framework-page__card-title">{item.title}</h3>
         )}
-        {hasDisplayValue(item.description) && (
-          <p className="competency-framework-page__card-description">{item.description}</p>
+        {hasRichTextContent(item.description) && (
+          <div
+            className="competency-framework-page__card-description"
+            dangerouslySetInnerHTML={{ __html: getRichTextHtml(item.description) }}
+          />
         )}
         <div className="competency-framework-page__card-meta">
           {hasDisplayValue(item.domains) && (

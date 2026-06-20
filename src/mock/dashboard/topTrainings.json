@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "id": "tr-001",
+      "training": "GMP Inspection Module 1-3",
+      "learners": 124,
+      "rating": 4.7
+    },
+    {
+      "id": "tr-002",
+      "training": "Pharmacovigilance Advanced",
+      "learners": 86,
+      "rating": 4.5
+    },
+    {
+      "id": "tr-003",
+      "training": "Lab Quality Management",
+      "learners": 72,
+      "rating": 4.8
+    },
+    {
+      "id": "tr-004",
+      "training": "Regulatory Submissions",
+      "learners": 60,
+      "rating": 4.4
+    },
+    {
+      "id": "tr-005",
+      "training": "Clinical Trials Oversight",
+      "learners": 0,
+      "rating": null
+    }
+  ]
+}

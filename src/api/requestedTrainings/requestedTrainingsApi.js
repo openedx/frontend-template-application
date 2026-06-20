@@ -84,7 +84,7 @@ export const createRequestedTraining = ({
 });
 
 /**
- * @param {{ formatMessage: Function, id: string|number, action: 'close'|'reopen' }} params
+ * @param {{ formatMessage: Function, id: string|number, action: 'close'|'reopen'|'flag'|'unflag' }} params
  */
 export const patchRequestedTrainingStatus = ({ formatMessage, id, action }) => executeApiRequest({
   request: () => {
@@ -95,3 +95,15 @@ export const patchRequestedTrainingStatus = ({ formatMessage, id, action }) => e
   formatMessage,
   fallbackMessage: requestedTrainingsMessages.statusError,
 });
+
+/**
+ * Toggle flag interest on a requested training (same PATCH endpoint as status).
+ * @param {{ formatMessage: Function, id: string|number, isFlagged: boolean }} params
+ */
+export const patchRequestedTrainingFlag = ({ formatMessage, id, isFlagged }) => (
+  patchRequestedTrainingStatus({
+    formatMessage,
+    id,
+    action: isFlagged ? 'unflag' : 'flag',
+  })
+);

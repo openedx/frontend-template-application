@@ -1,17 +1,35 @@
 import {
   faClock,
+  faBookOpen,
+  faCheckCircle,
   faExclamationTriangle,
   faGlobe,
   faQuestionCircle,
+  faStar,
+  faUpload,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
 /** Icons the stats API may reference by string key (e.g. `"faUsers"`). */
 export const STATS_ICON_MAP = {
   faUsers,
+  users: faUsers,
   faExclamationTriangle,
+  exclamationTriangle: faExclamationTriangle,
   faGlobe,
+  globe: faGlobe,
   faClock,
+  clock: faClock,
+  faBookOpen,
+  bookOpen: faBookOpen,
+  faCheckCircle,
+  circleCheck: faCheckCircle,
+  checkCircle: faCheckCircle,
+  faStar,
+  star: faStar,
+  faUpload,
+  upload: faUpload,
+  import: faUpload,
 };
 
 export const STATS_FALLBACK_ICON = faQuestionCircle;

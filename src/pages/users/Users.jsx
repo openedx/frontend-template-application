@@ -22,6 +22,7 @@ import UsersRoleFilter, { USERS_ROLE_FILTER_ALL } from '../../components/users/U
 import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import { buildUserNavigationState } from '../../api/users/userPageMockData';
 import { ADMIN_PATHS } from '../../utils/adminPaths';
 import { fetchUserDetail } from '../../api/users/usersApi';
 import {
@@ -388,7 +389,7 @@ const Users = () => {
                           {canViewUserAbout ? (
                             <Link
                               to={ADMIN_PATHS.userDetail(user.id)}
-                              state={{ userProfileImage: user.userProfileImage }}
+                              state={buildUserNavigationState(user)}
                               className="users-page__name users-page__name--link"
                             >
                               {user.name}
@@ -425,7 +426,7 @@ const Users = () => {
                           {canViewUserAbout && (
                             <Link
                               to={ADMIN_PATHS.userDetail(user.id)}
-                              state={{ userProfileImage: user.userProfileImage }}
+                              state={buildUserNavigationState(user)}
                               className="users-page__icon-button"
                               aria-label={formatMessage(messages.viewAction)}
                             >

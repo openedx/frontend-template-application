@@ -20,6 +20,11 @@ const detailMessages = defineMessages({
   competencyCompleted: { id: 'app.users.detail.competencyCompleted', defaultMessage: 'Completed', description: 'Completed competency status' },
   competencyPending: { id: 'app.users.detail.competencyPending', defaultMessage: 'Not completed', description: 'Pending competency status' },
   passportTitle: { id: 'app.users.detail.passportTitle', defaultMessage: 'Regulatory Passport', description: 'Passport CTA title' },
+  passportDescription: {
+    id: 'app.users.detail.passportDescription',
+    defaultMessage: "View this user's digital regulatory training and competency record",
+    description: 'Passport CTA description on user about page',
+  },
   passportButton: { id: 'app.users.detail.passportButton', defaultMessage: 'View Regulatory Passport', description: 'Passport CTA button' },
   assignedTrainingsTitle: {
     id: 'app.users.detail.assignedTrainingsTitle',

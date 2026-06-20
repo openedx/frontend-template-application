@@ -8,6 +8,9 @@ export const CORE_PERMISSIONS = '/api/v1/core-permissions/';
 export const DASHBOARD_STATS = '/api/v1/dashboard/stats/';
 export const DASHBOARD_USERS_PER_COUNTRY = '/api/v1/dashboard/users-per-country/';
 export const DASHBOARD_TOP_REQUESTED_ACTIVITIES = '/api/v1/dashboard/top-requested-activities/?limit=5';
+export const DASHBOARD_TOP_TRAININGS = '/api/v1/dashboard/top-trainings/';
+
+export const MY_TRAINING_CATALOG_LIST = '/api/v1/my-training-catalog/';
 
 /** `page_size` for pending requests on the dashboard card. */
 export const DASHBOARD_PENDING_REQUESTS_PAGE_SIZE = 4;
@@ -68,7 +71,23 @@ export const ROLE_ASSIGNMENT_ROLE_OPTIONS = '/api/v1/role-assignment/roles/optio
 export const ROLE_ASSIGNMENT_PERMISSIONS = '/api/v1/role-assignment/permissions/';
 export const ROLE_ASSIGNMENT_USERS = '/api/v1/role-assignment/users/';
 
+/** @param {string|number} userId */
+export const roleAssignmentUserRegulatoryPassport = (userId) => (
+  `/api/v1/role-assignment/users/${userId}/regulatory-passport/`
+);
+
+/** @param {string|number} userId */
+export const roleAssignmentUserRegulatoryPassportDomainCoverage = (userId) => (
+  `/api/v1/role-assignment/users/${userId}/regulatory-passport/domain-coverage/`
+);
+
+/** @param {string|number} userId */
+export const roleAssignmentUserRegulatoryPassportCompletedTrainings = (userId) => (
+  `/api/v1/role-assignment/users/${userId}/regulatory-passport/completed-trainings/`
+);
+
 export const ORGANIZATION_DETAILS = '/api/v1/options/organization/details/';
+export const ORGANIZATION_PROFILE = '/api/v1/organization-profile/';
 
 export const ACTIVITIES_LIST = '/api/v1/activities/';
 

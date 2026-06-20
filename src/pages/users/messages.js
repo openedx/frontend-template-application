@@ -274,6 +274,11 @@ const usersPageMessages = defineMessages({
     defaultMessage: 'Unable to load user details. Please try again.',
     description: 'Fallback when user detail API fails',
   },
+  regulatoryPassportLoadError: {
+    id: 'app.users.regulatoryPassport.loadError',
+    defaultMessage: 'Unable to load regulatory passport. Please try again.',
+    description: 'Fallback when regulatory passport API fails',
+  },
   detailErrorTitle: {
     id: 'app.users.detail.errorToast.title',
     defaultMessage: 'Failed to load user',

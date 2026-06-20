@@ -14,6 +14,9 @@ const navigationItems = [
     key: 'trainingCatalog', labelKey: 'navTrainingCatalog', iconKey: 'trainingCatalog', path: ADMIN_PATHS.trainingCatalog,
   },
   {
+    key: 'myTrainingCatalog', labelKey: 'navMyTrainingCatalog', iconKey: 'myTrainingCatalog', path: ADMIN_PATHS.myTrainingCatalog,
+  },
+  {
     key: 'nras', labelKey: 'navNras', iconKey: 'nras', path: ADMIN_PATHS.nras,
   },
   {
@@ -33,6 +36,9 @@ const navigationItems = [
   },
   {
     key: 'users', labelKey: 'navUsers', iconKey: 'users', path: ADMIN_PATHS.users,
+  },
+  {
+    key: 'organizationProfile', labelKey: 'navOrganizationProfile', iconKey: 'organizationProfile', path: ADMIN_PATHS.organizationProfile,
   },
   {
     key: 'roles', labelKey: 'navRoles', iconKey: 'roles', path: ADMIN_PATHS.roles,
@@ -58,11 +64,13 @@ const navigationItems = [
 const navigationAccessMap = {
   competencyFramework: 'accessCompetencyFramework',
   activities: 'accessActivities',
+  myTrainingCatalog: 'accessMyTrainingCatalog',
   nras: 'accessNrasManagement',
   countries: 'accessCountries',
   trainingProviders: 'accessTrainingProviders',
   pendingRequests: 'accessPendingRequests',
   users: 'accessUsers',
+  organizationProfile: 'accessOrganizationProfile',
   roles: 'accessRoles',
   settings: 'accessSettings',
   reports: 'accessReports',

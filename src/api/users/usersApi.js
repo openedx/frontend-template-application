@@ -4,6 +4,7 @@ import {
   COUNTRIES,
   ROLE_ASSIGNMENT_ROLE_OPTIONS,
   ROLE_ASSIGNMENT_USERS,
+  roleAssignmentUserRegulatoryPassport,
 } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
 import usersMessages from '../../pages/users/messages';
@@ -66,6 +67,19 @@ export const fetchUserDetail = ({ formatMessage, userId }) => executeApiRequest(
   },
   formatMessage,
   fallbackMessage: usersMessages.detailLoadError,
+});
+
+/**
+ * @param {{ formatMessage: Function, userId: string|number }} params
+ */
+export const fetchUserRegulatoryPassport = ({ formatMessage, userId }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${roleAssignmentUserRegulatoryPassport(userId)}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: usersMessages.regulatoryPassportLoadError,
 });
 
 /**

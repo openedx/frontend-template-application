@@ -1,5 +1,5 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import {
   faArrowLeft,
   faCalendar,
@@ -18,11 +18,15 @@ import MultiSelectInput from '../../components/multiSelectInput/MultiSelectInput
 import PopupDialog from '../../components/popupDialog/PopupDialog';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import { resolveUserAboutDetailMock, resolveUserAssignedTrainingsMock, resolveUserCompletedTrainingsMock, resolveUserMappedCompetenciesMock, resolveUserTrainingStatusMock } from '../../api/users/userPageMockData';
+import { mapUserAboutDetail, mergeUserIdentityIntoAboutDetail } from '../../api/users/usersUtils';
+import useUserDetail from '../../hooks/users/useUserDetail';
+import userDetailsMock from '../../mock/users/userDetails.json';
+import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import AccessRestrictedPage from '../AccessRestrictedPage';
+import UserMappedCompetencies from '../../components/users/UserMappedCompetencies';
 import { ADMIN_PATHS } from '../../utils/adminPaths';
 import trainingCatalog from '../../mock/trainingCatalog/trainings.json';
-import userDetailsData from '../../mock/users/userDetails.json';
-import usersData from '../../mock/users/users.json';
 import detailMessages from './detailMessages';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import usersMessages from './messages';
@@ -46,31 +50,54 @@ const UserDetailPage = () => {
   const canDeleteUser = Boolean(componentAccess?.users?.canDeleteUser ?? false);
   const canAssignTrainings = Boolean(componentAccess?.users?.canAssignTrainings ?? false);
   const canRemoveAssignedTrainings = Boolean(componentAccess?.users?.canRemoveAssignedTrainings ?? false);
+  const canViewAssignedTrainings = Boolean(componentAccess?.users?.canViewAssignedTrainings ?? false);
+  const canViewMappedCompetencies = Boolean(componentAccess?.users?.canViewMappedCompetencies ?? false);
   const canViewRegulatoryPassport = Boolean(componentAccess?.users?.canViewRegulatoryPassport ?? false);
 
-  if (!canViewUserAbout) {
-    return <AccessRestrictedPage />;
-  }
+  const completedTrainings = useMemo(() => resolveUserCompletedTrainingsMock(), []);
+  const trainingStatus = useMemo(() => resolveUserTrainingStatusMock(), []);
+  const mappedCompetencies = useMemo(() => resolveUserMappedCompetenciesMock(), []);
 
-  const user = usersData.find(item => item.id === userId);
-  if (!user) {
-    return <Navigate to={ADMIN_PATHS.users} replace />;
-  }
+  const listRowFromState = location.state?.userListRow ?? null;
 
-  const defaultDetail = userDetailsData.find(item => item.id === 'default');
-  const detail = userDetailsData.find(item => item.id === userId) || {
-    ...defaultDetail,
-    createdAt: user.joined,
-  };
-
-  const [assignedTrainings, setAssignedTrainings] = useState(() => {
-    const seed = trainingCatalog.slice(0, 2).map(t => ({
-      id: t.id,
-      title: t.title,
-      providerLine: `${t.provider} • ${t.duration}`,
-    }));
-    return seed;
+  const { detail: apiDetail, isLoading: isApiDetailLoading } = useUserDetail({
+    userId,
+    enabled: !listRowFromState,
   });
+
+  const userDetail = useMemo(() => {
+    const fromNavigation = resolveUserAboutDetailMock(userId, listRowFromState);
+    if (fromNavigation) {
+      return fromNavigation;
+    }
+
+    if (apiDetail) {
+      const template = mapUserAboutDetail(userDetailsMock);
+      if (!template) {
+        return null;
+      }
+
+      return mergeUserIdentityIntoAboutDetail(template, {
+        id: apiDetail.id,
+        name: apiDetail.name,
+        email: apiDetail.email,
+        country: apiDetail.country,
+        role: apiDetail.role,
+        roleSub: '',
+        competencyRole: apiDetail.competencyRole ?? '',
+        userProfileImage: apiDetail.userProfileImage,
+        joined: '',
+      });
+    }
+
+    return null;
+  }, [apiDetail, listRowFromState, userId]);
+
+  const [assignedTrainings, setAssignedTrainings] = useState([]);
+
+  useEffect(() => {
+    setAssignedTrainings(resolveUserAssignedTrainingsMock());
+  }, [userId]);
 
   const availableTrainingOptions = useMemo(
     () => trainingCatalog
@@ -80,12 +107,28 @@ const UserDetailPage = () => {
     [assignedTrainings],
   );
 
-  const canAssignSubmit = selectedTrainingIds.length > 0;
+  if (!canViewUserAbout) {
+    return <AccessRestrictedPage />;
+  }
 
-  const profileImageUrl = location.state?.userProfileImage ?? user.userProfileImage ?? '';
-  const roleLabel = getRoleDisplayLine(user);
-  const statusLabel = hasDisplayValue(detail.status)
-    ? detail.status
+  if (!userDetail) {
+    if (isApiDetailLoading) {
+      return (
+        <SkeletonScreen
+          variant={SKELETON_VARIANTS.TOOLBAR_TABLE}
+          ariaLabel={formatMessage(detailMessages.backToUsers)}
+        />
+      );
+    }
+
+    return <Navigate to={ADMIN_PATHS.users} replace />;
+  }
+
+  const canAssignSubmit = selectedTrainingIds.length > 0;
+  const profileImageUrl = location.state?.userProfileImage ?? userDetail.userProfileImage ?? '';
+  const roleLabel = getRoleDisplayLine(userDetail);
+  const statusLabel = hasDisplayValue(userDetail.status)
+    ? userDetail.status
     : formatMessage(detailMessages.statusActiveDefault);
 
   return (
@@ -100,22 +143,26 @@ const UserDetailPage = () => {
       <div className="user-about-page__hero">
         <div className="user-about-page__hero-inner">
           <div className="user-about-page__hero-left">
-            <UserAvatar variant="hero" name={user.name} imageUrl={profileImageUrl} />
+            <UserAvatar variant="hero" name={userDetail.name} imageUrl={profileImageUrl} />
             <div>
-              <h2 className="user-about-page__hero-name">{user.name}</h2>
+              <h2 className="user-about-page__hero-name">{userDetail.name}</h2>
               <div className="user-about-page__hero-meta">
                 <span className="user-about-page__hero-meta-item">
                   <FontAwesomeIcon icon={faEnvelope} />
-                  {user.email}
+                  {userDetail.email}
                 </span>
                 <span className="user-about-page__hero-meta-item">
                   <FontAwesomeIcon icon={faMapMarkerAlt} />
-                  {user.country}
+                  {userDetail.country}
                 </span>
               </div>
               <div className="user-about-page__hero-tags">
-                <span className="user-about-page__hero-tag">{roleLabel}</span>
-                <span className="user-about-page__hero-tag user-about-page__hero-tag--status">{statusLabel}</span>
+                {hasDisplayValue(roleLabel) && (
+                  <span className="user-about-page__hero-tag">{roleLabel}</span>
+                )}
+                {hasDisplayValue(statusLabel) && (
+                  <span className="user-about-page__hero-tag user-about-page__hero-tag--status">{statusLabel}</span>
+                )}
               </div>
             </div>
           </div>
@@ -143,28 +190,28 @@ const UserDetailPage = () => {
             <FontAwesomeIcon icon={faCalendar} />
             <span>{formatMessage(detailMessages.createdAt)}</span>
           </div>
-          <p className="user-about-page__stat-value">{detail.createdAt}</p>
+          <p className="user-about-page__stat-value">{userDetail.createdAt}</p>
         </div>
         <div className="user-about-page__stat-card">
           <div className="user-about-page__stat-label">
             <FontAwesomeIcon icon={faCalendar} />
             <span>{formatMessage(detailMessages.updatedAt)}</span>
           </div>
-          <p className="user-about-page__stat-value">{detail.updatedAt}</p>
+          <p className="user-about-page__stat-value">{userDetail.updatedAt}</p>
         </div>
         <div className="user-about-page__stat-card">
           <div className="user-about-page__stat-label">
             <FontAwesomeIcon icon={faClock} />
             <span>{formatMessage(detailMessages.lastLogin)}</span>
           </div>
-          <p className="user-about-page__stat-value">{detail.lastLogin}</p>
+          <p className="user-about-page__stat-value">{userDetail.lastLogin}</p>
         </div>
         <div className="user-about-page__stat-card">
           <div className="user-about-page__stat-label">
             <FontAwesomeIcon icon={faClock} />
             <span>{formatMessage(detailMessages.trainingsCompleted)}</span>
           </div>
-          <p className="user-about-page__stat-value">{detail.trainingsCompleted}</p>
+          <p className="user-about-page__stat-value">{userDetail.trainingsCompleted}</p>
         </div>
       </div>
 
@@ -174,13 +221,17 @@ const UserDetailPage = () => {
             {formatMessage(detailMessages.completedTrainings)}
           </div>
           <div className="user-about-page__list">
-            {detail.completedTrainings.map(item => (
-              <div key={item.title} className="user-about-page__list-item">
+            {completedTrainings.map(item => (
+              <div key={item.id} className="user-about-page__list-item">
                 <div>
                   <p className="user-about-page__list-title">{item.title}</p>
-                  <p className="user-about-page__list-sub">{item.completedOn}</p>
+                  {hasDisplayValue(item.completedOn) && (
+                    <p className="user-about-page__list-sub">{item.completedOn}</p>
+                  )}
                 </div>
-                <span className="user-about-page__score">{item.score}</span>
+                {hasDisplayValue(item.score) && (
+                  <span className="user-about-page__score">{item.score}</span>
+                )}
               </div>
             ))}
           </div>
@@ -191,11 +242,13 @@ const UserDetailPage = () => {
             {formatMessage(detailMessages.trainingStatus)}
           </div>
           <div className="user-about-page__status-list">
-            {detail.trainingStatus.map(item => (
-              <div key={item.title} className="user-about-page__status-item">
+            {trainingStatus.map(item => (
+              <div key={item.id} className="user-about-page__status-item">
                 <div className="user-about-page__status-row">
                   <p className="user-about-page__status-title">{item.title}</p>
-                  <span className="user-about-page__status-badge">{item.status}</span>
+                  {hasDisplayValue(item.status) && (
+                    <span className="user-about-page__status-badge">{item.status}</span>
+                  )}
                 </div>
                 <div className="user-about-page__progress">
                   <div className="user-about-page__progress-fill" style={{ width: `${item.progress}%` }} />
@@ -206,41 +259,49 @@ const UserDetailPage = () => {
         </div>
       </div>
 
-      <div className="user-about-page__card user-about-page__assigned">
-        <div className="user-about-page__assigned-head">
-          <div className="user-about-page__card-title">
-            {formatMessage(detailMessages.assignedTrainingsTitle, { count: assignedTrainings.length })}
-          </div>
-          {canAssignTrainings && (
-            <button type="button" className="user-about-page__assigned-btn" onClick={() => setAssignOpen(true)}>
-              <FontAwesomeIcon icon={faPlus} />
-              {formatMessage(detailMessages.assignTraining)}
-            </button>
-          )}
-        </div>
-        <div className="user-about-page__assigned-list">
-          {assignedTrainings.map(item => (
-            <div key={item.id} className="user-about-page__assigned-item">
-              <div className="user-about-page__assigned-main">
-                <a className="user-about-page__assigned-link" href={ADMIN_PATHS.trainingCatalogDetail(item.id)}>
-                  {item.title}
-                </a>
-                <p className="user-about-page__assigned-sub">{item.providerLine}</p>
-              </div>
-              {canRemoveAssignedTrainings && (
-                <button
-                  type="button"
-                  className="user-about-page__assigned-remove"
-                  aria-label={formatMessage(detailMessages.removeAssignedTraining)}
-                  onClick={() => setRemoveAssigned(item)}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-              )}
+      {canViewMappedCompetencies && (
+        <UserMappedCompetencies items={mappedCompetencies} />
+      )}
+
+      {canViewAssignedTrainings && (
+        <div className="user-about-page__card user-about-page__assigned">
+          <div className="user-about-page__assigned-head">
+            <div className="user-about-page__card-title">
+              {formatMessage(detailMessages.assignedTrainingsTitle, { count: assignedTrainings.length })}
             </div>
-          ))}
+            {canAssignTrainings && (
+              <button type="button" className="user-about-page__assigned-btn" onClick={() => setAssignOpen(true)}>
+                <FontAwesomeIcon icon={faPlus} />
+                {formatMessage(detailMessages.assignTraining)}
+              </button>
+            )}
+          </div>
+          <div className="user-about-page__assigned-list">
+            {assignedTrainings.map(item => (
+              <div key={item.id} className="user-about-page__assigned-item">
+                <div className="user-about-page__assigned-main">
+                  <a className="user-about-page__assigned-link" href={ADMIN_PATHS.trainingCatalogDetail(item.id)}>
+                    {item.title}
+                  </a>
+                  {hasDisplayValue(item.providerLine) && (
+                    <p className="user-about-page__assigned-sub">{item.providerLine}</p>
+                  )}
+                </div>
+                {canRemoveAssignedTrainings && (
+                  <button
+                    type="button"
+                    className="user-about-page__assigned-remove"
+                    aria-label={formatMessage(detailMessages.removeAssignedTraining)}
+                    onClick={() => setRemoveAssigned(item)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {canViewRegulatoryPassport && (
         <div className="user-about-page__passport">
@@ -248,12 +309,15 @@ const UserDetailPage = () => {
             <div className="user-about-page__passport-icon" aria-hidden="true">RP</div>
             <div>
               <h3 className="user-about-page__passport-title">{formatMessage(detailMessages.passportTitle)}</h3>
-              <p className="user-about-page__passport-desc">{detail.passportDescription}</p>
+              <p className="user-about-page__passport-desc">{formatMessage(detailMessages.passportDescription)}</p>
             </div>
           </div>
           <Link
             to={ADMIN_PATHS.userRegulatoryPassport(userId)}
-            state={{ userProfileImage: profileImageUrl }}
+            state={{
+              userProfileImage: profileImageUrl,
+              userListRow: location.state?.userListRow ?? null,
+            }}
             className="user-about-page__passport-btn"
           >
             {formatMessage(detailMessages.passportButton)}
@@ -267,12 +331,12 @@ const UserDetailPage = () => {
           onClose={() => setEditOpen(false)}
           mode="edit"
           initialValues={{
-            name: user.name,
-            email: user.email,
-            country: user.country,
-            role: user.role,
-            roleSub: user.roleSub || '',
-            competencyRole: user.competencyRole || '',
+            name: userDetail.name,
+            email: userDetail.email,
+            country: userDetail.country,
+            role: userDetail.role,
+            roleSub: userDetail.roleSub || '',
+            competencyRole: userDetail.competencyRole || '',
           }}
         />
       )}
@@ -281,14 +345,14 @@ const UserDetailPage = () => {
         <ConfirmActionDialog
           isOpen={deleteOpen}
           title={formatMessage(usersMessages.deleteDialogTitle)}
-          description={formatMessage(usersMessages.deleteDialogDescription, { name: user.name })}
+          description={formatMessage(usersMessages.deleteDialogDescription, { name: userDetail.name })}
           cancelLabel={formatMessage(usersMessages.deleteDialogCancel)}
           confirmLabel={formatMessage(usersMessages.deleteDialogConfirm)}
           onCancel={() => setDeleteOpen(false)}
           onConfirm={() => {
             showToast({
               title: formatMessage(usersMessages.toastUserDeletedTitle),
-              description: formatMessage(usersMessages.toastUserDeletedDescription, { name: user.name }),
+              description: formatMessage(usersMessages.toastUserDeletedDescription, { name: userDetail.name }),
             });
             setDeleteOpen(false);
           }}
@@ -298,7 +362,7 @@ const UserDetailPage = () => {
       {canAssignTrainings && (
         <PopupDialog
           isOpen={assignOpen}
-          title={formatMessage(detailMessages.assignModalTitle, { name: user.name })}
+          title={formatMessage(detailMessages.assignModalTitle, { name: userDetail.name })}
           onClose={() => {
             setAssignOpen(false);
             setSelectedTrainingIds([]);

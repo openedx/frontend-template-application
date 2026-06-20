@@ -14,11 +14,13 @@ import {
 const DEFAULT_NAVBAR_ACCESS = {
   accessCompetencyFramework: false,
   accessActivities: false,
+  accessMyTrainingCatalog: false,
   accessNrasManagement: false,
   accessCountries: false,
   accessTrainingProviders: false,
   accessPendingRequests: false,
   accessUsers: false,
+  accessOrganizationProfile: false,
   accessRoles: false,
   accessSettings: false,
   accessReports: false,
@@ -29,6 +31,7 @@ const DEFAULT_COMPONENT_ACCESS = {
     showUsersPerCountry: false,
     showTopRequestedActivities: false,
     showPendingRequests: false,
+    showTopTrainings: false,
   },
   nrasManagement: {
     canOnboardNra: false,
@@ -62,6 +65,8 @@ const DEFAULT_COMPONENT_ACCESS = {
     canViewCompetencyRoleColumn: false,
     canAssignTrainings: false,
     canRemoveAssignedTrainings: false,
+    canViewAssignedTrainings: false,
+    canViewMappedCompetencies: false,
     canViewRegulatoryPassport: false,
     userFormFields: {
       showRoleField: false,
@@ -87,6 +92,19 @@ const DEFAULT_COMPONENT_ACCESS = {
     canDeleteFrameworkSearnTab: false,
     canDeleteFrameworkNraTab: false,
     showSuggestionsTab: false,
+  },
+  myTrainingCatalog: {
+    canCreateTraining: false,
+    canEditTraining: false,
+    canDeleteTraining: false,
+  },
+  requestedTrainings: {
+    showOpenCloseButton: false,
+    showFlagButton: false,
+  },
+  organizationProfile: {
+    canChangeOrganizationProfile: false,
+    showAdministratorsSection: false,
   },
 };
 
@@ -128,6 +146,18 @@ const mergeComponentAccess = (roleData) => ({
   competencyFramework: {
     ...DEFAULT_COMPONENT_ACCESS.competencyFramework,
     ...(roleData?.componentAccess?.competencyFramework || {}),
+  },
+  myTrainingCatalog: {
+    ...DEFAULT_COMPONENT_ACCESS.myTrainingCatalog,
+    ...(roleData?.componentAccess?.myTrainingCatalog || {}),
+  },
+  requestedTrainings: {
+    ...DEFAULT_COMPONENT_ACCESS.requestedTrainings,
+    ...(roleData?.componentAccess?.requestedTrainings || {}),
+  },
+  organizationProfile: {
+    ...DEFAULT_COMPONENT_ACCESS.organizationProfile,
+    ...(roleData?.componentAccess?.organizationProfile || {}),
   },
 });
 

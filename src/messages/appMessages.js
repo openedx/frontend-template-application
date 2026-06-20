@@ -11,6 +11,11 @@ const appMessages = defineMessages({
     defaultMessage: 'Users',
     description: 'Top header title for users route',
   },
+  organizationProfileTitle: {
+    id: 'app.layout.route.organizationProfile.title',
+    defaultMessage: 'Organization Profile',
+    description: 'Top header title for organization profile route',
+  },
   competencyFrameworkTitle: {
     id: 'app.layout.route.competencyFramework.title',
     defaultMessage: 'Competency Framework',
@@ -60,6 +65,11 @@ const appMessages = defineMessages({
     id: 'app.layout.route.trainingCatalog.title',
     defaultMessage: 'SEARN Training Catalog',
     description: 'Top header title for SEARN training catalog routes',
+  },
+  myTrainingCatalogTitle: {
+    id: 'app.layout.route.myTrainingCatalog.title',
+    defaultMessage: 'My Trainings Catalog',
+    description: 'Top header title for my trainings catalog route',
   },
   nrasTitle: {
     id: 'app.layout.route.nras.title',

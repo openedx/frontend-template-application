@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "id": "tr-001",
+      "title": "Advanced Pharmacovigilance Masterclass",
+      "description": "Comprehensive training on pharmacovigilance best practices for NRA staff.",
+      "mode": "Virtual",
+      "rating": 4.5,
+      "review_count": 6,
+      "cost": "$800"
+    },
+    {
+      "id": "tr-002",
+      "title": "GMP Compliance Workshop",
+      "description": "Hands-on workshop for GMP compliance in pharmaceutical manufacturing.",
+      "mode": "Hybrid",
+      "rating": 4.6,
+      "review_count": 10,
+      "cost": "$600"
+    }
+  ],
+  "count": 42,
+  "page": 1,
+  "page_size": 20,
+  "total_pages": 3
+}

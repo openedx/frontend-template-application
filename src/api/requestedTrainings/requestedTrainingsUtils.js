@@ -16,13 +16,32 @@ export const normalizeRequestedTrainingFilters = (results) => {
 /**
  * @param {object} row
  */
-export const mapRequestedTrainingListRow = (row) => ({
-  id: row?.id,
-  activity: row?.activity,
-  description: row?.description,
-  status: row?.status,
-  flags: row?.flags,
-});
+export const hasRequestedTrainingIsFlaggedField = (row) => (
+  row != null
+  && typeof row === 'object'
+  && Object.prototype.hasOwnProperty.call(row, 'is_flagged')
+  && row.is_flagged !== null
+  && row.is_flagged !== undefined
+);
+
+/**
+ * @param {object} row
+ */
+export const mapRequestedTrainingListRow = (row) => {
+  const mapped = {
+    id: row?.id,
+    activity: row?.activity,
+    description: row?.description,
+    status: row?.status,
+    flags: row?.flags,
+  };
+
+  if (hasRequestedTrainingIsFlaggedField(row)) {
+    mapped.isFlagged = Boolean(row.is_flagged);
+  }
+
+  return mapped;
+};
 
 /**
  * @param {Array<object>} results

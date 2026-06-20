@@ -1,122 +1,17 @@
-[
-  {
-    "id": "u2",
-    "status": "Active",
-    "createdAt": "Feb 3, 2026",
-    "updatedAt": "Apr 15, 2026",
-    "lastLogin": "2 hours ago",
-    "trainingsCompleted": 3,
-    "completedTrainings": [
-      {
-        "title": "GMP Inspection Fundamentals",
-        "completedOn": "Completed Mar 12, 2026",
-        "score": "92%"
-      },
-      {
-        "title": "Pharmacovigilance Essentials",
-        "completedOn": "Completed Feb 04, 2026",
-        "score": "88%"
-      },
-      {
-        "title": "Bioequivalence Study Review",
-        "completedOn": "Completed Dec 20, 2025",
-        "score": "95%"
-      }
-    ],
-    "trainingStatus": [
-      { "title": "Risk-Based Inspection", "status": "Completed", "progress": 100 },
-      { "title": "Quality Management Systems", "status": "In Progress", "progress": 65 },
-      { "title": "Regulatory Reliance Pathways", "status": "In Progress", "progress": 30 },
-      { "title": "Clinical Trial Oversight", "status": "Not Started", "progress": 0 }
-    ],
-    "competenciesSummary": "3/5 completed",
-    "competencies": [
-      {
-        "title": "Regulatory and scientific guidelines for medicines assessment",
-        "proficiency": "Advanced",
-        "completed": true
-      },
-      {
-        "title": "Stability data and shelf life extrapolation",
-        "proficiency": "Intermediate",
-        "completed": true
-      },
-      {
-        "title": "Container closure system quality assurance",
-        "proficiency": "Advanced",
-        "completed": false
-      },
-      {
-        "title": "GMP inspection methodology",
-        "proficiency": "Expert",
-        "completed": true
-      },
-      {
-        "title": "Pharmacovigilance signal detection",
-        "proficiency": "Intermediate",
-        "completed": false
-      }
-    ],
-    "passportDescription": "View this user's digital regulatory training and competency record"
-  },
-  {
+{
+  "results": {
     "id": "default",
+    "name": "Sample User",
+    "email": "user@example.com",
+    "country": "India",
+    "role": "NRA Admin",
+    "role_sub": "nra-national-lead",
+    "competency_role": "Reviewer",
+    "user_profile_image": "",
     "status": "Active",
-    "createdAt": "Jan 10, 2026",
-    "updatedAt": "Apr 18, 2026",
-    "lastLogin": "1 day ago",
-    "trainingsCompleted": 3,
-    "completedTrainings": [
-      {
-        "title": "GMP Inspection Fundamentals",
-        "completedOn": "Completed Mar 12, 2026",
-        "score": "92%"
-      },
-      {
-        "title": "Pharmacovigilance Essentials",
-        "completedOn": "Completed Feb 04, 2026",
-        "score": "88%"
-      },
-      {
-        "title": "Bioequivalence Study Review",
-        "completedOn": "Completed Dec 20, 2025",
-        "score": "95%"
-      }
-    ],
-    "trainingStatus": [
-      { "title": "Risk-Based Inspection", "status": "Completed", "progress": 100 },
-      { "title": "Quality Management Systems", "status": "In Progress", "progress": 65 },
-      { "title": "Regulatory Reliance Pathways", "status": "In Progress", "progress": 30 },
-      { "title": "Clinical Trial Oversight", "status": "Not Started", "progress": 0 }
-    ],
-    "competenciesSummary": "3/5 completed",
-    "competencies": [
-      {
-        "title": "Regulatory and scientific guidelines for medicines assessment",
-        "proficiency": "Advanced",
-        "completed": true
-      },
-      {
-        "title": "Stability data and shelf life extrapolation",
-        "proficiency": "Intermediate",
-        "completed": true
-      },
-      {
-        "title": "Container closure system quality assurance",
-        "proficiency": "Advanced",
-        "completed": false
-      },
-      {
-        "title": "GMP inspection methodology",
-        "proficiency": "Expert",
-        "completed": true
-      },
-      {
-        "title": "Pharmacovigilance signal detection",
-        "proficiency": "Intermediate",
-        "completed": false
-      }
-    ],
-    "passportDescription": "View this user's digital regulatory training and competency record"
+    "created_at": "Jan 10, 2026",
+    "updated_at": "Apr 18, 2026",
+    "last_login": "1 day ago",
+    "trainings_completed": 3
   }
-]
+}
