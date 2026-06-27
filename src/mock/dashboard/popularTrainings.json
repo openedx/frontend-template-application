@@ -1,0 +1,29 @@
+{
+  "results": [
+    {
+      "id": "pop-001",
+      "name": "GMP Inspection Fundamentals",
+      "completedCount": 142
+    },
+    {
+      "id": "pop-002",
+      "name": "Pharmacovigilance Basics",
+      "completedCount": 118
+    },
+    {
+      "id": "pop-003",
+      "name": "Regulatory Affairs Essentials",
+      "completedCount": 96
+    },
+    {
+      "id": "pop-004",
+      "name": "Clinical Trials Oversight",
+      "completedCount": 84
+    },
+    {
+      "id": "pop-005",
+      "name": "Post-Market Surveillance",
+      "completedCount": 71
+    }
+  ]
+}

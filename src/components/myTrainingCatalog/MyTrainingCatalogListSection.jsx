@@ -5,6 +5,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { FILTER_ALL } from '../../api/searnTrainingCatalog/trainingsCatalogOptionsUtils';
 import ConfirmActionDialog from '../confirmActionDialog/ConfirmActionDialog';
@@ -15,28 +16,43 @@ import SearchableDropdown from '../searchableDropdown/SearchableDropdown';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../skeleton';
 import { useToast } from '../toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
-import useMyTrainingCatalogList from '../../hooks/myTrainingCatalog/useMyTrainingCatalogList';
+import useMyTrainingCatalogList, {
+  myTrainingCatalogListQueryKey,
+} from '../../hooks/myTrainingCatalog/useMyTrainingCatalogList';
+import useTrainingCatalogRequestAccessMutation from '../../hooks/trainingCatalogRequestAccess/useTrainingCatalogRequestAccessMutation';
 import useTrainingCatalogFilterOptions from '../../hooks/searnTrainingCatalog/useTrainingCatalogFilterOptions';
 import catalogMessages from '../../pages/searnTrainingCatalog/messages';
 import { getStarFill } from '../../pages/searnTrainingCatalog/starUtils';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
-import { ADMIN_PATHS } from '../../utils/adminPaths';
+import useTrainingCatalogVariant from '../../hooks/myTrainingCatalog/useTrainingCatalogVariant';
+import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
 import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from '../../pages/myTrainingCatalog/messages';
 import '../../pages/searnTrainingCatalog/SearnTrainingCatalog.scss';
 import '../../pages/myTrainingCatalog/MyTrainingCatalog.scss';
 
-const MyTrainingCatalogListSection = () => {
+const MyTrainingCatalogListSection = ({
+  initialProviderSlug = '',
+  lockProviderFilter = false,
+  lockedProviderLabel = '',
+} = {}) => {
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { componentAccess } = useUserRole();
-  const access = componentAccess?.myTrainingCatalog ?? {};
+  const variant = useTrainingCatalogVariant();
+  const access = componentAccess?.[variant.componentAccessKey] ?? {};
+  const isNraVariant = variant.id === TRAINING_CATALOG_VARIANT_IDS.NRA_SPECIFIC_TRAINING_CATALOG;
+  const queryClient = useQueryClient();
+  const requestAccessMutation = useTrainingCatalogRequestAccessMutation();
 
   const canCreateTraining = Boolean(access.canCreateTraining);
   const canEditTraining = Boolean(access.canEditTraining);
   const canDeleteTraining = Boolean(access.canDeleteTraining);
-  const showActionsColumn = canEditTraining || canDeleteTraining;
+  const canRequestAccess = Boolean(access.canRequestAccess) && isNraVariant;
+  const canViewProviderColumn = Boolean(access.canViewProviderColumn) && isNraVariant;
+  const showProviderColumn = canViewProviderColumn;
+  const showActionsColumn = canEditTraining || canDeleteTraining || canRequestAccess;
 
   const [searchText, setSearchText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,9 +62,14 @@ const MyTrainingCatalogListSection = () => {
   const [subDomainFilter, setSubDomainFilter] = useState(FILTER_ALL);
   const [activityFilter, setActivityFilter] = useState(FILTER_ALL);
   const [nraGoalFilter, setNraGoalFilter] = useState(FILTER_ALL);
+  const [providerSlugFilter, setProviderSlugFilter] = useState(
+    lockProviderFilter && hasDisplayValue(initialProviderSlug) ? initialProviderSlug : '',
+  );
   const [page, setPage] = useState(1);
   const [hiddenIds, setHiddenIds] = useState([]);
   const [pendingDelete, setPendingDelete] = useState(null);
+  const [pendingRequestAccess, setPendingRequestAccess] = useState(null);
+  const [requestedTrainingIds, setRequestedTrainingIds] = useState([]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -58,6 +79,14 @@ const MyTrainingCatalogListSection = () => {
 
     return () => window.clearTimeout(timer);
   }, [searchText]);
+
+  useEffect(() => {
+    if (!hasDisplayValue(initialProviderSlug)) {
+      return;
+    }
+
+    setProviderSlugFilter(initialProviderSlug);
+  }, [initialProviderSlug]);
 
   const {
     frameworkOptions,
@@ -86,6 +115,8 @@ const MyTrainingCatalogListSection = () => {
     subDomainFilter,
     activityFilter,
     nraGoalFilter,
+    providerSlug: providerSlugFilter,
+    catalogVariantId: variant.id,
   });
 
   const visibleItems = useMemo(
@@ -142,6 +173,56 @@ const MyTrainingCatalogListSection = () => {
   const showEmpty = !isLoading && !isError && visibleItems.length === 0;
   const showTable = !isError && visibleItems.length > 0;
   const safePage = Math.min(page, Math.max(1, totalPages));
+
+  const isTrainingRequested = (row) => (
+    Boolean(row.isRequested) || requestedTrainingIds.includes(row.id)
+  );
+
+  const handleConfirmRequestAccess = async () => {
+    if (!pendingRequestAccess?.id) {
+      return;
+    }
+
+    try {
+      const result = await requestAccessMutation.mutateAsync({
+        catalogVariantId: variant.id,
+        trainingId: pendingRequestAccess.id,
+      });
+
+      setRequestedTrainingIds((current) => (
+        current.includes(pendingRequestAccess.id)
+          ? current
+          : [...current, pendingRequestAccess.id]
+      ));
+
+      await queryClient.invalidateQueries({
+        queryKey: myTrainingCatalogListQueryKey({
+          page,
+          search: searchQuery,
+          frameworkFilter,
+          roleFilter,
+          domainFilter,
+          subDomainFilter,
+          activityFilter,
+          nraGoalFilter,
+          catalogVariantId: variant.id,
+        }),
+      });
+
+      showToast({
+        title: formatMessage(catalogMessages.requestAccessSubmittedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(catalogMessages.requestAccessSubmittedDescription),
+      });
+      setPendingRequestAccess(null);
+    } catch (error) {
+      showToast({
+        title: formatMessage(catalogMessages.requestAccessCreateErrorTitle),
+        description: error?.message || formatMessage(catalogMessages.requestAccessCreateError),
+      });
+    }
+  };
 
   return (
     <>
@@ -231,7 +312,7 @@ const MyTrainingCatalogListSection = () => {
             <button
               type="button"
               className="my-training-catalog-page__primary-button"
-              onClick={() => navigate(ADMIN_PATHS.myTrainingCatalogNew)}
+              onClick={() => navigate(variant.paths.new)}
             >
               <FontAwesomeIcon icon={faPlus} aria-hidden />
               {formatMessage(messages.createTraining)}
@@ -264,6 +345,9 @@ const MyTrainingCatalogListSection = () => {
                 <tr className="searn-training-catalog-page__thead-row">
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnTraining)}</th>
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnMode)}</th>
+                  {showProviderColumn && (
+                    <th className="searn-training-catalog-page__th">{formatMessage(catalogMessages.columnProvider)}</th>
+                  )}
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnSatisfaction)}</th>
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnCost)}</th>
                   {showActionsColumn && (
@@ -278,7 +362,7 @@ const MyTrainingCatalogListSection = () => {
                   <tr
                     key={row.id}
                     className="searn-training-catalog-page__row"
-                    onClick={() => navigate(ADMIN_PATHS.myTrainingCatalogDetail(row.id))}
+                    onClick={() => navigate(variant.paths.detail(row.id))}
                   >
                     <td className="searn-training-catalog-page__td">
                       <div className="searn-training-catalog-page__training-cell">
@@ -298,6 +382,26 @@ const MyTrainingCatalogListSection = () => {
                     <td className="searn-training-catalog-page__td">
                       {hasDisplayValue(row.mode) && <span>{row.mode}</span>}
                     </td>
+                    {showProviderColumn && (
+                      <td className="searn-training-catalog-page__td">
+                        {hasDisplayValue(row.provider) && (
+                          <button
+                            type="button"
+                            className="searn-training-catalog-page__provider-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (hasDisplayValue(row.providerSlug) && variant.paths?.provider) {
+                                navigate(variant.paths.provider(row.providerSlug));
+                              }
+                            }}
+                            title={row.provider}
+                            disabled={!hasDisplayValue(row.providerSlug)}
+                          >
+                            {row.provider}
+                          </button>
+                        )}
+                      </td>
+                    )}
                     <td className="searn-training-catalog-page__td">
                       {typeof row.rating === 'number' && (
                         <button
@@ -305,7 +409,7 @@ const MyTrainingCatalogListSection = () => {
                           className="searn-training-catalog-page__rating-button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate(ADMIN_PATHS.myTrainingCatalogFeedback(row.id));
+                            navigate(variant.paths.feedback(row.id));
                           }}
                           title={formatMessage(catalogMessages.userFeedback)}
                         >
@@ -353,37 +457,58 @@ const MyTrainingCatalogListSection = () => {
                     </td>
                     {showActionsColumn && (
                       <td className="searn-training-catalog-page__td my-training-catalog-page__actions-cell">
-                        {canEditTraining && (
-                          <button
-                            type="button"
-                            className="my-training-catalog-page__icon-button"
-                            aria-label={formatMessage(messages.editTraining)}
-                            title={formatMessage(messages.editTraining)}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              showToast({
-                                title: formatMessage(messages.editUnavailableTitle),
-                                description: formatMessage(messages.editUnavailableDescription),
-                              });
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faPen} />
-                          </button>
-                        )}
-                        {canDeleteTraining && (
-                          <button
-                            type="button"
-                            className="my-training-catalog-page__icon-button my-training-catalog-page__icon-button--danger"
-                            aria-label={formatMessage(messages.deleteTraining)}
-                            title={formatMessage(messages.deleteTraining)}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPendingDelete(row);
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </button>
-                        )}
+                        <div className="my-training-catalog-page__actions-group">
+                          {(canEditTraining || canDeleteTraining) && (
+                            <div className="my-training-catalog-page__icon-actions">
+                              {canEditTraining && (
+                                <button
+                                  type="button"
+                                  className="my-training-catalog-page__icon-button"
+                                  aria-label={formatMessage(messages.editTraining)}
+                                  title={formatMessage(messages.editTraining)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(variant.paths.edit(row.id));
+                              }}
+                                >
+                                  <FontAwesomeIcon icon={faPen} />
+                                </button>
+                              )}
+                              {canDeleteTraining && (
+                                <button
+                                  type="button"
+                                  className="my-training-catalog-page__icon-button my-training-catalog-page__icon-button--danger"
+                                  aria-label={formatMessage(messages.deleteTraining)}
+                                  title={formatMessage(messages.deleteTraining)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setPendingDelete(row);
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                              )}
+                            </div>
+                          )}
+                          {canRequestAccess && (
+                            isTrainingRequested(row) ? (
+                              <span className="searn-training-catalog-page__requested-badge">
+                                {formatMessage(catalogMessages.requested)}
+                              </span>
+                            ) : (
+                              <button
+                                type="button"
+                                className="searn-training-catalog-page__outline-button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPendingRequestAccess(row);
+                                }}
+                              >
+                                {formatMessage(catalogMessages.requestAccess)}
+                              </button>
+                            )
+                          )}
+                        </div>
                       </td>
                     )}
                   </tr>
@@ -417,6 +542,18 @@ const MyTrainingCatalogListSection = () => {
         confirmLabel={formatMessage(messages.deleteDialogConfirm)}
         onCancel={() => setPendingDelete(null)}
         onConfirm={handleConfirmDelete}
+      />
+
+      <ConfirmActionDialog
+        isOpen={Boolean(pendingRequestAccess)}
+        title={formatMessage(catalogMessages.requestAccessConfirmTitle)}
+        description={formatMessage(catalogMessages.requestAccessConfirmDescription, {
+          name: pendingRequestAccess?.title || '',
+        })}
+        cancelLabel={formatMessage(catalogMessages.requestAccessConfirmCancel)}
+        confirmLabel={formatMessage(catalogMessages.requestAccessConfirmSubmit)}
+        onCancel={() => setPendingRequestAccess(null)}
+        onConfirm={handleConfirmRequestAccess}
       />
     </>
   );

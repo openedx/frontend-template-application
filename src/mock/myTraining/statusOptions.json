@@ -1,0 +1,19 @@
+{
+  "results": [
+    {
+      "id": "not_started",
+      "value": "not_started",
+      "label": "Not Started"
+    },
+    {
+      "id": "in_progress",
+      "value": "in_progress",
+      "label": "In Progress"
+    },
+    {
+      "id": "completed",
+      "value": "completed",
+      "label": "Completed"
+    }
+  ]
+}

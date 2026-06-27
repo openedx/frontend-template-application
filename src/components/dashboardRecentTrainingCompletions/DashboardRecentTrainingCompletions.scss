@@ -1,0 +1,114 @@
+.dashboard-recent-training-completions {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: .75rem;
+  box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: #2A3B8F;
+  }
+
+  &__empty {
+    padding: 1.5rem;
+    min-height: 120px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__item {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid #E5E7EB;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  &__main {
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__title-text {
+    margin: 0;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: #2A3B8F;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__meta {
+    margin: .125rem 0 0;
+    font-size: .75rem;
+    line-height: 1rem;
+    color: #505B95;
+  }
+
+  &__proof-badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    font-size: .75rem;
+    line-height: 1rem;
+    font-weight: 600;
+    padding: .25rem .5rem;
+    border-radius: 9999px;
+    background: #ECFDF5;
+    color: #047857;
+  }
+
+  &__proof-icon {
+    width: .75rem;
+    height: .75rem;
+  }
+
+  &__footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #E5E7EB;
+  }
+
+  &__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    color: #2A3B8F;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgb(42 59 143 / .35);
+      outline-offset: 2px;
+    }
+  }
+
+  &__view-all-icon {
+    width: .875rem;
+    height: .875rem;
+  }
+}

@@ -118,5 +118,95 @@
     "country": "Maldives",
     "joined": "Mar 22, 2026",
     "mode": "Hybrid"
+  },
+  {
+    "id": "u23",
+    "name": "Ms. Nadia Farooq",
+    "email": "nadia@nra.bd",
+    "role": "NRA Admin",
+    "country": "Bangladesh",
+    "joined": "Apr 1, 2026",
+    "mode": "Virtual"
+  },
+  {
+    "id": "u24",
+    "name": "Mr. Vikram Singh",
+    "email": "vikram@nra.in",
+    "role": "Training Provider",
+    "country": "India",
+    "joined": "Apr 3, 2026",
+    "mode": "Hybrid"
+  },
+  {
+    "id": "u25",
+    "name": "Dr. Yuki Sato",
+    "email": "yuki@nra.jp",
+    "role": "SEARN Secretariat",
+    "country": "Japan",
+    "joined": "Apr 5, 2026",
+    "mode": "In-person"
+  },
+  {
+    "id": "u26",
+    "name": "Ms. Amina Khan",
+    "email": "amina@nra.pk",
+    "role": "IT Support",
+    "country": "Pakistan",
+    "joined": "Apr 8, 2026",
+    "mode": "Virtual"
+  },
+  {
+    "id": "u27",
+    "name": "Mr. Daniel Wong",
+    "email": "daniel@nra.sg",
+    "role": "Training Provider",
+    "country": "Singapore",
+    "joined": "Apr 10, 2026",
+    "mode": "Hybrid"
+  },
+  {
+    "id": "u28",
+    "name": "Dr. Olga Ivanova",
+    "email": "olga@nra.kz",
+    "role": "NRA Admin",
+    "country": "Kazakhstan",
+    "joined": "Apr 12, 2026",
+    "mode": "In-person"
+  },
+  {
+    "id": "u29",
+    "name": "Mr. Sanjeewa Perera",
+    "email": "sanjeewa@nra.lk",
+    "role": "Training Provider",
+    "country": "Sri Lanka",
+    "joined": "Apr 14, 2026",
+    "mode": "Virtual"
+  },
+  {
+    "id": "u30",
+    "name": "Ms. Sofia Almeida",
+    "email": "sofia@nra.pt",
+    "role": "SEARN Secretariat",
+    "country": "Portugal",
+    "joined": "Apr 16, 2026",
+    "mode": "Hybrid"
+  },
+  {
+    "id": "u31",
+    "name": "Dr. Chidi Eze",
+    "email": "chidi@nra.ng",
+    "role": "IT Support",
+    "country": "Nigeria",
+    "joined": "Apr 18, 2026",
+    "mode": "In-person"
+  },
+  {
+    "id": "u32",
+    "name": "Ms. Hannah Becker",
+    "email": "hannah@nra.de",
+    "role": "Training Provider",
+    "country": "Germany",
+    "joined": "Apr 20, 2026",
+    "mode": "Virtual"
   }
 ]

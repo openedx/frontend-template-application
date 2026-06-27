@@ -3,6 +3,13 @@
   flex-direction: column;
   gap: 2rem;
 
+  &__page-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2A3B8F;
+  }
+
   &__grid {
     display: grid;
     grid-template-columns: 1fr;

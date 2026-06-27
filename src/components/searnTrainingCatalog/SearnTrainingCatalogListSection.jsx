@@ -1,21 +1,27 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { faBookOpen, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faPaperPlane, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useRequestedTrainingMutations from '../../hooks/requestedTrainings/useRequestedTrainingMutations';
 import { FILTER_ALL } from '../../api/searnTrainingCatalog/trainingsCatalogOptionsUtils';
+import ConfirmActionDialog from '../confirmActionDialog/ConfirmActionDialog';
 import { EmptyState } from '../emptyState';
 import { TablePaginationFooter } from '../dataTable';
 import SearchInput from '../searchInput/SearchInput';
 import SearchableDropdown from '../searchableDropdown/SearchableDropdown';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../skeleton';
 import { useToast } from '../toast/ToastProvider';
+import RequestTrainingModal from './RequestTrainingModal';
+import { useUserRole } from '../../contexts/UserRoleContext';
 import useSearnTrainingCatalogList from '../../hooks/searnTrainingCatalog/useSearnTrainingCatalogList';
 import useTrainingCatalogFilterOptions from '../../hooks/searnTrainingCatalog/useTrainingCatalogFilterOptions';
+import useTrainingCatalogRequestAccessMutation from '../../hooks/trainingCatalogRequestAccess/useTrainingCatalogRequestAccessMutation';
 import messages from '../../pages/searnTrainingCatalog/messages';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import { ADMIN_PATHS } from '../../utils/adminPaths';
+import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
 import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import { getStarFill } from '../../pages/searnTrainingCatalog/starUtils';
 import '../../pages/searnTrainingCatalog/SearnTrainingCatalog.scss';
@@ -35,6 +41,18 @@ const SearnTrainingCatalogListSection = ({
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { componentAccess } = useUserRole();
+  const access = componentAccess?.searnTrainingCatalog ?? {};
+
+  const canRequestTraining = Boolean(access.canRequestTraining);
+  const canRequestAccess = Boolean(access.canRequestAccess);
+
+  const [requestTrainingModalOpen, setRequestTrainingModalOpen] = useState(false);
+  const [requestedTrainingIds, setRequestedTrainingIds] = useState([]);
+  const [pendingRequestAccess, setPendingRequestAccess] = useState(null);
+
+  const { createMutation } = useRequestedTrainingMutations();
+  const requestAccessMutation = useTrainingCatalogRequestAccessMutation();
 
   const [searchText, setSearchText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -136,6 +154,69 @@ const SearnTrainingCatalogListSection = ({
   const showEmpty = !isLoading && !isError && items.length === 0;
   const showTable = !isError && items.length > 0;
   const safePage = Math.min(page, Math.max(1, totalPages));
+
+  const isTrainingRequested = (row) => (
+    Boolean(row.isRequested) || requestedTrainingIds.includes(row.id)
+  );
+
+  const handleRequestTrainingSubmit = async ({ activityId, description }) => {
+    const parsedActivityId = Number(activityId);
+    if (!Number.isFinite(parsedActivityId)) {
+      return;
+    }
+
+    try {
+      const result = await createMutation.mutateAsync({
+        activityId: parsedActivityId,
+        description,
+      });
+
+      setRequestTrainingModalOpen(false);
+      showToast({
+        title: formatMessage(messages.requestTrainingSubmittedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.requestTrainingSubmittedDescription),
+      });
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.requestTrainingCreateErrorTitle),
+        description: error?.message || formatMessage(messages.requestTrainingCreateError),
+      });
+    }
+  };
+
+  const handleConfirmRequestAccess = async () => {
+    if (!pendingRequestAccess?.id) {
+      return;
+    }
+
+    try {
+      const result = await requestAccessMutation.mutateAsync({
+        catalogVariantId: TRAINING_CATALOG_VARIANT_IDS.SEARN_TRAINING_CATALOG,
+        trainingId: pendingRequestAccess.id,
+      });
+
+      setRequestedTrainingIds((current) => (
+        current.includes(pendingRequestAccess.id)
+          ? current
+          : [...current, pendingRequestAccess.id]
+      ));
+
+      showToast({
+        title: formatMessage(messages.requestAccessSubmittedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.requestAccessSubmittedDescription),
+      });
+      setPendingRequestAccess(null);
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.requestAccessCreateErrorTitle),
+        description: error?.message || formatMessage(messages.requestAccessCreateError),
+      });
+    }
+  };
 
   const lockedProviderOptions = hasDisplayValue(lockedProviderLabel)
     ? [{ value: providerFilter, label: lockedProviderLabel }]
@@ -247,6 +328,19 @@ const SearnTrainingCatalogListSection = ({
             />
           )}
         </div>
+
+        {canRequestTraining && (
+          <div className="searn-training-catalog-page__actions-row">
+            <button
+              type="button"
+              className="searn-training-catalog-page__primary-button"
+              onClick={() => setRequestTrainingModalOpen(true)}
+            >
+              <FontAwesomeIcon icon={faPaperPlane} aria-hidden />
+              {formatMessage(messages.requestTraining)}
+            </button>
+          </div>
+        )}
       </div>
 
       {showTableSkeleton && (
@@ -276,6 +370,11 @@ const SearnTrainingCatalogListSection = ({
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnProvider)}</th>
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnSatisfaction)}</th>
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnCost)}</th>
+                  {canRequestAccess && (
+                    <th className="searn-training-catalog-page__th searn-training-catalog-page__th--right">
+                      {formatMessage(messages.columnAction)}
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -364,6 +463,26 @@ const SearnTrainingCatalogListSection = ({
                     <td className="searn-training-catalog-page__td" style={{ fontWeight: 600 }}>
                       {hasDisplayValue(row.cost) && row.cost}
                     </td>
+                    {canRequestAccess && (
+                      <td className="searn-training-catalog-page__td searn-training-catalog-page__td--actions">
+                        {isTrainingRequested(row) ? (
+                          <span className="searn-training-catalog-page__requested-badge">
+                            {formatMessage(messages.requested)}
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            className="searn-training-catalog-page__outline-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPendingRequestAccess(row);
+                            }}
+                          >
+                            {formatMessage(messages.requestAccess)}
+                          </button>
+                        )}
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -384,6 +503,27 @@ const SearnTrainingCatalogListSection = ({
           )}
         </div>
       )}
+
+      {canRequestTraining && (
+        <RequestTrainingModal
+          isOpen={requestTrainingModalOpen}
+          onClose={() => setRequestTrainingModalOpen(false)}
+          onSubmit={handleRequestTrainingSubmit}
+          isSubmitting={createMutation.isPending}
+        />
+      )}
+
+      <ConfirmActionDialog
+        isOpen={Boolean(pendingRequestAccess)}
+        title={formatMessage(messages.requestAccessConfirmTitle)}
+        description={formatMessage(messages.requestAccessConfirmDescription, {
+          name: pendingRequestAccess?.title || '',
+        })}
+        cancelLabel={formatMessage(messages.requestAccessConfirmCancel)}
+        confirmLabel={formatMessage(messages.requestAccessConfirmSubmit)}
+        onCancel={() => setPendingRequestAccess(null)}
+        onConfirm={handleConfirmRequestAccess}
+      />
     </>
   );
 };

@@ -1,0 +1,116 @@
+.dashboard-quick-actions {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: .75rem;
+  box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: #2A3B8F;
+  }
+
+  &__subtitle {
+    margin: .25rem 0 0;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    color: #6B7280;
+  }
+
+  &__empty {
+    padding: 1.5rem;
+    min-height: 120px;
+  }
+
+  &__list {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: 1rem;
+    border: 1px solid #E5E7EB;
+    border-radius: .5rem;
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+
+  &__item--link {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover {
+      border-color: #2A3B8F;
+      background: rgb(42 59 143 / .05);
+
+      .dashboard-quick-actions__chevron {
+        color: #2A3B8F;
+        transform: translateX(.25rem);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgb(42 59 143 / .35);
+      outline-offset: 2px;
+    }
+  }
+
+  &__icon-wrap {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &--missing {
+      background: #6B7280;
+    }
+  }
+
+  &__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #FFFFFF;
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__label {
+    margin: 0;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    color: #2A3B8F;
+  }
+
+  &__description {
+    margin: 0;
+    font-size: .75rem;
+    line-height: 1rem;
+    color: #6B7280;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    color: #6B7280;
+    transition: color .15s ease, transform .15s ease;
+  }
+}

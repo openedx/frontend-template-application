@@ -52,10 +52,10 @@
     background: #FFFFFF;
     padding: .5rem .75rem .5rem 2.25rem;
     font-size: .875rem;
-    color: #111827;
+    color: #2A398D;
 
     &::placeholder {
-      color: #9CA3AF;
+      color: #2A398D;
     }
 
     &:focus {
@@ -106,15 +106,15 @@
     margin: 0;
     font-size: .875rem;
     font-weight: 600;
-    color: #111827;
-    line-height: 1.35;
+    color: #2A3B8F;
+    line-height: 1.25rem;
   }
 
   &__activity-desc {
     margin: .125rem 0 0;
     font-size: .75rem;
     color: #6B7280;
-    line-height: 1.35;
+    line-height: 1rem;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
@@ -124,10 +124,12 @@
   &__muted {
     color: #6B7280;
     font-size: .875rem;
+    line-height: 1.25rem;
   }
 
   &__text {
     font-size: .875rem;
-    color: #111827;
+    line-height: 1.25rem;
+    color: #6B7280;
   }
 }

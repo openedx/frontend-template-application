@@ -2,9 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { API_PAGE_SIZE } from '../../api/endpoints';
 import { resolveMyTrainingCatalogListMock } from '../../api/myTrainingCatalog/myTrainingCatalogPageMockData';
 
+import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
+
 export const myTrainingCatalogListQueryKey = (filters) => [
-  'my-training-catalog',
+  'training-catalog',
   'list',
+  filters.catalogVariantId ?? TRAINING_CATALOG_VARIANT_IDS.MY_TRAINING_CATALOG,
   filters.page,
   filters.search ?? '',
   filters.frameworkFilter ?? 'all',
@@ -13,6 +16,7 @@ export const myTrainingCatalogListQueryKey = (filters) => [
   filters.subDomainFilter ?? 'all',
   filters.activityFilter ?? 'all',
   filters.nraGoalFilter ?? 'all',
+  filters.providerSlug ?? '',
 ];
 
 /**
@@ -27,6 +31,8 @@ export const myTrainingCatalogListQueryKey = (filters) => [
  *   subDomainFilter?: string,
  *   activityFilter?: string,
  *   nraGoalFilter?: string,
+ *   providerSlug?: string,
+ *   catalogVariantId?: string,
  *   enabled?: boolean,
  * }} options
  */
@@ -39,6 +45,8 @@ const useMyTrainingCatalogList = ({
   subDomainFilter = 'all',
   activityFilter = 'all',
   nraGoalFilter = 'all',
+  providerSlug = '',
+  catalogVariantId = TRAINING_CATALOG_VARIANT_IDS.MY_TRAINING_CATALOG,
   enabled = true,
 } = {}) => {
   const query = useQuery({
@@ -51,12 +59,16 @@ const useMyTrainingCatalogList = ({
       subDomainFilter,
       activityFilter,
       nraGoalFilter,
+      catalogVariantId,
+      providerSlug,
     }),
     enabled,
     queryFn: async () => resolveMyTrainingCatalogListMock({
       page,
       pageSize: API_PAGE_SIZE,
       search,
+      catalogVariantId,
+      providerSlug,
     }),
   });
 

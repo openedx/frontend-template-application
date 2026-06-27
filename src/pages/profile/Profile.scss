@@ -159,6 +159,11 @@
     color: #2A398D;
   }
 
+  &__label-optional {
+    font-weight: 400;
+    color: #6B7280;
+  }
+
   &__input,
   &__textarea {
     width: 100%;
@@ -211,9 +216,43 @@
     border-top: 1px solid #E5E7EB;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    flex-wrap: wrap;
+  }
+
+  &__footer-start {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__footer-actions {
+    display: flex;
+    align-items: center;
     justify-content: flex-end;
     gap: .75rem;
     flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  &__request-admin-button {
+    height: 44px;
+    border-radius: .5rem;
+    border: 2px solid rgb(42 59 143 / .30);
+    background: transparent;
+    color: #2A3B8F;
+    font-size: .875rem;
+    font-weight: 600;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+
+    &:hover {
+      background: rgb(42 59 143 / .05);
+    }
   }
 
   &__outline-button,

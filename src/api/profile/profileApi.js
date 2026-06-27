@@ -2,10 +2,21 @@ import { executeApiRequest } from '../apiRequest';
 import {
   ROLE_ASSIGNMENT_LANGUAGES,
   ROLE_ASSIGNMENT_PROFILE,
+  ROLE_ASSIGNMENT_PROFILE_MANAGER_OPTIONS,
 } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
-import { buildProfilePatchFormData } from './profileUtils';
 import profileMessages from '../../pages/profile/messages';
+import {
+  buildProfilePatchBody,
+  buildProfilePatchFormData,
+  buildProfileRequestAdminRoleBody,
+} from './profileUtils';
+import {
+  resolveCurrentUserProfileSaveMock,
+} from './profilePageMockData';
+import { resolveProfileManagerOptionsMock } from './profileManagerOptionsMockData';
+
+const USE_PROFILE_MOCK = true;
 
 /**
  * @param {{ formatMessage: Function }} params
@@ -34,13 +45,40 @@ export const fetchProfileLanguages = ({ formatMessage }) => executeApiRequest({
 });
 
 /**
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchProfileManagerOptions = ({ formatMessage }) => {
+  if (USE_PROFILE_MOCK) {
+    return Promise.resolve({
+      ok: true,
+      message: null,
+      data: resolveProfileManagerOptionsMock(),
+    });
+  }
+
+  return executeApiRequest({
+    request: () => {
+      const httpClient = getHttpClient();
+      const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE_MANAGER_OPTIONS}`;
+      return httpClient.get(url);
+    },
+    formatMessage,
+    fallbackMessage: profileMessages.managerOptionsLoadError,
+  });
+};
+
+/**
  * @param {{
  *   formatMessage: Function,
- *   fullName: string,
- *   country: string,
- *   language: string,
- *   about: string,
+ *   fullName?: string,
+ *   country?: string,
+ *   language?: string,
+ *   about?: string,
+ *   manager?: string,
+ *   competencyRole?: string[]|string,
  *   profileImageFile?: File|null,
+ *   profileImagePreviewUrl?: string,
+ *   requestAdminRole?: boolean,
  * }} params
  */
 export const patchCurrentUserProfile = ({
@@ -49,32 +87,68 @@ export const patchCurrentUserProfile = ({
   country,
   language,
   about,
+  manager,
+  competencyRole,
   profileImageFile = null,
-}) => executeApiRequest({
-  request: () => {
-    const httpClient = getHttpClient();
-    const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE}`;
-    const hasImageFile = profileImageFile instanceof File;
+  profileImagePreviewUrl = '',
+  requestAdminRole = false,
+}) => {
+  if (USE_PROFILE_MOCK) {
+    const result = resolveCurrentUserProfileSaveMock({
+      fullName,
+      country,
+      language,
+      about,
+      manager,
+      competencyRole,
+      profileImagePreviewUrl,
+      requestAdminRole,
+    });
 
-    if (hasImageFile) {
-      const formData = buildProfilePatchFormData({
+    return Promise.resolve({
+      ok: result.ok,
+      message: result.message,
+      data: result.data,
+    });
+  }
+
+  return executeApiRequest({
+    request: () => {
+      const httpClient = getHttpClient();
+      const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE}`;
+
+      if (requestAdminRole) {
+        return httpClient.patch(url, buildProfileRequestAdminRoleBody({ requestAdminRole: true }));
+      }
+
+      const hasImageFile = profileImageFile instanceof File;
+
+      if (hasImageFile) {
+        const formData = buildProfilePatchFormData({
+          fullName,
+          country,
+          language,
+          about,
+          manager,
+          competencyRole,
+          profileImageFile,
+        });
+
+        return httpClient.patch(url, formData);
+      }
+
+      return httpClient.patch(url, buildProfilePatchBody({
         fullName,
         country,
         language,
         about,
-        profileImageFile,
-      });
-
-      return httpClient.patch(url, formData);
-    }
-
-    return httpClient.patch(url, {
-      full_name: fullName.trim(),
-      country: String(country),
-      language: String(language),
-      about: about.trim(),
-    });
-  },
-  formatMessage,
-  fallbackMessage: profileMessages.profileSaveError,
-});
+        manager,
+        competencyRole,
+      }));
+    },
+    formatMessage,
+    fallbackMessage: requestAdminRole
+      ? profileMessages.requestAdminRoleError
+      : profileMessages.profileSaveError,
+  });
+};

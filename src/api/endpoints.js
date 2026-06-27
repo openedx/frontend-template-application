@@ -9,8 +9,35 @@ export const DASHBOARD_STATS = '/api/v1/dashboard/stats/';
 export const DASHBOARD_USERS_PER_COUNTRY = '/api/v1/dashboard/users-per-country/';
 export const DASHBOARD_TOP_REQUESTED_ACTIVITIES = '/api/v1/dashboard/top-requested-activities/?limit=5';
 export const DASHBOARD_TOP_TRAININGS = '/api/v1/dashboard/top-trainings/';
+export const DASHBOARD_RECENT_ACTIVITIES = '/api/v1/dashboard/recent-activities/';
+export const DASHBOARD_POPULAR_TRAININGS = '/api/v1/dashboard/popular-trainings/';
+export const DASHBOARD_QUICK_ACTIONS = '/api/v1/dashboard/quick-actions/';
+export const DASHBOARD_RECENT_TRAINING_COMPLETIONS = '/api/v1/dashboard/recent-training-completions/';
 
 export const MY_TRAINING_CATALOG_LIST = '/api/v1/my-training-catalog/';
+export const NRA_SPECIFIC_TRAINING_CATALOG_LIST = '/api/v1/nra-specific-training-catalog/';
+
+/** @param {string|number} trainingId */
+export const nraSpecificTrainingCatalogRequestAccess = (trainingId) => (
+  `/api/v1/nra-specific-training-catalog/${trainingId}/request-access/`
+);
+
+/** @param {string|number} trainingId */
+export const searnTrainingCatalogRequestAccess = (trainingId) => (
+  `/api/v1/searn-training-catalog/${trainingId}/request-access/`
+);
+
+export const MY_TRAINING_LIST = '/api/v1/my-training/';
+export const MY_TRAINING_STATUS_OPTIONS = '/api/v1/my-training/status-options/';
+
+export const MY_TEAM_LIST = '/api/v1/my-team/members/';
+export const MY_TEAM_CANDIDATE_USERS = '/api/v1/my-team/candidate-users/';
+
+/** @param {string|number} userId */
+export const myTeamMemberDetail = (userId) => `/api/v1/my-team/members/${userId}/`;
+
+/** @param {string|number} trainingId */
+export const myTrainingDetail = (trainingId) => `/api/v1/my-training/${trainingId}/`;
 
 /** `page_size` for pending requests on the dashboard card. */
 export const DASHBOARD_PENDING_REQUESTS_PAGE_SIZE = 4;
@@ -65,6 +92,7 @@ export const REQUESTED_TRAININGS_LIST = '/api/v1/requested-trainings/';
 export const REQUESTED_TRAININGS_ACTIVITIES = '/api/v1/requested-trainings/activities/';
 
 export const ROLE_ASSIGNMENT_PROFILE = '/api/v1/role-assignment/profile/';
+export const ROLE_ASSIGNMENT_PROFILE_MANAGER_OPTIONS = '/api/v1/role-assignment/profile/manager-options/';
 export const ROLE_ASSIGNMENT_LANGUAGES = '/api/v1/role-assignment/languages/';
 export const ROLE_ASSIGNMENT_ROLES = '/api/v1/role-assignment/roles/';
 export const ROLE_ASSIGNMENT_ROLE_OPTIONS = '/api/v1/role-assignment/roles/options/';

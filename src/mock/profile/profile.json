@@ -1,9 +1,13 @@
 {
-  "fullName": "Secretariat",
-  "email": "secretariat@who.int",
-  "country": "Bangladesh",
-  "language": "English",
-  "about": "Regulatory officer focused on pharmacovigilance and inspections within the South-East Asia Region.",
-  "profile_image_url": ""
+  "results": {
+    "full_name": "Secretariat",
+    "email": "secretariat@who.int",
+    "country": "Bangladesh",
+    "language": "English",
+    "about": "Regulatory officer focused on pharmacovigilance and inspections within the South-East Asia Region.",
+    "profile_image_url": "https://cdn.example.com/users/u123/profile.jpg",
+    "manager": "manager-u2",
+    "competency_role": ["Reviewer", "Inspector"],
+    "is_admin": false
+  }
 }
-

@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "id": "rtc-001",
+      "title": "Regulatory Systems Strengthening",
+      "provider": "WHO AFRO Training Centre",
+      "completedDate": "2026-01-12",
+      "hasProof": true
+    },
+    {
+      "id": "rtc-002",
+      "title": "GMP Inspection Fundamentals",
+      "provider": "WHO Prequalification",
+      "completedDate": "2026-01-12",
+      "hasProof": true
+    },
+    {
+      "id": "rtc-003",
+      "title": "Bioequivalence Assessment — Level II",
+      "provider": "SEARN e-Learning Hub",
+      "completedDate": "2025-03-03",
+      "hasProof": true
+    }
+  ]
+}

@@ -1,13 +1,16 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { EmptyState } from '../../components/emptyState';
 import MultiSelectInput from '../../components/multiSelectInput/MultiSelectInput';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
+import { mapMyTrainingCatalogFormDetailToState } from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
+import useMyTrainingCatalogFormDetail from '../../hooks/myTrainingCatalog/useMyTrainingCatalogFormDetail';
 import useMyTrainingCatalogFormOptions from '../../hooks/myTrainingCatalog/useMyTrainingCatalogFormOptions';
+import useTrainingCatalogVariant from '../../hooks/myTrainingCatalog/useTrainingCatalogVariant';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
-import { ADMIN_PATHS } from '../../utils/adminPaths';
 import catalogMessages from '../searnTrainingCatalog/messages';
 import messages from './messages';
 import './MyTrainingCatalogCreate.scss';
@@ -19,6 +22,9 @@ const MyTrainingCatalogCreate = () => {
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { trainingId } = useParams();
+  const variant = useTrainingCatalogVariant();
+  const isEditMode = hasDisplayValue(trainingId);
 
   const {
     languageOptions,
@@ -30,8 +36,18 @@ const MyTrainingCatalogCreate = () => {
     nraObjectiveOptions,
     mappedCompetencyOptions,
     mappedActivityOptions,
-    isLoading,
-  } = useMyTrainingCatalogFormOptions();
+    isLoading: isOptionsLoading,
+  } = useMyTrainingCatalogFormOptions({ enabled: true });
+
+  const {
+    training,
+    isLoading: isDetailLoading,
+    isError: isDetailError,
+    errorMessage: detailErrorMessage,
+  } = useMyTrainingCatalogFormDetail({
+    trainingId,
+    enabled: isEditMode,
+  });
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -48,9 +64,83 @@ const MyTrainingCatalogCreate = () => {
   const [mappedActivities, setMappedActivities] = useState([]);
   const [registrationBy, setRegistrationBy] = useState(REGISTRATION_URL);
   const [registrationValue, setRegistrationValue] = useState('');
+  const [isFormPrefilled, setIsFormPrefilled] = useState(false);
 
   const dropdownSearchPlaceholder = formatMessage(catalogMessages.dropdownSearchPlaceholder);
   const dropdownNoOptions = formatMessage(catalogMessages.dropdownNoOptions);
+  const isLoading = isOptionsLoading || (isEditMode && isDetailLoading);
+  const showLoadError = isEditMode && isDetailError;
+
+  useEffect(() => {
+    if (!isEditMode) {
+      setIsFormPrefilled(false);
+      return;
+    }
+
+    if (!training || isOptionsLoading || isFormPrefilled) {
+      return;
+    }
+
+    const nextState = mapMyTrainingCatalogFormDetailToState(training, {
+      languageOptions,
+      modeOptions,
+      approachOptions,
+      evaluationOptions,
+      outcomeOptions,
+      productTypeOptions,
+      nraObjectiveOptions,
+      mappedCompetencyOptions,
+      mappedActivityOptions,
+    });
+
+    if (!nextState) {
+      return;
+    }
+
+    setName(nextState.name);
+    setDescription(nextState.description);
+    setLanguage(nextState.language);
+    setDuration(nextState.duration);
+    setCost(nextState.cost);
+    setMode(nextState.mode);
+    setApproach(nextState.approach);
+    setEvaluation(nextState.evaluation);
+    setOutcome(nextState.outcome);
+    setProductType(nextState.productType);
+    setNraObjectives(nextState.nraObjectives);
+    setMappedCompetencies(nextState.mappedCompetencies);
+    setMappedActivities(nextState.mappedActivities);
+    setRegistrationBy(nextState.registrationBy === REGISTRATION_EMAIL
+      ? REGISTRATION_EMAIL
+      : REGISTRATION_URL);
+    setRegistrationValue(nextState.registrationValue);
+    setIsFormPrefilled(true);
+  }, [
+    approachOptions,
+    evaluationOptions,
+    isEditMode,
+    isFormPrefilled,
+    isOptionsLoading,
+    languageOptions,
+    mappedActivityOptions,
+    mappedCompetencyOptions,
+    modeOptions,
+    nraObjectiveOptions,
+    outcomeOptions,
+    productTypeOptions,
+    training,
+  ]);
+
+  useEffect(() => {
+    if (!showLoadError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.formDetailLoadErrorTitle),
+      description: detailErrorMessage || formatMessage(messages.formDetailLoadError),
+    });
+  }, [detailErrorMessage, formatMessage, showLoadError, showToast]);
 
   const handleSubmit = () => {
     if (!hasDisplayValue(name) || !hasDisplayValue(cost) || !hasDisplayValue(mode)
@@ -64,10 +154,10 @@ const MyTrainingCatalogCreate = () => {
     }
 
     showToast({
-      title: formatMessage(messages.createSuccessTitle),
-      description: formatMessage(messages.createSuccessDescription),
+      title: formatMessage(isEditMode ? messages.updateSuccessTitle : messages.createSuccessTitle),
+      description: formatMessage(isEditMode ? messages.updateSuccessDescription : messages.createSuccessDescription),
     });
-    navigate(ADMIN_PATHS.myTrainingCatalog);
+    navigate(variant.paths.list);
   };
 
   if (isLoading) {
@@ -78,8 +168,25 @@ const MyTrainingCatalogCreate = () => {
     );
   }
 
+  if (showLoadError) {
+    return (
+      <section className="my-training-create">
+        <EmptyState
+          fullSize
+          message={detailErrorMessage || formatMessage(messages.formDetailNotFound)}
+        />
+      </section>
+    );
+  }
+
   return (
     <section className="my-training-create">
+      {isEditMode && (
+        <h1 className="my-training-create__page-title">
+          {formatMessage(messages.editPageTitle)}
+        </h1>
+      )}
+
       <div className="my-training-create__grid">
         <div className="my-training-create__card">
           <h2 className="my-training-create__card-title">{formatMessage(messages.basicInformationTitle)}</h2>
@@ -289,7 +396,7 @@ const MyTrainingCatalogCreate = () => {
         <button
           type="button"
           className="my-training-create__outline-button"
-          onClick={() => navigate(ADMIN_PATHS.myTrainingCatalog)}
+          onClick={() => navigate(variant.paths.list)}
         >
           {formatMessage(messages.cancel)}
         </button>
@@ -298,7 +405,7 @@ const MyTrainingCatalogCreate = () => {
           className="my-training-create__primary-button"
           onClick={handleSubmit}
         >
-          {formatMessage(messages.submitCreate)}
+          {formatMessage(isEditMode ? messages.submitEdit : messages.submitCreate)}
         </button>
       </div>
     </section>

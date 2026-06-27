@@ -1,12 +1,18 @@
 import {
-  faClock,
+  faAward,
   faBookOpen,
+  faBullseye,
   faCheckCircle,
+  faClock,
   faExclamationTriangle,
   faGlobe,
   faQuestionCircle,
+  faShieldAlt,
   faStar,
   faUpload,
+  faUserCheck,
+  faUserCog,
+  faUserFriends,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -14,6 +20,9 @@ import {
 export const STATS_ICON_MAP = {
   faUsers,
   users: faUsers,
+  faUserFriends,
+  usersRound: faUserFriends,
+  userFriends: faUserFriends,
   faExclamationTriangle,
   exclamationTriangle: faExclamationTriangle,
   faGlobe,
@@ -22,6 +31,11 @@ export const STATS_ICON_MAP = {
   clock: faClock,
   faBookOpen,
   bookOpen: faBookOpen,
+  faAward,
+  award: faAward,
+  faBullseye,
+  target: faBullseye,
+  bullseye: faBullseye,
   faCheckCircle,
   circleCheck: faCheckCircle,
   checkCircle: faCheckCircle,
@@ -30,6 +44,13 @@ export const STATS_ICON_MAP = {
   faUpload,
   upload: faUpload,
   import: faUpload,
+  faUserCog,
+  userCog: faUserCog,
+  faUserCheck,
+  userCheck: faUserCheck,
+  faShieldAlt,
+  shieldCheck: faShieldAlt,
+  shieldAlt: faShieldAlt,
 };
 
 export const STATS_FALLBACK_ICON = faQuestionCircle;

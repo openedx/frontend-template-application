@@ -10,11 +10,15 @@
         "accessCompetencyFramework": true,
         "accessActivities": true,
         "accessMyTrainingCatalog": true,
+        "accessNraSpecificTrainingCatalog": true,
+        "accessMyTraining": true,
         "accessNrasManagement": true,
         "accessCountries": true,
         "accessTrainingProviders": true,
         "accessPendingRequests": true,
         "accessUsers": true,
+        "accessMyTeam": true,
+        "accessRegulatoryPassport": true,
         "accessOrganizationProfile": true,
         "accessRoles": true,
         "accessSettings": true,
@@ -25,7 +29,11 @@
           "showUsersPerCountry": true,
           "showTopRequestedActivities": true,
           "showPendingRequests": true,
-          "showTopTrainings": true
+          "showTopTrainings": true,
+          "showRecentActivities": true,
+          "showPopularTrainings": true,
+          "showQuickActions": true,
+          "showRecentTrainingCompletions": true
         },
         "nrasManagement": {
           "canOnboardNra": true,
@@ -92,13 +100,36 @@
           "canEditTraining": true,
           "canDeleteTraining": true
         },
+        "nraSpecificTrainingCatalog": {
+          "canCreateTraining": true,
+          "canEditTraining": true,
+          "canDeleteTraining": true,
+          "canRequestAccess": true,
+          "canViewProviderColumn": true
+        },
+        "myTraining": {
+          "canUpdateTraining": true
+        },
         "requestedTrainings": {
           "showOpenCloseButton": true,
           "showFlagButton": true
         },
+        "searnTrainingCatalog": {
+          "canRequestTraining": true,
+          "canRequestAccess": true
+        },
         "organizationProfile": {
           "canChangeOrganizationProfile": true,
           "showAdministratorsSection": true
+        },
+        "myTeam": {
+          "canAddTeamMember": true,
+          "canRemoveTeamMember": true
+        },
+        "profile": {
+          "showManagerField": true,
+          "showCompetencyRoleField": true,
+          "canRequestAdminRole": true
         }
       }
     }

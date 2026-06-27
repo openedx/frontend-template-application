@@ -47,9 +47,7 @@ const MyTrainingCatalogFeedback = () => {
   }
 
   if (isError || !data) {
-    const displayMessage = errorMessage === 'NOT_FOUND'
-      ? formatMessage(messages.feedbackNotFound)
-      : (errorMessage || formatMessage(messages.feedbackNotFound));
+    const displayMessage = errorMessage || formatMessage(messages.feedbackNotFound);
 
     return (
       <section className="training-feedback">

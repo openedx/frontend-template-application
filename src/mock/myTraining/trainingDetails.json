@@ -1,0 +1,50 @@
+{
+  "mt-001": {
+    "id": "mt-001",
+    "title": "GMP Inspection Fundamentals",
+    "status": "completed",
+    "proof_file_name": "gmp-fundamentals-cert.pdf",
+    "rating": 4,
+    "feedback": "Very practical and well structured."
+  },
+  "mt-002": {
+    "id": "mt-002",
+    "title": "Pharmacovigilance Signal Detection",
+    "status": "in_progress",
+    "proof_file_name": null,
+    "rating": null,
+    "feedback": null
+  },
+  "mt-003": {
+    "id": "mt-003",
+    "title": "Medical Device Regulation",
+    "status": "in_progress",
+    "proof_file_name": null,
+    "rating": null,
+    "feedback": null
+  },
+  "mt-004": {
+    "id": "mt-004",
+    "title": "Post-Market Surveillance",
+    "status": "not_started",
+    "proof_file_name": null,
+    "rating": null,
+    "feedback": null
+  },
+  "mt-005": {
+    "id": "mt-005",
+    "title": "Bioequivalence Assessment — Level II",
+    "status": "completed",
+    "proof_file_name": "bioequiv-cert.pdf",
+    "rating": 5,
+    "feedback": "Excellent depth on study design."
+  },
+  "mt-006": {
+    "id": "mt-006",
+    "title": "Regulatory Systems Strengthening",
+    "status": "completed",
+    "proof_file_name": "rss-cert.pdf",
+    "rating": 4,
+    "feedback": null
+  }
+}

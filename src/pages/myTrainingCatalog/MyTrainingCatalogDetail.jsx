@@ -53,9 +53,7 @@ const MyTrainingCatalogDetail = () => {
   }
 
   if (isError || !training) {
-    const displayMessage = errorMessage === 'NOT_FOUND'
-      ? formatMessage(messages.detailNotFound)
-      : (errorMessage || formatMessage(messages.detailNotFound));
+    const displayMessage = errorMessage || formatMessage(messages.detailNotFound);
 
     return (
       <section className="training-detail">

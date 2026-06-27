@@ -66,6 +66,126 @@ const messages = defineMessages({
     defaultMessage: 'Cost',
     description: 'Cost column header',
   },
+  columnAction: {
+    id: 'app.searnTrainingCatalog.table.column.action',
+    defaultMessage: 'Action',
+    description: 'Action column header on SEARN training catalog table',
+  },
+  requestTraining: {
+    id: 'app.searnTrainingCatalog.actions.requestTraining',
+    defaultMessage: 'Request Training',
+    description: 'Button to open request training modal on catalog page',
+  },
+  requestAccess: {
+    id: 'app.searnTrainingCatalog.actions.requestAccess',
+    defaultMessage: 'Request Access',
+    description: 'Button to request access to a training in catalog table',
+  },
+  requested: {
+    id: 'app.searnTrainingCatalog.badge.requested',
+    defaultMessage: 'Requested',
+    description: 'Badge when user has already requested access to a training',
+  },
+  requestTrainingModalTitle: {
+    id: 'app.searnTrainingCatalog.requestTraining.modal.title',
+    defaultMessage: 'Request Training',
+    description: 'Title for request training modal on catalog page',
+  },
+  requestTrainingModalDescription: {
+    id: 'app.searnTrainingCatalog.requestTraining.modal.description',
+    defaultMessage: 'Submit a training request by selecting the relevant activity and providing details.',
+    description: 'Description for request training modal on catalog page',
+  },
+  requestTrainingActivityLabel: {
+    id: 'app.searnTrainingCatalog.requestTraining.modal.activity.label',
+    defaultMessage: 'Select Activity',
+    description: 'Activity field label in request training modal',
+  },
+  requestTrainingActivityPlaceholder: {
+    id: 'app.searnTrainingCatalog.requestTraining.modal.activity.placeholder',
+    defaultMessage: 'Choose an activity',
+    description: 'Activity field placeholder in request training modal',
+  },
+  requestTrainingDescriptionLabel: {
+    id: 'app.searnTrainingCatalog.requestTraining.modal.description.label',
+    defaultMessage: 'Description',
+    description: 'Description field label in request training modal',
+  },
+  requestTrainingDescriptionPlaceholder: {
+    id: 'app.searnTrainingCatalog.requestTraining.modal.description.placeholder',
+    defaultMessage: 'Describe the training need, expected outcomes, target audience...',
+    description: 'Description field placeholder in request training modal',
+  },
+  requestTrainingCancel: {
+    id: 'app.searnTrainingCatalog.requestTraining.modal.cancel',
+    defaultMessage: 'Cancel',
+    description: 'Cancel button in request training modal',
+  },
+  requestTrainingSubmit: {
+    id: 'app.searnTrainingCatalog.requestTraining.modal.submit',
+    defaultMessage: 'Submit Request',
+    description: 'Submit button in request training modal',
+  },
+  requestTrainingSubmittedTitle: {
+    id: 'app.searnTrainingCatalog.requestTraining.toast.submitted.title',
+    defaultMessage: 'Training request submitted',
+    description: 'Toast title after submitting request training form',
+  },
+  requestTrainingSubmittedDescription: {
+    id: 'app.searnTrainingCatalog.requestTraining.toast.submitted.description',
+    defaultMessage: 'Your training request has been submitted for review.',
+    description: 'Toast description after submitting request training form',
+  },
+  requestTrainingCreateError: {
+    id: 'app.searnTrainingCatalog.requestTraining.create.error',
+    defaultMessage: 'Unable to submit training request. Please try again.',
+    description: 'Fallback when create requested training POST fails from catalog modal',
+  },
+  requestTrainingCreateErrorTitle: {
+    id: 'app.searnTrainingCatalog.requestTraining.create.errorTitle',
+    defaultMessage: 'Request not submitted',
+    description: 'Toast title when create requested training POST fails from catalog modal',
+  },
+  requestAccessSubmittedTitle: {
+    id: 'app.searnTrainingCatalog.requestAccess.toast.submitted.title',
+    defaultMessage: 'Access requested',
+    description: 'Toast title after requesting access to a training',
+  },
+  requestAccessSubmittedDescription: {
+    id: 'app.searnTrainingCatalog.requestAccess.toast.submitted.description',
+    defaultMessage: 'Your request will be sent to your Manager for approval.',
+    description: 'Toast description after requesting access to a training',
+  },
+  requestAccessConfirmTitle: {
+    id: 'app.searnTrainingCatalog.requestAccess.confirm.title',
+    defaultMessage: 'Request Access',
+    description: 'Title for request access confirmation dialog',
+  },
+  requestAccessConfirmDescription: {
+    id: 'app.searnTrainingCatalog.requestAccess.confirm.description',
+    defaultMessage: 'Do you want to request access to "{name}"? Your request will be sent to your Manager for approval.',
+    description: 'Description for request access confirmation dialog',
+  },
+  requestAccessConfirmCancel: {
+    id: 'app.searnTrainingCatalog.requestAccess.confirm.cancel',
+    defaultMessage: 'Cancel',
+    description: 'Cancel button in request access confirmation dialog',
+  },
+  requestAccessConfirmSubmit: {
+    id: 'app.searnTrainingCatalog.requestAccess.confirm.submit',
+    defaultMessage: 'Request Access',
+    description: 'Confirm button in request access confirmation dialog',
+  },
+  requestAccessCreateError: {
+    id: 'app.searnTrainingCatalog.requestAccess.create.error',
+    defaultMessage: 'Unable to submit access request. Please try again.',
+    description: 'Fallback when request access POST fails',
+  },
+  requestAccessCreateErrorTitle: {
+    id: 'app.searnTrainingCatalog.requestAccess.create.errorTitle',
+    defaultMessage: 'Access request not submitted',
+    description: 'Toast title when request access POST fails',
+  },
   noTrainingsFound: {
     id: 'app.searnTrainingCatalog.empty.noTrainingsFound',
     defaultMessage: 'No trainings found.',

@@ -48,6 +48,21 @@
     white-space: nowrap;
   }
 
+  &__actions-group {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+
+  &__icon-actions {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: .25rem;
+  }
+
   &__cost-cell {
     font-weight: 600;
     color: #111827;

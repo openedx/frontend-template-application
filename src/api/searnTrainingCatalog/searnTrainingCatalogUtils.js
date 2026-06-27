@@ -21,6 +21,7 @@ export const mapSearnTrainingCatalogListRow = (row) => {
     rating: Number.isNaN(rating) ? 0 : rating,
     reviewCount: Number(row.review_count) || 0,
     cost: row.cost ?? '',
+    isRequested: Boolean(row.is_requested),
   };
 };
 

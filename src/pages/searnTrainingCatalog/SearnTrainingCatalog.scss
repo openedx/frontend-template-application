@@ -199,6 +199,75 @@
     font-weight: 700;
   }
 
+  &__actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+  }
+
+  &__primary-button {
+    height: 44px;
+    border-radius: .5rem;
+    border: 0;
+    background: #2A3B8F;
+    color: #FFFFFF;
+    font-size: .875rem;
+    font-weight: 600;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    width: 100%;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1);
+
+    @media (width >= 640px) {
+      width: auto;
+    }
+  }
+
+  &__th--right {
+    text-align: right;
+  }
+
+  &__td--actions {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__outline-button {
+    height: 36px;
+    border-radius: .375rem;
+    border: 2px solid #2A3B8F;
+    background: transparent;
+    color: #2A3B8F;
+    font-size: .875rem;
+    font-weight: 600;
+    padding: 0 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    cursor: pointer;
+
+    &:hover {
+      background: #2A3B8F;
+      color: #FFFFFF;
+    }
+  }
+
+  &__requested-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background: #F3F4F6;
+    color: #374151;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: .125rem .625rem;
+  }
+
   // Pagination/footer styling is shared globally via `src/components/dataTable/DataTable.scss`
   // using `.data-table__footer` and `.data-table__pagination`.
 }

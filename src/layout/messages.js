@@ -41,6 +41,11 @@ const layoutMessages = defineMessages({
     defaultMessage: 'My Trainings Catalog',
     description: 'Sidebar navigation label for my trainings catalog',
   },
+  navNraSpecificTrainingCatalog: {
+    id: 'app.layout.sidebar.nav.nraSpecificTrainingCatalog',
+    defaultMessage: 'NRA-Specific Training Catalog',
+    description: 'Sidebar navigation label for NRA-specific training catalog',
+  },
   navNras: {
     id: 'app.layout.sidebar.nav.nras',
     defaultMessage: 'NRAs Management',
@@ -71,10 +76,25 @@ const layoutMessages = defineMessages({
     defaultMessage: 'Profile',
     description: 'Sidebar navigation label for admin profile',
   },
+  navMyTraining: {
+    id: 'app.layout.sidebar.nav.myTraining',
+    defaultMessage: 'My Trainings',
+    description: 'Sidebar navigation label for my trainings page',
+  },
   navUsers: {
     id: 'app.layout.sidebar.nav.users',
     defaultMessage: 'Users',
     description: 'Sidebar navigation label for users',
+  },
+  navMyTeam: {
+    id: 'app.layout.sidebar.nav.myTeam',
+    defaultMessage: 'My Team',
+    description: 'Sidebar navigation label for my team',
+  },
+  navRegulatoryPassport: {
+    id: 'app.layout.sidebar.nav.regulatoryPassport',
+    defaultMessage: 'Regulatory Passport',
+    description: 'Sidebar navigation label for regulatory passport',
   },
   navOrganizationProfile: {
     id: 'app.layout.sidebar.nav.organizationProfile',

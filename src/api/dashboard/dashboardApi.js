@@ -4,6 +4,10 @@ import {
   DASHBOARD_STATS,
   DASHBOARD_TOP_REQUESTED_ACTIVITIES,
   DASHBOARD_TOP_TRAININGS,
+  DASHBOARD_RECENT_ACTIVITIES,
+  DASHBOARD_POPULAR_TRAININGS,
+  DASHBOARD_QUICK_ACTIONS,
+  DASHBOARD_RECENT_TRAINING_COMPLETIONS,
   DASHBOARD_USERS_PER_COUNTRY,
   PENDING_REQUESTS_LIST,
 } from '../endpoints';
@@ -60,6 +64,58 @@ export const fetchDashboardTopTrainings = ({ formatMessage }) => executeApiReque
   },
   formatMessage,
   fallbackMessage: dashboardMessages.topTrainingsLoadError,
+});
+
+/**
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardRecentActivities = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_RECENT_ACTIVITIES}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.recentActivitiesLoadError,
+});
+
+/**
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardPopularTrainings = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_POPULAR_TRAININGS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.popularTrainingsLoadError,
+});
+
+/**
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardQuickActions = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_QUICK_ACTIONS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.quickActionsLoadError,
+});
+
+/**
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardRecentTrainingCompletions = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_RECENT_TRAINING_COMPLETIONS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.recentTrainingCompletionsLoadError,
 });
 
 /**

@@ -311,4 +311,39 @@ export default defineMessages({
     defaultMessage: 'Your training has been saved.',
     description: 'Toast description when create training succeeds (mock)',
   },
+  editPageTitle: {
+    id: 'app.myTrainingCatalog.edit.pageTitle',
+    defaultMessage: 'Edit Training',
+    description: 'Header title for edit training page',
+  },
+  submitEdit: {
+    id: 'app.myTrainingCatalog.edit.submit',
+    defaultMessage: 'Save Changes',
+    description: 'Submit button on edit training page',
+  },
+  updateSuccessTitle: {
+    id: 'app.myTrainingCatalog.edit.success.title',
+    defaultMessage: 'Training updated',
+    description: 'Toast title when edit training succeeds (mock)',
+  },
+  updateSuccessDescription: {
+    id: 'app.myTrainingCatalog.edit.success.description',
+    defaultMessage: 'Your training changes have been saved.',
+    description: 'Toast description when edit training succeeds (mock)',
+  },
+  formDetailLoadError: {
+    id: 'app.myTrainingCatalog.formDetail.loadError',
+    defaultMessage: 'Unable to load training details. Please try again.',
+    description: 'Fallback when training form detail GET fails',
+  },
+  formDetailLoadErrorTitle: {
+    id: 'app.myTrainingCatalog.formDetail.loadErrorTitle',
+    defaultMessage: 'Training unavailable',
+    description: 'Toast title when training form detail GET fails',
+  },
+  formDetailNotFound: {
+    id: 'app.myTrainingCatalog.formDetail.notFound',
+    defaultMessage: 'Training not found.',
+    description: 'Empty state when training form detail is missing',
+  },
 });
