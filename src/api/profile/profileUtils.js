@@ -1,5 +1,6 @@
 import { normalizePickerOptionRows } from '../competencyFramework/competencyFrameworkUtils';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { isUploadableFile } from '../multipartRequest';
 
 const MANAGER_NONE_OPTION_ID = 'manager-none';
 
@@ -55,7 +56,10 @@ export const mapProfileResult = (payload) => {
     profileImageUrl: data.profile_image_url ?? '',
     manager: data.manager != null ? String(data.manager) : '',
     competencyRole: normalizeCompetencyRoleList(data.competency_role),
-    isAdmin: Boolean(data.access_admin_status ?? data.is_admin),
+    accessAdminStatus: data.access_admin_status ?? false,
+    isAdmin: data.access_admin_status === true,
+    adminRequestPending: data.access_admin_status === 'pending',
+    canRequestAdminRoleFromApi: data.access_admin_status === true,
   };
 };
 
@@ -66,8 +70,9 @@ export const mapProfileManagerOptionsToDropdown = (results) => {
   const rows = normalizePickerOptionRows(results);
 
   return rows.map((row) => ({
-    value: String(row.id ?? ''),
+    value: String(row.value ?? ''),
     label: row.label,
+    optionId: String(row.id ?? ''),
   }));
 };
 
@@ -95,13 +100,54 @@ export const resolveManagerDropdownValue = (managerField, options) => {
   }
 
   if (!hasDisplayValue(managerField)) {
-    const noneOption = options.find((option) => String(option.value) === MANAGER_NONE_OPTION_ID);
+    const noneOption = options.find(
+      (option) => !hasDisplayValue(option.value)
+        || String(option.optionId) === MANAGER_NONE_OPTION_ID,
+    );
     return noneOption ? String(noneOption.value) : '';
   }
 
-  const normalized = String(managerField);
-  const byId = options.find((option) => String(option.value) === normalized);
-  return byId ? String(byId.value) : normalized;
+  const token = String(managerField);
+  const byValue = options.find((option) => String(option.value) === token);
+  if (byValue) {
+    return String(byValue.value);
+  }
+
+  const byOptionId = options.find((option) => String(option.optionId) === token);
+  if (byOptionId) {
+    return String(byOptionId.value);
+  }
+
+  if (token.startsWith('manager-')) {
+    const suffix = token.slice('manager-'.length);
+    const bySuffix = options.find(
+      (option) => String(option.value) === suffix || String(option.optionId) === token,
+    );
+    if (bySuffix) {
+      return String(bySuffix.value);
+    }
+  }
+
+  return token;
+};
+
+/**
+ * PATCH expects manager token (e.g. manager-u2) when available from options.
+ * @param {string} managerValue
+ * @param {Array<{ value: string, optionId?: string }>} options
+ */
+export const formatManagerForProfileApi = (managerValue, options) => {
+  if (!hasDisplayValue(managerValue)) {
+    return '';
+  }
+
+  const token = String(managerValue);
+  const match = options?.find((option) => String(option.value) === token);
+  if (match && hasDisplayValue(match.optionId)) {
+    return String(match.optionId);
+  }
+
+  return token;
 };
 
 /**
@@ -163,6 +209,25 @@ export const getLanguageLabelByValue = (value, options) => {
 };
 
 /**
+ * @param {string} languageField - API may return label (GET) or value
+ * @param {Array<{ value: string, label: string }>} options
+ */
+export const resolveLanguageDropdownValue = (languageField, options) => {
+  if (!hasDisplayValue(languageField) || !Array.isArray(options)) {
+    return '';
+  }
+
+  const normalized = String(languageField);
+  const byValue = options.find((option) => String(option.value) === normalized);
+  if (byValue) {
+    return String(byValue.value);
+  }
+
+  const byLabel = options.find((option) => option.label === normalized);
+  return byLabel ? String(byLabel.value) : normalized;
+};
+
+/**
  * @param {{
  *   fullName: string,
  *   country: string,
@@ -194,10 +259,15 @@ export const buildProfilePatchFormData = ({
   }
 
   if (competencyRole !== undefined) {
-    formData.append('competency_role', JSON.stringify(parseCompetencyRoleForApi(competencyRole)));
+    formData.append(
+      'competency_role',
+      JSON.stringify(parseCompetencyRoleForApi(competencyRole)),
+    );
   }
 
-  formData.append('profile_image', profileImageFile, profileImageFile.name);
+  if (isUploadableFile(profileImageFile)) {
+    formData.append('profile_image', profileImageFile, profileImageFile.name);
+  }
 
   return formData;
 };
@@ -239,8 +309,8 @@ export const buildProfilePatchBody = ({
 };
 
 /**
- * @param {{ requestAdminRole?: boolean }} params
+ * POST /api/v1/nras-management/admin-role-requests/
  */
-export const buildProfileRequestAdminRoleBody = ({ requestAdminRole = false } = {}) => ({
-  request_admin_role: requestAdminRole,
+export const buildAdminRoleRequestBody = () => ({
+  access_admin_status: true,
 });

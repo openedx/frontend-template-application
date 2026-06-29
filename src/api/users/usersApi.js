@@ -45,6 +45,9 @@ export const fetchRoleOptions = ({ formatMessage }) => executeApiRequest({
 });
 
 /**
+ * Paginated users table — GET /api/v1/role-assignment/users/
+ * Response: { results, count, page, page_size, total_pages, has_next, has_previous }
+ * Row: { id, name, email, role, competency_role, user_profile_image }
  * @param {{
  *   formatMessage: Function,
  *   page?: number,

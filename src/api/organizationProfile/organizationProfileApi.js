@@ -1,6 +1,7 @@
 import { executeApiRequest } from '../apiRequest';
 import { TRAINING_PROVIDERS_ORGANIZATION_PROFILE } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
+import { isUploadableFile, patchMultipart } from '../multipartRequest';
 import organizationProfileMessages from '../../pages/organizationProfile/messages';
 import {
   buildOrganizationProfilePatchBody,
@@ -53,18 +54,20 @@ export const patchOrganizationProfile = ({
     const url = `${getApiBaseUrl()}${TRAINING_PROVIDERS_ORGANIZATION_PROFILE}`;
     const administratorsPayload = includeAdministrators ? administrators : null;
 
-    if (logoFile instanceof File) {
+    if (isUploadableFile(logoFile)) {
       const formData = buildOrganizationProfilePatchFormData({
         organizationName,
         website,
         contactEmail,
         country,
         overview,
+        logoUrl,
         logoFile,
         administrators: administratorsPayload,
       });
 
-      return httpClient.patch(url, formData);
+      // Backend field is `logo` (ImageField) — must be multipart with boundary.
+      return patchMultipart(httpClient, url, formData);
     }
 
     return httpClient.patch(url, buildOrganizationProfilePatchBody({

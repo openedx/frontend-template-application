@@ -12,11 +12,13 @@ import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import {
   formatCompetencyRoleForInput,
+  formatManagerForProfileApi,
   getCountryLabelByValue,
   getLanguageLabelByValue,
   getManagerLabelByValue,
   parseCompetencyRoleForApi,
   resolveCountryDropdownValue,
+  resolveLanguageDropdownValue,
   resolveManagerDropdownValue,
 } from '../../api/profile/profileUtils';
 import useCurrentUserProfile from '../../hooks/profile/useCurrentUserProfile';
@@ -204,7 +206,7 @@ const Profile = () => {
 
     setFullName(hasDisplayValue(profileData.fullName) ? profileData.fullName : '');
     setAbout(hasDisplayValue(profileData.about) ? profileData.about : '');
-    setLanguage(hasDisplayValue(profileData.language) ? String(profileData.language) : '');
+    setLanguage(resolveLanguageDropdownValue(profileData.language, languageOptions));
     setManager(resolveManagerDropdownValue(profileData.manager, managerOptions));
     setCompetencyRole(formatCompetencyRoleForInput(profileData.competencyRole));
     setSavedProfileImageUrl(hasDisplayValue(profileData.profileImageUrl) ? profileData.profileImageUrl : '');
@@ -219,7 +221,7 @@ const Profile = () => {
     }
 
     applyProfileToForm(profile);
-  }, [profile, countryOptions, managerOptions]);
+  }, [profile, countryOptions, languageOptions, managerOptions]);
 
   useEffect(() => {
     if (!isProfileError) {
@@ -288,8 +290,7 @@ const Profile = () => {
         language,
         about,
         profileImageFile: pendingImageFile,
-        profileImagePreviewUrl: photoPreview,
-        ...(showManagerField ? { manager } : {}),
+        ...(showManagerField ? { manager: formatManagerForProfileApi(manager, managerOptions) } : {}),
         ...(showCompetencyRoleField ? { competencyRole: parseCompetencyRoleForApi(competencyRole) } : {}),
       });
 
@@ -310,7 +311,11 @@ const Profile = () => {
   };
 
   const onRequestAdminRole = async () => {
-    if (!canRequestAdminRole || profile?.isAdmin || requestMutation.isPending) {
+    if (
+      !canRequestAdminRole
+      || !profile?.canRequestAdminRoleFromApi
+      || requestMutation.isPending
+    ) {
       return;
     }
 
@@ -322,6 +327,7 @@ const Profile = () => {
           ? result.message
           : formatMessage(messages.requestAdminRoleSuccess),
       });
+      await refetchProfile();
     } catch (error) {
       showToast({
         title: formatMessage(messages.requestAdminRoleErrorTitle),
@@ -350,7 +356,7 @@ const Profile = () => {
     <span className="profile-page__placeholder">{formatMessage(messages.managerPlaceholder)}</span>
   );
 
-  const showRequestAdminRoleButton = canRequestAdminRole && !profile?.isAdmin;
+  const showRequestAdminRoleButton = canRequestAdminRole && profile?.canRequestAdminRoleFromApi;
 
   if (isPageLoading) {
     return (

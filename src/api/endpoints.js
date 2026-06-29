@@ -9,8 +9,8 @@ export const DASHBOARD_STATS = '/api/v1/dashboard/stats/';
 export const DASHBOARD_USERS_PER_COUNTRY = '/api/v1/dashboard/users-per-country/';
 export const DASHBOARD_TOP_REQUESTED_ACTIVITIES = '/api/v1/dashboard/top-requested-activities/?limit=5';
 export const DASHBOARD_TOP_TRAININGS = '/api/v1/dashboard/top-trainings/';
-export const DASHBOARD_RECENT_ACTIVITIES = '/api/v1/dashboard/recent-activities/';
-export const DASHBOARD_POPULAR_TRAININGS = '/api/v1/dashboard/popular-trainings/';
+export const DASHBOARD_NRA_ADMIN_RECENT_ACTIVITY = '/api/v1/dashboard/nra-admin/recent-activity/';
+export const DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS = '/api/v1/dashboard/nra-admin/popular-trainings/';
 export const DASHBOARD_QUICK_ACTIONS = '/api/v1/dashboard/quick-actions/';
 export const DASHBOARD_RECENT_TRAINING_COMPLETIONS = '/api/v1/dashboard/recent-training-completions/';
 
@@ -48,11 +48,11 @@ export const searnTrainingCatalogRequestAccess = (trainingId) => (
 export const MY_TRAINING_LIST = '/api/v1/my-training/';
 export const MY_TRAINING_STATUS_OPTIONS = '/api/v1/my-training/status-options/';
 
-export const MY_TEAM_LIST = '/api/v1/my-team/members/';
-export const MY_TEAM_CANDIDATE_USERS = '/api/v1/my-team/candidate-users/';
+export const MY_TEAM_LIST = '/api/v1/nras-management/my-team/';
+export const MY_TEAM_CANDIDATE_USERS = '/api/v1/nras-management/my-team/user-options/';
 
 /** @param {string|number} userId */
-export const myTeamMemberDetail = (userId) => `/api/v1/my-team/members/${userId}/`;
+export const myTeamMemberDetail = (userId) => `/api/v1/nras-management/my-team/${userId}/`;
 
 /** @param {string|number} trainingId */
 export const myTrainingDetail = (trainingId) => `/api/v1/my-training/${trainingId}/`;
@@ -100,6 +100,8 @@ export const optionsCompetencyFrameworkCompetencyTypes = (frameworkUuid) => `/ap
 
 export const COUNTRIES = '/api/v1/countries/';
 export const NRAS_ONBOARD = '/api/v1/nras-management/onboard/';
+export const NRAS_MANAGEMENT_ADMIN_ROLE_REQUESTS = '/api/v1/nras-management/admin-role-requests/';
+export const NRAS_MANAGEMENT_TRAINING_ACCESS_REQUESTS = '/api/v1/nras-management/training-access-requests/';
 export const TRAINING_PROVIDERS_ONBOARD = '/api/v1/training-providers/onboard/';
 
 export const PENDING_REQUESTS_FILTERS = '/api/v1/pending-requests/filters/';
@@ -115,7 +117,7 @@ export const requestedTrainingFlag = (requestedTrainingId) => (
 );
 
 export const ROLE_ASSIGNMENT_PROFILE = '/api/v1/role-assignment/profile/';
-export const ROLE_ASSIGNMENT_PROFILE_MANAGER_OPTIONS = '/api/v1/role-assignment/profile/manager-options/';
+export const ROLE_ASSIGNMENT_PROFILE_MANAGERS = '/api/v1/role-assignment/profile/managers/';
 export const ROLE_ASSIGNMENT_LANGUAGES = '/api/v1/role-assignment/languages/';
 export const ROLE_ASSIGNMENT_ROLES = '/api/v1/role-assignment/roles/';
 export const ROLE_ASSIGNMENT_ROLE_OPTIONS = '/api/v1/role-assignment/roles/options/';

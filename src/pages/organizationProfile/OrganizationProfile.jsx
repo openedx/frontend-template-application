@@ -140,11 +140,16 @@ const OrganizationProfile = () => {
   };
 
   const startEditAdmin = (admin) => {
-    if (!canChangeOrganizationProfile || !admin?.id) {
+    if (!canChangeOrganizationProfile) {
       return;
     }
 
-    setEditingAdminId(admin.id);
+    const adminKey = admin?.id || admin?.email;
+    if (!hasDisplayValue(adminKey)) {
+      return;
+    }
+
+    setEditingAdminId(adminKey);
     setEditingAdminName(admin.name || '');
     setEditingAdminEmail(admin.email || '');
   };
@@ -165,11 +170,12 @@ const OrganizationProfile = () => {
       return;
     }
 
-    setAdministrators((current) => current.map((admin) => (
-      admin.id === editingAdminId
+    setAdministrators((current) => current.map((admin) => {
+      const adminKey = admin.id || admin.email;
+      return adminKey === editingAdminId
         ? { ...admin, name, email }
-        : admin
-    )));
+        : admin;
+    }));
     clearEditingAdmin();
   };
 
@@ -202,15 +208,54 @@ const OrganizationProfile = () => {
   };
 
   const handleDeleteAdmin = () => {
-    if (!pendingDeleteAdmin?.id) {
+    if (!pendingDeleteAdmin) {
       return;
     }
 
-    setAdministrators((current) => current.filter((admin) => admin.id !== pendingDeleteAdmin.id));
-    if (pendingDeleteAdmin.id === editingAdminId) {
-      clearEditingAdmin();
-    }
-    setPendingDeleteAdmin(null);
+    const nextAdministrators = administrators.filter((admin) => {
+      if (hasDisplayValue(pendingDeleteAdmin.id) && hasDisplayValue(admin.id)) {
+        return admin.id !== pendingDeleteAdmin.id;
+      }
+
+      return admin.email !== pendingDeleteAdmin.email;
+    });
+
+    // Persist deletion immediately (same PATCH used by Save Changes).
+    (async () => {
+      try {
+        const result = await updateMutation.mutateAsync({
+          organizationName,
+          website,
+          contactEmail,
+          country,
+          overview,
+          logoFile: pendingLogoFile,
+          logoUrl: savedLogoUrl,
+          administrators: nextAdministrators,
+          includeAdministrators: showAdministratorsSection,
+        });
+
+        showToast({
+          title: formatMessage(messages.toastSavedTitle),
+          description: hasDisplayValue(result.message)
+            ? result.message
+            : formatMessage(messages.toastSavedDescription),
+        });
+
+        if (pendingDeleteAdmin.id === editingAdminId || pendingDeleteAdmin.email === editingAdminId) {
+          clearEditingAdmin();
+        }
+
+        setAdministrators(nextAdministrators);
+        setPendingDeleteAdmin(null);
+        await refetch();
+      } catch (error) {
+        showToast({
+          title: formatMessage(messages.saveErrorTitle),
+          description: error?.message || formatMessage(messages.saveError),
+        });
+      }
+    })();
   };
 
   const onSave = async () => {
@@ -417,15 +462,16 @@ const OrganizationProfile = () => {
                 </span>
                 <div className="organization-profile-page__admin-list">
                   {administrators.map((admin) => {
+                    const editKey = admin.id || admin.email;
                     const adminKey = hasDisplayValue(admin.id)
                       ? admin.id
-                      : `${admin.name}-${admin.email}`;
+                      : (hasDisplayValue(admin.email) ? admin.email : `${admin.name}-${admin.email}`);
 
                     if (!hasDisplayValue(adminKey)) {
                       return null;
                     }
 
-                    const isEditing = editingAdminId === admin.id;
+                    const isEditing = editingAdminId === editKey;
 
                     if (isEditing) {
                       return (
@@ -502,7 +548,11 @@ const OrganizationProfile = () => {
                             className="organization-profile-page__icon-button organization-profile-page__icon-button--danger"
                             aria-label={formatMessage(messages.deleteAdmin)}
                             title={formatMessage(messages.deleteAdmin)}
-                            disabled={!canChangeOrganizationProfile || Boolean(editingAdminId)}
+                            disabled={
+                              !canChangeOrganizationProfile
+                              || Boolean(editingAdminId)
+                              || updateMutation.isPending
+                            }
                             onClick={() => setPendingDeleteAdmin(admin)}
                           >
                             <FontAwesomeIcon icon={faTrash} />
@@ -566,6 +616,8 @@ const OrganizationProfile = () => {
         confirmLabel={formatMessage(messages.delete)}
         onCancel={() => setPendingDeleteAdmin(null)}
         onConfirm={handleDeleteAdmin}
+        isConfirmDisabled={updateMutation.isPending}
+        isCancelDisabled={updateMutation.isPending}
       />
     </section>
   );

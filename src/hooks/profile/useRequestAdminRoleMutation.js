@@ -1,6 +1,6 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { patchCurrentUserProfile } from '../../api/profile/profileApi';
+import { postAdminRoleRequest } from '../../api/profile/profileApi';
 import { currentUserProfileQueryKey } from './useCurrentUserProfile';
 
 const useRequestAdminRoleMutation = () => {
@@ -9,10 +9,7 @@ const useRequestAdminRoleMutation = () => {
 
   const requestMutation = useMutation({
     mutationFn: async () => {
-      const result = await patchCurrentUserProfile({
-        formatMessage,
-        requestAdminRole: true,
-      });
+      const result = await postAdminRoleRequest({ formatMessage });
 
       if (!result.ok) {
         throw new Error(result.message);

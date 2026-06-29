@@ -6,10 +6,9 @@ const useTrainingCatalogRequestAccessMutation = () => {
   const { formatMessage } = useIntl();
 
   return useMutation({
-    mutationFn: async ({ catalogVariantId, trainingId }) => {
+    mutationFn: async ({ trainingId }) => {
       const result = await requestTrainingCatalogAccess({
         formatMessage,
-        catalogVariantId,
         trainingId,
       });
 

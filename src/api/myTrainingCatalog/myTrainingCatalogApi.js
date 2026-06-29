@@ -29,6 +29,7 @@ import { buildMyTrainingCatalogListParams } from './myTrainingCatalogUtils';
  *   subDomainFilter?: string,
  *   activityFilter?: string,
  *   nraGoalFilter?: string,
+ *   catalogScope?: string,
  * }} params
  */
 export const fetchMyTrainingCatalogList = ({
@@ -42,6 +43,7 @@ export const fetchMyTrainingCatalogList = ({
   subDomainFilter,
   activityFilter,
   nraGoalFilter,
+  catalogScope,
 }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
@@ -56,6 +58,7 @@ export const fetchMyTrainingCatalogList = ({
       subDomainFilter,
       activityFilter,
       nraGoalFilter,
+      catalogScope,
     });
 
     return httpClient.get(url, { params });

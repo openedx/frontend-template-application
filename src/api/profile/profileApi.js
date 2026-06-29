@@ -1,24 +1,21 @@
 import { executeApiRequest } from '../apiRequest';
 import {
+  NRAS_MANAGEMENT_ADMIN_ROLE_REQUESTS,
   ROLE_ASSIGNMENT_LANGUAGES,
   ROLE_ASSIGNMENT_PROFILE,
-  ROLE_ASSIGNMENT_PROFILE_MANAGER_OPTIONS,
+  ROLE_ASSIGNMENT_PROFILE_MANAGERS,
 } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
+import { isUploadableFile, patchMultipart } from '../multipartRequest';
 import profileMessages from '../../pages/profile/messages';
 import {
+  buildAdminRoleRequestBody,
   buildProfilePatchBody,
   buildProfilePatchFormData,
-  buildProfileRequestAdminRoleBody,
 } from './profileUtils';
-import {
-  resolveCurrentUserProfileSaveMock,
-} from './profilePageMockData';
-import { resolveProfileManagerOptionsMock } from './profileManagerOptionsMockData';
-
-const USE_PROFILE_MOCK = true;
 
 /**
+ * GET /api/v1/role-assignment/profile/
  * @param {{ formatMessage: Function }} params
  */
 export const fetchCurrentUserProfile = ({ formatMessage }) => executeApiRequest({
@@ -32,6 +29,7 @@ export const fetchCurrentUserProfile = ({ formatMessage }) => executeApiRequest(
 });
 
 /**
+ * GET /api/v1/role-assignment/languages/
  * @param {{ formatMessage: Function }} params
  */
 export const fetchProfileLanguages = ({ formatMessage }) => executeApiRequest({
@@ -45,29 +43,22 @@ export const fetchProfileLanguages = ({ formatMessage }) => executeApiRequest({
 });
 
 /**
+ * GET /api/v1/role-assignment/profile/managers/
  * @param {{ formatMessage: Function }} params
  */
-export const fetchProfileManagerOptions = ({ formatMessage }) => {
-  if (USE_PROFILE_MOCK) {
-    return Promise.resolve({
-      ok: true,
-      message: null,
-      data: resolveProfileManagerOptionsMock(),
-    });
-  }
-
-  return executeApiRequest({
-    request: () => {
-      const httpClient = getHttpClient();
-      const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE_MANAGER_OPTIONS}`;
-      return httpClient.get(url);
-    },
-    formatMessage,
-    fallbackMessage: profileMessages.managerOptionsLoadError,
-  });
-};
+export const fetchProfileManagerOptions = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE_MANAGERS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: profileMessages.managerOptionsLoadError,
+});
 
 /**
+ * PATCH /api/v1/role-assignment/profile/
+ * Payload keys: full_name, country, language, about, profile_image, manager, competency_role
  * @param {{
  *   formatMessage: Function,
  *   fullName?: string,
@@ -77,8 +68,6 @@ export const fetchProfileManagerOptions = ({ formatMessage }) => {
  *   manager?: string,
  *   competencyRole?: string[]|string,
  *   profileImageFile?: File|null,
- *   profileImagePreviewUrl?: string,
- *   requestAdminRole?: boolean,
  * }} params
  */
 export const patchCurrentUserProfile = ({
@@ -90,65 +79,48 @@ export const patchCurrentUserProfile = ({
   manager,
   competencyRole,
   profileImageFile = null,
-  profileImagePreviewUrl = '',
-  requestAdminRole = false,
-}) => {
-  if (USE_PROFILE_MOCK) {
-    const result = resolveCurrentUserProfileSaveMock({
-      fullName,
-      country,
-      language,
-      about,
-      manager,
-      competencyRole,
-      profileImagePreviewUrl,
-      requestAdminRole,
-    });
+}) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE}`;
 
-    return Promise.resolve({
-      ok: result.ok,
-      message: result.message,
-      data: result.data,
-    });
-  }
-
-  return executeApiRequest({
-    request: () => {
-      const httpClient = getHttpClient();
-      const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE}`;
-
-      if (requestAdminRole) {
-        return httpClient.patch(url, buildProfileRequestAdminRoleBody({ requestAdminRole: true }));
-      }
-
-      const hasImageFile = profileImageFile instanceof File;
-
-      if (hasImageFile) {
-        const formData = buildProfilePatchFormData({
-          fullName,
-          country,
-          language,
-          about,
-          manager,
-          competencyRole,
-          profileImageFile,
-        });
-
-        return httpClient.patch(url, formData);
-      }
-
-      return httpClient.patch(url, buildProfilePatchBody({
+    if (isUploadableFile(profileImageFile)) {
+      const formData = buildProfilePatchFormData({
         fullName,
         country,
         language,
         about,
         manager,
         competencyRole,
-      }));
-    },
-    formatMessage,
-    fallbackMessage: requestAdminRole
-      ? profileMessages.requestAdminRoleError
-      : profileMessages.profileSaveError,
-  });
-};
+        profileImageFile,
+      });
+
+      return patchMultipart(httpClient, url, formData);
+    }
+
+    return httpClient.patch(url, buildProfilePatchBody({
+      fullName,
+      country,
+      language,
+      about,
+      manager,
+      competencyRole,
+    }));
+  },
+  formatMessage,
+  fallbackMessage: profileMessages.profileSaveError,
+});
+
+/**
+ * POST /api/v1/nras-management/admin-role-requests/
+ * @param {{ formatMessage: Function }} params
+ */
+export const postAdminRoleRequest = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${NRAS_MANAGEMENT_ADMIN_ROLE_REQUESTS}`;
+    return httpClient.post(url, buildAdminRoleRequestBody());
+  },
+  formatMessage,
+  fallbackMessage: profileMessages.requestAdminRoleError,
+});

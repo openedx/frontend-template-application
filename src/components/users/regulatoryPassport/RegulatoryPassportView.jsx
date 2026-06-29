@@ -84,6 +84,7 @@ const RegulatoryPassportView = ({
 
         <RegulatoryPassportCompletedTrainings
           items={completedTrainingsPage?.items}
+          count={completedTrainingsPage?.count}
           page={completedTrainingsPage?.page}
           totalPages={completedTrainingsPage?.totalPages}
           onPageChange={onCompletedTrainingsPageChange}

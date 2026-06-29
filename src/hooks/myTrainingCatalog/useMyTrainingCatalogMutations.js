@@ -6,7 +6,6 @@ import {
   updateMyTrainingCatalog,
 } from '../../api/myTrainingCatalog/myTrainingCatalogApi';
 import { myTrainingCatalogListQueryKey } from './useMyTrainingCatalogList';
-import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
 
 const useMyTrainingCatalogMutations = () => {
   const { formatMessage } = useIntl();
@@ -14,7 +13,7 @@ const useMyTrainingCatalogMutations = () => {
 
   const invalidateList = () => {
     queryClient.invalidateQueries({
-      queryKey: ['training-catalog', 'list', TRAINING_CATALOG_VARIANT_IDS.MY_TRAINING_CATALOG],
+      queryKey: ['training-catalog', 'list'],
     });
   };
 
@@ -48,7 +47,7 @@ const useMyTrainingCatalogMutations = () => {
     onSuccess: (_, { trainingId }) => {
       invalidateList();
       queryClient.invalidateQueries({ queryKey: ['training-catalog', 'form-detail', trainingId] });
-      queryClient.invalidateQueries({ queryKey: ['training-catalog', 'detail', TRAINING_CATALOG_VARIANT_IDS.MY_TRAINING_CATALOG, trainingId] });
+      queryClient.invalidateQueries({ queryKey: ['training-catalog', 'detail'] });
     },
   });
 

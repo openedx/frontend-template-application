@@ -1,3 +1,5 @@
+import { formatUserListCompetencyRole } from './usersUtils';
+
 /**
  * Normalize a users-list row (API or mock) for about/passport pages.
  * @param {object|null|undefined} row
@@ -20,7 +22,7 @@ export const normalizeUserListNavigationRow = (row, userId) => {
     country: row.country ?? '',
     role: row.role ?? '',
     roleSub: row.roleSub ?? row.role_sub ?? '',
-    competencyRole: row.competencyRole ?? row.competency_role ?? '',
+    competencyRole: formatUserListCompetencyRole(row.competencyRole ?? row.competency_role),
     userProfileImage: row.userProfileImage ?? row.user_profile_image ?? '',
     joined: row.joined ?? '',
   };

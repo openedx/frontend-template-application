@@ -68,6 +68,11 @@ const regulatoryPassportMessages = defineMessages({
     defaultMessage: 'Regulatory passport pagination',
     description: 'Accessible label for regulatory passport table pagination',
   },
+  showingCount: {
+    id: 'app.users.regulatoryPassport.pagination.showingCount',
+    defaultMessage: 'Showing {count} of {total} completed trainings',
+    description: 'Pagination summary for completed trainings table',
+  },
   exportTitle: {
     id: 'app.users.regulatoryPassport.export.title',
     defaultMessage: 'Export Regulatory Passport — {name}',

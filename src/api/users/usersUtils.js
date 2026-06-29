@@ -70,6 +70,22 @@ export const normalizeRoleOptionRows = (results) => {
 };
 
 /**
+ * @param {string|string[]|undefined|null} value
+ * @returns {string}
+ */
+export const formatUserListCompetencyRole = (value) => {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => (hasDisplayValue(item) ? String(item).trim() : ''))
+      .filter(Boolean)
+      .join(', ');
+  }
+
+  return hasDisplayValue(value) ? String(value).trim() : '';
+};
+
+/**
+ * Maps a row from GET /api/v1/role-assignment/users/.
  * @param {object} row
  */
 export const mapUserListRow = (row) => ({
@@ -77,8 +93,8 @@ export const mapUserListRow = (row) => ({
   name: row?.name ?? '',
   email: row?.email ?? '',
   role: row?.role ?? '',
-  userProfileImage: row?.user_profile_image ?? '',
-  competencyRole: row?.competency_role ?? '',
+  userProfileImage: row?.user_profile_image ?? row?.userProfileImage ?? '',
+  competencyRole: formatUserListCompetencyRole(row?.competency_role ?? row?.competencyRole),
 });
 
 /**

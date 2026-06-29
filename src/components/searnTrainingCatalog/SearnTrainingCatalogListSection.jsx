@@ -21,7 +21,6 @@ import useTrainingCatalogRequestAccessMutation from '../../hooks/trainingCatalog
 import messages from '../../pages/searnTrainingCatalog/messages';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import { ADMIN_PATHS } from '../../utils/adminPaths';
-import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
 import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import { getStarFill } from '../../pages/searnTrainingCatalog/starUtils';
 import '../../pages/searnTrainingCatalog/SearnTrainingCatalog.scss';
@@ -193,7 +192,6 @@ const SearnTrainingCatalogListSection = ({
 
     try {
       const result = await requestAccessMutation.mutateAsync({
-        catalogVariantId: TRAINING_CATALOG_VARIANT_IDS.SEARN_TRAINING_CATALOG,
         trainingId: pendingRequestAccess.id,
       });
 
@@ -489,18 +487,16 @@ const SearnTrainingCatalogListSection = ({
             </table>
           </div>
 
-          {totalPages > 1 && (
-            <TablePaginationFooter
-              currentPage={safePage}
-              totalPages={totalPages}
-              onPageChange={setPage}
-              paginationLabel={formatMessage(messages.paginationLabel)}
-              footerContent={formatMessage(
-                messages.showingCount,
-                buildPaginationShowingParams(items, count),
-              )}
-            />
-          )}
+          <TablePaginationFooter
+            currentPage={safePage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            paginationLabel={formatMessage(messages.paginationLabel)}
+            footerContent={formatMessage(
+              messages.showingCount,
+              buildPaginationShowingParams(items, count),
+            )}
+          />
         </div>
       )}
 

@@ -1,27 +1,35 @@
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
-import { resolveDashboardRecentActivitiesMock } from '../../api/dashboard/dashboardPageMockData';
+import { fetchDashboardRecentActivities } from '../../api/dashboard/dashboardApi';
+import dashboardMessages from '../../pages/dashboard/messages';
 
-export const DASHBOARD_RECENT_ACTIVITIES_QUERY_KEY = ['dashboard', 'recent-activities'];
+export const DASHBOARD_RECENT_ACTIVITIES_QUERY_KEY = ['dashboard', 'nra-admin', 'recent-activity'];
 
 /**
- * Loads recent activities for the dashboard.
- * Uses mock data until GET /api/v1/dashboard/recent-activities/ is available
- * (switch queryFn to fetchDashboardRecentActivities when ready).
- *
  * @param {{ enabled?: boolean }} [options]
  */
 const useDashboardRecentActivities = ({ enabled = true } = {}) => {
+  const { formatMessage } = useIntl();
+
   const query = useQuery({
     queryKey: DASHBOARD_RECENT_ACTIVITIES_QUERY_KEY,
     enabled,
-    queryFn: async () => resolveDashboardRecentActivitiesMock(),
+    queryFn: async () => {
+      const result = await fetchDashboardRecentActivities({ formatMessage });
+
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      return result.data?.results ?? [];
+    },
   });
 
   return {
     items: query.data ?? [],
     isLoading: query.isLoading,
     isError: query.isError,
-    errorMessage: query.error?.message ?? null,
+    errorMessage: query.error?.message ?? formatMessage(dashboardMessages.recentActivitiesLoadError),
     refetch: query.refetch,
   };
 };

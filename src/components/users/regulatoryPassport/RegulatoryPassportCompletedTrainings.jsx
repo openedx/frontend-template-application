@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import { TablePaginationFooter } from '../../dataTable';
 import { adminPath } from '../../../utils/adminPaths';
 import { hasDisplayValue } from '../../../utils/hasDisplayValue';
+import { buildPaginationShowingParams } from '../../../utils/paginationUtils';
 import messages from '../../../pages/users/regulatoryPassportMessages';
 
 const isAbsoluteUrl = (value) => /^https?:\/\//i.test(String(value));
 
 const RegulatoryPassportCompletedTrainings = ({
   items,
+  count = 0,
   page,
   totalPages,
   onPageChange,
@@ -89,6 +91,10 @@ const RegulatoryPassportCompletedTrainings = ({
         totalPages={totalPages}
         onPageChange={onPageChange}
         paginationLabel={formatMessage(messages.paginationLabel)}
+        footerContent={formatMessage(
+          messages.showingCount,
+          buildPaginationShowingParams(visibleItems, count),
+        )}
       />
     </div>
   );

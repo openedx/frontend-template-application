@@ -234,6 +234,7 @@ export const buildMyTrainingCatalogWriteBody = ({
  *   subDomainFilter?: string,
  *   activityFilter?: string,
  *   nraGoalFilter?: string,
+ *   catalogScope?: string,
  * }} filters
  */
 export const buildMyTrainingCatalogListParams = ({
@@ -246,11 +247,16 @@ export const buildMyTrainingCatalogListParams = ({
   subDomainFilter,
   activityFilter,
   nraGoalFilter,
+  catalogScope,
 }) => {
   const params = {
     page,
     page_size: pageSize,
   };
+
+  if (hasDisplayValue(catalogScope)) {
+    params.catalog_scope = catalogScope;
+  }
 
   const trimmedSearch = search?.trim();
   if (hasDisplayValue(trimmedSearch)) {

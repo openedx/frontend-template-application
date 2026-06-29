@@ -1,4 +1,5 @@
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { isUploadableFile } from '../multipartRequest';
 
 /**
  * @param {object} row
@@ -10,6 +11,7 @@ export const mapOrganizationProfileAdministrator = (row) => ({
 });
 
 /**
+ * Maps GET /api/v1/training-providers/organization-profile/ results.
  * @param {object} payload
  */
 export const mapOrganizationProfile = (payload) => {
@@ -22,8 +24,7 @@ export const mapOrganizationProfile = (payload) => {
   const administrators = Array.isArray(data.administrators)
     ? data.administrators
       .map(mapOrganizationProfileAdministrator)
-      .filter((row) => hasDisplayValue(row.id)
-        || (hasDisplayValue(row.name) && hasDisplayValue(row.email)))
+      .filter((row) => hasDisplayValue(row.name) && hasDisplayValue(row.email))
     : [];
 
   return {
@@ -38,8 +39,8 @@ export const mapOrganizationProfile = (payload) => {
 };
 
 /**
- * PATCH body — administrators omit `id` per API contract.
- * @param {Array<{ name: string, email: string }>} administrators
+ * PATCH administrators — send name and email only (omit id).
+ * @param {Array<{ name?: string, email?: string }>} administrators
  */
 export const buildOrganizationProfileAdministratorsPayload = (administrators) => {
   if (!Array.isArray(administrators)) {
@@ -55,6 +56,7 @@ export const buildOrganizationProfileAdministratorsPayload = (administrators) =>
 };
 
 /**
+ * Builds PATCH JSON body for organization profile.
  * @param {{
  *   organizationName: string,
  *   website: string,
@@ -62,7 +64,7 @@ export const buildOrganizationProfileAdministratorsPayload = (administrators) =>
  *   country: string,
  *   overview: string,
  *   logoUrl?: string,
- *   administrators?: Array<{ name: string, email: string }>|null,
+ *   administrators?: Array<{ name?: string, email?: string }>|null,
  * }} params
  */
 export const buildOrganizationProfilePatchBody = ({
@@ -75,12 +77,12 @@ export const buildOrganizationProfilePatchBody = ({
   administrators = null,
 }) => {
   const body = {
+    logo_url: logoUrl ?? '',
     organization_name: organizationName.trim(),
     website: website.trim(),
     contact_email: contactEmail.trim(),
     country: country.trim(),
     overview: overview.trim(),
-    logo_url: logoUrl ?? '',
   };
 
   if (administrators !== null) {
@@ -91,15 +93,17 @@ export const buildOrganizationProfilePatchBody = ({
 };
 
 /**
- * Multipart PATCH when a new logo file is uploaded.
+ * Multipart PATCH when a new logo file is uploaded (`logo` file field).
+ * Text fields and administrators follow the same JSON PATCH contract.
  * @param {{
  *   organizationName: string,
  *   website: string,
  *   contactEmail: string,
  *   country: string,
  *   overview: string,
+ *   logoUrl?: string,
  *   logoFile?: File|null,
- *   administrators?: Array<{ name: string, email: string }>|null,
+ *   administrators?: Array<{ name?: string, email?: string }>|null,
  * }} params
  */
 export const buildOrganizationProfilePatchFormData = ({
@@ -108,18 +112,20 @@ export const buildOrganizationProfilePatchFormData = ({
   contactEmail,
   country,
   overview,
+  logoUrl = '',
   logoFile = null,
   administrators = null,
 }) => {
   const formData = new FormData();
 
+  formData.append('logo_url', logoUrl ?? '');
   formData.append('organization_name', organizationName.trim());
   formData.append('website', website.trim());
   formData.append('contact_email', contactEmail.trim());
   formData.append('country', country.trim());
   formData.append('overview', overview.trim());
 
-  if (logoFile instanceof File) {
+  if (isUploadableFile(logoFile)) {
     formData.append('logo', logoFile, logoFile.name);
   }
 

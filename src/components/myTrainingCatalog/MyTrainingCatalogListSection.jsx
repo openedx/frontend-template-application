@@ -33,7 +33,7 @@ import '../../pages/searnTrainingCatalog/SearnTrainingCatalog.scss';
 import '../../pages/myTrainingCatalog/MyTrainingCatalog.scss';
 
 const MyTrainingCatalogListSection = ({
-  initialProviderSlug = '',
+  initialProviderFilter = FILTER_ALL,
   lockProviderFilter = false,
   lockedProviderLabel = '',
 } = {}) => {
@@ -64,8 +64,10 @@ const MyTrainingCatalogListSection = ({
   const [subDomainFilter, setSubDomainFilter] = useState(FILTER_ALL);
   const [activityFilter, setActivityFilter] = useState(FILTER_ALL);
   const [nraGoalFilter, setNraGoalFilter] = useState(FILTER_ALL);
-  const [providerSlugFilter, setProviderSlugFilter] = useState(
-    lockProviderFilter && hasDisplayValue(initialProviderSlug) ? initialProviderSlug : '',
+  const [providerFilter, setProviderFilter] = useState(
+    lockProviderFilter && hasDisplayValue(initialProviderFilter) && initialProviderFilter !== FILTER_ALL
+      ? initialProviderFilter
+      : FILTER_ALL,
   );
   const [page, setPage] = useState(1);
   const [pendingDelete, setPendingDelete] = useState(null);
@@ -82,12 +84,12 @@ const MyTrainingCatalogListSection = ({
   }, [searchText]);
 
   useEffect(() => {
-    if (!hasDisplayValue(initialProviderSlug)) {
+    if (!hasDisplayValue(initialProviderFilter) || initialProviderFilter === FILTER_ALL) {
       return;
     }
 
-    setProviderSlugFilter(initialProviderSlug);
-  }, [initialProviderSlug]);
+    setProviderFilter(initialProviderFilter);
+  }, [initialProviderFilter]);
 
   const {
     frameworkOptions,
@@ -116,7 +118,7 @@ const MyTrainingCatalogListSection = ({
     subDomainFilter,
     activityFilter,
     nraGoalFilter,
-    providerSlug: providerSlugFilter,
+    providerFilter,
     catalogVariantId: variant.id,
   });
 
@@ -171,7 +173,7 @@ const MyTrainingCatalogListSection = ({
           activityFilter,
           nraGoalFilter,
           catalogVariantId: variant.id,
-          providerSlug: providerSlugFilter,
+          providerFilter,
         }),
       });
 
@@ -208,7 +210,6 @@ const MyTrainingCatalogListSection = ({
 
     try {
       const result = await requestAccessMutation.mutateAsync({
-        catalogVariantId: variant.id,
         trainingId: pendingRequestAccess.id,
       });
 
@@ -229,6 +230,7 @@ const MyTrainingCatalogListSection = ({
           activityFilter,
           nraGoalFilter,
           catalogVariantId: variant.id,
+          providerFilter,
         }),
       });
 
@@ -540,18 +542,16 @@ const MyTrainingCatalogListSection = ({
             </table>
           </div>
 
-          {totalPages > 1 && (
-            <TablePaginationFooter
-              currentPage={safePage}
-              totalPages={totalPages}
-              onPageChange={setPage}
-              paginationLabel={formatMessage(catalogMessages.paginationLabel)}
-              footerContent={formatMessage(
-                catalogMessages.showingCount,
-                buildPaginationShowingParams(visibleItems, count),
-              )}
-            />
-          )}
+          <TablePaginationFooter
+            currentPage={safePage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            paginationLabel={formatMessage(catalogMessages.paginationLabel)}
+            footerContent={formatMessage(
+              catalogMessages.showingCount,
+              buildPaginationShowingParams(visibleItems, count),
+            )}
+          />
         </div>
       )}
 

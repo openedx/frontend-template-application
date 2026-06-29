@@ -4,8 +4,8 @@ import {
   DASHBOARD_STATS,
   DASHBOARD_TOP_REQUESTED_ACTIVITIES,
   DASHBOARD_TOP_TRAININGS,
-  DASHBOARD_RECENT_ACTIVITIES,
-  DASHBOARD_POPULAR_TRAININGS,
+  DASHBOARD_NRA_ADMIN_RECENT_ACTIVITY,
+  DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS,
   DASHBOARD_QUICK_ACTIONS,
   DASHBOARD_RECENT_TRAINING_COMPLETIONS,
   DASHBOARD_USERS_PER_COUNTRY,
@@ -67,12 +67,13 @@ export const fetchDashboardTopTrainings = ({ formatMessage }) => executeApiReque
 });
 
 /**
+ * GET /api/v1/dashboard/nra-admin/recent-activity/
  * @param {{ formatMessage: Function }} params
  */
 export const fetchDashboardRecentActivities = ({ formatMessage }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const url = `${getApiBaseUrl()}${DASHBOARD_RECENT_ACTIVITIES}`;
+    const url = `${getApiBaseUrl()}${DASHBOARD_NRA_ADMIN_RECENT_ACTIVITY}`;
     return httpClient.get(url);
   },
   formatMessage,
@@ -80,12 +81,13 @@ export const fetchDashboardRecentActivities = ({ formatMessage }) => executeApiR
 });
 
 /**
+ * GET /api/v1/dashboard/nra-admin/popular-trainings/
  * @param {{ formatMessage: Function }} params
  */
 export const fetchDashboardPopularTrainings = ({ formatMessage }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const url = `${getApiBaseUrl()}${DASHBOARD_POPULAR_TRAININGS}`;
+    const url = `${getApiBaseUrl()}${DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS}`;
     return httpClient.get(url);
   },
   formatMessage,
