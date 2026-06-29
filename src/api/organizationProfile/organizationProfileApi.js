@@ -1,16 +1,20 @@
 import { executeApiRequest } from '../apiRequest';
-import { ORGANIZATION_PROFILE } from '../endpoints';
+import { TRAINING_PROVIDERS_ORGANIZATION_PROFILE } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
 import organizationProfileMessages from '../../pages/organizationProfile/messages';
-import { buildOrganizationProfilePatchFormData } from './organizationProfileUtils';
+import {
+  buildOrganizationProfilePatchBody,
+  buildOrganizationProfilePatchFormData,
+} from './organizationProfileUtils';
 
 /**
+ * GET /api/v1/training-providers/organization-profile/
  * @param {{ formatMessage: Function }} params
  */
 export const fetchOrganizationProfile = ({ formatMessage }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const url = `${getApiBaseUrl()}${ORGANIZATION_PROFILE}`;
+    const url = `${getApiBaseUrl()}${TRAINING_PROVIDERS_ORGANIZATION_PROFILE}`;
     return httpClient.get(url);
   },
   formatMessage,
@@ -18,6 +22,7 @@ export const fetchOrganizationProfile = ({ formatMessage }) => executeApiRequest
 });
 
 /**
+ * PATCH /api/v1/training-providers/organization-profile/
  * @param {{
  *   formatMessage: Function,
  *   organizationName: string,
@@ -26,7 +31,9 @@ export const fetchOrganizationProfile = ({ formatMessage }) => executeApiRequest
  *   country: string,
  *   overview: string,
  *   logoFile?: File|null,
+ *   logoUrl?: string,
  *   administrators?: Array<{ id?: string, name: string, email: string }>,
+ *   includeAdministrators?: boolean,
  * }} params
  */
 export const patchOrganizationProfile = ({
@@ -37,15 +44,16 @@ export const patchOrganizationProfile = ({
   country,
   overview,
   logoFile = null,
+  logoUrl = '',
   administrators = [],
+  includeAdministrators = false,
 }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const url = `${getApiBaseUrl()}${ORGANIZATION_PROFILE}`;
-    const hasLogoFile = logoFile instanceof File;
-    const hasAdministrators = administrators.length > 0;
+    const url = `${getApiBaseUrl()}${TRAINING_PROVIDERS_ORGANIZATION_PROFILE}`;
+    const administratorsPayload = includeAdministrators ? administrators : null;
 
-    if (hasLogoFile || hasAdministrators) {
+    if (logoFile instanceof File) {
       const formData = buildOrganizationProfilePatchFormData({
         organizationName,
         website,
@@ -53,19 +61,21 @@ export const patchOrganizationProfile = ({
         country,
         overview,
         logoFile,
-        administrators,
+        administrators: administratorsPayload,
       });
 
       return httpClient.patch(url, formData);
     }
 
-    return httpClient.patch(url, {
-      organization_name: organizationName.trim(),
-      website: website.trim(),
-      contact_email: contactEmail.trim(),
-      country: country.trim(),
-      overview: overview.trim(),
-    });
+    return httpClient.patch(url, buildOrganizationProfilePatchBody({
+      organizationName,
+      website,
+      contactEmail,
+      country,
+      overview,
+      logoUrl,
+      administrators: administratorsPayload,
+    }));
   },
   formatMessage,
   fallbackMessage: organizationProfileMessages.saveError,

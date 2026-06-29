@@ -1,6 +1,10 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
-import { resolveMyTrainingCatalogFormDetailMock } from '../../api/myTrainingCatalog/myTrainingCatalogPageMockData';
+import { fetchMyTrainingCatalogFormDetail } from '../../api/myTrainingCatalog/myTrainingCatalogApi';
+import {
+  mapMyTrainingCatalogFormDetail,
+  unwrapMyTrainingCatalogFormDetail,
+} from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
 import myTrainingCatalogMessages from '../../pages/myTrainingCatalog/messages';
 
 export const myTrainingCatalogFormDetailQueryKey = (trainingId) => (
@@ -17,9 +21,20 @@ const useMyTrainingCatalogFormDetail = ({ trainingId, enabled = true } = {}) => 
     queryKey: myTrainingCatalogFormDetailQueryKey(trainingId),
     enabled: enabled && Boolean(trainingId),
     queryFn: async () => {
-      const detail = resolveMyTrainingCatalogFormDetailMock(trainingId);
+      const result = await fetchMyTrainingCatalogFormDetail({
+        formatMessage,
+        trainingId,
+      });
 
-      if (!detail) {
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      const detail = mapMyTrainingCatalogFormDetail(
+        unwrapMyTrainingCatalogFormDetail(result.data),
+      );
+
+      if (!detail || !detail.id) {
         throw new Error(formatMessage(myTrainingCatalogMessages.formDetailNotFound));
       }
 
@@ -31,7 +46,7 @@ const useMyTrainingCatalogFormDetail = ({ trainingId, enabled = true } = {}) => 
     training: query.data ?? null,
     isLoading: query.isLoading,
     isError: query.isError,
-    errorMessage: query.error?.message ?? null,
+    errorMessage: query.error?.message ?? formatMessage(myTrainingCatalogMessages.formDetailLoadError),
     refetch: query.refetch,
   };
 };

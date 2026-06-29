@@ -1,11 +1,11 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
+import { fetchMyTrainingCatalogDetail } from '../../api/myTrainingCatalog/myTrainingCatalogApi';
 import { fetchSearnTrainingCatalogDetail } from '../../api/searnTrainingCatalog/searnTrainingCatalogApi';
 import {
-  mapSearnTrainingCatalogDetail,
-  unwrapSearnTrainingCatalogDetail,
-} from '../../api/searnTrainingCatalog/searnTrainingCatalogUtils';
-import { resolveMyTrainingCatalogDetailMock } from '../../api/myTrainingCatalog/myTrainingCatalogPageMockData';
+  mapMyTrainingCatalogDetail,
+  unwrapMyTrainingCatalogDetail,
+} from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
 import catalogMessages from '../../pages/searnTrainingCatalog/messages';
 import myTrainingCatalogMessages from '../../pages/myTrainingCatalog/messages';
 import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
@@ -38,7 +38,7 @@ const useMyTrainingCatalogDetail = ({ trainingId, enabled = true } = {}) => {
           throw new Error(result.message);
         }
 
-        const detail = mapSearnTrainingCatalogDetail(unwrapSearnTrainingCatalogDetail(result.data));
+        const detail = mapMyTrainingCatalogDetail(unwrapMyTrainingCatalogDetail(result.data));
 
         if (!detail || !hasDisplayValue(detail.id)) {
           throw new Error(result.message || formatMessage(catalogMessages.detailLoadError));
@@ -47,8 +47,18 @@ const useMyTrainingCatalogDetail = ({ trainingId, enabled = true } = {}) => {
         return detail;
       }
 
-      const detail = resolveMyTrainingCatalogDetailMock(trainingId);
-      if (!detail) {
+      const result = await fetchMyTrainingCatalogDetail({
+        formatMessage,
+        trainingId,
+      });
+
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      const detail = mapMyTrainingCatalogDetail(unwrapMyTrainingCatalogDetail(result.data));
+
+      if (!detail || !hasDisplayValue(detail.id)) {
         throw new Error(formatMessage(myTrainingCatalogMessages.detailNotFound));
       }
 
@@ -63,7 +73,7 @@ const useMyTrainingCatalogDetail = ({ trainingId, enabled = true } = {}) => {
     errorMessage: query.error?.message ?? (
       isNraVariant
         ? formatMessage(catalogMessages.detailLoadError)
-        : formatMessage(myTrainingCatalogMessages.detailNotFound)
+        : formatMessage(myTrainingCatalogMessages.detailLoadError)
     ),
     refetch: query.refetch,
   };

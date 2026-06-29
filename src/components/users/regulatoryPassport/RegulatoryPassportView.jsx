@@ -12,8 +12,10 @@ const RegulatoryPassportView = ({
   detail,
   profileImageUrl = '',
   domainCoverage = [],
+  domainCoverageProps = {},
   completedTrainingsPage,
   onCompletedTrainingsPageChange = () => {},
+  onDownloadClick = () => {},
   certificateLinkState = null,
 }) => {
   const { formatMessage } = useIntl();
@@ -31,9 +33,10 @@ const RegulatoryPassportView = ({
               className="user-passport-page__brand-img"
               src={resolveHeaderLogoSrc()}
               alt={formatMessage(messages.brandAlt)}
-              onError={(event) => {
-                event.currentTarget.onerror = null;
-                event.currentTarget.src = HEADER_LOGO_FALLBACK;
+              onError={({ currentTarget }) => {
+                const image = currentTarget;
+                image.onerror = null;
+                image.src = HEADER_LOGO_FALLBACK;
               }}
             />
           </div>
@@ -74,7 +77,10 @@ const RegulatoryPassportView = ({
 
         <RegulatoryPassportStats items={detail.stats} />
 
-        <RegulatoryPassportDomainCoverage items={domainCoverage} />
+        <RegulatoryPassportDomainCoverage
+          items={domainCoverage}
+          {...domainCoverageProps}
+        />
 
         <RegulatoryPassportCompletedTrainings
           items={completedTrainingsPage?.items}
@@ -92,7 +98,11 @@ const RegulatoryPassportView = ({
               </p>
             </div>
             <div className="user-passport-page__export-actions">
-              <button type="button" className="user-passport-page__export-btn">
+              <button
+                type="button"
+                className="user-passport-page__export-btn"
+                onClick={onDownloadClick}
+              >
                 {formatMessage(messages.exportDownloadButton)}
               </button>
             </div>

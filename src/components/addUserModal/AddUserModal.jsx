@@ -45,7 +45,7 @@ const AddUserModal = ({
       setEmail(userDetail.email || '');
       setCountry(userDetail.country || '');
       setRole(userDetail.role || '');
-      setRoleSub(userDetail.provider || '');
+      setRoleSub(userDetail.roleSub || userDetail.provider || '');
       setManagerId('');
       setCompetencyRole('');
       return;

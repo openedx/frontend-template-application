@@ -29,7 +29,7 @@ export const hasRequestedTrainingIsFlaggedField = (row) => (
  */
 export const mapRequestedTrainingListRow = (row) => {
   const mapped = {
-    id: row?.id,
+    id: row?.id != null ? String(row.id) : '',
     activity: row?.activity,
     description: row?.description,
     status: row?.status,

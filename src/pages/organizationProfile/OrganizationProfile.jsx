@@ -28,9 +28,10 @@ const LOGO_MAX_BYTES = 2 * 1024 * 1024;
 const OrganizationProfile = () => {
   const { formatMessage } = useIntl();
   const { showToast } = useToast();
-  const { componentAccess } = useUserRole();
+  const { componentAccess, navbarAccess } = useUserRole();
   const access = componentAccess?.organizationProfile ?? {};
 
+  const canAccessOrganizationProfile = Boolean(navbarAccess?.accessOrganizationProfile ?? false);
   const canChangeOrganizationProfile = Boolean(access.canChangeOrganizationProfile);
   const showAdministratorsSection = Boolean(access.showAdministratorsSection);
 
@@ -42,7 +43,7 @@ const OrganizationProfile = () => {
     isError,
     errorMessage,
     refetch,
-  } = useOrganizationProfile();
+  } = useOrganizationProfile({ enabled: canAccessOrganizationProfile });
 
   const { updateMutation } = useOrganizationProfileMutation();
 
@@ -120,7 +121,10 @@ const OrganizationProfile = () => {
         title: formatMessage(messages.validationTitle),
         description: formatMessage(messages.validationLogoSize),
       });
-      event.target.value = '';
+      const input = event.target;
+      if (input) {
+        input.value = '';
+      }
       return;
     }
 
@@ -230,8 +234,9 @@ const OrganizationProfile = () => {
         country,
         overview,
         logoFile: pendingLogoFile,
-        logoPreviewUrl: logoPreview,
-        administrators: showAdministratorsSection ? administrators : [],
+        logoUrl: savedLogoUrl,
+        administrators,
+        includeAdministrators: showAdministratorsSection,
       });
 
       showToast({
@@ -412,7 +417,11 @@ const OrganizationProfile = () => {
                 </span>
                 <div className="organization-profile-page__admin-list">
                   {administrators.map((admin) => {
-                    if (!hasDisplayValue(admin.id)) {
+                    const adminKey = hasDisplayValue(admin.id)
+                      ? admin.id
+                      : `${admin.name}-${admin.email}`;
+
+                    if (!hasDisplayValue(adminKey)) {
                       return null;
                     }
 
@@ -421,7 +430,7 @@ const OrganizationProfile = () => {
                     if (isEditing) {
                       return (
                         <div
-                          key={admin.id}
+                          key={adminKey}
                           className="organization-profile-page__admin-row organization-profile-page__admin-row--editing"
                         >
                           <div className="organization-profile-page__admin-edit-fields">
@@ -468,7 +477,7 @@ const OrganizationProfile = () => {
                     }
 
                     return (
-                      <div key={admin.id} className="organization-profile-page__admin-row">
+                      <div key={adminKey} className="organization-profile-page__admin-row">
                         <div className="organization-profile-page__admin-info">
                           {hasDisplayValue(admin.name) && (
                             <p className="organization-profile-page__admin-name">{admin.name}</p>

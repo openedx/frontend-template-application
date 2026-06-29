@@ -1,5 +1,5 @@
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
-import { API_PAGE_SIZE } from '../endpoints';
+import { API_PAGE_SIZE, REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE } from '../endpoints';
 
 const OPTION_META_KEYS = new Set(['id', 'value', 'label']);
 
@@ -73,9 +73,9 @@ export const normalizeRoleOptionRows = (results) => {
  * @param {object} row
  */
 export const mapUserListRow = (row) => ({
-  id: row?.id,
-  name: row?.name,
-  email: row?.email,
+  id: row?.id != null ? String(row.id) : '',
+  name: row?.name ?? '',
+  email: row?.email ?? '',
   role: row?.role ?? '',
   userProfileImage: row?.user_profile_image ?? '',
   competencyRole: row?.competency_role ?? '',
@@ -108,11 +108,19 @@ const mapTrainingStatusRow = (row) => ({
   progress: Number.isFinite(Number(row?.progress)) ? Number(row.progress) : 0,
 });
 
-const mapAssignedTrainingRow = (row) => ({
-  id: row?.id,
-  title: row?.title ?? '',
-  providerLine: row?.provider_line ?? row?.providerLine ?? '',
-});
+const mapAssignedTrainingRow = (row) => {
+  const providerParts = [
+    row?.provider_name,
+    row?.time ?? row?.Time,
+    row?.provider_line ?? row?.providerLine,
+  ].filter(hasDisplayValue);
+
+  return {
+    id: row?.id != null ? String(row.id) : '',
+    title: row?.title ?? '',
+    providerLine: providerParts.join(' • '),
+  };
+};
 
 const mapMappedCompetencyRow = (row) => ({
   id: row?.id,
@@ -174,7 +182,7 @@ export const mapUserAboutDetail = (payload) => {
   }
 
   return {
-    id: data.id,
+    id: data.id != null ? String(data.id) : '',
     name: data.name ?? '',
     email: data.email ?? '',
     country: data.country != null ? String(data.country) : '',
@@ -192,23 +200,47 @@ export const mapUserAboutDetail = (payload) => {
 };
 
 /**
+ * Maps GET /api/v1/role-assignment/users/{id}/ for edit modal prefill.
  * @param {object} payload
  */
-export const mapUserDetail = (payload) => {
-  const about = mapUserAboutDetail(payload);
-  if (!about) {
+export const mapUserEditDetail = (payload) => {
+  const data = payload?.results ?? payload;
+
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
     return null;
   }
 
   return {
-    id: about.id,
-    name: about.name,
-    email: about.email,
-    country: about.country,
-    role: about.role,
-    provider: about.provider,
-    userProfileImage: about.userProfileImage,
-    competencyRole: about.competencyRole,
+    id: data.id != null ? String(data.id) : '',
+    name: data.name ?? '',
+    email: data.email ?? '',
+    country: data.country != null ? String(data.country) : '',
+    role: data.role ?? '',
+    provider: data.provider != null ? String(data.provider) : '',
+    roleSub: data.role_sub ?? data.roleSub ?? (data.provider != null ? String(data.provider) : ''),
+    userProfileImage: data.user_profile_image ?? data.userProfileImage ?? '',
+    competencyRole: data.competency_role ?? data.competencyRole ?? '',
+  };
+};
+
+/**
+ * @param {object} payload
+ */
+export const mapUserDetail = (payload) => {
+  const edit = mapUserEditDetail(payload);
+  if (!edit) {
+    return null;
+  }
+
+  return {
+    id: edit.id,
+    name: edit.name,
+    email: edit.email,
+    country: edit.country,
+    role: edit.role,
+    provider: edit.provider,
+    userProfileImage: edit.userProfileImage,
+    competencyRole: edit.competencyRole,
   };
 };
 
@@ -364,4 +396,65 @@ export const buildUserWritePayload = ({
   }
 
   return payload;
+};
+
+/**
+ * @param {Array<object>} results
+ */
+export const normalizeDropdownOptionRows = (results) => {
+  if (!Array.isArray(results)) {
+    return [];
+  }
+
+  return results
+    .filter((row) => hasDisplayValue(row?.value) && hasDisplayValue(row?.label))
+    .map((row) => ({
+      id: row.id ?? row.value,
+      value: String(row.value),
+      label: row.label,
+    }));
+};
+
+/**
+ * @param {Array<object>} results
+ */
+export const normalizeAssignableTrainingOptions = (results) => normalizeDropdownOptionRows(results);
+
+/**
+ * @param {{
+ *   page?: number,
+ *   pageSize?: number,
+ *   domainId?: string|number,
+ *   subDomainId?: string|number,
+ *   levelId?: string|number,
+ *   productTypeId?: string|number,
+ * }} params
+ */
+export const buildRegulatoryPassportDomainCoverageParams = ({
+  page = 1,
+  pageSize = REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE,
+  domainId,
+  subDomainId,
+  levelId,
+  productTypeId,
+} = {}) => {
+  const params = {
+    page,
+    page_size: pageSize,
+  };
+
+  if (domainId != null && domainId !== '') {
+    params.domain_id = domainId;
+  }
+  if (subDomainId != null && subDomainId !== '') {
+    params.sub_domain_id = subDomainId;
+  }
+  if (levelId != null && levelId !== '') {
+    params.level_id = levelId;
+  }
+  if (productTypeId != null && productTypeId !== '') {
+    params.product_type_id = productTypeId;
+  }
+
+  return params;
 };

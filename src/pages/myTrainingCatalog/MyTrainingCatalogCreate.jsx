@@ -6,9 +6,10 @@ import MultiSelectInput from '../../components/multiSelectInput/MultiSelectInput
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
-import { mapMyTrainingCatalogFormDetailToState } from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
+import { mapMyTrainingCatalogFormDetailToState, buildMyTrainingCatalogWriteBody } from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
 import useMyTrainingCatalogFormDetail from '../../hooks/myTrainingCatalog/useMyTrainingCatalogFormDetail';
 import useMyTrainingCatalogFormOptions from '../../hooks/myTrainingCatalog/useMyTrainingCatalogFormOptions';
+import useMyTrainingCatalogMutations from '../../hooks/myTrainingCatalog/useMyTrainingCatalogMutations';
 import useTrainingCatalogVariant from '../../hooks/myTrainingCatalog/useTrainingCatalogVariant';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import catalogMessages from '../searnTrainingCatalog/messages';
@@ -49,6 +50,8 @@ const MyTrainingCatalogCreate = () => {
     enabled: isEditMode,
   });
 
+  const { createMutation, updateMutation } = useMyTrainingCatalogMutations();
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [language, setLanguage] = useState('');
@@ -68,6 +71,7 @@ const MyTrainingCatalogCreate = () => {
 
   const dropdownSearchPlaceholder = formatMessage(catalogMessages.dropdownSearchPlaceholder);
   const dropdownNoOptions = formatMessage(catalogMessages.dropdownNoOptions);
+  const isSaving = createMutation.isPending || updateMutation.isPending;
   const isLoading = isOptionsLoading || (isEditMode && isDetailLoading);
   const showLoadError = isEditMode && isDetailError;
 
@@ -142,7 +146,7 @@ const MyTrainingCatalogCreate = () => {
     });
   }, [detailErrorMessage, formatMessage, showLoadError, showToast]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!hasDisplayValue(name) || !hasDisplayValue(cost) || !hasDisplayValue(mode)
       || !hasDisplayValue(approach) || !hasDisplayValue(evaluation) || !hasDisplayValue(productType)
       || mappedActivities.length === 0) {
@@ -153,11 +157,42 @@ const MyTrainingCatalogCreate = () => {
       return;
     }
 
-    showToast({
-      title: formatMessage(isEditMode ? messages.updateSuccessTitle : messages.createSuccessTitle),
-      description: formatMessage(isEditMode ? messages.updateSuccessDescription : messages.createSuccessDescription),
+    const payload = buildMyTrainingCatalogWriteBody({
+      title: name,
+      description,
+      language,
+      duration,
+      cost,
+      mode,
+      approach,
+      evaluation,
+      outcome,
+      productType,
+      nraObjectives,
+      registrationBy,
+      registrationValue,
+      mappedCompetencies,
+      mappedActivities,
     });
-    navigate(variant.paths.list);
+
+    try {
+      const result = isEditMode
+        ? await updateMutation.mutateAsync({ trainingId, payload })
+        : await createMutation.mutateAsync(payload);
+
+      showToast({
+        title: formatMessage(isEditMode ? messages.updateSuccessTitle : messages.createSuccessTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(isEditMode ? messages.updateSuccessDescription : messages.createSuccessDescription),
+      });
+      navigate(variant.paths.list);
+    } catch (error) {
+      showToast({
+        title: formatMessage(isEditMode ? messages.updateErrorTitle : messages.createErrorTitle),
+        description: error?.message || formatMessage(isEditMode ? messages.updateError : messages.createError),
+      });
+    }
   };
 
   if (isLoading) {
@@ -404,6 +439,7 @@ const MyTrainingCatalogCreate = () => {
           type="button"
           className="my-training-create__primary-button"
           onClick={handleSubmit}
+          disabled={isSaving}
         >
           {formatMessage(isEditMode ? messages.submitEdit : messages.submitCreate)}
         </button>

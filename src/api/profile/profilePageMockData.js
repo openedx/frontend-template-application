@@ -42,7 +42,7 @@ export const resolveCurrentUserProfileSaveMock = ({
   requestAdminRole = false,
 }) => {
   if (requestAdminRole) {
-    if (mockProfileState.results?.is_admin) {
+    if (mockProfileState.results?.access_admin_status ?? mockProfileState.results?.is_admin) {
       return {
         ok: false,
         message: 'You already have administrator access.',

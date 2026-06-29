@@ -1,4 +1,12 @@
 .my-training-catalog-page {
+  .searn-training-catalog-page__td {
+    color: #2A3B8F;
+  }
+
+  .searn-training-catalog-page__training-title {
+    color: #2A3B8F;
+  }
+
   &__toolbar {
     gap: .75rem;
   }
@@ -65,7 +73,7 @@
 
   &__cost-cell {
     font-weight: 600;
-    color: #111827;
+    color: #2A3B8F;
   }
 
   &__icon-button {

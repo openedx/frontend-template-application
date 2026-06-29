@@ -4,9 +4,9 @@ import { hasDisplayValue } from '../../utils/hasDisplayValue';
  * @param {object} row
  */
 export const mapOrganizationProfileAdministrator = (row) => ({
-  id: row?.id,
-  name: row?.name,
-  email: row?.email,
+  id: row?.id != null ? String(row.id) : '',
+  name: row?.name ?? '',
+  email: row?.email ?? '',
 });
 
 /**
@@ -22,18 +22,36 @@ export const mapOrganizationProfile = (payload) => {
   const administrators = Array.isArray(data.administrators)
     ? data.administrators
       .map(mapOrganizationProfileAdministrator)
-      .filter((row) => hasDisplayValue(row.id))
+      .filter((row) => hasDisplayValue(row.id)
+        || (hasDisplayValue(row.name) && hasDisplayValue(row.email)))
     : [];
 
   return {
-    logoUrl: data.logo_url,
-    organizationName: data.organization_name,
-    website: data.website,
-    contactEmail: data.contact_email,
-    country: data.country,
-    overview: data.overview,
+    logoUrl: data.logo_url ?? '',
+    organizationName: data.organization_name ?? '',
+    website: data.website ?? '',
+    contactEmail: data.contact_email ?? '',
+    country: data.country != null ? String(data.country) : '',
+    overview: data.overview ?? '',
     administrators,
   };
+};
+
+/**
+ * PATCH body — administrators omit `id` per API contract.
+ * @param {Array<{ name: string, email: string }>} administrators
+ */
+export const buildOrganizationProfileAdministratorsPayload = (administrators) => {
+  if (!Array.isArray(administrators)) {
+    return [];
+  }
+
+  return administrators
+    .filter((admin) => hasDisplayValue(admin?.name) && hasDisplayValue(admin?.email))
+    .map((admin) => ({
+      name: admin.name.trim(),
+      email: admin.email.trim(),
+    }));
 };
 
 /**
@@ -43,8 +61,45 @@ export const mapOrganizationProfile = (payload) => {
  *   contactEmail: string,
  *   country: string,
  *   overview: string,
+ *   logoUrl?: string,
+ *   administrators?: Array<{ name: string, email: string }>|null,
+ * }} params
+ */
+export const buildOrganizationProfilePatchBody = ({
+  organizationName,
+  website,
+  contactEmail,
+  country,
+  overview,
+  logoUrl = '',
+  administrators = null,
+}) => {
+  const body = {
+    organization_name: organizationName.trim(),
+    website: website.trim(),
+    contact_email: contactEmail.trim(),
+    country: country.trim(),
+    overview: overview.trim(),
+    logo_url: logoUrl ?? '',
+  };
+
+  if (administrators !== null) {
+    body.administrators = buildOrganizationProfileAdministratorsPayload(administrators);
+  }
+
+  return body;
+};
+
+/**
+ * Multipart PATCH when a new logo file is uploaded.
+ * @param {{
+ *   organizationName: string,
+ *   website: string,
+ *   contactEmail: string,
+ *   country: string,
+ *   overview: string,
  *   logoFile?: File|null,
- *   administrators?: Array<{ id?: string, name: string, email: string }>,
+ *   administrators?: Array<{ name: string, email: string }>|null,
  * }} params
  */
 export const buildOrganizationProfilePatchFormData = ({
@@ -54,7 +109,7 @@ export const buildOrganizationProfilePatchFormData = ({
   country,
   overview,
   logoFile = null,
-  administrators = [],
+  administrators = null,
 }) => {
   const formData = new FormData();
 
@@ -68,8 +123,11 @@ export const buildOrganizationProfilePatchFormData = ({
     formData.append('logo', logoFile, logoFile.name);
   }
 
-  if (administrators.length > 0) {
-    formData.append('administrators', JSON.stringify(administrators));
+  if (administrators !== null) {
+    formData.append(
+      'administrators',
+      JSON.stringify(buildOrganizationProfileAdministratorsPayload(administrators)),
+    );
   }
 
   return formData;

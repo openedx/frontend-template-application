@@ -1,8 +1,0 @@
-{
-  "results": [
-    { "id": "ts1", "title": "Risk-Based Inspection", "status": "Completed", "progress": 100 },
-    { "id": "ts2", "title": "Quality Management Systems", "status": "In Progress", "progress": 65 },
-    { "id": "ts3", "title": "Regulatory Reliance Pathways", "status": "In Progress", "progress": 30 },
-    { "id": "ts4", "title": "Clinical Trial Oversight", "status": "Not Started", "progress": 0 }
-  ]
-}

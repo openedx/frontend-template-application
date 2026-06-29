@@ -8,6 +8,6 @@
     "profile_image_url": "https://cdn.example.com/users/u123/profile.jpg",
     "manager": "manager-u2",
     "competency_role": ["Reviewer", "Inspector"],
-    "is_admin": false
+    "access_admin_status": false
   }
 }

@@ -53,9 +53,9 @@ export const mapProfileResult = (payload) => {
     language: data.language ?? '',
     about: data.about ?? '',
     profileImageUrl: data.profile_image_url ?? '',
-    manager: data.manager ?? '',
+    manager: data.manager != null ? String(data.manager) : '',
     competencyRole: normalizeCompetencyRoleList(data.competency_role),
-    isAdmin: Boolean(data.is_admin),
+    isAdmin: Boolean(data.access_admin_status ?? data.is_admin),
   };
 };
 

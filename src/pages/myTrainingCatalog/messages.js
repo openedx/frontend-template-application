@@ -89,12 +89,22 @@ export default defineMessages({
   deleteSuccessTitle: {
     id: 'app.myTrainingCatalog.delete.successTitle',
     defaultMessage: 'Training deleted',
-    description: 'Toast title when training delete succeeds (mock)',
+    description: 'Toast title when training delete succeeds',
   },
   deleteSuccessDescription: {
     id: 'app.myTrainingCatalog.delete.successDescription',
     defaultMessage: '"{name}" has been removed from your catalog.',
-    description: 'Toast description when training delete succeeds (mock)',
+    description: 'Toast description when training delete succeeds',
+  },
+  deleteError: {
+    id: 'app.myTrainingCatalog.delete.error',
+    defaultMessage: 'Unable to delete this training. Please try again.',
+    description: 'Fallback when training delete API fails',
+  },
+  deleteErrorTitle: {
+    id: 'app.myTrainingCatalog.delete.errorTitle',
+    defaultMessage: 'Delete failed',
+    description: 'Toast title when training delete fails',
   },
   detailLoadError: {
     id: 'app.myTrainingCatalog.detail.loadError',
@@ -304,12 +314,22 @@ export default defineMessages({
   createSuccessTitle: {
     id: 'app.myTrainingCatalog.create.success.title',
     defaultMessage: 'Training created',
-    description: 'Toast title when create training succeeds (mock)',
+    description: 'Toast title when create training succeeds',
   },
   createSuccessDescription: {
     id: 'app.myTrainingCatalog.create.success.description',
     defaultMessage: 'Your training has been saved.',
-    description: 'Toast description when create training succeeds (mock)',
+    description: 'Toast description when create training succeeds',
+  },
+  createError: {
+    id: 'app.myTrainingCatalog.create.error',
+    defaultMessage: 'Unable to create this training. Please try again.',
+    description: 'Fallback when create training API fails',
+  },
+  createErrorTitle: {
+    id: 'app.myTrainingCatalog.create.errorTitle',
+    defaultMessage: 'Create failed',
+    description: 'Toast title when create training fails',
   },
   editPageTitle: {
     id: 'app.myTrainingCatalog.edit.pageTitle',
@@ -324,12 +344,27 @@ export default defineMessages({
   updateSuccessTitle: {
     id: 'app.myTrainingCatalog.edit.success.title',
     defaultMessage: 'Training updated',
-    description: 'Toast title when edit training succeeds (mock)',
+    description: 'Toast title when edit training succeeds',
   },
   updateSuccessDescription: {
     id: 'app.myTrainingCatalog.edit.success.description',
     defaultMessage: 'Your training changes have been saved.',
-    description: 'Toast description when edit training succeeds (mock)',
+    description: 'Toast description when edit training succeeds',
+  },
+  updateError: {
+    id: 'app.myTrainingCatalog.edit.error',
+    defaultMessage: 'Unable to save your training changes. Please try again.',
+    description: 'Fallback when update training API fails',
+  },
+  updateErrorTitle: {
+    id: 'app.myTrainingCatalog.edit.errorTitle',
+    defaultMessage: 'Save failed',
+    description: 'Toast title when update training fails',
+  },
+  formOptionsLoadError: {
+    id: 'app.myTrainingCatalog.formOptions.loadError',
+    defaultMessage: 'Unable to load training form options. Please try again.',
+    description: 'Fallback when training catalog form options API fails',
   },
   formDetailLoadError: {
     id: 'app.myTrainingCatalog.formDetail.loadError',

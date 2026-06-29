@@ -1,7 +1,10 @@
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { API_PAGE_SIZE } from '../../api/endpoints';
+import { fetchMyTrainingCatalogList } from '../../api/myTrainingCatalog/myTrainingCatalogApi';
+import { normalizeMyTrainingCatalogList } from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
 import { resolveMyTrainingCatalogListMock } from '../../api/myTrainingCatalog/myTrainingCatalogPageMockData';
-
+import myTrainingCatalogMessages from '../../pages/myTrainingCatalog/messages';
 import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
 
 export const myTrainingCatalogListQueryKey = (filters) => [
@@ -20,8 +23,6 @@ export const myTrainingCatalogListQueryKey = (filters) => [
 ];
 
 /**
- * Uses mock data until GET /api/v1/my-training-catalog/ is available.
- *
  * @param {{
  *   page?: number,
  *   search?: string,
@@ -49,6 +50,9 @@ const useMyTrainingCatalogList = ({
   catalogVariantId = TRAINING_CATALOG_VARIANT_IDS.MY_TRAINING_CATALOG,
   enabled = true,
 } = {}) => {
+  const { formatMessage } = useIntl();
+  const isNraVariant = catalogVariantId === TRAINING_CATALOG_VARIANT_IDS.NRA_SPECIFIC_TRAINING_CATALOG;
+
   const query = useQuery({
     queryKey: myTrainingCatalogListQueryKey({
       page,
@@ -63,13 +67,44 @@ const useMyTrainingCatalogList = ({
       providerSlug,
     }),
     enabled,
-    queryFn: async () => resolveMyTrainingCatalogListMock({
-      page,
-      pageSize: API_PAGE_SIZE,
-      search,
-      catalogVariantId,
-      providerSlug,
-    }),
+    queryFn: async () => {
+      if (isNraVariant) {
+        return resolveMyTrainingCatalogListMock({
+          page,
+          pageSize: API_PAGE_SIZE,
+          search,
+          catalogVariantId,
+          providerSlug,
+        });
+      }
+
+      const result = await fetchMyTrainingCatalogList({
+        formatMessage,
+        page,
+        pageSize: API_PAGE_SIZE,
+        search,
+        frameworkFilter,
+        roleFilter,
+        domainFilter,
+        subDomainFilter,
+        activityFilter,
+        nraGoalFilter,
+      });
+
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      const data = result.data ?? {};
+
+      return {
+        items: normalizeMyTrainingCatalogList(data.results),
+        count: data.count ?? 0,
+        page: data.page ?? page,
+        pageSize: data.page_size ?? API_PAGE_SIZE,
+        totalPages: data.total_pages ?? 1,
+      };
+    },
   });
 
   return {
@@ -79,7 +114,7 @@ const useMyTrainingCatalogList = ({
     totalPages: query.data?.totalPages ?? 1,
     isLoading: query.isLoading,
     isError: query.isError,
-    errorMessage: query.error?.message ?? null,
+    errorMessage: query.error?.message ?? formatMessage(myTrainingCatalogMessages.listLoadError),
     refetch: query.refetch,
   };
 };

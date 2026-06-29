@@ -1,11 +1,11 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
+import { fetchMyTrainingCatalogFeedback } from '../../api/myTrainingCatalog/myTrainingCatalogApi';
 import { fetchSearnTrainingCatalogFeedback } from '../../api/searnTrainingCatalog/searnTrainingCatalogApi';
 import {
-  mapSearnTrainingCatalogFeedback,
-  unwrapSearnTrainingCatalogFeedback,
-} from '../../api/searnTrainingCatalog/searnTrainingCatalogUtils';
-import { resolveMyTrainingCatalogFeedbackMock } from '../../api/myTrainingCatalog/myTrainingCatalogPageMockData';
+  mapMyTrainingCatalogFeedback,
+  unwrapMyTrainingCatalogFeedback,
+} from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
 import catalogMessages from '../../pages/searnTrainingCatalog/messages';
 import myTrainingCatalogMessages from '../../pages/myTrainingCatalog/messages';
 import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
@@ -38,7 +38,7 @@ const useMyTrainingCatalogFeedback = ({ trainingId, enabled = true } = {}) => {
           throw new Error(result.message);
         }
 
-        const feedback = mapSearnTrainingCatalogFeedback(unwrapSearnTrainingCatalogFeedback(result.data));
+        const feedback = mapMyTrainingCatalogFeedback(unwrapMyTrainingCatalogFeedback(result.data));
 
         if (!feedback) {
           throw new Error(result.message || formatMessage(catalogMessages.feedbackLoadError));
@@ -47,12 +47,22 @@ const useMyTrainingCatalogFeedback = ({ trainingId, enabled = true } = {}) => {
         return feedback;
       }
 
-      const data = resolveMyTrainingCatalogFeedbackMock(trainingId);
-      if (!data) {
+      const result = await fetchMyTrainingCatalogFeedback({
+        formatMessage,
+        trainingId,
+      });
+
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      const feedback = mapMyTrainingCatalogFeedback(unwrapMyTrainingCatalogFeedback(result.data));
+
+      if (!feedback) {
         throw new Error(formatMessage(myTrainingCatalogMessages.feedbackNotFound));
       }
 
-      return data;
+      return feedback;
     },
   });
 
@@ -63,7 +73,7 @@ const useMyTrainingCatalogFeedback = ({ trainingId, enabled = true } = {}) => {
     errorMessage: query.error?.message ?? (
       isNraVariant
         ? formatMessage(catalogMessages.feedbackLoadError)
-        : formatMessage(myTrainingCatalogMessages.feedbackNotFound)
+        : formatMessage(myTrainingCatalogMessages.feedbackLoadError)
     ),
     refetch: query.refetch,
   };

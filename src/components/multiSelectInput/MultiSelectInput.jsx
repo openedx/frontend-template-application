@@ -13,22 +13,28 @@ const MultiSelectInput = ({
   disabled = false,
   searchPlaceholder,
   removeAllLabel,
+  onSearchChange,
+  filterOptionsLocally = true,
 }) => {
   const { formatMessage } = useIntl();
   const selectedValues = Array.isArray(selectedValuesProp) ? selectedValuesProp : [];
   const [searchTerm, setSearchTerm] = useState('');
-  const shouldShowSearch = options.length > 5;
+  const shouldShowSearch = filterOptionsLocally ? options.length > 5 : true;
   const filterPlaceholder = searchPlaceholder ?? formatMessage(commonMessages.multiSelectFilterPlaceholder);
   const clearAllLabel = removeAllLabel ?? formatMessage(commonMessages.multiSelectRemoveAll);
 
   const filteredOptions = useMemo(() => {
+    if (!filterOptionsLocally) {
+      return options;
+    }
+
     const query = searchTerm.trim().toLowerCase();
     if (!query) {
       return options;
     }
 
     return options.filter(option => option.label.toLowerCase().startsWith(query));
-  }, [options, searchTerm]);
+  }, [filterOptionsLocally, options, searchTerm]);
   const selectedOptions = useMemo(
     () => options.filter(option => selectedValues.includes(option.value)),
     [options, selectedValues],
@@ -42,7 +48,11 @@ const MultiSelectInput = ({
           className="multi-select-input__search"
           value={searchTerm}
           placeholder={filterPlaceholder}
-          onChange={event => setSearchTerm(event.target.value)}
+          onChange={(event) => {
+            const nextValue = event.target.value;
+            setSearchTerm(nextValue);
+            onSearchChange?.(nextValue);
+          }}
           disabled={disabled}
         />
       )}

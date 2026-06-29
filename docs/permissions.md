@@ -339,7 +339,7 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
 - **`showCompetencyRoleField`**
   - **Controls**: "Competency Role" input above About; `competency_role` sent as a string array in PATCH when saving
 - **`canRequestAdminRole`**
-  - **Controls**: "Request Admin Role" button in the page footer (hidden when GET `is_admin` is `true`)
+  - **Controls**: "Request Admin Role" button in the page footer (hidden when GET `access_admin_status` is `true`)
 
 ### Settings
 

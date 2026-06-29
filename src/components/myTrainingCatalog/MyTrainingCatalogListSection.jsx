@@ -4,7 +4,7 @@ import {
   faBookOpen, faPen, faPlus, faStar, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { FILTER_ALL } from '../../api/searnTrainingCatalog/trainingsCatalogOptionsUtils';
@@ -19,6 +19,7 @@ import { useUserRole } from '../../contexts/UserRoleContext';
 import useMyTrainingCatalogList, {
   myTrainingCatalogListQueryKey,
 } from '../../hooks/myTrainingCatalog/useMyTrainingCatalogList';
+import useMyTrainingCatalogMutations from '../../hooks/myTrainingCatalog/useMyTrainingCatalogMutations';
 import useTrainingCatalogRequestAccessMutation from '../../hooks/trainingCatalogRequestAccess/useTrainingCatalogRequestAccessMutation';
 import useTrainingCatalogFilterOptions from '../../hooks/searnTrainingCatalog/useTrainingCatalogFilterOptions';
 import catalogMessages from '../../pages/searnTrainingCatalog/messages';
@@ -45,6 +46,7 @@ const MyTrainingCatalogListSection = ({
   const isNraVariant = variant.id === TRAINING_CATALOG_VARIANT_IDS.NRA_SPECIFIC_TRAINING_CATALOG;
   const queryClient = useQueryClient();
   const requestAccessMutation = useTrainingCatalogRequestAccessMutation();
+  const { deleteMutation } = useMyTrainingCatalogMutations();
 
   const canCreateTraining = Boolean(access.canCreateTraining);
   const canEditTraining = Boolean(access.canEditTraining);
@@ -66,7 +68,6 @@ const MyTrainingCatalogListSection = ({
     lockProviderFilter && hasDisplayValue(initialProviderSlug) ? initialProviderSlug : '',
   );
   const [page, setPage] = useState(1);
-  const [hiddenIds, setHiddenIds] = useState([]);
   const [pendingDelete, setPendingDelete] = useState(null);
   const [pendingRequestAccess, setPendingRequestAccess] = useState(null);
   const [requestedTrainingIds, setRequestedTrainingIds] = useState([]);
@@ -119,10 +120,7 @@ const MyTrainingCatalogListSection = ({
     catalogVariantId: variant.id,
   });
 
-  const visibleItems = useMemo(
-    () => items.filter((row) => !hiddenIds.includes(row.id)),
-    [hiddenIds, items],
-  );
+  const visibleItems = items;
 
   useEffect(() => {
     if (!optionsErrorMessage) {
@@ -154,17 +152,42 @@ const MyTrainingCatalogListSection = ({
     setPage(1);
   };
 
-  const handleConfirmDelete = () => {
-    if (!pendingDelete) {
+  const handleConfirmDelete = async () => {
+    if (!pendingDelete?.id || deleteMutation.isPending) {
       return;
     }
 
-    setHiddenIds((current) => [...current, pendingDelete.id]);
-    showToast({
-      title: formatMessage(messages.deleteSuccessTitle),
-      description: formatMessage(messages.deleteSuccessDescription, { name: pendingDelete.title || '' }),
-    });
-    setPendingDelete(null);
+    try {
+      const result = await deleteMutation.mutateAsync(pendingDelete.id);
+
+      await queryClient.invalidateQueries({
+        queryKey: myTrainingCatalogListQueryKey({
+          page,
+          search: searchQuery,
+          frameworkFilter,
+          roleFilter,
+          domainFilter,
+          subDomainFilter,
+          activityFilter,
+          nraGoalFilter,
+          catalogVariantId: variant.id,
+          providerSlug: providerSlugFilter,
+        }),
+      });
+
+      showToast({
+        title: formatMessage(messages.deleteSuccessTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.deleteSuccessDescription, { name: pendingDelete.title || '' }),
+      });
+      setPendingDelete(null);
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.deleteErrorTitle),
+        description: error?.message || formatMessage(messages.deleteError),
+      });
+    }
   };
 
   const dropdownSearchPlaceholder = formatMessage(catalogMessages.dropdownSearchPlaceholder);
