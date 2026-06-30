@@ -2,7 +2,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { API_PAGE_SIZE } from '../../api/endpoints';
 import { fetchMyTrainingCatalogList } from '../../api/myTrainingCatalog/myTrainingCatalogApi';
-import { normalizeMyTrainingCatalogList } from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
+import { normalizeMyTrainingCatalogList, hasMyTrainingCatalogListFilters } from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
 import { fetchSearnTrainingCatalogList } from '../../api/searnTrainingCatalog/searnTrainingCatalogApi';
 import { mapSearnTrainingCatalogListResults } from '../../api/searnTrainingCatalog/searnTrainingCatalogUtils';
 import { FILTER_ALL } from '../../api/searnTrainingCatalog/trainingsCatalogOptionsUtils';
@@ -115,7 +115,17 @@ const useMyTrainingCatalogList = ({
         subDomainFilter,
         activityFilter,
         nraGoalFilter,
-        catalogScope: isNraVariant ? 'nra' : undefined,
+        catalogScope: isNraVariant && hasMyTrainingCatalogListFilters({
+          search,
+          frameworkFilter,
+          roleFilter,
+          domainFilter,
+          subDomainFilter,
+          activityFilter,
+          nraGoalFilter,
+        })
+          ? 'nra'
+          : undefined,
       });
 
       if (!result.ok) {

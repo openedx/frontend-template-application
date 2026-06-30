@@ -1,28 +1,46 @@
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
-import { resolveDashboardRecentTrainingCompletionsMock } from '../../api/dashboard/dashboardPageMockData';
+import { fetchDashboardRecentTrainingCompletions } from '../../api/dashboard/dashboardApi';
+import { resolveDashboardCompletedTrainingsScope } from '../../api/dashboard/dashboardScopeUtils';
+import { useUserRole } from '../../contexts/UserRoleContext';
+import { ADMIN_PATHS } from '../../utils/adminPaths';
+import dashboardMessages from '../../pages/dashboard/messages';
 
-export const DASHBOARD_RECENT_TRAINING_COMPLETIONS_QUERY_KEY = ['dashboard', 'recent-training-completions'];
+export const dashboardRecentTrainingCompletionsQueryKey = (scope) => (
+  ['dashboard', 'recent-training-completions', scope ?? 'default']
+);
 
 /**
- * Loads recent training completions for the dashboard.
- * Uses mock data until GET /api/v1/dashboard/recent-training-completions/ is available
- * (switch queryFn to fetchDashboardRecentTrainingCompletions when ready).
- *
  * @param {{ enabled?: boolean }} [options]
  */
 const useDashboardRecentTrainingCompletions = ({ enabled = true } = {}) => {
+  const { formatMessage } = useIntl();
+  const { role } = useUserRole();
+  const scope = resolveDashboardCompletedTrainingsScope(role);
+
   const query = useQuery({
-    queryKey: DASHBOARD_RECENT_TRAINING_COMPLETIONS_QUERY_KEY,
+    queryKey: dashboardRecentTrainingCompletionsQueryKey(scope),
     enabled,
-    queryFn: async () => resolveDashboardRecentTrainingCompletionsMock(),
+    queryFn: async () => {
+      const result = await fetchDashboardRecentTrainingCompletions({ formatMessage, userRole: role });
+
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      return {
+        items: result.data?.results ?? [],
+        viewAllHref: ADMIN_PATHS.myTraining,
+      };
+    },
   });
 
   return {
     items: query.data?.items ?? [],
-    viewAllHref: query.data?.viewAllHref ?? null,
+    viewAllHref: query.data?.viewAllHref ?? ADMIN_PATHS.myTraining,
     isLoading: query.isLoading,
     isError: query.isError,
-    errorMessage: query.error?.message ?? null,
+    errorMessage: query.error?.message ?? formatMessage(dashboardMessages.recentTrainingCompletionsLoadError),
     refetch: query.refetch,
   };
 };

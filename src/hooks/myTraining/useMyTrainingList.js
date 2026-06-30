@@ -2,7 +2,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMyTrainingList } from '../../api/myTraining/myTrainingApi';
 import { mapMyTrainingListResults } from '../../api/myTraining/myTrainingUtils';
-import { API_PAGE_SIZE } from '../../api/endpoints';
+import { MY_TRAINING_PAGE_SIZE } from '../../api/endpoints';
 import myTrainingMessages from '../../pages/myTraining/messages';
 
 export const myTrainingListQueryKey = (filters) => [
@@ -13,8 +13,6 @@ export const myTrainingListQueryKey = (filters) => [
 ];
 
 /**
- * Uses mock data until GET /api/v1/my-training/ is available.
- *
  * @param {{ page?: number, search?: string, enabled?: boolean }} options
  */
 const useMyTrainingList = ({
@@ -31,7 +29,7 @@ const useMyTrainingList = ({
       const result = await fetchMyTrainingList({
         formatMessage,
         page,
-        pageSize: API_PAGE_SIZE,
+        pageSize: MY_TRAINING_PAGE_SIZE,
         search,
       });
 
@@ -45,7 +43,7 @@ const useMyTrainingList = ({
         items: mapMyTrainingListResults(data.results),
         count: data.count ?? 0,
         page: data.page ?? page,
-        pageSize: data.page_size ?? API_PAGE_SIZE,
+        pageSize: data.page_size ?? MY_TRAINING_PAGE_SIZE,
         totalPages: data.total_pages ?? 1,
       };
     },

@@ -1,24 +1,41 @@
 import { executeApiRequest } from '../apiRequest';
 import {
-  MY_TRAINING_LIST,
-  MY_TRAINING_STATUS_OPTIONS,
-  myTrainingDetail,
+  MY_TRAINING_PAGE_SIZE,
+  NRAS_MANAGEMENT_MY_TRAININGS,
+  NRAS_MANAGEMENT_MY_TRAININGS_FORM_OPTIONS,
+  nrasManagementMyTrainingDetail,
 } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
+import { isUploadableFile, patchMultipart } from '../multipartRequest';
 import myTrainingMessages from '../../pages/myTraining/messages';
 import {
   buildMyTrainingListParams,
   buildMyTrainingUpdateBody,
+  MY_TRAINING_STATUS,
 } from './myTrainingUtils';
-import {
-  resolveMyTrainingDetailMock,
-  resolveMyTrainingListMock,
-  resolveMyTrainingStartMock,
-  resolveMyTrainingUpdateMock,
-} from './myTrainingPageMockData';
-import statusOptionsMock from '../../mock/myTraining/statusOptions.json';
 
-const USE_MY_TRAINING_MOCK = true;
+/**
+ * @param {Record<string, unknown>} body
+ * @returns {FormData}
+ */
+const buildMyTrainingUpdateFormData = (body) => {
+  const formData = new FormData();
+
+  Object.entries(body).forEach(([key, value]) => {
+    if (value == null || value === '') {
+      return;
+    }
+
+    if (key === 'proof_file' && isUploadableFile(value)) {
+      formData.append('proof_file', value);
+      return;
+    }
+
+    formData.append(key, String(value));
+  });
+
+  return formData;
+};
 
 /**
  * @param {{ formatMessage: Function, page?: number, pageSize?: number, search?: string }} params
@@ -26,108 +43,45 @@ const USE_MY_TRAINING_MOCK = true;
 export const fetchMyTrainingList = ({
   formatMessage,
   page = 1,
-  pageSize,
+  pageSize = MY_TRAINING_PAGE_SIZE,
   search,
-}) => {
-  if (USE_MY_TRAINING_MOCK) {
-    const mockData = resolveMyTrainingListMock({ page, pageSize, search });
+}) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${NRAS_MANAGEMENT_MY_TRAININGS}`;
+    const params = buildMyTrainingListParams({ page, pageSize, search });
 
-    return Promise.resolve({
-      ok: true,
-      message: null,
-      data: {
-        count: mockData.count,
-        page: mockData.page,
-        page_size: mockData.pageSize,
-        total_pages: mockData.totalPages,
-        results: mockData.items.map((item) => ({
-          id: item.id,
-          title: item.title,
-          description: item.description,
-          provider: item.provider,
-          status: item.status,
-          access_url: item.accessUrl,
-        })),
-      },
-    });
-  }
-
-  return executeApiRequest({
-    request: () => {
-      const httpClient = getHttpClient();
-      const url = `${getApiBaseUrl()}${MY_TRAINING_LIST}`;
-      const params = buildMyTrainingListParams({ page, pageSize, search });
-
-      return httpClient.get(url, { params });
-    },
-    formatMessage,
-    fallbackMessage: myTrainingMessages.listLoadError,
-  });
-};
+    return httpClient.get(url, { params });
+  },
+  formatMessage,
+  fallbackMessage: myTrainingMessages.listLoadError,
+});
 
 /**
  * @param {{ formatMessage: Function }} params
  */
-export const fetchMyTrainingStatusOptions = ({ formatMessage }) => {
-  if (USE_MY_TRAINING_MOCK) {
-    return Promise.resolve({
-      ok: true,
-      message: null,
-      data: { results: statusOptionsMock.results ?? [] },
-    });
-  }
-
-  return executeApiRequest({
-    request: () => {
-      const httpClient = getHttpClient();
-      const url = `${getApiBaseUrl()}${MY_TRAINING_STATUS_OPTIONS}`;
-      return httpClient.get(url);
-    },
-    formatMessage,
-    fallbackMessage: myTrainingMessages.statusOptionsLoadError,
-  });
-};
+export const fetchMyTrainingStatusOptions = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${NRAS_MANAGEMENT_MY_TRAININGS_FORM_OPTIONS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: myTrainingMessages.statusOptionsLoadError,
+});
 
 /**
  * @param {{ formatMessage: Function, trainingId: string|number }} params
  */
-export const fetchMyTrainingDetail = ({ formatMessage, trainingId }) => {
-  if (USE_MY_TRAINING_MOCK) {
-    const detail = resolveMyTrainingDetailMock(trainingId);
-
-    if (!detail) {
-      return Promise.resolve({
-        ok: false,
-        message: formatMessage(myTrainingMessages.detailNotFound),
-      });
-    }
-
-    return Promise.resolve({
-      ok: true,
-      message: null,
-      data: {
-        results: {
-          id: detail.id,
-          title: detail.title,
-          status: detail.status,
-          proof_file_name: detail.proofFileName || null,
-          rating: detail.rating,
-          feedback: detail.feedback || null,
-        },
-      },
-    });
-  }
-
-  return executeApiRequest({
-    request: () => {
-      const httpClient = getHttpClient();
-      const url = `${getApiBaseUrl()}${myTrainingDetail(trainingId)}`;
-      return httpClient.get(url);
-    },
-    formatMessage,
-    fallbackMessage: myTrainingMessages.detailLoadError,
-  });
-};
+export const fetchMyTrainingDetail = ({ formatMessage, trainingId }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${nrasManagementMyTrainingDetail(trainingId)}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: myTrainingMessages.detailLoadError,
+});
 
 /**
  * @param {{
@@ -149,22 +103,6 @@ export const updateMyTraining = ({
   proofFile,
   proofFileName,
 }) => {
-  if (USE_MY_TRAINING_MOCK) {
-    const result = resolveMyTrainingUpdateMock(trainingId, {
-      status,
-      rating,
-      feedback,
-      proofFile,
-      proofFileName,
-    });
-
-    return Promise.resolve({
-      ok: result.ok,
-      message: result.message,
-      data: result.data,
-    });
-  }
-
   const body = buildMyTrainingUpdateBody({
     status,
     rating,
@@ -176,19 +114,10 @@ export const updateMyTraining = ({
   return executeApiRequest({
     request: () => {
       const httpClient = getHttpClient();
-      const url = `${getApiBaseUrl()}${myTrainingDetail(trainingId)}`;
+      const url = `${getApiBaseUrl()}${nrasManagementMyTrainingDetail(trainingId)}`;
 
-      if (body.proof_file instanceof File) {
-        const formData = new FormData();
-        Object.entries(body).forEach(([key, value]) => {
-          if (value != null && value !== '') {
-            formData.append(key, value);
-          }
-        });
-
-        return httpClient.patch(url, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
+      if (isUploadableFile(body.proof_file)) {
+        return patchMultipart(httpClient, url, buildMyTrainingUpdateFormData(body));
       }
 
       return httpClient.patch(url, body);
@@ -201,24 +130,12 @@ export const updateMyTraining = ({
 /**
  * @param {{ formatMessage: Function, trainingId: string|number }} params
  */
-export const startMyTraining = ({ formatMessage, trainingId }) => {
-  if (USE_MY_TRAINING_MOCK) {
-    const result = resolveMyTrainingStartMock(trainingId);
-
-    return Promise.resolve({
-      ok: result.ok,
-      message: result.message,
-      data: result.data,
-    });
-  }
-
-  return executeApiRequest({
-    request: () => {
-      const httpClient = getHttpClient();
-      const url = `${getApiBaseUrl()}${myTrainingDetail(trainingId)}`;
-      return httpClient.patch(url, { status: 'in_progress' });
-    },
-    formatMessage,
-    fallbackMessage: myTrainingMessages.startError,
-  });
-};
+export const startMyTraining = ({ formatMessage, trainingId }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${nrasManagementMyTrainingDetail(trainingId)}`;
+    return httpClient.patch(url, { status: MY_TRAINING_STATUS.IN_PROGRESS });
+  },
+  formatMessage,
+  fallbackMessage: myTrainingMessages.startError,
+});

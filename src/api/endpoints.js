@@ -13,6 +13,8 @@ export const DASHBOARD_NRA_ADMIN_RECENT_ACTIVITY = '/api/v1/dashboard/nra-admin/
 export const DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS = '/api/v1/dashboard/nra-admin/popular-trainings/';
 export const DASHBOARD_NRA_MANAGER_RECENT_ACTIVITY = '/api/v1/dashboard/nra-manager/recent-activity/';
 export const DASHBOARD_NRA_MANAGER_QUICK_ACTIONS = '/api/v1/dashboard/nra-manager/quick-actions/';
+export const DASHBOARD_NRA_STAFF_RECENT_ACTIVITY = '/api/v1/dashboard/nra-staff/recent-activity/';
+export const DASHBOARD_NRA_STAFF_COMPLETED_TRAININGS = '/api/v1/dashboard/nra-staff/completed-trainings/';
 export const DASHBOARD_QUICK_ACTIONS = '/api/v1/dashboard/quick-actions/';
 export const DASHBOARD_RECENT_TRAINING_COMPLETIONS = '/api/v1/dashboard/recent-training-completions/';
 
@@ -37,27 +39,23 @@ export const TRAININGS_CATALOG_OPTIONS_MAPPED_COMPETENCIES = '/api/v1/trainings-
 
 export const NRA_SPECIFIC_TRAINING_CATALOG_LIST = '/api/v1/nra-specific-training-catalog/';
 
-/** @param {string|number} trainingId */
-export const nraSpecificTrainingCatalogRequestAccess = (trainingId) => (
-  `/api/v1/nra-specific-training-catalog/${trainingId}/request-access/`
+export const NRAS_MANAGEMENT_MY_TRAININGS = '/api/v1/nras-management/my-trainings/';
+export const NRAS_MANAGEMENT_MY_TRAININGS_FORM_OPTIONS = (
+  '/api/v1/nras-management/my-trainings/form-options/'
 );
+/** Default `page_size` for NRA My Trainings list (backend default). */
+export const MY_TRAINING_PAGE_SIZE = 8;
 
 /** @param {string|number} trainingId */
-export const searnTrainingCatalogRequestAccess = (trainingId) => (
-  `/api/v1/searn-training-catalog/${trainingId}/request-access/`
+export const nrasManagementMyTrainingDetail = (trainingId) => (
+  `/api/v1/nras-management/my-trainings/${trainingId}/`
 );
-
-export const MY_TRAINING_LIST = '/api/v1/my-training/';
-export const MY_TRAINING_STATUS_OPTIONS = '/api/v1/my-training/status-options/';
 
 export const MY_TEAM_LIST = '/api/v1/nras-management/my-team/';
 export const MY_TEAM_CANDIDATE_USERS = '/api/v1/nras-management/my-team/user-options/';
 
 /** @param {string|number} userId */
 export const myTeamMemberDetail = (userId) => `/api/v1/nras-management/my-team/${userId}/`;
-
-/** @param {string|number} trainingId */
-export const myTrainingDetail = (trainingId) => `/api/v1/my-training/${trainingId}/`;
 
 /** `page_size` for pending requests on the dashboard card. */
 export const DASHBOARD_PENDING_REQUESTS_PAGE_SIZE = 4;

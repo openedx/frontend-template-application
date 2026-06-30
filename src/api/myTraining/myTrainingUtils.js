@@ -1,5 +1,4 @@
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
-import { mapCatalogFilterOptionsToDropdown } from '../searnTrainingCatalog/trainingsCatalogOptionsUtils';
 
 export const MY_TRAINING_STATUS = {
   NOT_STARTED: 'not_started',
@@ -109,9 +108,61 @@ export const getMyTrainingStatusBadgeClass = (status) => {
 };
 
 /**
+ * @param {object|null|undefined} data
+ */
+export const unwrapMyTrainingStatusOptions = (data) => {
+  if (!data || typeof data !== 'object') {
+    return [];
+  }
+
+  const { results } = data;
+
+  if (Array.isArray(results)) {
+    return results;
+  }
+
+  if (results && typeof results === 'object' && Array.isArray(results.status_options)) {
+    return results.status_options;
+  }
+
+  if (Array.isArray(data.status_options)) {
+    return data.status_options;
+  }
+
+  return [];
+};
+
+/**
  * @param {Array<object>|undefined} results
  */
-export const mapMyTrainingStatusOptions = (results) => mapCatalogFilterOptionsToDropdown(results);
+export const mapMyTrainingStatusOptions = (results) => {
+  if (!Array.isArray(results)) {
+    return [];
+  }
+
+  return results
+    .map((row) => {
+      if (!row || typeof row !== 'object') {
+        return null;
+      }
+
+      const label = hasDisplayValue(row.label) ? row.label : row.lable;
+      const value = hasDisplayValue(row.value) ? row.value : row.Value;
+
+      if (!hasDisplayValue(label) || !hasDisplayValue(value)) {
+        return null;
+      }
+
+      const normalizedValue = String(value);
+
+      return {
+        value: normalizedValue,
+        label,
+        optionId: row.id != null ? String(row.id) : normalizedValue,
+      };
+    })
+    .filter(Boolean);
+};
 
 /**
  * @param {{

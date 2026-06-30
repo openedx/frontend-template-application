@@ -224,6 +224,41 @@ export const buildMyTrainingCatalogWriteBody = ({
 };
 
 /**
+ * Whether the trainings-catalog list has user-applied filters (search or dropdowns).
+ * @param {{
+ *   search?: string,
+ *   frameworkFilter?: string,
+ *   roleFilter?: string,
+ *   domainFilter?: string,
+ *   subDomainFilter?: string,
+ *   activityFilter?: string,
+ *   nraGoalFilter?: string,
+ * }} filters
+ */
+export const hasMyTrainingCatalogListFilters = ({
+  search,
+  frameworkFilter,
+  roleFilter,
+  domainFilter,
+  subDomainFilter,
+  activityFilter,
+  nraGoalFilter,
+}) => {
+  if (hasDisplayValue(search?.trim())) {
+    return true;
+  }
+
+  return [
+    frameworkFilter,
+    roleFilter,
+    domainFilter,
+    subDomainFilter,
+    activityFilter,
+    nraGoalFilter,
+  ].some((value) => hasDisplayValue(value) && value !== FILTER_ALL);
+};
+
+/**
  * @param {{
  *   page: number,
  *   pageSize: number,

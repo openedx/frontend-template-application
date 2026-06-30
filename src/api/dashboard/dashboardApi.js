@@ -5,13 +5,13 @@ import {
   DASHBOARD_TOP_REQUESTED_ACTIVITIES,
   DASHBOARD_TOP_TRAININGS,
   DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS,
-  DASHBOARD_RECENT_TRAINING_COMPLETIONS,
   DASHBOARD_USERS_PER_COUNTRY,
   PENDING_REQUESTS_LIST,
 } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
 import dashboardMessages from '../../pages/dashboard/messages';
 import {
+  resolveDashboardCompletedTrainingsEndpoint,
   resolveDashboardQuickActionsEndpoint,
   resolveDashboardRecentActivityEndpoint,
 } from './dashboardScopeUtils';
@@ -71,6 +71,7 @@ export const fetchDashboardTopTrainings = ({ formatMessage }) => executeApiReque
 /**
  * GET /api/v1/dashboard/nra-admin/recent-activity/
  * GET /api/v1/dashboard/nra-manager/recent-activity/
+ * GET /api/v1/dashboard/nra-staff/recent-activity/
  * @param {{ formatMessage: Function, userRole?: string|null }} params
  */
 export const fetchDashboardRecentActivities = ({ formatMessage, userRole = null }) => executeApiRequest({
@@ -113,12 +114,14 @@ export const fetchDashboardQuickActions = ({ formatMessage, userRole = null }) =
 });
 
 /**
- * @param {{ formatMessage: Function }} params
+ * GET /api/v1/dashboard/recent-training-completions/
+ * GET /api/v1/dashboard/nra-staff/completed-trainings/
+ * @param {{ formatMessage: Function, userRole?: string|null }} params
  */
-export const fetchDashboardRecentTrainingCompletions = ({ formatMessage }) => executeApiRequest({
+export const fetchDashboardRecentTrainingCompletions = ({ formatMessage, userRole = null }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const url = `${getApiBaseUrl()}${DASHBOARD_RECENT_TRAINING_COMPLETIONS}`;
+    const url = `${getApiBaseUrl()}${resolveDashboardCompletedTrainingsEndpoint(userRole)}`;
     return httpClient.get(url);
   },
   formatMessage,

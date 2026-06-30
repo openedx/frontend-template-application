@@ -1,5 +1,8 @@
 import { fetchCorePermissions } from '../api/corePermissions/corePermissionsApi';
 import { pickActiveRoleFromPayload } from '../api/corePermissions/corePermissionsUtils';
+import nraAdminRolePayload from '../data/userRole/nra-admin.json';
+import nraManagerRolePayload from '../data/userRole/nra-manager.json';
+import nraStaffRolePayload from '../data/userRole/nra-staff.json';
 import secretariatRolePayload from '../data/userRole/secretariat.json';
 import trainingProviderRolePayload from '../data/userRole/training-provider.json';
 import superUserRolePayload from '../data/userRole/super-user.json';
@@ -12,18 +15,18 @@ import superUserRolePayload from '../data/userRole/super-user.json';
  *   'local' → JSON from src/data/userRole/ (never calls the API)
  *
  * LOCAL_ROLE_DATA_KEY — which local file when source is 'local'
- *   'super-user' | 'secretariat' | 'training-provider'
+ *   'super-user' | 'secretariat' | 'training-provider' | 'nra-admin' | 'nra-manager' | 'nra-staff'
  *
  * If the chosen source returns no row in `results` (or the API fails), the app
  * applies empty permissions: only pages/components that do not require permissions
  * stay available (see hasNavbarAccessForPath in App.jsx).
  */
 
-// ─── Permissions plug-in (change here only) ───────────────────────────────────
+// ─── Permissions plug-in (change here only) here only two change required line number 27 cahnge api to local and on line 30 choose any one role have listed on line 29───────────────────────────────────
 /** @type {'api' | 'local'} */
 export const ROLE_DATA_SOURCE = 'api';
 
-/** @type {'super-user' | 'secretariat' | 'training-provider'} */
+/** @type {'super-user' | 'secretariat' | 'training-provider' | 'nra-admin' | 'nra-manager' | 'nra-staff'} */
 export const LOCAL_ROLE_DATA_KEY = 'super-user';
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -34,6 +37,9 @@ const LOCAL_ROLE_PAYLOADS = {
   'super-user': superUserRolePayload,
   secretariat: secretariatRolePayload,
   'training-provider': trainingProviderRolePayload,
+  'nra-admin': nraAdminRolePayload,
+  'nra-manager': nraManagerRolePayload,
+  'nra-staff': nraStaffRolePayload,
 };
 
 const getLocalRolePayload = () => LOCAL_ROLE_PAYLOADS[LOCAL_ROLE_DATA_KEY] ?? superUserRolePayload;
@@ -94,6 +100,9 @@ export const ROLE_DATA_BY_SLUG = Object.fromEntries(
 );
 
 export {
+  nraAdminRolePayload as nraAdminRoleData,
+  nraManagerRolePayload as nraManagerRoleData,
+  nraStaffRolePayload as nraStaffRoleData,
   secretariatRolePayload as secretariatRoleData,
   trainingProviderRolePayload as trainingProviderRoleData,
   superUserRolePayload as superUserRoleData,

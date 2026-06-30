@@ -1,5 +1,4 @@
 const requestedNraTrainingIds = new Set(['nra-tr-001']);
-const requestedSearnTrainingIds = new Set();
 
 /**
  * @param {Set<string>} requestedIds
@@ -32,13 +31,6 @@ const resolveRequestAccessMock = (requestedIds, trainingId) => {
  */
 export const resolveNraSpecificTrainingCatalogRequestAccessMock = (trainingId) => (
   resolveRequestAccessMock(requestedNraTrainingIds, trainingId)
-);
-
-/**
- * @param {string|number} trainingId
- */
-export const resolveSearnTrainingCatalogRequestAccessMock = (trainingId) => (
-  resolveRequestAccessMock(requestedSearnTrainingIds, trainingId)
 );
 
 /**

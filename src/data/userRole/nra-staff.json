@@ -2,8 +2,8 @@
   "results": [
     {
       "userInfo": {
-        "userName": "NRA Manager",
-        "userRole": "nra-manager",
+        "userName": "NRA Staff",
+        "userRole": "nra-staff",
         "userProfileImage": ""
       },
       "navbarAccess": {
@@ -11,16 +11,16 @@
         "accessActivities": false,
         "accessMyTrainingCatalog": false,
         "accessNraSpecificTrainingCatalog": true,
-        "accessMyTraining": false,
+        "accessMyTraining": true,
         "accessNrasManagement": false,
         "accessCountries": false,
         "accessTrainingProviders": false,
         "accessPendingRequests": false,
-        "accessUsers": true,
-        "accessMyTeam": true,
-        "accessRegulatoryPassport": false,
+        "accessUsers": false,
+        "accessMyTeam": false,
+        "accessRegulatoryPassport": true,
         "accessOrganizationProfile": true,
-        "accessRoles": false,
+        "accessRoles": true,
         "accessSettings": false,
         "accessReports": true
       },
@@ -32,8 +32,8 @@
           "showTopTrainings": false,
           "showRecentActivities": true,
           "showPopularTrainings": false,
-          "showQuickActions": true,
-          "showRecentTrainingCompletions": false
+          "showQuickActions": false,
+          "showRecentTrainingCompletions": true
         },
         "nrasManagement": {
           "canOnboardNra": false,
@@ -60,16 +60,16 @@
         },
         "users": {
           "canAddUser": false,
-          "canViewUserAbout": true,
-          "canEditUser": true,
-          "canDeleteUser": true,
-          "canViewRoleColumn": true,
-          "canViewCompetencyRoleColumn": true,
-          "canAssignTrainings": true,
-          "canRemoveAssignedTrainings": true,
-          "canViewAssignedTrainings": true,
+          "canViewUserAbout": false,
+          "canEditUser": false,
+          "canDeleteUser": false,
+          "canViewRoleColumn": false,
+          "canViewCompetencyRoleColumn": false,
+          "canAssignTrainings": false,
+          "canRemoveAssignedTrainings": false,
+          "canViewAssignedTrainings": false,
           "canViewMappedCompetencies": false,
-          "canViewRegulatoryPassport": true,
+          "canViewRegulatoryPassport": false,
           "userFormFields": {
             "showRoleField": false,
             "showManagerField": false,
@@ -101,14 +101,14 @@
           "canDeleteTraining": false
         },
         "nraSpecificTrainingCatalog": {
-          "canCreateTraining": true,
-          "canEditTraining": true,
-          "canDeleteTraining": true,
+          "canCreateTraining": false,
+          "canEditTraining": false,
+          "canDeleteTraining": false,
           "canRequestAccess": true,
           "canViewProviderColumn": true
         },
         "myTraining": {
-          "canUpdateTraining": false
+          "canUpdateTraining": true
         },
         "requestedTrainings": {
           "showOpenCloseButton": false,
@@ -123,8 +123,8 @@
           "showAdministratorsSection": true
         },
         "myTeam": {
-          "canAddTeamMember": true,
-          "canRemoveTeamMember": true
+          "canAddTeamMember": false,
+          "canRemoveTeamMember": false
         },
         "profile": {
           "showManagerField": true,
