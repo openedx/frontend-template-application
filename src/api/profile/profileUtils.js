@@ -38,19 +38,44 @@ export const formatCompetencyRoleForInput = (value) => normalizeCompetencyRoleLi
 export const parseCompetencyRoleForApi = (value) => normalizeCompetencyRoleList(value);
 
 /**
+ * GET returns `{ result: {...} }`; NRA GET/PATCH use `{ results: {...} }`.
+ * @param {object} payload
+ */
+export const unwrapProfilePayload = (payload) => {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+    return null;
+  }
+
+  if (payload.result && typeof payload.result === 'object' && !Array.isArray(payload.result)) {
+    return payload.result;
+  }
+
+  if (payload.results && typeof payload.results === 'object' && !Array.isArray(payload.results)) {
+    return payload.results;
+  }
+
+  if ('full_name' in payload || 'name' in payload || 'email' in payload || 'profile_image_url' in payload) {
+    return payload;
+  }
+
+  return null;
+};
+
+/**
  * @param {object} payload
  */
 export const mapProfileResult = (payload) => {
-  const data = payload?.results ?? payload;
+  const data = unwrapProfilePayload(payload);
 
-  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+  if (!data) {
     return null;
   }
 
   return {
-    fullName: data.full_name ?? '',
+    fullName: data.full_name ?? data.name ?? '',
     email: data.email ?? '',
     country: data.country ?? '',
+    countryLabel: data.country_label ?? '',
     language: data.language ?? '',
     about: data.about ?? '',
     profileImageUrl: data.profile_image_url ?? '',

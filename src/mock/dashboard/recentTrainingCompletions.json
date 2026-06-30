@@ -21,5 +21,9 @@
       "completedDate": "2025-03-03",
       "hasProof": true
     }
-  ]
+  ],
+  "count": 3,
+  "page": 1,
+  "page_size": 20,
+  "total_pages": 1
 }

@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Link } from 'react-router-dom';
 import { TablePaginationFooter } from '../../dataTable';
-import { adminPath } from '../../../utils/adminPaths';
 import { hasDisplayValue } from '../../../utils/hasDisplayValue';
 import { buildPaginationShowingParams } from '../../../utils/paginationUtils';
 import messages from '../../../pages/users/regulatoryPassportMessages';
 
 const isAbsoluteUrl = (value) => /^https?:\/\//i.test(String(value));
+const isInternalAdminPath = (value) => String(value || '').startsWith('/admin/');
 
 const RegulatoryPassportCompletedTrainings = ({
   items,
@@ -15,7 +14,6 @@ const RegulatoryPassportCompletedTrainings = ({
   page,
   totalPages,
   onPageChange,
-  certificateLinkState = null,
 }) => {
   const { formatMessage } = useIntl();
   const visibleItems = (items ?? []).filter((row) => hasDisplayValue(row?.id));
@@ -61,7 +59,7 @@ const RegulatoryPassportCompletedTrainings = ({
                 </td>
                 <td>
                   {hasDisplayValue(row.certificateViewUrl) && (
-                    isAbsoluteUrl(row.certificateViewUrl) ? (
+                    isAbsoluteUrl(row.certificateViewUrl) || isInternalAdminPath(row.certificateViewUrl) ? (
                       <a
                         className="user-passport-page__link"
                         href={row.certificateViewUrl}
@@ -70,15 +68,7 @@ const RegulatoryPassportCompletedTrainings = ({
                       >
                         {formatMessage(messages.certificateView)}
                       </a>
-                    ) : (
-                      <Link
-                        className="user-passport-page__link"
-                        to={adminPath(row.certificateViewUrl)}
-                        state={certificateLinkState}
-                      >
-                        {formatMessage(messages.certificateView)}
-                      </Link>
-                    )
+                    ) : null
                   )}
                 </td>
               </tr>

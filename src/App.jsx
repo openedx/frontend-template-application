@@ -38,7 +38,6 @@ import OrganizationProfile from './pages/organizationProfile/OrganizationProfile
 import Users from './pages/users/Users';
 import UserDetailPage from './pages/users/UserDetailPage';
 import UserRegulatoryPassport from './pages/users/UserRegulatoryPassport';
-import CertificateDetailPage from './pages/certificates/CertificateDetailPage';
 import Roles from './pages/roles/Roles';
 import AccessRestrictedPage from './pages/AccessRestrictedPage';
 import PlaceholderPage from './pages/PlaceholderPage';
@@ -394,7 +393,6 @@ const RoutedLayout = () => {
         <Route path={ADMIN_PATHS.requestedTrainings} element={<RequestedTrainings />} />
         <Route path={ADMIN_PATHS.profile} element={<Profile />} />
         <Route path="/admin/users/:userId/regulatory-passport/" element={withAccess(Boolean(navbarAccess.accessUsers && componentAccess?.users?.canViewRegulatoryPassport), <UserRegulatoryPassport />)} />
-        <Route path="/admin/certificates/:certificateId/" element={withAccess(Boolean(navbarAccess.accessUsers && componentAccess?.users?.canViewRegulatoryPassport), <CertificateDetailPage />)} />
         <Route path="/admin/users/:userId/" element={withAccess(Boolean(navbarAccess.accessUsers && componentAccess?.users?.canViewUserAbout), <UserDetailPage />)} />
         <Route path={ADMIN_PATHS.users} element={withAccess(navbarAccess.accessUsers, <Users />)} />
         <Route path={ADMIN_PATHS.myTeam} element={withAccess(navbarAccess.accessMyTeam, <MyTeam />)} />

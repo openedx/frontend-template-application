@@ -260,8 +260,9 @@ const Profile = () => {
   const displayAvatarSrc = photoPreview || savedProfileImageUrl;
 
   const countryLabel = useMemo(
-    () => getCountryLabelByValue(country, countryOptions),
-    [country, countryOptions],
+    () => getCountryLabelByValue(country, countryOptions)
+      || (hasDisplayValue(profile?.countryLabel) ? profile.countryLabel : ''),
+    [country, countryOptions, profile?.countryLabel],
   );
 
   const languageLabel = useMemo(

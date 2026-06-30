@@ -1,4 +1,5 @@
-[
+{
+  "results": [
   {
     "slug": "who-prequalification",
     "name": "WHO Prequalification",
@@ -47,4 +48,9 @@
     "websiteLabel": "swissmedic.ch",
     "overview": "Swissmedic is the Swiss Agency for Therapeutic Products responsible for authorisation and supervision of medicines."
   }
-]
+  ],
+  "count": 6,
+  "page": 1,
+  "page_size": 20,
+  "total_pages": 1
+}

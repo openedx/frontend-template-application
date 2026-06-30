@@ -1,7 +1,7 @@
 {
   "results": [
     {
-      "id": "nra-tr-001",
+      "id": 1,
       "title": "GMP Inspection Fundamentals",
       "description": "An introductory course covering the principles and practices of Good Manufacturing Practice inspections for pharmaceutical manufacturing facilities.",
       "mode": "Virtual",
@@ -13,7 +13,7 @@
       "is_requested": true
     },
     {
-      "id": "nra-tr-002",
+      "id": 2,
       "title": "Pharmacovigilance Signal Detection",
       "description": "Advanced workshop on identifying, assessing, and managing safety signals from pharmacovigilance databases and adverse event reporting systems.",
       "mode": "Hybrid",
@@ -25,7 +25,7 @@
       "is_requested": false
     },
     {
-      "id": "nra-tr-003",
+      "id": 3,
       "title": "Bioequivalence Study Design",
       "description": "Comprehensive training on designing, conducting, and evaluating bioequivalence studies for generic medicine registration applications.",
       "mode": "In-person",
@@ -37,7 +37,7 @@
       "is_requested": false
     },
     {
-      "id": "nra-tr-004",
+      "id": 4,
       "title": "Regulatory Leadership Masterclass",
       "description": "A high-level leadership program designed for senior regulatory officials focusing on strategic planning, stakeholder engagement, and institutional governance.",
       "mode": "Virtual",
@@ -49,7 +49,7 @@
       "is_requested": false
     },
     {
-      "id": "nra-tr-005",
+      "id": 5,
       "title": "Laboratory Quality Management Systems",
       "description": "Training on establishing and maintaining quality management systems in pharmaceutical testing laboratories in compliance with ISO 17025 standards.",
       "mode": "Hybrid",
@@ -61,7 +61,7 @@
       "is_requested": false
     },
     {
-      "id": "nra-tr-006",
+      "id": 6,
       "title": "Risk-Based Inspection Planning",
       "description": "Webinar series on implementing risk-based approaches to pharmaceutical inspection planning and resource allocation.",
       "mode": "Virtual",
@@ -73,7 +73,7 @@
       "is_requested": false
     },
     {
-      "id": "nra-tr-007",
+      "id": 7,
       "title": "Adverse Drug Reaction Reporting",
       "description": "Foundational training on collecting, documenting, and reporting adverse drug reactions following international standards.",
       "mode": "Virtual",
@@ -85,7 +85,7 @@
       "is_requested": false
     },
     {
-      "id": "nra-tr-008",
+      "id": 8,
       "title": "Regulatory Dossier Assessment",
       "description": "Intensive course on evaluating pharmaceutical product registration dossiers including chemistry, manufacturing and controls (CMC) sections.",
       "mode": "In-person",

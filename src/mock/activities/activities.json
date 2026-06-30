@@ -1,4 +1,5 @@
-[
+{
+  "results": [
   {
     "id": "act-001",
     "title": "Conduct GMP Inspections",
@@ -263,4 +264,9 @@
     "targetRole": "Reviewers",
     "stream": "Specialist"
   }
-]
+  ],
+  "count": 24,
+  "page": 1,
+  "page_size": 20,
+  "total_pages": 2
+}

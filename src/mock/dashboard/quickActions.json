@@ -24,5 +24,9 @@
       "icon": "building",
       "iconBackground": "#FFCC29"
     }
-  ]
+  ],
+  "count": 3,
+  "page": 1,
+  "page_size": 20,
+  "total_pages": 1
 }

@@ -71,5 +71,4 @@ export const ADMIN_PATHS = {
   trainingCatalogProvider: (providerSlug) => adminPath(`/admin/searn-training-catalog/providers/${providerSlug}`),
   trainingCatalogProviderCatalog: (providerSlug) => adminPath(`/admin/searn-training-catalog/providers/${providerSlug}/catalog`),
   trainingCatalogWithProviderFilter: (providerId) => adminPath(`/admin/searn-training-catalog?training-provider=${providerId}`),
-  certificateDetail: (certificateId) => adminPath(`/admin/certificates/${certificateId}`),
 };
