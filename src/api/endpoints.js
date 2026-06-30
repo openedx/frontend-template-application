@@ -11,6 +11,8 @@ export const DASHBOARD_TOP_REQUESTED_ACTIVITIES = '/api/v1/dashboard/top-request
 export const DASHBOARD_TOP_TRAININGS = '/api/v1/dashboard/top-trainings/';
 export const DASHBOARD_NRA_ADMIN_RECENT_ACTIVITY = '/api/v1/dashboard/nra-admin/recent-activity/';
 export const DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS = '/api/v1/dashboard/nra-admin/popular-trainings/';
+export const DASHBOARD_NRA_MANAGER_RECENT_ACTIVITY = '/api/v1/dashboard/nra-manager/recent-activity/';
+export const DASHBOARD_NRA_MANAGER_QUICK_ACTIONS = '/api/v1/dashboard/nra-manager/quick-actions/';
 export const DASHBOARD_QUICK_ACTIONS = '/api/v1/dashboard/quick-actions/';
 export const DASHBOARD_RECENT_TRAINING_COMPLETIONS = '/api/v1/dashboard/recent-training-completions/';
 

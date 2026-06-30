@@ -4,15 +4,17 @@ import {
   DASHBOARD_STATS,
   DASHBOARD_TOP_REQUESTED_ACTIVITIES,
   DASHBOARD_TOP_TRAININGS,
-  DASHBOARD_NRA_ADMIN_RECENT_ACTIVITY,
   DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS,
-  DASHBOARD_QUICK_ACTIONS,
   DASHBOARD_RECENT_TRAINING_COMPLETIONS,
   DASHBOARD_USERS_PER_COUNTRY,
   PENDING_REQUESTS_LIST,
 } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
 import dashboardMessages from '../../pages/dashboard/messages';
+import {
+  resolveDashboardQuickActionsEndpoint,
+  resolveDashboardRecentActivityEndpoint,
+} from './dashboardScopeUtils';
 
 /**
  * @param {{ formatMessage: Function }} params
@@ -68,12 +70,13 @@ export const fetchDashboardTopTrainings = ({ formatMessage }) => executeApiReque
 
 /**
  * GET /api/v1/dashboard/nra-admin/recent-activity/
- * @param {{ formatMessage: Function }} params
+ * GET /api/v1/dashboard/nra-manager/recent-activity/
+ * @param {{ formatMessage: Function, userRole?: string|null }} params
  */
-export const fetchDashboardRecentActivities = ({ formatMessage }) => executeApiRequest({
+export const fetchDashboardRecentActivities = ({ formatMessage, userRole = null }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const url = `${getApiBaseUrl()}${DASHBOARD_NRA_ADMIN_RECENT_ACTIVITY}`;
+    const url = `${getApiBaseUrl()}${resolveDashboardRecentActivityEndpoint(userRole)}`;
     return httpClient.get(url);
   },
   formatMessage,
@@ -95,12 +98,14 @@ export const fetchDashboardPopularTrainings = ({ formatMessage }) => executeApiR
 });
 
 /**
- * @param {{ formatMessage: Function }} params
+ * GET /api/v1/dashboard/quick-actions/
+ * GET /api/v1/dashboard/nra-manager/quick-actions/
+ * @param {{ formatMessage: Function, userRole?: string|null }} params
  */
-export const fetchDashboardQuickActions = ({ formatMessage }) => executeApiRequest({
+export const fetchDashboardQuickActions = ({ formatMessage, userRole = null }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const url = `${getApiBaseUrl()}${DASHBOARD_QUICK_ACTIONS}`;
+    const url = `${getApiBaseUrl()}${resolveDashboardQuickActionsEndpoint(userRole)}`;
     return httpClient.get(url);
   },
   formatMessage,
