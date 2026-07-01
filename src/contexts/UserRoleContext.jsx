@@ -127,6 +127,9 @@ const DEFAULT_COMPONENT_ACCESS = {
   organizationProfile: {
     canChangeOrganizationProfile: false,
     showAdministratorsSection: false,
+    canAddAdministrator: false,
+    canEditAdministrator: false,
+    canDeleteAdministrator: false,
   },
   myTeam: {
     canAddTeamMember: false,
