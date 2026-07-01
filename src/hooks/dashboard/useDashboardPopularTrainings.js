@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchDashboardPopularTrainings } from '../../api/dashboard/dashboardApi';
 import dashboardMessages from '../../pages/dashboard/messages';
 
-export const DASHBOARD_POPULAR_TRAININGS_QUERY_KEY = ['dashboard', 'nra-admin', 'popular-trainings'];
+export const DASHBOARD_POPULAR_TRAININGS_QUERY_KEY = ['dashboard', 'popular-trainings'];
 
 /**
  * @param {{ enabled?: boolean }} [options]

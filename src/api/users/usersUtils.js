@@ -444,6 +444,7 @@ export const normalizeAssignableTrainingOptions = (results) => normalizeDropdown
  *   subDomainId?: string|number,
  *   levelId?: string|number,
  *   productTypeId?: string|number,
+ *   userId?: string|number|null,
  * }} params
  */
 export const buildRegulatoryPassportDomainCoverageParams = ({
@@ -453,11 +454,16 @@ export const buildRegulatoryPassportDomainCoverageParams = ({
   subDomainId,
   levelId,
   productTypeId,
+  userId,
 } = {}) => {
   const params = {
     page,
     page_size: pageSize,
   };
+
+  if (userId != null && userId !== '') {
+    params.user_id = userId;
+  }
 
   if (domainId != null && domainId !== '') {
     params.domain_id = domainId;

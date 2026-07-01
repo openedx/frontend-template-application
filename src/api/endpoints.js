@@ -9,14 +9,10 @@ export const DASHBOARD_STATS = '/api/v1/dashboard/stats/';
 export const DASHBOARD_USERS_PER_COUNTRY = '/api/v1/dashboard/users-per-country/';
 export const DASHBOARD_TOP_REQUESTED_ACTIVITIES = '/api/v1/dashboard/top-requested-activities/?limit=5';
 export const DASHBOARD_TOP_TRAININGS = '/api/v1/dashboard/top-trainings/';
-export const DASHBOARD_NRA_ADMIN_RECENT_ACTIVITY = '/api/v1/dashboard/nra-admin/recent-activity/';
+export const DASHBOARD_RECENT_ACTIVITY = '/api/v1/dashboard/recent-activity/';
 export const DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS = '/api/v1/dashboard/nra-admin/popular-trainings/';
-export const DASHBOARD_NRA_MANAGER_RECENT_ACTIVITY = '/api/v1/dashboard/nra-manager/recent-activity/';
 export const DASHBOARD_NRA_MANAGER_QUICK_ACTIONS = '/api/v1/dashboard/nra-manager/quick-actions/';
-export const DASHBOARD_NRA_STAFF_RECENT_ACTIVITY = '/api/v1/dashboard/nra-staff/recent-activity/';
 export const DASHBOARD_NRA_STAFF_COMPLETED_TRAININGS = '/api/v1/dashboard/nra-staff/completed-trainings/';
-export const DASHBOARD_QUICK_ACTIONS = '/api/v1/dashboard/quick-actions/';
-export const DASHBOARD_RECENT_TRAINING_COMPLETIONS = '/api/v1/dashboard/recent-training-completions/';
 
 export const TRAININGS_CATALOG = '/api/v1/trainings-catalog/';
 
@@ -36,8 +32,6 @@ export const TRAININGS_CATALOG_OPTIONS_EVALUATIONS = '/api/v1/trainings-catalog/
 export const TRAININGS_CATALOG_OPTIONS_OUTCOMES = '/api/v1/trainings-catalog/options/outcomes/';
 export const TRAININGS_CATALOG_OPTIONS_PRODUCT_TYPES = '/api/v1/trainings-catalog/options/product-types/';
 export const TRAININGS_CATALOG_OPTIONS_MAPPED_COMPETENCIES = '/api/v1/trainings-catalog/options/mapped-competencies/';
-
-export const NRA_SPECIFIC_TRAINING_CATALOG_LIST = '/api/v1/nra-specific-training-catalog/';
 
 export const NRAS_MANAGEMENT_MY_TRAININGS = '/api/v1/nras-management/my-trainings/';
 export const NRAS_MANAGEMENT_MY_TRAININGS_FORM_OPTIONS = (
@@ -179,21 +173,6 @@ export const REGULATORY_PASSPORT_TRAINING_COMPLETED = '/api/v1/nras-management/r
 
 /** Default `page_size` for regulatory passport domain coverage. */
 export const REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE = 10;
-
-/** @param {string|number} userId */
-export const nrasManagementUserRegulatoryPassportSummary = (userId) => (
-  `/api/v1/nras-management/users/${userId}/regulatory-passport/summary/`
-);
-
-/** @param {string|number} userId */
-export const nrasManagementUserRegulatoryPassportDomainCoverage = (userId) => (
-  `/api/v1/nras-management/users/${userId}/regulatory-passport/domain-coverage/`
-);
-
-/** @param {string|number} userId */
-export const nrasManagementUserRegulatoryPassportTrainingCompleted = (userId) => (
-  `/api/v1/nras-management/users/${userId}/regulatory-passport/training-completed/`
-);
 
 export const ORGANIZATION_DETAILS = '/api/v1/options/organization/details/';
 export const TRAINING_PROVIDERS_ORGANIZATION_PROFILE = '/api/v1/training-providers/organization-profile/';

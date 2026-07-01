@@ -15,7 +15,7 @@
         "accessNrasManagement": false,
         "accessCountries": false,
         "accessTrainingProviders": false,
-        "accessPendingRequests": false,
+        "accessPendingRequests": true,
         "accessUsers": true,
         "accessMyTeam": true,
         "accessRegulatoryPassport": false,
@@ -56,7 +56,7 @@
           "canDeleteRole": false
         },
         "pendingRequests": {
-          "canEditPendingRequest": false
+          "canEditPendingRequest": true
         },
         "users": {
           "canAddUser": false,

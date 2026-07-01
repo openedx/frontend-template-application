@@ -1,27 +1,21 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDashboardRecentActivities } from '../../api/dashboard/dashboardApi';
-import { resolveDashboardRecentActivityScope } from '../../api/dashboard/dashboardScopeUtils';
-import { useUserRole } from '../../contexts/UserRoleContext';
 import dashboardMessages from '../../pages/dashboard/messages';
 
-export const dashboardRecentActivitiesQueryKey = (scope) => (
-  ['dashboard', 'recent-activity', scope ?? 'nra-admin']
-);
+export const dashboardRecentActivitiesQueryKey = ['dashboard', 'recent-activity'];
 
 /**
  * @param {{ enabled?: boolean }} [options]
  */
 const useDashboardRecentActivities = ({ enabled = true } = {}) => {
   const { formatMessage } = useIntl();
-  const { role } = useUserRole();
-  const scope = resolveDashboardRecentActivityScope(role);
 
   const query = useQuery({
-    queryKey: dashboardRecentActivitiesQueryKey(scope),
+    queryKey: dashboardRecentActivitiesQueryKey,
     enabled,
     queryFn: async () => {
-      const result = await fetchDashboardRecentActivities({ formatMessage, userRole: role });
+      const result = await fetchDashboardRecentActivities({ formatMessage });
 
       if (!result.ok) {
         throw new Error(result.message);

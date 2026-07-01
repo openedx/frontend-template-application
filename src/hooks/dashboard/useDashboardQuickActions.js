@@ -1,27 +1,21 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDashboardQuickActions } from '../../api/dashboard/dashboardApi';
-import { resolveDashboardQuickActionsScope } from '../../api/dashboard/dashboardScopeUtils';
-import { useUserRole } from '../../contexts/UserRoleContext';
 import dashboardMessages from '../../pages/dashboard/messages';
 
-export const dashboardQuickActionsQueryKey = (scope) => (
-  ['dashboard', 'quick-actions', scope ?? 'default']
-);
+export const dashboardQuickActionsQueryKey = ['dashboard', 'quick-actions'];
 
 /**
  * @param {{ enabled?: boolean }} [options]
  */
 const useDashboardQuickActions = ({ enabled = true } = {}) => {
   const { formatMessage } = useIntl();
-  const { role } = useUserRole();
-  const scope = resolveDashboardQuickActionsScope(role);
 
   const query = useQuery({
-    queryKey: dashboardQuickActionsQueryKey(scope),
+    queryKey: dashboardQuickActionsQueryKey,
     enabled,
     queryFn: async () => {
-      const result = await fetchDashboardQuickActions({ formatMessage, userRole: role });
+      const result = await fetchDashboardQuickActions({ formatMessage });
 
       if (!result.ok) {
         throw new Error(result.message);

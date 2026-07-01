@@ -8,9 +8,6 @@ import {
   nrasManagementUserAssignableTrainings,
   nrasManagementUserCompletedTrainings,
   nrasManagementUserDetail,
-  nrasManagementUserRegulatoryPassportDomainCoverage,
-  nrasManagementUserRegulatoryPassportSummary,
-  nrasManagementUserRegulatoryPassportTrainingCompleted,
   nrasManagementUserTrainingStatus,
   REGULATORY_PASSPORT_DOMAIN_COVERAGE,
   REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE,
@@ -217,11 +214,9 @@ export const fetchUserMappedCompetencies = ({ formatMessage, userId }) => execut
 export const fetchRegulatoryPassportSummary = ({ formatMessage, userId = null }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const path = userId != null && userId !== ''
-      ? nrasManagementUserRegulatoryPassportSummary(userId)
-      : REGULATORY_PASSPORT_SUMMARY;
-    const url = `${getApiBaseUrl()}${path}`;
-    return httpClient.get(url);
+    const url = `${getApiBaseUrl()}${REGULATORY_PASSPORT_SUMMARY}`;
+    const params = userId != null && userId !== '' ? { user_id: userId } : undefined;
+    return httpClient.get(url, params ? { params } : undefined);
   },
   formatMessage,
   fallbackMessage: usersMessages.regulatoryPassportLoadError,
@@ -251,10 +246,7 @@ export const fetchRegulatoryPassportDomainCoverage = ({
 }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const path = userId != null && userId !== ''
-      ? nrasManagementUserRegulatoryPassportDomainCoverage(userId)
-      : REGULATORY_PASSPORT_DOMAIN_COVERAGE;
-    const url = `${getApiBaseUrl()}${path}`;
+    const url = `${getApiBaseUrl()}${REGULATORY_PASSPORT_DOMAIN_COVERAGE}`;
     const params = buildRegulatoryPassportDomainCoverageParams({
       page,
       pageSize,
@@ -262,6 +254,7 @@ export const fetchRegulatoryPassportDomainCoverage = ({
       subDomainId,
       levelId,
       productTypeId,
+      userId,
     });
     return httpClient.get(url, { params });
   },
@@ -337,11 +330,12 @@ export const fetchRegulatoryPassportCompletedTrainings = ({
 }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
-    const path = userId != null && userId !== ''
-      ? nrasManagementUserRegulatoryPassportTrainingCompleted(userId)
-      : REGULATORY_PASSPORT_TRAINING_COMPLETED;
-    const url = `${getApiBaseUrl()}${path}`;
-    return httpClient.get(url, { params: { page, page_size: pageSize } });
+    const url = `${getApiBaseUrl()}${REGULATORY_PASSPORT_TRAINING_COMPLETED}`;
+    const params = { page, page_size: pageSize };
+    if (userId != null && userId !== '') {
+      params.user_id = userId;
+    }
+    return httpClient.get(url, { params });
   },
   formatMessage,
   fallbackMessage: regulatoryPassportMessages.completedTrainingsLoadError,
