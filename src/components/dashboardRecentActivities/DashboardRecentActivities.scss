@@ -1,0 +1,128 @@
+.dashboard-recent-activities {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: .75rem;
+  box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  &__header-icon-wrap {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .5rem;
+    background: rgb(42 59 143 / .1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__header-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #2A3B8F;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: #2A3B8F;
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    color: #6B7280;
+  }
+
+  &__empty {
+    padding: 1.5rem;
+    min-height: 120px;
+  }
+
+  &__list {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #E5E7EB;
+
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+  }
+
+  &__avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+    border-radius: 9999px;
+    background: rgb(42 59 143 / .1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    font-size: .875rem;
+    font-weight: 600;
+    color: #2A3B8F;
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__text {
+    margin: 0;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    color: #111827;
+  }
+
+  &__user {
+    font-weight: 600;
+    color: #2A3B8F;
+  }
+
+  &__action {
+    color: #6B7280;
+  }
+
+  &__target {
+    font-weight: 500;
+    color: #111827;
+  }
+
+  &__time {
+    margin: .25rem 0 0;
+    font-size: .75rem;
+    line-height: 1rem;
+    color: #6B7280;
+  }
+}

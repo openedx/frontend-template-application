@@ -1,0 +1,137 @@
+{
+  "results": [
+    {
+      "userInfo": {
+        "userName": "NRA Admin",
+        "userRole": "nra-admin",
+        "userProfileImage": ""
+      },
+      "navbarAccess": {
+        "accessCompetencyFramework": true,
+        "accessActivities": true,
+        "accessMyTrainingCatalog": false,
+        "accessNraSpecificTrainingCatalog": true,
+        "accessMyTraining": false,
+        "accessNrasManagement": false,
+        "accessCountries": false,
+        "accessTrainingProviders": false,
+        "accessPendingRequests": true,
+        "accessUsers": true,
+        "accessMyTeam": true,
+        "accessRegulatoryPassport": false,
+        "accessOrganizationProfile": true,
+        "accessRoles": true,
+        "accessSettings": false,
+        "accessReports": true
+      },
+      "componentAccess": {
+        "dashboard": {
+          "showUsersPerCountry": false,
+          "showTopRequestedActivities": false,
+          "showPendingRequests": false,
+          "showTopTrainings": false,
+          "showRecentActivities": true,
+          "showPopularTrainings": true,
+          "showQuickActions": false,
+          "showRecentTrainingCompletions": false
+        },
+        "nrasManagement": {
+          "canOnboardNra": false,
+          "canEditNra": false,
+          "canDeleteNra": false
+        },
+        "countries": {
+          "canAddCountry": false,
+          "canDeleteCountry": false
+        },
+        "trainingProviders": {
+          "canAddTrainingProvider": false,
+          "canEditTrainingProvider": false,
+          "canDeleteTrainingProvider": false
+        },
+        "roles": {
+          "canAddRole": true,
+          "canViewRole": true,
+          "canEditRole": true,
+          "canDeleteRole": true
+        },
+        "pendingRequests": {
+          "canEditPendingRequest": true
+        },
+        "users": {
+          "canAddUser": true,
+          "canViewUserAbout": true,
+          "canEditUser": true,
+          "canDeleteUser": true,
+          "canViewRoleColumn": true,
+          "canViewCompetencyRoleColumn": true,
+          "canAssignTrainings": true,
+          "canRemoveAssignedTrainings": true,
+          "canViewAssignedTrainings": true,
+          "canViewMappedCompetencies": false,
+          "canViewRegulatoryPassport": true,
+          "userFormFields": {
+            "showRoleField": true,
+            "showManagerField": true,
+            "showCompetencyRoleField": true,
+            "showCountryField": true
+          }
+        },
+        "competencyFramework": {
+          "showWhoTab": true,
+          "showSearnTab": true,
+          "showNraTab": true,
+          "canCreateFrameworkWhoTab": false,
+          "canCreateFrameworkSearnTab": false,
+          "canCreateFrameworkNraTab": true,
+          "canViewFrameworkWhoTab": true,
+          "canViewFrameworkSearnTab": true,
+          "canViewFrameworkNraTab": true,
+          "canEditFrameworkWhoTab": false,
+          "canEditFrameworkSearnTab": false,
+          "canEditFrameworkNraTab": true,
+          "canDeleteFrameworkWhoTab": false,
+          "canDeleteFrameworkSearnTab": false,
+          "canDeleteFrameworkNraTab": true,
+          "showSuggestionsTab": true
+        },
+        "myTrainingCatalog": {
+          "canCreateTraining": false,
+          "canEditTraining": false,
+          "canDeleteTraining": false
+        },
+        "nraSpecificTrainingCatalog": {
+          "canCreateTraining": true,
+          "canEditTraining": true,
+          "canDeleteTraining": true,
+          "canRequestAccess": false,
+          "canViewProviderColumn": false
+        },
+        "myTraining": {
+          "canUpdateTraining": false
+        },
+        "requestedTrainings": {
+          "showOpenCloseButton": false,
+          "showFlagButton": true
+        },
+        "searnTrainingCatalog": {
+          "canRequestTraining": true,
+          "canRequestAccess": false
+        },
+        "organizationProfile": {
+          "canChangeOrganizationProfile": true,
+          "showAdministratorsSection": true
+        },
+        "myTeam": {
+          "canAddTeamMember": true,
+          "canRemoveTeamMember": true
+        },
+        "profile": {
+          "showManagerField": true,
+          "showCompetencyRoleField": true,
+          "canRequestAdminRole": true
+        }
+      }
+    }
+  ]
+}

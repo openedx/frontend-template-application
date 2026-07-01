@@ -1,0 +1,104 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "title": "GMP Inspection Fundamentals",
+      "description": "An introductory course covering the principles and practices of Good Manufacturing Practice inspections for pharmaceutical manufacturing facilities.",
+      "mode": "Virtual",
+      "provider": "WHO Prequalification",
+      "provider_slug": "who-prequalification",
+      "rating": 4.3,
+      "review_count": 14,
+      "cost": "Free",
+      "is_requested": true
+    },
+    {
+      "id": 2,
+      "title": "Pharmacovigilance Signal Detection",
+      "description": "Advanced workshop on identifying, assessing, and managing safety signals from pharmacovigilance databases and adverse event reporting systems.",
+      "mode": "Hybrid",
+      "provider": "Uppsala Monitoring Centre",
+      "provider_slug": "uppsala-monitoring-centre",
+      "rating": 4.5,
+      "review_count": 12,
+      "cost": "$500",
+      "is_requested": false
+    },
+    {
+      "id": 3,
+      "title": "Bioequivalence Study Design",
+      "description": "Comprehensive training on designing, conducting, and evaluating bioequivalence studies for generic medicine registration applications.",
+      "mode": "In-person",
+      "provider": "SEARN Secretariat",
+      "provider_slug": "searn-secretariat",
+      "rating": 3.9,
+      "review_count": 15,
+      "cost": "$750",
+      "is_requested": false
+    },
+    {
+      "id": 4,
+      "title": "Regulatory Leadership Masterclass",
+      "description": "A high-level leadership program designed for senior regulatory officials focusing on strategic planning, stakeholder engagement, and institutional governance.",
+      "mode": "Virtual",
+      "provider": "SEARN Secretariat",
+      "provider_slug": "searn-secretariat",
+      "rating": 4.8,
+      "review_count": 6,
+      "cost": "$1,200",
+      "is_requested": false
+    },
+    {
+      "id": 5,
+      "title": "Laboratory Quality Management Systems",
+      "description": "Training on establishing and maintaining quality management systems in pharmaceutical testing laboratories in compliance with ISO 17025 standards.",
+      "mode": "Hybrid",
+      "provider": "USP",
+      "provider_slug": "usp",
+      "rating": 4.4,
+      "review_count": 8,
+      "cost": "$400",
+      "is_requested": false
+    },
+    {
+      "id": 6,
+      "title": "Risk-Based Inspection Planning",
+      "description": "Webinar series on implementing risk-based approaches to pharmaceutical inspection planning and resource allocation.",
+      "mode": "Virtual",
+      "provider": "PIC/S",
+      "provider_slug": "pics",
+      "rating": 4.3,
+      "review_count": 6,
+      "cost": "Free",
+      "is_requested": false
+    },
+    {
+      "id": 7,
+      "title": "Adverse Drug Reaction Reporting",
+      "description": "Foundational training on collecting, documenting, and reporting adverse drug reactions following international standards.",
+      "mode": "Virtual",
+      "provider": "WHO Prequalification",
+      "provider_slug": "who-prequalification",
+      "rating": 4.6,
+      "review_count": 11,
+      "cost": "Free",
+      "is_requested": false
+    },
+    {
+      "id": 8,
+      "title": "Regulatory Dossier Assessment",
+      "description": "Intensive course on evaluating pharmaceutical product registration dossiers including chemistry, manufacturing and controls (CMC) sections.",
+      "mode": "In-person",
+      "provider": "Swissmedic",
+      "provider_slug": "swissmedic",
+      "rating": 4.2,
+      "review_count": 11,
+      "cost": "$900",
+      "is_requested": false
+    }
+  ],
+  "count": 14,
+  "page": 1,
+  "page_size": 20,
+  "total_pages": 2
+}

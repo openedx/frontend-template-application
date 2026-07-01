@@ -1,0 +1,32 @@
+{
+  "results": [
+    {
+      "id": "view-my-team",
+      "label": "View My Team",
+      "description": "See members on your team",
+      "href": "/admin/my-team/",
+      "icon": "usersRound",
+      "iconBackground": "#2A3B8F"
+    },
+    {
+      "id": "view-my-profile",
+      "label": "View My Profile",
+      "description": "Open your profile",
+      "href": "/admin/profile/",
+      "icon": "user",
+      "iconBackground": "#14B8A6"
+    },
+    {
+      "id": "view-organization-profile",
+      "label": "View Organization Profile",
+      "description": "Open organization profile",
+      "href": "/admin/organization-profile/",
+      "icon": "building",
+      "iconBackground": "#FFCC29"
+    }
+  ],
+  "count": 3,
+  "page": 1,
+  "page_size": 20,
+  "total_pages": 1
+}

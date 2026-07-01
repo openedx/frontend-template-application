@@ -1,0 +1,120 @@
+.dashboard-popular-trainings {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: .75rem;
+  box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  &__header-icon-wrap {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .5rem;
+    background: rgb(42 59 143 / .1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__header-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #2A3B8F;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: #2A3B8F;
+  }
+
+  &__subtitle {
+    margin: .125rem 0 0;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    color: #6B7280;
+  }
+
+  &__empty {
+    padding: 1.5rem;
+    min-height: 120px;
+  }
+
+  &__list {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .75rem;
+    border: 1px solid #E5E7EB;
+    border-radius: .5rem;
+    transition: border-color .15s ease, background-color .15s ease;
+
+    &:hover {
+      border-color: #2A3B8F;
+      background: rgb(42 59 143 / .05);
+    }
+  }
+
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__icon-wrap {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: .5rem;
+    background: rgb(42 59 143 / .1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__icon {
+    width: 1rem;
+    height: 1rem;
+    color: #2A3B8F;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: .875rem;
+    font-weight: 500;
+    color: #2A3B8F;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__badge {
+    flex-shrink: 0;
+    font-size: .75rem;
+    line-height: 1rem;
+    font-weight: 600;
+    padding: .25rem .625rem;
+    border-radius: 9999px;
+    background: #ECFDF5;
+    color: #047857;
+  }
+}

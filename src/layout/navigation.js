@@ -11,7 +11,16 @@ const navigationItems = [
     key: 'activities', labelKey: 'navActivities', iconKey: 'activities', path: ADMIN_PATHS.activities,
   },
   {
+    key: 'myTraining', labelKey: 'navMyTraining', iconKey: 'myTraining', path: ADMIN_PATHS.myTraining,
+  },
+  {
     key: 'trainingCatalog', labelKey: 'navTrainingCatalog', iconKey: 'trainingCatalog', path: ADMIN_PATHS.trainingCatalog,
+  },
+  {
+    key: 'myTrainingCatalog', labelKey: 'navMyTrainingCatalog', iconKey: 'myTrainingCatalog', path: ADMIN_PATHS.myTrainingCatalog,
+  },
+  {
+    key: 'nraSpecificTrainingCatalog', labelKey: 'navNraSpecificTrainingCatalog', iconKey: 'nraSpecificTrainingCatalog', path: ADMIN_PATHS.nraSpecificTrainingCatalog,
   },
   {
     key: 'nras', labelKey: 'navNras', iconKey: 'nras', path: ADMIN_PATHS.nras,
@@ -33,6 +42,15 @@ const navigationItems = [
   },
   {
     key: 'users', labelKey: 'navUsers', iconKey: 'users', path: ADMIN_PATHS.users,
+  },
+  {
+    key: 'myTeam', labelKey: 'navMyTeam', iconKey: 'myTeam', path: ADMIN_PATHS.myTeam,
+  },
+  {
+    key: 'regulatoryPassport', labelKey: 'navRegulatoryPassport', iconKey: 'regulatoryPassport', path: ADMIN_PATHS.regulatoryPassport,
+  },
+  {
+    key: 'organizationProfile', labelKey: 'navOrganizationProfile', iconKey: 'organizationProfile', path: ADMIN_PATHS.organizationProfile,
   },
   {
     key: 'roles', labelKey: 'navRoles', iconKey: 'roles', path: ADMIN_PATHS.roles,
@@ -58,11 +76,17 @@ const navigationItems = [
 const navigationAccessMap = {
   competencyFramework: 'accessCompetencyFramework',
   activities: 'accessActivities',
+  myTrainingCatalog: 'accessMyTrainingCatalog',
+  nraSpecificTrainingCatalog: 'accessNraSpecificTrainingCatalog',
+  myTraining: 'accessMyTraining',
   nras: 'accessNrasManagement',
   countries: 'accessCountries',
   trainingProviders: 'accessTrainingProviders',
   pendingRequests: 'accessPendingRequests',
   users: 'accessUsers',
+  myTeam: 'accessMyTeam',
+  regulatoryPassport: 'accessRegulatoryPassport',
+  organizationProfile: 'accessOrganizationProfile',
   roles: 'accessRoles',
   settings: 'accessSettings',
   reports: 'accessReports',

@@ -22,16 +22,17 @@ import UsersRoleFilter, { USERS_ROLE_FILTER_ALL } from '../../components/users/U
 import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import { buildUserNavigationState } from '../../api/users/userPageMockData';
 import { ADMIN_PATHS } from '../../utils/adminPaths';
-import { fetchUserDetail } from '../../api/users/usersApi';
+import { fetchUserForEdit } from '../../api/users/usersApi';
 import {
   buildUserWritePayload,
   findRoleOptionByValue,
-  mapUserDetail,
+  mapUserEditDetail,
   roleOptionHasSubOptions,
 } from '../../api/users/usersUtils';
 import useRoleOptions from '../../hooks/users/useRoleOptions';
-import useUserDetail, { userDetailQueryKey } from '../../hooks/users/useUserDetail';
+import useUserEditDetail, { userEditDetailQueryKey } from '../../hooks/users/useUserEditDetail';
 import useUserFormCountries from '../../hooks/users/useUserFormCountries';
 import useUserMutations from '../../hooks/users/useUserMutations';
 import useUsersList from '../../hooks/users/useUsersList';
@@ -46,7 +47,7 @@ const Users = () => {
   const { formatMessage } = useIntl();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
-  const { componentAccess } = useUserRole();
+  const { componentAccess, navbarAccess } = useUserRole();
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState(USERS_ROLE_FILTER_ALL);
@@ -59,21 +60,32 @@ const Users = () => {
   const [importUsersOpen, setImportUsersOpen] = useState(false);
   const [isEditUserLoading, setIsEditUserLoading] = useState(false);
 
+  const canAccessUsers = Boolean(navbarAccess?.accessUsers ?? false);
   const canAddUser = Boolean(componentAccess?.users?.canAddUser ?? false);
   const canViewUserAbout = Boolean(componentAccess?.users?.canViewUserAbout ?? false);
   const canEditUser = Boolean(componentAccess?.users?.canEditUser ?? false);
   const canDeleteUser = Boolean(componentAccess?.users?.canDeleteUser ?? false);
   const canViewRoleColumn = Boolean(componentAccess?.users?.canViewRoleColumn ?? false);
   const canViewCompetencyRoleColumn = Boolean(componentAccess?.users?.canViewCompetencyRoleColumn ?? false);
+  const showCountryField = Boolean(componentAccess?.users?.userFormFields?.showCountryField ?? false);
+  const showRoleField = Boolean(componentAccess?.users?.userFormFields?.showRoleField ?? false);
 
   const canShowActions = canViewUserAbout || canEditUser || canDeleteUser;
   const canManageUsers = canAddUser || canEditUser;
+
+  const isEditing = addUserOpen && modalMode === 'edit' && editingUserId != null;
+  const needsUserFormCountries = addUserOpen
+    && showCountryField
+    && (canAddUser || (canEditUser && isEditing));
+  const needsUserFormRoleOptions = addUserOpen
+    && showRoleField
+    && (canAddUser || (canEditUser && isEditing));
 
   const {
     roleOptions,
     isError: isRoleOptionsError,
     errorMessage: roleOptionsErrorMessage,
-  } = useRoleOptions({ enabled: true });
+  } = useRoleOptions({ enabled: canAccessUsers || needsUserFormRoleOptions });
 
   const selectedFilterRole = useMemo(
     () => findRoleOptionByValue(roleOptions, roleFilter),
@@ -100,13 +112,12 @@ const Users = () => {
     search: debouncedSearch,
     roleValue: listRoleValue,
     providerId: listProviderId,
+    enabled: canAccessUsers,
   });
 
-  const isEditing = addUserOpen && modalMode === 'edit' && editingUserId != null;
-
-  const { detail: userDetail } = useUserDetail({
+  const { detail: userDetail, isLoading: isEditDetailLoading } = useUserEditDetail({
     userId: editingUserId,
-    enabled: isEditing,
+    enabled: isEditing && canEditUser,
   });
 
   const {
@@ -114,7 +125,7 @@ const Users = () => {
     isLoading: isCountriesLoading,
     isError: isCountriesError,
     errorMessage: countriesErrorMessage,
-  } = useUserFormCountries({ enabled: addUserOpen });
+  } = useUserFormCountries({ enabled: needsUserFormCountries });
 
   const { createMutation, updateMutation, deleteMutation } = useUserMutations();
 
@@ -180,6 +191,10 @@ const Users = () => {
   };
 
   const openEditUser = async (user) => {
+    if (!canEditUser) {
+      return;
+    }
+
     const userId = user?.id;
     if (userId == null || userId === '') {
       return;
@@ -188,17 +203,17 @@ const Users = () => {
     setIsEditUserLoading(true);
     try {
       await queryClient.fetchQuery({
-        queryKey: userDetailQueryKey(userId),
+        queryKey: userEditDetailQueryKey(userId),
         queryFn: async () => {
-          const result = await fetchUserDetail({ formatMessage, userId });
+          const result = await fetchUserForEdit({ formatMessage, userId });
 
           if (!result.ok) {
             throw new Error(result.message);
           }
 
-          const detail = mapUserDetail(result.data);
+          const detail = mapUserEditDetail(result.data);
           if (!detail) {
-            throw new Error(formatMessage(messages.detailLoadError));
+            throw new Error(formatMessage(messages.editUserLoadError));
           }
 
           return detail;
@@ -210,8 +225,8 @@ const Users = () => {
       setAddUserOpen(true);
     } catch (error) {
       showToast({
-        title: formatMessage(messages.detailErrorTitle),
-        description: error?.message || formatMessage(messages.detailLoadError),
+        title: formatMessage(messages.editUserErrorTitle),
+        description: error?.message || formatMessage(messages.editUserLoadError),
       });
     } finally {
       setIsEditUserLoading(false);
@@ -223,18 +238,18 @@ const Users = () => {
 
     try {
       if (modalMode === 'edit') {
-        await updateMutation.mutateAsync({ userId: editingUserId, payload });
+        const result = await updateMutation.mutateAsync({ userId: editingUserId, payload });
         showToast({
           title: formatMessage(messages.toastUserUpdatedTitle),
-          description: formatMessage(messages.toastUserUpdatedDescription, {
+          description: result.message || formatMessage(messages.toastUserUpdatedDescription, {
             name: formValues.name.trim(),
           }),
         });
       } else {
-        await createMutation.mutateAsync(payload);
+        const result = await createMutation.mutateAsync(payload);
         showToast({
           title: formatMessage(messages.toastUserCreatedTitle),
-          description: formatMessage(messages.toastUserCreatedDescription, {
+          description: result.message || formatMessage(messages.toastUserCreatedDescription, {
             name: formValues.name.trim(),
           }),
         });
@@ -263,11 +278,11 @@ const Users = () => {
     const userName = hasDisplayValue(deleteUser.name) ? deleteUser.name : '';
 
     try {
-      await deleteMutation.mutateAsync(deleteUser.id);
+      const result = await deleteMutation.mutateAsync(deleteUser.id);
       setDeleteUser(null);
       showToast({
         title: formatMessage(messages.toastUserDeletedTitle),
-        description: formatMessage(messages.toastUserDeletedDescription, { name: userName }),
+        description: result.message || formatMessage(messages.toastUserDeletedDescription, { name: userName }),
       });
     } catch (error) {
       showToast({
@@ -388,7 +403,7 @@ const Users = () => {
                           {canViewUserAbout ? (
                             <Link
                               to={ADMIN_PATHS.userDetail(user.id)}
-                              state={{ userProfileImage: user.userProfileImage }}
+                              state={buildUserNavigationState(user)}
                               className="users-page__name users-page__name--link"
                             >
                               {user.name}
@@ -425,7 +440,7 @@ const Users = () => {
                           {canViewUserAbout && (
                             <Link
                               to={ADMIN_PATHS.userDetail(user.id)}
-                              state={{ userProfileImage: user.userProfileImage }}
+                              state={buildUserNavigationState(user)}
                               className="users-page__icon-button"
                               aria-label={formatMessage(messages.viewAction)}
                             >
@@ -481,7 +496,7 @@ const Users = () => {
           onClose={closeAddUserModal}
           mode={modalMode}
           userDetail={userDetail}
-          isLoadingDetail={false}
+          isLoadingDetail={isEditing && isEditDetailLoading}
           isSaving={createMutation.isPending || updateMutation.isPending}
           roleOptionRows={roleOptions}
           countryOptions={countryOptions}

@@ -29,9 +29,11 @@
   }
 
   &__brand-img {
-    height: 48px;
-    width: auto;
     display: block;
+    height: 3rem;
+    width: auto;
+    max-height: 3rem;
+    object-fit: contain;
   }
 
   &__identity {
@@ -396,6 +398,27 @@
     display: flex;
     gap: .75rem;
     flex-shrink: 0;
+  }
+
+  &__domain-filters {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .75rem;
+    margin-bottom: 1rem;
+
+    @media (width >= 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (width >= 1024px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  &__domain-loading {
+    margin: 0 0 1rem;
+    color: #667085;
+    font-size: .875rem;
   }
 
   &__export-btn {

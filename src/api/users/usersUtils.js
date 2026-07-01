@@ -1,4 +1,5 @@
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { API_PAGE_SIZE, REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE } from '../endpoints';
 
 const OPTION_META_KEYS = new Set(['id', 'value', 'label']);
 
@@ -69,15 +70,31 @@ export const normalizeRoleOptionRows = (results) => {
 };
 
 /**
+ * @param {string|string[]|undefined|null} value
+ * @returns {string}
+ */
+export const formatUserListCompetencyRole = (value) => {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => (hasDisplayValue(item) ? String(item).trim() : ''))
+      .filter(Boolean)
+      .join(', ');
+  }
+
+  return hasDisplayValue(value) ? String(value).trim() : '';
+};
+
+/**
+ * Maps a row from GET /api/v1/role-assignment/users/.
  * @param {object} row
  */
 export const mapUserListRow = (row) => ({
-  id: row?.id,
-  name: row?.name,
-  email: row?.email,
+  id: row?.id != null ? String(row.id) : '',
+  name: row?.name ?? '',
+  email: row?.email ?? '',
   role: row?.role ?? '',
-  userProfileImage: row?.user_profile_image ?? '',
-  competencyRole: row?.competency_role ?? '',
+  userProfileImage: row?.user_profile_image ?? row?.userProfileImage ?? '',
+  competencyRole: formatUserListCompetencyRole(row?.competency_role ?? row?.competencyRole),
 });
 
 /**
@@ -93,26 +110,278 @@ export const normalizeUserListResults = (results) => {
     .filter((row) => hasDisplayValue(row.id));
 };
 
+const mapCompletedTrainingRow = (row) => ({
+  id: row?.id,
+  title: row?.title ?? '',
+  completedOn: row?.completed_on ?? row?.completedOn ?? '',
+  score: row?.score ?? '',
+});
+
+const mapTrainingStatusRow = (row) => ({
+  id: row?.id,
+  title: row?.title ?? '',
+  status: row?.status ?? '',
+  progress: Number.isFinite(Number(row?.progress)) ? Number(row.progress) : 0,
+});
+
+const mapAssignedTrainingRow = (row) => {
+  const providerParts = [
+    row?.provider_name,
+    row?.time ?? row?.Time,
+    row?.provider_line ?? row?.providerLine,
+  ].filter(hasDisplayValue);
+
+  return {
+    id: row?.id != null ? String(row.id) : '',
+    title: row?.title ?? '',
+    providerLine: providerParts.join(' • '),
+  };
+};
+
+const mapMappedCompetencyRow = (row) => ({
+  id: row?.id,
+  title: row?.title ?? '',
+  proficiency: row?.proficiency ?? '',
+  completed: Boolean(row?.completed),
+});
+
+/**
+ * @param {object} payload
+ * @param {(row: object) => object} mapRow
+ * @param {string} requiredField
+ */
+const mapUserListPayload = (payload, mapRow, requiredField) => {
+  const results = payload?.results ?? payload;
+  const rows = Array.isArray(results) ? results : [];
+
+  return rows
+    .map(mapRow)
+    .filter((row) => hasDisplayValue(row?.[requiredField]));
+};
+
+/**
+ * @param {object} payload
+ */
+export const mapUserCompletedTrainingsList = (payload) => (
+  mapUserListPayload(payload, mapCompletedTrainingRow, 'id')
+);
+
+/**
+ * @param {object} payload
+ */
+export const mapUserTrainingStatusList = (payload) => (
+  mapUserListPayload(payload, mapTrainingStatusRow, 'id')
+);
+
+/**
+ * @param {object} payload
+ */
+export const mapUserAssignedTrainingsList = (payload) => (
+  mapUserListPayload(payload, mapAssignedTrainingRow, 'id')
+);
+
+/**
+ * @param {object} payload
+ */
+export const mapUserMappedCompetenciesList = (payload) => (
+  mapUserListPayload(payload, mapMappedCompetencyRow, 'title')
+);
+
+/**
+ * @param {object} payload
+ */
+export const mapUserAboutDetail = (payload) => {
+  const data = payload?.results ?? payload;
+
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    return null;
+  }
+
+  return {
+    id: data.id != null ? String(data.id) : '',
+    name: data.name ?? '',
+    email: data.email ?? '',
+    country: data.country != null ? String(data.country) : '',
+    role: data.role ?? '',
+    roleSub: data.role_sub ?? data.roleSub ?? '',
+    competencyRole: data.competency_role ?? data.competencyRole ?? '',
+    provider: data.provider != null ? String(data.provider) : '',
+    userProfileImage: data.user_profile_image ?? data.userProfileImage ?? '',
+    status: data.status ?? '',
+    createdAt: data.created_at ?? data.createdAt ?? '',
+    updatedAt: data.updated_at ?? data.updatedAt ?? '',
+    lastLogin: data.last_login ?? data.lastLogin ?? '',
+    trainingsCompleted: data.trainings_completed ?? data.trainingsCompleted ?? '',
+  };
+};
+
+/**
+ * Maps GET /api/v1/role-assignment/users/{id}/ for edit modal prefill.
+ * @param {object} payload
+ */
+export const mapUserEditDetail = (payload) => {
+  const data = payload?.results ?? payload;
+
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    return null;
+  }
+
+  return {
+    id: data.id != null ? String(data.id) : '',
+    name: data.name ?? '',
+    email: data.email ?? '',
+    country: data.country != null ? String(data.country) : '',
+    role: data.role ?? '',
+    provider: data.provider != null ? String(data.provider) : '',
+    roleSub: data.role_sub ?? data.roleSub ?? (data.provider != null ? String(data.provider) : ''),
+    userProfileImage: data.user_profile_image ?? data.userProfileImage ?? '',
+    competencyRole: data.competency_role ?? data.competencyRole ?? '',
+  };
+};
+
 /**
  * @param {object} payload
  */
 export const mapUserDetail = (payload) => {
+  const edit = mapUserEditDetail(payload);
+  if (!edit) {
+    return null;
+  }
+
+  return {
+    id: edit.id,
+    name: edit.name,
+    email: edit.email,
+    country: edit.country,
+    role: edit.role,
+    provider: edit.provider,
+    userProfileImage: edit.userProfileImage,
+    competencyRole: edit.competencyRole,
+  };
+};
+
+const mapDomainCoverageRow = (row) => ({
+  id: row?.id,
+  domain: row?.domain ?? '',
+  percent: Number.isFinite(Number(row?.percent)) ? Number(row.percent) : 0,
+  tags: Array.isArray(row?.tags) ? row.tags.filter((tag) => hasDisplayValue(tag)) : [],
+});
+
+const mapPassportCompletedTrainingRow = (row) => ({
+  id: row?.id,
+  training: row?.training ?? '',
+  provider: row?.provider ?? '',
+  completed: row?.completed ?? '',
+  activity: row?.activity ?? '',
+  remoteType: row?.remote_type ?? row?.remoteType ?? '',
+  certificateViewUrl: row?.certificate_view_url
+    ?? row?.certificateViewUrl
+    ?? row?.certificate_url
+    ?? row?.certificateUrl
+    ?? '',
+});
+
+const mapPassportStatRow = (row) => ({
+  id: row?.id,
+  name: row?.name ?? '',
+  number: row?.number != null && row?.number !== '' ? row.number : '',
+});
+
+/**
+ * @param {object} payload
+ */
+export const mapRegulatoryPassportStatsList = (payload) => (
+  mapUserListPayload(payload, mapPassportStatRow, 'id')
+);
+
+/**
+ * @param {object} payload
+ */
+export const mapRegulatoryPassportDomainCoverageList = (payload) => (
+  mapUserListPayload(payload, mapDomainCoverageRow, 'id')
+);
+
+/**
+ * @param {object} payload
+ */
+export const mapRegulatoryPassportCompletedTrainingsPage = (payload) => {
+  const rows = Array.isArray(payload?.results) ? payload.results : [];
+
+  return {
+    items: rows
+      .map(mapPassportCompletedTrainingRow)
+      .filter((row) => hasDisplayValue(row.id)),
+    count: Number.isFinite(Number(payload?.count)) ? Number(payload.count) : rows.length,
+    page: Number.isFinite(Number(payload?.page)) ? Number(payload.page) : 1,
+    pageSize: Number.isFinite(Number(payload?.page_size ?? payload?.pageSize))
+      ? Number(payload.page_size ?? payload.pageSize)
+      : API_PAGE_SIZE,
+    totalPages: Number.isFinite(Number(payload?.total_pages ?? payload?.totalPages))
+      ? Number(payload.total_pages ?? payload.totalPages)
+      : 1,
+  };
+};
+
+/**
+ * @param {object} payload
+ */
+export const mapUserRegulatoryPassport = (payload) => {
   const data = payload?.results ?? payload;
 
-  if (!data || typeof data !== 'object') {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
     return null;
   }
 
   return {
     id: data.id,
-    name: data.name,
-    email: data.email,
+    name: data.name ?? '',
+    email: data.email ?? '',
     country: data.country != null ? String(data.country) : '',
     role: data.role ?? '',
-    provider: data.provider != null ? String(data.provider) : '',
-    userProfileImage: data.user_profile_image ?? '',
+    userProfileImage: data.user_profile_image ?? data.userProfileImage ?? '',
+    passportId: data.passport_id ?? data.passportId ?? '',
+    jobTitle: data.job_title ?? data.jobTitle ?? '',
+    organisationLine: data.organisation_line ?? data.organisationLine ?? '',
+    about: data.about ?? '',
+    competencyRole: data.competency_role ?? data.competencyRole ?? '',
+    stats: mapRegulatoryPassportStatsList({ results: data.stats ?? [] }),
   };
 };
+
+/**
+ * Merge list-row identity onto regulatory passport payload.
+ * @param {ReturnType<typeof mapUserRegulatoryPassport>} passport
+ * @param {object} userRow
+ */
+export const mergeRegulatoryPassportIdentity = (passport, userRow) => ({
+  ...passport,
+  id: userRow.id ?? passport.id,
+  name: hasDisplayValue(userRow.name) ? userRow.name : passport.name,
+  email: hasDisplayValue(userRow.email) ? userRow.email : passport.email,
+  country: hasDisplayValue(userRow.country) ? userRow.country : passport.country,
+  role: hasDisplayValue(userRow.role) ? userRow.role : passport.role,
+  userProfileImage: hasDisplayValue(userRow.userProfileImage)
+    ? userRow.userProfileImage
+    : passport.userProfileImage,
+});
+
+/**
+ * Merge list-row identity onto shared about-detail mock content.
+ * @param {ReturnType<typeof mapUserAboutDetail>} detail
+ * @param {object} userRow
+ */
+export const mergeUserIdentityIntoAboutDetail = (detail, userRow) => ({
+  ...detail,
+  id: userRow.id,
+  name: hasDisplayValue(userRow.name) ? userRow.name : detail.name,
+  email: hasDisplayValue(userRow.email) ? userRow.email : detail.email,
+  country: hasDisplayValue(userRow.country) ? userRow.country : detail.country,
+  role: hasDisplayValue(userRow.role) ? userRow.role : detail.role,
+  roleSub: hasDisplayValue(userRow.roleSub) ? userRow.roleSub : detail.roleSub,
+  competencyRole: hasDisplayValue(userRow.competencyRole) ? userRow.competencyRole : detail.competencyRole,
+  userProfileImage: hasDisplayValue(userRow.userProfileImage) ? userRow.userProfileImage : detail.userProfileImage,
+  createdAt: hasDisplayValue(userRow.joined) ? userRow.joined : detail.createdAt,
+});
 
 /**
  * @param {{
@@ -143,4 +412,71 @@ export const buildUserWritePayload = ({
   }
 
   return payload;
+};
+
+/**
+ * @param {Array<object>} results
+ */
+export const normalizeDropdownOptionRows = (results) => {
+  if (!Array.isArray(results)) {
+    return [];
+  }
+
+  return results
+    .filter((row) => hasDisplayValue(row?.value) && hasDisplayValue(row?.label))
+    .map((row) => ({
+      id: row.id ?? row.value,
+      value: String(row.value),
+      label: row.label,
+    }));
+};
+
+/**
+ * @param {Array<object>} results
+ */
+export const normalizeAssignableTrainingOptions = (results) => normalizeDropdownOptionRows(results);
+
+/**
+ * @param {{
+ *   page?: number,
+ *   pageSize?: number,
+ *   domainId?: string|number,
+ *   subDomainId?: string|number,
+ *   levelId?: string|number,
+ *   productTypeId?: string|number,
+ *   userId?: string|number|null,
+ * }} params
+ */
+export const buildRegulatoryPassportDomainCoverageParams = ({
+  page = 1,
+  pageSize = REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE,
+  domainId,
+  subDomainId,
+  levelId,
+  productTypeId,
+  userId,
+} = {}) => {
+  const params = {
+    page,
+    page_size: pageSize,
+  };
+
+  if (userId != null && userId !== '') {
+    params.user_id = userId;
+  }
+
+  if (domainId != null && domainId !== '') {
+    params.domain_id = domainId;
+  }
+  if (subDomainId != null && subDomainId !== '') {
+    params.sub_domain_id = subDomainId;
+  }
+  if (levelId != null && levelId !== '') {
+    params.level_id = levelId;
+  }
+  if (productTypeId != null && productTypeId !== '') {
+    params.product_type_id = productTypeId;
+  }
+
+  return params;
 };

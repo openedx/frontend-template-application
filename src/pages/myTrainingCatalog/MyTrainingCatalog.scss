@@ -1,0 +1,103 @@
+.my-training-catalog-page {
+  .searn-training-catalog-page__td {
+    color: #2A3B8F;
+  }
+
+  .searn-training-catalog-page__training-title {
+    color: #2A3B8F;
+  }
+
+  &__toolbar {
+    gap: .75rem;
+  }
+
+  &__search-wide {
+    @media (width >= 1280px) {
+      grid-column: span 2;
+    }
+
+    @media (width >= 1536px) {
+      grid-column: span 2;
+    }
+  }
+
+  &__actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+  }
+
+  &__primary-button {
+    height: 44px;
+    border-radius: .5rem;
+    border: 0;
+    background: #2A3B8F;
+    color: #FFFFFF;
+    font-size: .875rem;
+    font-weight: 600;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    width: 100%;
+
+    @media (width >= 640px) {
+      width: auto;
+    }
+  }
+
+  &__th--actions {
+    text-align: right;
+  }
+
+  &__actions-cell {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__actions-group {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+
+  &__icon-actions {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: .25rem;
+  }
+
+  &__cost-cell {
+    font-weight: 600;
+    color: #2A3B8F;
+  }
+
+  &__icon-button {
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: .5rem;
+    background: transparent;
+    color: #2A3B8F;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background: rgb(42 59 143 / .08);
+    }
+
+    &--danger {
+      color: #DC2626;
+
+      &:hover {
+        background: rgb(220 38 38 / .08);
+      }
+    }
+  }
+}

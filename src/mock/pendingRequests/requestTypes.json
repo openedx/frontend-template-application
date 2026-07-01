@@ -1,6 +1,12 @@
-[
-  { "value": "all", "label": "All request types" },
-  { "value": "NRA onboarding", "label": "NRA onboarding" },
-  { "value": "Provider onboarding", "label": "Provider onboarding" }
-]
+{
+  "results": [
+    { "value": "all", "label": "All request types" },
+    { "value": "NRA onboarding", "label": "NRA onboarding" },
+    { "value": "Provider onboarding", "label": "Provider onboarding" }
+  ],
+  "count": 3,
+  "page": 1,
+  "page_size": 50,
+  "total_pages": 1
+}
 

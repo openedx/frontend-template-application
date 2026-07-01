@@ -2,6 +2,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createRequestedTraining,
+  patchRequestedTrainingFlag,
   patchRequestedTrainingStatus,
 } from '../../api/requestedTrainings/requestedTrainingsApi';
 
@@ -43,9 +44,25 @@ const useRequestedTrainingMutations = () => {
     onSuccess: invalidateRequestedTrainings,
   });
 
+  const flagMutation = useMutation({
+    mutationFn: async ({ id, isFlagged }) => {
+      const result = await patchRequestedTrainingFlag({
+        formatMessage,
+        id,
+        isFlagged,
+      });
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+      return result;
+    },
+    onSuccess: invalidateRequestedTrainings,
+  });
+
   return {
     createMutation,
     statusMutation,
+    flagMutation,
   };
 };
 

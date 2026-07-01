@@ -29,7 +29,8 @@ export const TablePagination = ({
 
 /**
  * Footer row with optional left summary and shared pagination on the right.
- * Renders nothing when `totalPages <= 1`.
+ * Pagination controls render only when `totalPages > 1`.
+ * The summary (`footerContent`) renders whenever it is provided, including single-page lists.
  */
 export const TablePaginationFooter = ({
   currentPage = 1,

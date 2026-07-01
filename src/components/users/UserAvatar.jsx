@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getUserInitials } from '../../utils/userInitials';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 
@@ -66,6 +68,16 @@ const UserAvatar = ({
   }, [imageUrl]);
 
   const renderFallback = () => {
+    if (variant === 'header') {
+      return (
+        <FontAwesomeIcon
+          icon={faUserCircle}
+          aria-hidden="true"
+          className="user-profile-menu__avatar-icon"
+        />
+      );
+    }
+
     if (resolvedFallbackClass) {
       return <div className={resolvedFallbackClass}>{initials}</div>;
     }

@@ -1,8 +1,13 @@
 import { executeApiRequest } from '../apiRequest';
 import {
+  DASHBOARD_NRA_MANAGER_QUICK_ACTIONS,
+  DASHBOARD_NRA_STAFF_COMPLETED_TRAININGS,
   DASHBOARD_PENDING_REQUESTS_PAGE_SIZE,
+  DASHBOARD_RECENT_ACTIVITY,
   DASHBOARD_STATS,
   DASHBOARD_TOP_REQUESTED_ACTIVITIES,
+  DASHBOARD_TOP_TRAININGS,
+  DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS,
   DASHBOARD_USERS_PER_COUNTRY,
   PENDING_REQUESTS_LIST,
 } from '../endpoints';
@@ -46,6 +51,75 @@ export const fetchDashboardTopRequestedActivities = ({ formatMessage }) => execu
   },
   formatMessage,
   fallbackMessage: dashboardMessages.topRequestedActivitiesLoadError,
+});
+
+/**
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardTopTrainings = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_TOP_TRAININGS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.topTrainingsLoadError,
+});
+
+/**
+ * GET /api/v1/dashboard/recent-activity/
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardRecentActivities = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_RECENT_ACTIVITY}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.recentActivitiesLoadError,
+});
+
+/**
+ * GET /api/v1/dashboard/nra-admin/popular-trainings/
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardPopularTrainings = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.popularTrainingsLoadError,
+});
+
+/**
+ * GET /api/v1/dashboard/nra-manager/quick-actions/
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardQuickActions = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_NRA_MANAGER_QUICK_ACTIONS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.quickActionsLoadError,
+});
+
+/**
+ * GET /api/v1/dashboard/nra-staff/completed-trainings/
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchDashboardRecentTrainingCompletions = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${DASHBOARD_NRA_STAFF_COMPLETED_TRAININGS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: dashboardMessages.recentTrainingCompletionsLoadError,
 });
 
 /**

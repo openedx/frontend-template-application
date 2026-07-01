@@ -14,11 +14,17 @@ import {
 const DEFAULT_NAVBAR_ACCESS = {
   accessCompetencyFramework: false,
   accessActivities: false,
+  accessMyTrainingCatalog: false,
+  accessNraSpecificTrainingCatalog: false,
+  accessMyTraining: false,
   accessNrasManagement: false,
   accessCountries: false,
   accessTrainingProviders: false,
   accessPendingRequests: false,
   accessUsers: false,
+  accessMyTeam: false,
+  accessRegulatoryPassport: false,
+  accessOrganizationProfile: false,
   accessRoles: false,
   accessSettings: false,
   accessReports: false,
@@ -29,6 +35,11 @@ const DEFAULT_COMPONENT_ACCESS = {
     showUsersPerCountry: false,
     showTopRequestedActivities: false,
     showPendingRequests: false,
+    showTopTrainings: false,
+    showRecentActivities: false,
+    showPopularTrainings: false,
+    showQuickActions: false,
+    showRecentTrainingCompletions: false,
   },
   nrasManagement: {
     canOnboardNra: false,
@@ -62,6 +73,8 @@ const DEFAULT_COMPONENT_ACCESS = {
     canViewCompetencyRoleColumn: false,
     canAssignTrainings: false,
     canRemoveAssignedTrainings: false,
+    canViewAssignedTrainings: false,
+    canViewMappedCompetencies: false,
     canViewRegulatoryPassport: false,
     userFormFields: {
       showRoleField: false,
@@ -87,6 +100,42 @@ const DEFAULT_COMPONENT_ACCESS = {
     canDeleteFrameworkSearnTab: false,
     canDeleteFrameworkNraTab: false,
     showSuggestionsTab: false,
+  },
+  myTrainingCatalog: {
+    canCreateTraining: false,
+    canEditTraining: false,
+    canDeleteTraining: false,
+  },
+  nraSpecificTrainingCatalog: {
+    canCreateTraining: false,
+    canEditTraining: false,
+    canDeleteTraining: false,
+    canRequestAccess: false,
+    canViewProviderColumn: false,
+  },
+  myTraining: {
+    canUpdateTraining: false,
+  },
+  searnTrainingCatalog: {
+    canRequestTraining: false,
+    canRequestAccess: false,
+  },
+  requestedTrainings: {
+    showOpenCloseButton: false,
+    showFlagButton: false,
+  },
+  organizationProfile: {
+    canChangeOrganizationProfile: false,
+    showAdministratorsSection: false,
+  },
+  myTeam: {
+    canAddTeamMember: false,
+    canRemoveTeamMember: false,
+  },
+  profile: {
+    showManagerField: false,
+    showCompetencyRoleField: false,
+    canRequestAdminRole: false,
   },
 };
 
@@ -128,6 +177,38 @@ const mergeComponentAccess = (roleData) => ({
   competencyFramework: {
     ...DEFAULT_COMPONENT_ACCESS.competencyFramework,
     ...(roleData?.componentAccess?.competencyFramework || {}),
+  },
+  myTrainingCatalog: {
+    ...DEFAULT_COMPONENT_ACCESS.myTrainingCatalog,
+    ...(roleData?.componentAccess?.myTrainingCatalog || {}),
+  },
+  nraSpecificTrainingCatalog: {
+    ...DEFAULT_COMPONENT_ACCESS.nraSpecificTrainingCatalog,
+    ...(roleData?.componentAccess?.nraSpecificTrainingCatalog || {}),
+  },
+  myTraining: {
+    ...DEFAULT_COMPONENT_ACCESS.myTraining,
+    ...(roleData?.componentAccess?.myTraining || {}),
+  },
+  searnTrainingCatalog: {
+    ...DEFAULT_COMPONENT_ACCESS.searnTrainingCatalog,
+    ...(roleData?.componentAccess?.searnTrainingCatalog || {}),
+  },
+  requestedTrainings: {
+    ...DEFAULT_COMPONENT_ACCESS.requestedTrainings,
+    ...(roleData?.componentAccess?.requestedTrainings || {}),
+  },
+  organizationProfile: {
+    ...DEFAULT_COMPONENT_ACCESS.organizationProfile,
+    ...(roleData?.componentAccess?.organizationProfile || {}),
+  },
+  myTeam: {
+    ...DEFAULT_COMPONENT_ACCESS.myTeam,
+    ...(roleData?.componentAccess?.myTeam || {}),
+  },
+  profile: {
+    ...DEFAULT_COMPONENT_ACCESS.profile,
+    ...(roleData?.componentAccess?.profile || {}),
   },
 });
 

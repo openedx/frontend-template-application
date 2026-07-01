@@ -1,52 +1,58 @@
-[
-  {
-    "id": "tp-001",
-    "name": "WHO Regional Office",
-    "email": "training@who.int",
-    "country": "Switzerland",
-    "courses": 12,
-    "admins": [
-      { "id": "tpa-001", "name": "WHO Admin", "email": "admin@who.int" }
-    ]
-  },
-  {
-    "id": "tp-002",
-    "name": "ASEAN Pharma Academy",
-    "email": "info@aseanpharma.org",
-    "country": "Thailand",
-    "courses": 8,
-    "admins": [
-      { "id": "tpa-002", "name": "Academy Admin", "email": "admin@aseanpharma.org" }
-    ]
-  },
-  {
-    "id": "tp-003",
-    "name": "Maldives FDA Training Center",
-    "email": "training@mfda.gov.mv",
-    "country": "Maldives",
-    "courses": 6,
-    "admins": [
-      { "id": "tpa-003", "name": "MFDA Admin", "email": "admin@mfda.gov.mv" }
-    ]
-  },
-  {
-    "id": "tp-004",
-    "name": "Thai MFA Institute",
-    "email": "institute@mfa.th",
-    "country": "Thailand",
-    "courses": 5,
-    "admins": [
-      { "id": "tpa-004", "name": "Institute Admin", "email": "admin@mfa.th" }
-    ]
-  },
-  {
-    "id": "tp-005",
-    "name": "Bangladesh DGDA Academy",
-    "email": "academy@dgda.gov.bd",
-    "country": "Bangladesh",
-    "courses": 4,
-    "admins": [
-      { "id": "tpa-005", "name": "DGDA Academy Admin", "email": "admin@dgda.gov.bd" }
-    ]
-  }
-]
+{
+  "results": [
+    {
+      "id": "tp-001",
+      "name": "WHO Regional Office",
+      "email": "training@who.int",
+      "country": "Switzerland",
+      "courses": 12,
+      "admins": [
+        { "id": "tpa-001", "name": "WHO Admin", "email": "admin@who.int" }
+      ]
+    },
+    {
+      "id": "tp-002",
+      "name": "ASEAN Pharma Academy",
+      "email": "info@aseanpharma.org",
+      "country": "Thailand",
+      "courses": 8,
+      "admins": [
+        { "id": "tpa-002", "name": "Academy Admin", "email": "admin@aseanpharma.org" }
+      ]
+    },
+    {
+      "id": "tp-003",
+      "name": "Maldives FDA Training Center",
+      "email": "training@mfda.gov.mv",
+      "country": "Maldives",
+      "courses": 6,
+      "admins": [
+        { "id": "tpa-003", "name": "MFDA Admin", "email": "admin@mfda.gov.mv" }
+      ]
+    },
+    {
+      "id": "tp-004",
+      "name": "Thai MFA Institute",
+      "email": "institute@mfa.th",
+      "country": "Thailand",
+      "courses": 5,
+      "admins": [
+        { "id": "tpa-004", "name": "Institute Admin", "email": "admin@mfa.th" }
+      ]
+    },
+    {
+      "id": "tp-005",
+      "name": "Bangladesh DGDA Academy",
+      "email": "academy@dgda.gov.bd",
+      "country": "Bangladesh",
+      "courses": 4,
+      "admins": [
+        { "id": "tpa-005", "name": "DGDA Academy Admin", "email": "admin@dgda.gov.bd" }
+      ]
+    }
+  ],
+  "count": 5,
+  "page": 1,
+  "page_size": 20,
+  "total_pages": 1
+}

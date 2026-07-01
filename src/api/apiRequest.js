@@ -1,8 +1,12 @@
-import { getApiErrorMessage, resolveApiMessage } from './apiMessage';
+import apiMessages from '../messages/apiMessages';
+import { resolveApiMessage } from './apiMessage';
 
 /**
  * Run a single HTTP call with normalized success/error handling.
  * Use from domain API files only — not from JSX.
+ *
+ * Every call must pass `fallbackMessage` (defineMessages entry unique to that API).
+ * If omitted, `apiMessages.genericRequestError` is used on failure.
  *
  * @returns {Promise<import('./apiTypes').ApiRequestResult>}
  */
@@ -11,14 +15,16 @@ export const executeApiRequest = async ({
   formatMessage,
   fallbackMessage,
 }) => {
+  const resolvedFallback = fallbackMessage ?? apiMessages.genericRequestError;
+
   try {
     const response = await request();
     const { data, status } = response;
     const message = resolveApiMessage({
       payload: data,
       formatMessage,
-      fallbackMessage,
-      variant: 'success',
+      fallbackMessage: resolvedFallback,
+      applyFallback: false,
     });
 
     return {
@@ -28,15 +34,21 @@ export const executeApiRequest = async ({
       status,
     };
   } catch (error) {
-    const payload = error?.response?.data;
+    const contentType = String(error?.response?.headers?.['content-type'] ?? '');
+    const rawPayload = error?.response?.data;
+    const payload = (
+      contentType.includes('application/json')
+      || (rawPayload != null && typeof rawPayload === 'object' && !Array.isArray(rawPayload))
+    )
+      ? rawPayload
+      : null;
+
     const message = resolveApiMessage({
       payload,
       formatMessage,
-      fallbackMessage,
-      variant: 'error',
-    })
-      || getApiErrorMessage(error?.message)
-      || formatMessage(fallbackMessage);
+      fallbackMessage: resolvedFallback,
+      applyFallback: true,
+    });
 
     return {
       ok: false,

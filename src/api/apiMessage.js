@@ -1,15 +1,49 @@
 /**
  * Resolve user-facing text from API payloads.
  *
- * - Success (2xx via executeApiRequest): prefer `message`, then `detail`.
- * - Errors (4xx/5xx, network): prefer `detail`, then `message`.
- * - Caller `fallbackMessage` is applied only when neither field is present.
+ * Priority for JSON bodies:
+ * 1. `message` (string or string array)
+ * 2. `detail` (string or string array)
+ *
+ * HTML error pages (e.g. Django 404) and other non-JSON bodies are ignored
+ * so executeApiRequest can apply the caller's fallbackMessage.
  */
+
+/** @param {string} text */
+const looksLikeHtmlDocument = (text) => {
+  const sample = text.trim().slice(0, 512).toLowerCase();
+  return sample.startsWith('<!doctype')
+    || sample.startsWith('<html')
+    || /<\s*(html|head|body|title)\b/.test(sample);
+};
+
+/** @param {string} text */
+const isDisplayableApiText = (text) => {
+  const trimmed = text.trim();
+  if (!trimmed) {
+    return false;
+  }
+  if (looksLikeHtmlDocument(trimmed)) {
+    return false;
+  }
+  // Skip huge bodies (HTML debug pages, accidental dumps).
+  if (trimmed.length > 500) {
+    return false;
+  }
+  // Reject markup-heavy strings even without a full document wrapper.
+  const tagCount = (trimmed.match(/</g) || []).length;
+  if (tagCount > 2) {
+    return false;
+  }
+  return true;
+};
 
 const normalizeField = (value) => {
   if (typeof value === 'string') {
-    const trimmed = value.trim();
-    return trimmed || null;
+    if (!isDisplayableApiText(value)) {
+      return null;
+    }
+    return value.trim();
   }
 
   if (Array.isArray(value)) {
@@ -28,50 +62,52 @@ const pickFromPayload = (payload, primaryKey, secondaryKey) => {
     return null;
   }
 
+  // Plain-text error bodies are rare; HTML 404/500 pages must not be shown in UI.
   if (typeof payload === 'string') {
-    return payload.trim() || null;
+    return isDisplayableApiText(payload) ? payload.trim() : null;
   }
 
-  if (typeof payload !== 'object') {
+  if (typeof payload !== 'object' || Array.isArray(payload)) {
     return null;
   }
 
   return normalizeField(payload[primaryKey]) ?? normalizeField(payload[secondaryKey]);
 };
 
-/** 2xx responses — backend copy is usually under `message`. */
-export const getApiSuccessMessage = (payload) => pickFromPayload(payload, 'message', 'detail');
+/** Read `message` or `detail` from any API JSON body. */
+export const getApiBodyMessage = (payload) => pickFromPayload(payload, 'message', 'detail');
 
-/** 4xx/5xx and validation errors — backend copy is usually under `detail`. */
-export const getApiErrorMessage = (payload) => pickFromPayload(payload, 'detail', 'message');
+/** @deprecated Use {@link getApiBodyMessage}. */
+export const getApiSuccessMessage = getApiBodyMessage;
+
+/** @deprecated Use {@link getApiBodyMessage}. */
+export const getApiErrorMessage = getApiBodyMessage;
 
 /**
  * @deprecated Prefer {@link getApiSuccessMessage} or {@link getApiErrorMessage}.
  */
-export const getApiMessage = getApiErrorMessage;
+export const getApiMessage = getApiBodyMessage;
 
 /**
  * @param {object} options
  * @param {import('axios').AxiosResponse['data']} [options.payload] - Response body
  * @param {Function} options.formatMessage - react-intl formatMessage
  * @param {{ id: string, defaultMessage: string }} [options.fallbackMessage] - defineMessages entry
- * @param {'success'|'error'} [options.variant] - Which API field to prefer
+ * @param {boolean} [options.applyFallback] - When true, format fallback if API copy is missing
  */
 export const resolveApiMessage = ({
   payload,
   formatMessage,
   fallbackMessage,
-  variant = 'error',
+  applyFallback = false,
 }) => {
-  const fromApi = variant === 'success'
-    ? getApiSuccessMessage(payload)
-    : getApiErrorMessage(payload);
+  const fromApi = getApiBodyMessage(payload);
 
   if (fromApi) {
     return fromApi;
   }
 
-  if (variant === 'error' && fallbackMessage) {
+  if (applyFallback && fallbackMessage) {
     return formatMessage(fallbackMessage);
   }
 

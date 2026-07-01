@@ -1,0 +1,82 @@
+.my-team-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2A3B8F;
+    line-height: 1.25;
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: .875rem;
+    color: #6B7280;
+  }
+
+  &__empty {
+    min-height: 12rem;
+  }
+
+  &__name {
+    font-size: .875rem;
+    font-weight: 600;
+    color: #2A3B8F;
+  }
+
+  &__email {
+    font-size: .875rem;
+    color: #6B7280;
+  }
+
+  &__row-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .25rem;
+    white-space: nowrap;
+  }
+
+  &__icon-button {
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: .5rem;
+    background: transparent;
+    color: #2A3B8F;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background: rgb(42 59 143 / .08);
+    }
+
+    &--danger {
+      color: #DC2626;
+
+      &:hover {
+        background: rgb(220 38 38 / .08);
+      }
+    }
+  }
+}

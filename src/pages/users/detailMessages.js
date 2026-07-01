@@ -20,6 +20,11 @@ const detailMessages = defineMessages({
   competencyCompleted: { id: 'app.users.detail.competencyCompleted', defaultMessage: 'Completed', description: 'Completed competency status' },
   competencyPending: { id: 'app.users.detail.competencyPending', defaultMessage: 'Not completed', description: 'Pending competency status' },
   passportTitle: { id: 'app.users.detail.passportTitle', defaultMessage: 'Regulatory Passport', description: 'Passport CTA title' },
+  passportDescription: {
+    id: 'app.users.detail.passportDescription',
+    defaultMessage: "View this user's digital regulatory training and competency record",
+    description: 'Passport CTA description on user about page',
+  },
   passportButton: { id: 'app.users.detail.passportButton', defaultMessage: 'View Regulatory Passport', description: 'Passport CTA button' },
   assignedTrainingsTitle: {
     id: 'app.users.detail.assignedTrainingsTitle',
@@ -87,6 +92,46 @@ const detailMessages = defineMessages({
     id: 'app.users.detail.toastRemovedAssignedDescription',
     defaultMessage: 'Assigned training was removed.',
     description: 'Toast description when assigned training removed',
+  },
+  completedTrainingsLoadError: {
+    id: 'app.users.detail.completedTrainings.loadError',
+    defaultMessage: 'Unable to load completed trainings. Please try again.',
+    description: 'Fallback when completed trainings API fails',
+  },
+  trainingStatusLoadError: {
+    id: 'app.users.detail.trainingStatus.loadError',
+    defaultMessage: 'Unable to load training status. Please try again.',
+    description: 'Fallback when training status API fails',
+  },
+  assignedTrainingsLoadError: {
+    id: 'app.users.detail.assignedTrainings.loadError',
+    defaultMessage: 'Unable to load assigned trainings. Please try again.',
+    description: 'Fallback when assigned trainings API fails',
+  },
+  assignableTrainingsLoadError: {
+    id: 'app.users.detail.assignableTrainings.loadError',
+    defaultMessage: 'Unable to load assignable trainings. Please try again.',
+    description: 'Fallback when assignable trainings API fails',
+  },
+  mappedCompetenciesLoadError: {
+    id: 'app.users.detail.mappedCompetencies.loadError',
+    defaultMessage: 'Unable to load mapped competencies. Please try again.',
+    description: 'Fallback when mapped competencies API fails',
+  },
+  assignTrainingsError: {
+    id: 'app.users.detail.assignTrainings.error',
+    defaultMessage: 'Unable to assign trainings. Please try again.',
+    description: 'Fallback when assign trainings API fails',
+  },
+  removeAssignedTrainingError: {
+    id: 'app.users.detail.removeAssignedTraining.error',
+    defaultMessage: 'Unable to remove assigned training. Please try again.',
+    description: 'Fallback when remove assigned training API fails',
+  },
+  sectionEmpty: {
+    id: 'app.users.detail.section.empty',
+    defaultMessage: 'No data available.',
+    description: 'Empty state for user detail sections',
   },
 });
 

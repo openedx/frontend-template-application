@@ -1,11 +1,15 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
+  assignUserTrainings,
   createUser,
   deleteUser,
+  removeUserAssignedTraining,
   updateUser,
 } from '../../api/users/usersApi';
-import { userDetailQueryKey } from './useUserDetail';
+import { userAboutDetailQueryKey } from './useUserAboutDetail';
+import { userEditDetailQueryKey } from './useUserEditDetail';
+import { userAssignedTrainingsQueryKey } from './useUserAssignedTrainings';
 
 const useUserMutations = () => {
   const { formatMessage } = useIntl();
@@ -40,7 +44,8 @@ const useUserMutations = () => {
     },
     onSuccess: (_, { userId }) => {
       invalidateList();
-      queryClient.invalidateQueries({ queryKey: userDetailQueryKey(userId) });
+      queryClient.invalidateQueries({ queryKey: userAboutDetailQueryKey(userId) });
+      queryClient.invalidateQueries({ queryKey: userEditDetailQueryKey(userId) });
     },
   });
 
@@ -57,10 +62,44 @@ const useUserMutations = () => {
     onSuccess: invalidateList,
   });
 
+  const assignTrainingsMutation = useMutation({
+    mutationFn: async ({ userId, trainingIds }) => {
+      const result = await assignUserTrainings({ formatMessage, userId, trainingIds });
+
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      return result;
+    },
+    onSuccess: (_, { userId }) => {
+      queryClient.invalidateQueries({ queryKey: userAssignedTrainingsQueryKey(userId) });
+      queryClient.invalidateQueries({ queryKey: ['users', userId, 'assignable-trainings'] });
+    },
+  });
+
+  const removeAssignedTrainingMutation = useMutation({
+    mutationFn: async ({ userId, assignmentId }) => {
+      const result = await removeUserAssignedTraining({ formatMessage, userId, assignmentId });
+
+      if (!result.ok) {
+        throw new Error(result.message);
+      }
+
+      return result;
+    },
+    onSuccess: (_, { userId }) => {
+      queryClient.invalidateQueries({ queryKey: userAssignedTrainingsQueryKey(userId) });
+      queryClient.invalidateQueries({ queryKey: ['users', userId, 'assignable-trainings'] });
+    },
+  });
+
   return {
     createMutation,
     updateMutation,
     deleteMutation,
+    assignTrainingsMutation,
+    removeAssignedTrainingMutation,
   };
 };
 

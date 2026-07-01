@@ -9,14 +9,31 @@
       "navbarAccess": {
         "accessCompetencyFramework": true,
         "accessActivities": true,
+        "accessMyTrainingCatalog": true,
+        "accessNraSpecificTrainingCatalog": false,
+        "accessMyTraining": false,
+        "accessNrasManagement": false,
+        "accessCountries": false,
+        "accessTrainingProviders": false,
         "accessPendingRequests": true,
-        "accessUsers": true
+        "accessUsers": true,
+        "accessMyTeam": false,
+        "accessRegulatoryPassport": false,
+        "accessOrganizationProfile": true,
+        "accessRoles": false,
+        "accessSettings": false,
+        "accessReports": true
       },
       "componentAccess": {
         "dashboard": {
-          "showUsersPerCountry": true,
-          "showTopRequestedActivities": true,
-          "showPendingRequests": true
+          "showUsersPerCountry": false,
+          "showTopRequestedActivities": false,
+          "showPendingRequests": false,
+          "showTopTrainings": true,
+          "showRecentActivities": false,
+          "showPopularTrainings": false,
+          "showQuickActions": false,
+          "showRecentTrainingCompletions": false
         },
         "nrasManagement": {
           "canOnboardNra": false,
@@ -39,17 +56,19 @@
           "canDeleteRole": false
         },
         "pendingRequests": {
-          "canEditPendingRequest": false
+          "canEditPendingRequest": true
         },
         "users": {
-          "canAddUser": false,
-          "canViewUserAbout": true,
-          "canEditUser": false,
-          "canDeleteUser": false,
-          "canViewRoleColumn": true,
-          "canViewCompetencyRoleColumn": true,
+          "canAddUser": true,
+          "canViewUserAbout": false,
+          "canEditUser": true,
+          "canDeleteUser": true,
+          "canViewRoleColumn": false,
+          "canViewCompetencyRoleColumn": false,
           "canAssignTrainings": false,
           "canRemoveAssignedTrainings": false,
+          "canViewAssignedTrainings": false,
+          "canViewMappedCompetencies": false,
           "canViewRegulatoryPassport": false,
           "userFormFields": {
             "showRoleField": false,
@@ -74,7 +93,43 @@
           "canDeleteFrameworkWhoTab": false,
           "canDeleteFrameworkSearnTab": false,
           "canDeleteFrameworkNraTab": false,
-          "showSuggestionsTab": false
+          "showSuggestionsTab": true
+        },
+        "myTrainingCatalog": {
+          "canCreateTraining": true,
+          "canEditTraining": true,
+          "canDeleteTraining": true
+        },
+        "nraSpecificTrainingCatalog": {
+          "canCreateTraining": false,
+          "canEditTraining": false,
+          "canDeleteTraining": false,
+          "canRequestAccess": false,
+          "canViewProviderColumn": false
+        },
+        "myTraining": {
+          "canUpdateTraining": false
+        },
+        "requestedTrainings": {
+          "showOpenCloseButton": false,
+          "showFlagButton": true
+        },
+        "searnTrainingCatalog": {
+          "canRequestTraining": false,
+          "canRequestAccess": false
+        },
+        "organizationProfile": {
+          "canChangeOrganizationProfile": true,
+          "showAdministratorsSection": false
+        },
+        "myTeam": {
+          "canAddTeamMember": false,
+          "canRemoveTeamMember": false
+        },
+        "profile": {
+          "showManagerField": false,
+          "showCompetencyRoleField": false,
+          "canRequestAdminRole": false
         }
       }
     }

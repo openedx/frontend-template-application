@@ -272,7 +272,22 @@ const usersPageMessages = defineMessages({
   detailLoadError: {
     id: 'app.users.detail.loadError',
     defaultMessage: 'Unable to load user details. Please try again.',
-    description: 'Fallback when user detail API fails',
+    description: 'Fallback when user about detail API fails',
+  },
+  editUserLoadError: {
+    id: 'app.users.editUser.loadError',
+    defaultMessage: 'Unable to load user for editing. Please try again.',
+    description: 'Fallback when edit user prefill API fails',
+  },
+  editUserErrorTitle: {
+    id: 'app.users.editUser.errorToast.title',
+    defaultMessage: 'Failed to load user',
+    description: 'Toast title when edit user prefill API fails',
+  },
+  regulatoryPassportLoadError: {
+    id: 'app.users.regulatoryPassport.loadError',
+    defaultMessage: 'Unable to load regulatory passport. Please try again.',
+    description: 'Fallback when regulatory passport API fails',
   },
   detailErrorTitle: {
     id: 'app.users.detail.errorToast.title',

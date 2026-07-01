@@ -17,6 +17,15 @@ import SearnTrainingDetail from './pages/searnTrainingCatalog/SearnTrainingDetai
 import SearnTrainingFeedback from './pages/searnTrainingCatalog/SearnTrainingFeedback';
 import SearnTrainingProvider from './pages/searnTrainingCatalog/SearnTrainingProvider';
 import SearnTrainingProviderCatalog from './pages/searnTrainingCatalog/SearnTrainingProviderCatalog';
+import MyTrainingCatalog from './pages/myTrainingCatalog/MyTrainingCatalog';
+import MyTrainingCatalogCreate from './pages/myTrainingCatalog/MyTrainingCatalogCreate';
+import MyTrainingCatalogDetail from './pages/myTrainingCatalog/MyTrainingCatalogDetail';
+import MyTrainingCatalogFeedback from './pages/myTrainingCatalog/MyTrainingCatalogFeedback';
+import NraSpecificTrainingProvider from './pages/myTrainingCatalog/NraSpecificTrainingProvider';
+import NraSpecificTrainingProviderCatalog from './pages/myTrainingCatalog/NraSpecificTrainingProviderCatalog';
+import MyTraining from './pages/myTraining/MyTraining';
+import MyTeam from './pages/myTeam/MyTeam';
+import RegulatoryPassport from './pages/regulatoryPassport/RegulatoryPassport';
 import Countries from './pages/countries/Countries';
 import Nras from './pages/nras/Nras';
 import TrainingProviders from './pages/trainingProviders/TrainingProviders';
@@ -25,6 +34,7 @@ import Settings from './pages/settings/Settings';
 import PendingRequests from './pages/pendingRequests/PendingRequests';
 import PendingRequestDetail from './pages/pendingRequests/PendingRequestDetail';
 import RequestedTrainings from './pages/requestedTrainings/RequestedTrainings';
+import OrganizationProfile from './pages/organizationProfile/OrganizationProfile';
 import Users from './pages/users/Users';
 import UserDetailPage from './pages/users/UserDetailPage';
 import UserRegulatoryPassport from './pages/users/UserRegulatoryPassport';
@@ -35,6 +45,8 @@ import appMessages from './messages/appMessages';
 import { ToastProvider } from './components/toast/ToastProvider';
 import { UserRoleProvider, useUserRole } from './contexts/UserRoleContext';
 import TrailingSlashRedirect from './components/routing/TrailingSlashRedirect';
+import TrainingCatalogAccessRoute from './components/myTrainingCatalog/TrainingCatalogAccessRoute';
+import { TRAINING_CATALOG_VARIANTS } from './utils/trainingCatalogVariantConfig';
 import { ADMIN_PATHS } from './utils/adminPaths';
 import { isPublicAdminRoute } from './utils/publicRoutes';
 
@@ -59,6 +71,24 @@ const getHeaderMeta = (pathname, formatMessage, userName) => {
   if (pathname.startsWith('/admin/users')) {
     return {
       title: formatMessage(appMessages.usersTitle),
+    };
+  }
+
+  if (pathname.startsWith('/admin/my-team')) {
+    return {
+      title: formatMessage(appMessages.myTeamTitle),
+    };
+  }
+
+  if (pathname.startsWith('/admin/regulatory-passport')) {
+    return {
+      title: formatMessage(appMessages.regulatoryPassportTitle),
+    };
+  }
+
+  if (pathname.startsWith('/admin/organization-profile')) {
+    return {
+      title: formatMessage(appMessages.organizationProfileTitle),
     };
   }
 
@@ -134,6 +164,24 @@ const getHeaderMeta = (pathname, formatMessage, userName) => {
     };
   }
 
+  if (pathname.startsWith('/admin/nra-specific-training-catalog')) {
+    return {
+      title: formatMessage(appMessages.nraSpecificTrainingCatalogTitle),
+    };
+  }
+
+  if (pathname.startsWith('/admin/my-training-catalog')) {
+    return {
+      title: formatMessage(appMessages.myTrainingCatalogTitle),
+    };
+  }
+
+  if (pathname.startsWith('/admin/my-training')) {
+    return {
+      title: formatMessage(appMessages.myTrainingTitle),
+    };
+  }
+
   if (pathname.startsWith('/admin/dashboard')) {
     const dashboardTitle = formatMessage(appMessages.dashboardTitle);
     return {
@@ -153,6 +201,15 @@ const hasNavbarAccessForPath = (pathname, navbarAccess) => {
 
   if (pathname.startsWith('/admin/users')) {
     return Boolean(navbarAccess.accessUsers);
+  }
+  if (pathname.startsWith('/admin/my-team')) {
+    return Boolean(navbarAccess.accessMyTeam);
+  }
+  if (pathname.startsWith('/admin/regulatory-passport')) {
+    return Boolean(navbarAccess.accessRegulatoryPassport);
+  }
+  if (pathname.startsWith('/admin/organization-profile')) {
+    return Boolean(navbarAccess.accessOrganizationProfile);
   }
   if (pathname.startsWith('/admin/competency-frameworks')) {
     return Boolean(navbarAccess.accessCompetencyFramework);
@@ -180,6 +237,15 @@ const hasNavbarAccessForPath = (pathname, navbarAccess) => {
   }
   if (pathname.startsWith('/admin/activities-management')) {
     return Boolean(navbarAccess.accessActivities);
+  }
+  if (pathname.startsWith('/admin/nra-specific-training-catalog')) {
+    return Boolean(navbarAccess.accessNraSpecificTrainingCatalog);
+  }
+  if (pathname.startsWith('/admin/my-training-catalog')) {
+    return Boolean(navbarAccess.accessMyTrainingCatalog);
+  }
+  if (pathname.startsWith('/admin/my-training')) {
+    return Boolean(navbarAccess.accessMyTraining);
   }
 
   return false;
@@ -210,6 +276,115 @@ const RoutedLayout = () => {
         <Route path="/admin/searn-training-catalog/:trainingId/feedback/" element={<SearnTrainingFeedback />} />
         <Route path="/admin/searn-training-catalog/:trainingId/" element={<SearnTrainingDetail />} />
         <Route path={ADMIN_PATHS.trainingCatalog} element={<SearnTrainingCatalog />} />
+        <Route
+          path="/admin/my-training-catalog/:trainingId/edit/"
+          element={(
+            <TrainingCatalogAccessRoute
+              variant={TRAINING_CATALOG_VARIANTS.myTrainingCatalog}
+              requireEditPermission
+            >
+              <MyTrainingCatalogCreate />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path={ADMIN_PATHS.myTrainingCatalogNew}
+          element={(
+            <TrainingCatalogAccessRoute
+              variant={TRAINING_CATALOG_VARIANTS.myTrainingCatalog}
+              requireCreatePermission
+            >
+              <MyTrainingCatalogCreate />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path="/admin/my-training-catalog/:trainingId/feedback/"
+          element={(
+            <TrainingCatalogAccessRoute variant={TRAINING_CATALOG_VARIANTS.myTrainingCatalog}>
+              <MyTrainingCatalogFeedback />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path="/admin/my-training-catalog/:trainingId/"
+          element={(
+            <TrainingCatalogAccessRoute variant={TRAINING_CATALOG_VARIANTS.myTrainingCatalog}>
+              <MyTrainingCatalogDetail />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path={ADMIN_PATHS.myTrainingCatalog}
+          element={(
+            <TrainingCatalogAccessRoute variant={TRAINING_CATALOG_VARIANTS.myTrainingCatalog}>
+              <MyTrainingCatalog />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path="/admin/nra-specific-training-catalog/providers/:providerSlug/catalog/"
+          element={(
+            <TrainingCatalogAccessRoute variant={TRAINING_CATALOG_VARIANTS.nraSpecificTrainingCatalog}>
+              <NraSpecificTrainingProviderCatalog />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path="/admin/nra-specific-training-catalog/providers/:providerSlug/"
+          element={(
+            <TrainingCatalogAccessRoute variant={TRAINING_CATALOG_VARIANTS.nraSpecificTrainingCatalog}>
+              <NraSpecificTrainingProvider />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path="/admin/nra-specific-training-catalog/:trainingId/edit/"
+          element={(
+            <TrainingCatalogAccessRoute
+              variant={TRAINING_CATALOG_VARIANTS.nraSpecificTrainingCatalog}
+              requireEditPermission
+            >
+              <MyTrainingCatalogCreate />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path={ADMIN_PATHS.nraSpecificTrainingCatalogNew}
+          element={(
+            <TrainingCatalogAccessRoute
+              variant={TRAINING_CATALOG_VARIANTS.nraSpecificTrainingCatalog}
+              requireCreatePermission
+            >
+              <MyTrainingCatalogCreate />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path="/admin/nra-specific-training-catalog/:trainingId/feedback/"
+          element={(
+            <TrainingCatalogAccessRoute variant={TRAINING_CATALOG_VARIANTS.nraSpecificTrainingCatalog}>
+              <MyTrainingCatalogFeedback />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path="/admin/nra-specific-training-catalog/:trainingId/"
+          element={(
+            <TrainingCatalogAccessRoute variant={TRAINING_CATALOG_VARIANTS.nraSpecificTrainingCatalog}>
+              <MyTrainingCatalogDetail />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route
+          path={ADMIN_PATHS.nraSpecificTrainingCatalog}
+          element={(
+            <TrainingCatalogAccessRoute variant={TRAINING_CATALOG_VARIANTS.nraSpecificTrainingCatalog}>
+              <MyTrainingCatalog />
+            </TrainingCatalogAccessRoute>
+          )}
+        />
+        <Route path={ADMIN_PATHS.myTraining} element={withAccess(navbarAccess.accessMyTraining, <MyTraining />)} />
         <Route path={ADMIN_PATHS.nras} element={withAccess(navbarAccess.accessNrasManagement, <Nras />)} />
         <Route path={ADMIN_PATHS.countries} element={withAccess(navbarAccess.accessCountries, <Countries />)} />
         <Route path={ADMIN_PATHS.trainingProviders} element={withAccess(navbarAccess.accessTrainingProviders, <TrainingProviders />)} />
@@ -218,8 +393,11 @@ const RoutedLayout = () => {
         <Route path={ADMIN_PATHS.requestedTrainings} element={<RequestedTrainings />} />
         <Route path={ADMIN_PATHS.profile} element={<Profile />} />
         <Route path="/admin/users/:userId/regulatory-passport/" element={withAccess(Boolean(navbarAccess.accessUsers && componentAccess?.users?.canViewRegulatoryPassport), <UserRegulatoryPassport />)} />
-        <Route path="/admin/users/:userId/" element={withAccess(navbarAccess.accessUsers, <UserDetailPage />)} />
+        <Route path="/admin/users/:userId/" element={withAccess(Boolean(navbarAccess.accessUsers && componentAccess?.users?.canViewUserAbout), <UserDetailPage />)} />
         <Route path={ADMIN_PATHS.users} element={withAccess(navbarAccess.accessUsers, <Users />)} />
+        <Route path={ADMIN_PATHS.myTeam} element={withAccess(navbarAccess.accessMyTeam, <MyTeam />)} />
+        <Route path={ADMIN_PATHS.regulatoryPassport} element={withAccess(navbarAccess.accessRegulatoryPassport, <RegulatoryPassport />)} />
+        <Route path={ADMIN_PATHS.organizationProfile} element={withAccess(navbarAccess.accessOrganizationProfile, <OrganizationProfile />)} />
         <Route path={ADMIN_PATHS.roles} element={withAccess(navbarAccess.accessRoles, <Roles />)} />
         <Route path={ADMIN_PATHS.reportsStaffTrained} element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />
         <Route path={ADMIN_PATHS.reportsTrainingOffers} element={withAccess(navbarAccess.accessReports, <PlaceholderPage />)} />

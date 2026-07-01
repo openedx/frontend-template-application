@@ -41,4 +41,54 @@ export default defineMessages({
     defaultMessage: 'Loading pending requests…',
     description: 'Loading state for pending requests card',
   },
+  topTrainingsLoadError: {
+    id: 'app.dashboard.topTrainings.loadError',
+    defaultMessage: 'Unable to load top trainings.',
+    description: 'Fallback when top-trainings API fails without a detail message',
+  },
+  topTrainingsLoading: {
+    id: 'app.dashboard.topTrainings.loading',
+    defaultMessage: 'Loading top trainings…',
+    description: 'Loading state for top trainings table',
+  },
+  recentActivitiesLoadError: {
+    id: 'app.dashboard.recentActivities.loadError',
+    defaultMessage: 'Unable to load recent activities.',
+    description: 'Fallback when recent-activities API fails without a detail message',
+  },
+  recentActivitiesLoading: {
+    id: 'app.dashboard.recentActivities.loading',
+    defaultMessage: 'Loading recent activities…',
+    description: 'Loading state for recent activities card',
+  },
+  popularTrainingsLoadError: {
+    id: 'app.dashboard.popularTrainings.loadError',
+    defaultMessage: 'Unable to load popular trainings.',
+    description: 'Fallback when popular-trainings API fails without a detail message',
+  },
+  popularTrainingsLoading: {
+    id: 'app.dashboard.popularTrainings.loading',
+    defaultMessage: 'Loading popular trainings…',
+    description: 'Loading state for popular trainings card',
+  },
+  quickActionsLoadError: {
+    id: 'app.dashboard.quickActions.loadError',
+    defaultMessage: 'Unable to load quick actions.',
+    description: 'Fallback when quick-actions API fails without a detail message',
+  },
+  quickActionsLoading: {
+    id: 'app.dashboard.quickActions.loading',
+    defaultMessage: 'Loading quick actions…',
+    description: 'Loading state for quick actions card',
+  },
+  recentTrainingCompletionsLoadError: {
+    id: 'app.dashboard.recentTrainingCompletions.loadError',
+    defaultMessage: 'Unable to load recent training completions.',
+    description: 'Fallback when recent-training-completions API fails without a detail message',
+  },
+  recentTrainingCompletionsLoading: {
+    id: 'app.dashboard.recentTrainingCompletions.loading',
+    defaultMessage: 'Loading recent training completions…',
+    description: 'Loading state for recent training completions card',
+  },
 });

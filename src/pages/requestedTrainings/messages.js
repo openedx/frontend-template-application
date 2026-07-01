@@ -46,6 +46,16 @@ const messages = defineMessages({
     defaultMessage: 'Reopen',
     description: 'Reopen button label',
   },
+  flagInterest: {
+    id: 'app.requestedTrainings.actions.flagInterest',
+    defaultMessage: 'Flag interest',
+    description: 'Button label to flag interest in a requested training',
+  },
+  flagged: {
+    id: 'app.requestedTrainings.actions.flagged',
+    defaultMessage: 'Flagged',
+    description: 'Button label when current user has flagged a requested training',
+  },
   empty: {
     id: 'app.requestedTrainings.empty',
     defaultMessage: 'No requested trainings found.',
@@ -170,6 +180,26 @@ const messages = defineMessages({
     id: 'app.requestedTrainings.toast.reopened.title',
     defaultMessage: 'Request reopened',
     description: 'Toast title when request reopened',
+  },
+  toastFlaggedTitle: {
+    id: 'app.requestedTrainings.toast.flagged.title',
+    defaultMessage: 'Interest flagged',
+    description: 'Toast title when request is flagged',
+  },
+  toastUnflaggedTitle: {
+    id: 'app.requestedTrainings.toast.unflagged.title',
+    defaultMessage: 'Flag removed',
+    description: 'Toast title when request flag is removed',
+  },
+  flagError: {
+    id: 'app.requestedTrainings.flag.error',
+    defaultMessage: 'Unable to update flag for this training request. Please try again.',
+    description: 'Fallback when requested training flag PATCH fails',
+  },
+  flagErrorTitle: {
+    id: 'app.requestedTrainings.flag.errorTitle',
+    defaultMessage: 'Flag update failed',
+    description: 'Toast title when flag PATCH fails',
   },
   showingCount: {
     id: 'app.requestedTrainings.pagination.showing',

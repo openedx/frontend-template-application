@@ -8,6 +8,48 @@ export const CORE_PERMISSIONS = '/api/v1/core-permissions/';
 export const DASHBOARD_STATS = '/api/v1/dashboard/stats/';
 export const DASHBOARD_USERS_PER_COUNTRY = '/api/v1/dashboard/users-per-country/';
 export const DASHBOARD_TOP_REQUESTED_ACTIVITIES = '/api/v1/dashboard/top-requested-activities/?limit=5';
+export const DASHBOARD_TOP_TRAININGS = '/api/v1/dashboard/top-trainings/';
+export const DASHBOARD_RECENT_ACTIVITY = '/api/v1/dashboard/recent-activity/';
+export const DASHBOARD_NRA_ADMIN_POPULAR_TRAININGS = '/api/v1/dashboard/nra-admin/popular-trainings/';
+export const DASHBOARD_NRA_MANAGER_QUICK_ACTIONS = '/api/v1/dashboard/nra-manager/quick-actions/';
+export const DASHBOARD_NRA_STAFF_COMPLETED_TRAININGS = '/api/v1/dashboard/nra-staff/completed-trainings/';
+
+export const TRAININGS_CATALOG = '/api/v1/trainings-catalog/';
+
+/** @param {string|number} trainingId */
+export const trainingsCatalogDetail = (trainingId) => `/api/v1/trainings-catalog/${trainingId}/`;
+
+/** @param {string|number} trainingId */
+export const trainingsCatalogDetails = (trainingId) => `/api/v1/trainings-catalog/${trainingId}/details/`;
+
+/** @param {string|number} trainingId */
+export const trainingsCatalogFeedback = (trainingId) => `/api/v1/trainings-catalog/feedback/${trainingId}/`;
+
+export const TRAININGS_CATALOG_OPTIONS_LANGUAGE = '/api/v1/trainings-catalog/options/language/';
+export const TRAININGS_CATALOG_OPTIONS_TRAINING_MODES = '/api/v1/trainings-catalog/options/training-modes/';
+export const TRAININGS_CATALOG_OPTIONS_APPROACHES = '/api/v1/trainings-catalog/options/approaches/';
+export const TRAININGS_CATALOG_OPTIONS_EVALUATIONS = '/api/v1/trainings-catalog/options/evaluations/';
+export const TRAININGS_CATALOG_OPTIONS_OUTCOMES = '/api/v1/trainings-catalog/options/outcomes/';
+export const TRAININGS_CATALOG_OPTIONS_PRODUCT_TYPES = '/api/v1/trainings-catalog/options/product-types/';
+export const TRAININGS_CATALOG_OPTIONS_MAPPED_COMPETENCIES = '/api/v1/trainings-catalog/options/mapped-competencies/';
+
+export const NRAS_MANAGEMENT_MY_TRAININGS = '/api/v1/nras-management/my-trainings/';
+export const NRAS_MANAGEMENT_MY_TRAININGS_FORM_OPTIONS = (
+  '/api/v1/nras-management/my-trainings/form-options/'
+);
+/** Default `page_size` for NRA My Trainings list (backend default). */
+export const MY_TRAINING_PAGE_SIZE = 8;
+
+/** @param {string|number} trainingId */
+export const nrasManagementMyTrainingDetail = (trainingId) => (
+  `/api/v1/nras-management/my-trainings/${trainingId}/`
+);
+
+export const MY_TEAM_LIST = '/api/v1/nras-management/my-team/';
+export const MY_TEAM_CANDIDATE_USERS = '/api/v1/nras-management/my-team/user-options/';
+
+/** @param {string|number} userId */
+export const myTeamMemberDetail = (userId) => `/api/v1/nras-management/my-team/${userId}/`;
 
 /** `page_size` for pending requests on the dashboard card. */
 export const DASHBOARD_PENDING_REQUESTS_PAGE_SIZE = 4;
@@ -52,6 +94,8 @@ export const optionsCompetencyFrameworkCompetencyTypes = (frameworkUuid) => `/ap
 
 export const COUNTRIES = '/api/v1/countries/';
 export const NRAS_ONBOARD = '/api/v1/nras-management/onboard/';
+export const NRAS_MANAGEMENT_ADMIN_ROLE_REQUESTS = '/api/v1/nras-management/admin-role-requests/';
+export const NRAS_MANAGEMENT_TRAINING_ACCESS_REQUESTS = '/api/v1/nras-management/training-access-requests/';
 export const TRAINING_PROVIDERS_ONBOARD = '/api/v1/training-providers/onboard/';
 
 export const PENDING_REQUESTS_FILTERS = '/api/v1/pending-requests/filters/';
@@ -61,14 +105,77 @@ export const REQUESTED_TRAININGS_FILTERS = '/api/v1/requested-trainings/filters-
 export const REQUESTED_TRAININGS_LIST = '/api/v1/requested-trainings/';
 export const REQUESTED_TRAININGS_ACTIVITIES = '/api/v1/requested-trainings/activities/';
 
+/** @param {string|number} requestedTrainingId */
+export const requestedTrainingFlag = (requestedTrainingId) => (
+  `/api/v1/requested-trainings/flag/${requestedTrainingId}/`
+);
+
 export const ROLE_ASSIGNMENT_PROFILE = '/api/v1/role-assignment/profile/';
+export const ROLE_ASSIGNMENT_PROFILE_MANAGERS = '/api/v1/role-assignment/profile/managers/';
 export const ROLE_ASSIGNMENT_LANGUAGES = '/api/v1/role-assignment/languages/';
 export const ROLE_ASSIGNMENT_ROLES = '/api/v1/role-assignment/roles/';
 export const ROLE_ASSIGNMENT_ROLE_OPTIONS = '/api/v1/role-assignment/roles/options/';
 export const ROLE_ASSIGNMENT_PERMISSIONS = '/api/v1/role-assignment/permissions/';
 export const ROLE_ASSIGNMENT_USERS = '/api/v1/role-assignment/users/';
 
+/** @param {string|number} userId */
+export const roleAssignmentUserDetail = (userId) => (
+  `/api/v1/role-assignment/users/${userId}/`
+);
+
+/** @param {string|number} userId */
+export const nrasManagementUserDetail = (userId) => (
+  `/api/v1/nras-management/users/${userId}/detail/`
+);
+
+/** @param {string|number} userId */
+export const nrasManagementUserCompletedTrainings = (userId) => (
+  `/api/v1/nras-management/users/${userId}/completed-trainings/`
+);
+
+/** @param {string|number} userId */
+export const nrasManagementUserTrainingStatus = (userId) => (
+  `/api/v1/nras-management/users/${userId}/training-status/`
+);
+
+/** @param {string|number} userId */
+export const nrasManagementUserAssignedTrainings = (userId) => (
+  `/api/v1/nras-management/users/${userId}/assigned-trainings/`
+);
+
+/** @param {string|number} userId */
+export const nrasManagementUserAssignableTrainings = (userId) => (
+  `/api/v1/nras-management/users/${userId}/assignable-trainings/`
+);
+
+/** @param {string|number} userId */
+export const nrasManagementUserAssignTrainings = (userId) => (
+  `/api/v1/nras-management/users/${userId}/assign-trainings/`
+);
+
+/** @param {string|number} userId @param {string|number} assignmentId */
+export const nrasManagementUserAssignedTrainingDetail = (userId, assignmentId) => (
+  `/api/v1/nras-management/users/${userId}/assigned-trainings/${assignmentId}/`
+);
+
+/** @param {string|number} userId */
+export const trainingProvidersUserMappedCompetencies = (userId) => (
+  `/api/v1/training-providers/users/${userId}/mapped-competencies/`
+);
+
+export const REGULATORY_PASSPORT_SUMMARY = '/api/v1/nras-management/regulatory-passport/summary/';
+export const REGULATORY_PASSPORT_DOMAIN_COVERAGE = '/api/v1/nras-management/regulatory-passport/domain-coverage/';
+export const REGULATORY_PASSPORT_DOMAIN_OPTIONS = '/api/v1/nras-management/regulatory-passport/domain/';
+export const REGULATORY_PASSPORT_SUBDOMAIN_OPTIONS = '/api/v1/nras-management/regulatory-passport/subdomain/';
+export const REGULATORY_PASSPORT_PRODUCT_TYPE_OPTIONS = '/api/v1/nras-management/regulatory-passport/producttype/';
+export const REGULATORY_PASSPORT_LEVEL_OPTIONS = '/api/v1/nras-management/regulatory-passport/level/';
+export const REGULATORY_PASSPORT_TRAINING_COMPLETED = '/api/v1/nras-management/regulatory-passport/training-completed/';
+
+/** Default `page_size` for regulatory passport domain coverage. */
+export const REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE = 10;
+
 export const ORGANIZATION_DETAILS = '/api/v1/options/organization/details/';
+export const TRAINING_PROVIDERS_ORGANIZATION_PROFILE = '/api/v1/training-providers/organization-profile/';
 
 export const ACTIVITIES_LIST = '/api/v1/activities/';
 

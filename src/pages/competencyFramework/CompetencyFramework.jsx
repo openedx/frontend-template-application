@@ -112,16 +112,16 @@ import { buildPaginationShowingParams } from '../../utils/paginationUtils';
 import messages from './messages';
 import './CompetencyFramework.scss';
 const BUILDER_TABS_CONFIG = [
-  { id: 'general', messageKey: 'tabGeneralInformation', accessKey: 'showBuilderGeneralTab' },
-  { id: 'introduction', messageKey: 'tabIntroduction', accessKey: 'showBuilderIntroductionTab' },
-  { id: 'overview', messageKey: 'tabOverview', accessKey: 'showBuilderOverviewTab' },
-  { id: 'domains', messageKey: 'tabDomains', accessKey: 'showBuilderDomainsTab' },
-  { id: 'subDomains', messageKey: 'tabSubDomain', accessKey: 'showBuilderSubDomainsTab' },
-  { id: 'frameworkRoles', messageKey: 'tabRole', accessKey: 'showBuilderRoleTab' },
-  { id: 'proficiencyLevels', messageKey: 'tabProficiencyLevel', accessKey: 'showBuilderProficiencyLevelTab' },
-  { id: 'orgCompetencies', messageKey: 'tabOrgCompetencies', accessKey: 'showBuilderOrgCompetenciesTab' },
-  { id: 'roleCompetencies', messageKey: 'tabRoleSpecificCompetencies', accessKey: 'showBuilderRoleCompetenciesTab' },
-  { id: 'activities', messageKey: 'tabRoleSpecificActivities', accessKey: 'showBuilderActivitiesTab' },
+  { id: 'general', messageKey: 'tabGeneralInformation' },
+  { id: 'introduction', messageKey: 'tabIntroduction' },
+  { id: 'overview', messageKey: 'tabOverview' },
+  { id: 'domains', messageKey: 'tabDomains' },
+  { id: 'subDomains', messageKey: 'tabSubDomain' },
+  { id: 'frameworkRoles', messageKey: 'tabRole' },
+  { id: 'proficiencyLevels', messageKey: 'tabProficiencyLevel' },
+  { id: 'orgCompetencies', messageKey: 'tabOrgCompetencies' },
+  { id: 'roleCompetencies', messageKey: 'tabRoleSpecificCompetencies' },
+  { id: 'activities', messageKey: 'tabRoleSpecificActivities' },
 ];
 
 const CompetencyFramework = () => {

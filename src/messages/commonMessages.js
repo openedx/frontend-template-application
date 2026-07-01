@@ -56,6 +56,16 @@ const commonMessages = defineMessages({
     defaultMessage: 'Delete admin',
     description: 'Accessible label for delete admin action',
   },
+  upcomingTitle: {
+    id: 'app.common.upcoming.title',
+    defaultMessage: 'Coming soon',
+    description: 'Generic title for pages or features that are not available yet',
+  },
+  upcomingDescription: {
+    id: 'app.common.upcoming.description',
+    defaultMessage: 'This page is under development and will be available in an upcoming release.',
+    description: 'Generic description for pages or features that are not available yet',
+  },
 });
 
 export default commonMessages;

@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "id": "manager-none",
+      "value": "",
+      "label": "— None —"
+    },
+    {
+      "id": "manager-u2",
+      "value": "u2",
+      "label": "Mr. Somchai Kanchana — somchai@mfa.th"
+    },
+    {
+      "id": "manager-u5",
+      "value": "u5",
+      "label": "Mr. Arjun Patel — arjun@cdsco.in"
+    },
+    {
+      "id": "manager-u6",
+      "value": "u6",
+      "label": "Dr. Maria Santos — maria@fda.ph"
+    }
+  ]
+}

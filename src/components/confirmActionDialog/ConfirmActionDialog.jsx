@@ -11,6 +11,8 @@ const ConfirmActionDialog = ({
   confirmLabel,
   onCancel,
   onConfirm,
+  isCancelDisabled = false,
+  isConfirmDisabled = false,
 }) => {
   const { formatMessage } = useIntl();
 
@@ -25,6 +27,7 @@ const ConfirmActionDialog = ({
         className="confirm-action-dialog__backdrop"
         aria-label={formatMessage(commonMessages.closeDialog)}
         onClick={onCancel}
+        disabled={isCancelDisabled || isConfirmDisabled}
       />
       <div className="confirm-action-dialog__content">
         <div className="confirm-action-dialog__header">
@@ -32,10 +35,20 @@ const ConfirmActionDialog = ({
           <p className="confirm-action-dialog__description">{description}</p>
         </div>
         <div className="confirm-action-dialog__actions">
-          <button type="button" className="confirm-action-dialog__button" onClick={onCancel}>
+          <button
+            type="button"
+            className="confirm-action-dialog__button"
+            onClick={onCancel}
+            disabled={isCancelDisabled || isConfirmDisabled}
+          >
             {cancelLabel}
           </button>
-          <button type="button" className="confirm-action-dialog__button confirm-action-dialog__button--confirm" onClick={onConfirm}>
+          <button
+            type="button"
+            className="confirm-action-dialog__button confirm-action-dialog__button--confirm"
+            onClick={onConfirm}
+            disabled={isConfirmDisabled}
+          >
             {confirmLabel}
           </button>
         </div>

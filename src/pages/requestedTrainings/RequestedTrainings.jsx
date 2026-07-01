@@ -7,6 +7,7 @@ import SearchableDropdown from '../../components/searchableDropdown/SearchableDr
 import { TablePaginationFooter } from '../../components/dataTable';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
+import { useUserRole } from '../../contexts/UserRoleContext';
 import useRequestedTrainingActivities from '../../hooks/requestedTrainings/useRequestedTrainingActivities';
 import useRequestedTrainingFilters from '../../hooks/requestedTrainings/useRequestedTrainingFilters';
 import useRequestedTrainingMutations from '../../hooks/requestedTrainings/useRequestedTrainingMutations';
@@ -114,13 +115,23 @@ const CircleCheckIcon = ({ className }) => (
 
 const hasFlagsCount = (flags) => typeof flags === 'number' && !Number.isNaN(flags);
 
+const rowHasFlagButton = (item) => (
+  typeof item?.isFlagged === 'boolean'
+);
+
 const RequestedTrainings = () => {
   const { formatMessage } = useIntl();
   const { showToast } = useToast();
+  const { componentAccess } = useUserRole();
+  const access = componentAccess?.requestedTrainings ?? {};
+
   const canShowTable = true;
   const canSearch = true;
   const canFilter = true;
   const canRequestTraining = true;
+  const showOpenCloseButton = Boolean(access.showOpenCloseButton);
+  const showFlagButton = Boolean(access.showFlagButton);
+  const showActionsColumn = showOpenCloseButton || showFlagButton;
 
   const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState('');
@@ -159,7 +170,7 @@ const RequestedTrainings = () => {
     errorMessage: activitiesErrorMessage,
   } = useRequestedTrainingActivities({ enabled: modalOpen });
 
-  const { createMutation, statusMutation } = useRequestedTrainingMutations();
+  const { createMutation, statusMutation, flagMutation } = useRequestedTrainingMutations();
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -292,6 +303,28 @@ const RequestedTrainings = () => {
     }
   };
 
+  const handleFlagAction = async (item) => {
+    if (!item?.id || flagMutation.isPending) {
+      return;
+    }
+
+    const wasFlagged = Boolean(item.isFlagged);
+
+    try {
+      const result = await flagMutation.mutateAsync({ id: item.id, isFlagged: wasFlagged });
+
+      showToast({
+        title: formatMessage(wasFlagged ? messages.toastUnflaggedTitle : messages.toastFlaggedTitle),
+        description: hasDisplayValue(result.message) ? result.message : undefined,
+      });
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.flagErrorTitle),
+        description: error?.message || formatMessage(messages.flagError),
+      });
+    }
+  };
+
   const activityTrigger = selectedActivityLabel ? (
     selectedActivityLabel
   ) : (
@@ -341,9 +374,11 @@ const RequestedTrainings = () => {
                   <th className="requested-trainings-page__th">{formatMessage(messages.tableActivity)}</th>
                   <th className="requested-trainings-page__th">{formatMessage(messages.tableStatus)}</th>
                   <th className="requested-trainings-page__th">{formatMessage(messages.tableFlags)}</th>
-                  <th className="requested-trainings-page__th requested-trainings-page__th--right">
-                    {formatMessage(messages.tableActions)}
-                  </th>
+                  {showActionsColumn && (
+                    <th className="requested-trainings-page__th requested-trainings-page__th--right">
+                      {formatMessage(messages.tableActions)}
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -376,29 +411,50 @@ const RequestedTrainings = () => {
                           </span>
                         )}
                       </td>
-                      <td className="requested-trainings-page__td requested-trainings-page__td--right">
-                        {isClosed ? (
-                          <button
-                            type="button"
-                            className="requested-trainings-page__outline-button"
-                            disabled={statusMutation.isPending}
-                            onClick={() => handleStatusAction(item, 'reopen')}
-                          >
-                            <CircleCheckIcon className="h-3.5 w-3.5" />
-                            {formatMessage(messages.reopen)}
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            className="requested-trainings-page__outline-button"
-                            disabled={statusMutation.isPending}
-                            onClick={() => handleStatusAction(item, 'close')}
-                          >
-                            <CircleXIcon className="h-3.5 w-3.5" />
-                            {formatMessage(messages.close)}
-                          </button>
-                        )}
-                      </td>
+                      {showActionsColumn && (
+                        <td className="requested-trainings-page__td requested-trainings-page__td--right">
+                          <div className="requested-trainings-page__actions-cell">
+                            {showFlagButton && rowHasFlagButton(item) && (
+                              <button
+                                type="button"
+                                className={
+                                  item.isFlagged
+                                    ? 'requested-trainings-page__flag-button requested-trainings-page__flag-button--active'
+                                    : 'requested-trainings-page__flag-button'
+                                }
+                                disabled={flagMutation.isPending}
+                                onClick={() => handleFlagAction(item)}
+                              >
+                                <FlagIcon className="h-3.5 w-3.5" />
+                                {formatMessage(item.isFlagged ? messages.flagged : messages.flagInterest)}
+                              </button>
+                            )}
+                            {showOpenCloseButton && (
+                              isClosed ? (
+                                <button
+                                  type="button"
+                                  className="requested-trainings-page__outline-button"
+                                  disabled={statusMutation.isPending}
+                                  onClick={() => handleStatusAction(item, 'reopen')}
+                                >
+                                  <CircleCheckIcon className="h-3.5 w-3.5" />
+                                  {formatMessage(messages.reopen)}
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  className="requested-trainings-page__outline-button"
+                                  disabled={statusMutation.isPending}
+                                  onClick={() => handleStatusAction(item, 'close')}
+                                >
+                                  <CircleXIcon className="h-3.5 w-3.5" />
+                                  {formatMessage(messages.close)}
+                                </button>
+                              )
+                            )}
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   );
                 })}

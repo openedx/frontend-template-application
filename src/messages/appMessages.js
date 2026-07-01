@@ -11,6 +11,21 @@ const appMessages = defineMessages({
     defaultMessage: 'Users',
     description: 'Top header title for users route',
   },
+  myTeamTitle: {
+    id: 'app.layout.route.myTeam.title',
+    defaultMessage: 'My Team',
+    description: 'Top header title for my team route',
+  },
+  regulatoryPassportTitle: {
+    id: 'app.layout.route.regulatoryPassport.title',
+    defaultMessage: 'Regulatory Passport',
+    description: 'Top header title for regulatory passport route',
+  },
+  organizationProfileTitle: {
+    id: 'app.layout.route.organizationProfile.title',
+    defaultMessage: 'Organization Profile',
+    description: 'Top header title for organization profile route',
+  },
   competencyFrameworkTitle: {
     id: 'app.layout.route.competencyFramework.title',
     defaultMessage: 'Competency Framework',
@@ -60,6 +75,21 @@ const appMessages = defineMessages({
     id: 'app.layout.route.trainingCatalog.title',
     defaultMessage: 'SEARN Training Catalog',
     description: 'Top header title for SEARN training catalog routes',
+  },
+  myTrainingCatalogTitle: {
+    id: 'app.layout.route.myTrainingCatalog.title',
+    defaultMessage: 'My Trainings Catalog',
+    description: 'Top header title for my trainings catalog route',
+  },
+  nraSpecificTrainingCatalogTitle: {
+    id: 'app.layout.route.nraSpecificTrainingCatalog.title',
+    defaultMessage: 'NRA-Specific Training Catalog',
+    description: 'Top header title for NRA-specific training catalog route',
+  },
+  myTrainingTitle: {
+    id: 'app.layout.route.myTraining.title',
+    defaultMessage: 'My Trainings',
+    description: 'Top header title for my trainings route',
   },
   nrasTitle: {
     id: 'app.layout.route.nras.title',

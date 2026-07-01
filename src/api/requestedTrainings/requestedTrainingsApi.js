@@ -4,6 +4,7 @@ import {
   REQUESTED_TRAININGS_ACTIVITIES,
   REQUESTED_TRAININGS_FILTERS,
   REQUESTED_TRAININGS_LIST,
+  requestedTrainingFlag,
 } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
 import requestedTrainingsMessages from '../../pages/requestedTrainings/messages';
@@ -84,7 +85,7 @@ export const createRequestedTraining = ({
 });
 
 /**
- * @param {{ formatMessage: Function, id: string|number, action: 'close'|'reopen' }} params
+ * @param {{ formatMessage: Function, id: string|number, action: 'close'|'reopen'|'flag'|'unflag' }} params
  */
 export const patchRequestedTrainingStatus = ({ formatMessage, id, action }) => executeApiRequest({
   request: () => {
@@ -94,4 +95,18 @@ export const patchRequestedTrainingStatus = ({ formatMessage, id, action }) => e
   },
   formatMessage,
   fallbackMessage: requestedTrainingsMessages.statusError,
+});
+
+/**
+ * Flag or unflag interest on a requested training.
+ * @param {{ formatMessage: Function, id: string|number, isFlagged: boolean }} params
+ */
+export const patchRequestedTrainingFlag = ({ formatMessage, id, isFlagged }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${requestedTrainingFlag(id)}`;
+    return httpClient.patch(url, { is_flagged: !isFlagged });
+  },
+  formatMessage,
+  fallbackMessage: requestedTrainingsMessages.flagError,
 });

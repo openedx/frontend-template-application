@@ -1,20 +1,32 @@
 /* eslint-disable react/prop-types */
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { faUserShield } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import CommaSeparatedInput from '../../components/commaSeparatedInput/CommaSeparatedInput';
 import { EmptyState } from '../../components/emptyState';
 import ProfilePageAvatar from '../../components/users/ProfilePageAvatar';
 import SearchableDropdown from '../../components/searchableDropdown/SearchableDropdown';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
+import { useUserRole } from '../../contexts/UserRoleContext';
 import {
+  formatCompetencyRoleForInput,
+  formatManagerForProfileApi,
   getCountryLabelByValue,
   getLanguageLabelByValue,
+  getManagerLabelByValue,
+  parseCompetencyRoleForApi,
   resolveCountryDropdownValue,
+  resolveLanguageDropdownValue,
+  resolveManagerDropdownValue,
 } from '../../api/profile/profileUtils';
 import useCurrentUserProfile from '../../hooks/profile/useCurrentUserProfile';
 import useProfileCountries from '../../hooks/profile/useProfileCountries';
 import useProfileLanguages from '../../hooks/profile/useProfileLanguages';
+import useProfileManagerOptions from '../../hooks/profile/useProfileManagerOptions';
 import useProfileMutation from '../../hooks/profile/useProfileMutation';
+import useRequestAdminRoleMutation from '../../hooks/profile/useRequestAdminRoleMutation';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import messages from './messages';
 import './Profile.scss';
@@ -122,6 +134,11 @@ const SaveIcon = ({ className }) => (
 const Profile = () => {
   const { formatMessage } = useIntl();
   const { showToast } = useToast();
+  const { componentAccess } = useUserRole();
+  const profileAccess = componentAccess?.profile ?? {};
+  const showManagerField = Boolean(profileAccess.showManagerField);
+  const showCompetencyRoleField = Boolean(profileAccess.showCompetencyRoleField);
+  const canRequestAdminRole = Boolean(profileAccess.canRequestAdminRole);
   const canEdit = true;
   const canUploadPhoto = true;
 
@@ -149,7 +166,15 @@ const Profile = () => {
     errorMessage: languagesErrorMessage,
   } = useProfileLanguages();
 
+  const {
+    dropdownOptions: managerOptions,
+    isLoading: isManagerOptionsLoading,
+    isError: isManagerOptionsError,
+    errorMessage: managerOptionsErrorMessage,
+  } = useProfileManagerOptions({ enabled: showManagerField });
+
   const { updateMutation } = useProfileMutation();
+  const { requestMutation } = useRequestAdminRoleMutation();
 
   const [photoPreview, setPhotoPreview] = useState('');
   const [pendingImageFile, setPendingImageFile] = useState(null);
@@ -157,10 +182,17 @@ const Profile = () => {
   const [fullName, setFullName] = useState('');
   const [country, setCountry] = useState('');
   const [language, setLanguage] = useState('');
+  const [manager, setManager] = useState('');
+  const [competencyRole, setCompetencyRole] = useState('');
   const [about, setAbout] = useState('');
 
-  const isPageLoading = isProfileLoading || isCountriesLoading || isLanguagesLoading;
-  const isPickerError = isCountriesError || isLanguagesError;
+  const isPageLoading = isProfileLoading
+    || isCountriesLoading
+    || isLanguagesLoading
+    || (showManagerField && isManagerOptionsLoading);
+  const isPickerError = isCountriesError
+    || isLanguagesError
+    || (showManagerField && isManagerOptionsError);
   const isSaveDisabled = !canEdit
     || updateMutation.isPending
     || isPageLoading
@@ -174,7 +206,9 @@ const Profile = () => {
 
     setFullName(hasDisplayValue(profileData.fullName) ? profileData.fullName : '');
     setAbout(hasDisplayValue(profileData.about) ? profileData.about : '');
-    setLanguage(hasDisplayValue(profileData.language) ? String(profileData.language) : '');
+    setLanguage(resolveLanguageDropdownValue(profileData.language, languageOptions));
+    setManager(resolveManagerDropdownValue(profileData.manager, managerOptions));
+    setCompetencyRole(formatCompetencyRoleForInput(profileData.competencyRole));
     setSavedProfileImageUrl(hasDisplayValue(profileData.profileImageUrl) ? profileData.profileImageUrl : '');
     setPhotoPreview('');
     setPendingImageFile(null);
@@ -187,7 +221,7 @@ const Profile = () => {
     }
 
     applyProfileToForm(profile);
-  }, [profile, countryOptions]);
+  }, [profile, countryOptions, languageOptions, managerOptions]);
 
   useEffect(() => {
     if (!isProfileError) {
@@ -201,33 +235,44 @@ const Profile = () => {
   }, [formatMessage, isProfileError, profileErrorMessage, showToast]);
 
   useEffect(() => {
-    if (!isCountriesError && !isLanguagesError) {
+    if (!isCountriesError && !isLanguagesError && !(showManagerField && isManagerOptionsError)) {
       return;
     }
 
     showToast({
       title: formatMessage(messages.profileErrorTitle),
-      description: countriesErrorMessage || languagesErrorMessage,
+      description: countriesErrorMessage
+        || languagesErrorMessage
+        || managerOptionsErrorMessage,
     });
   }, [
     countriesErrorMessage,
     formatMessage,
     isCountriesError,
     isLanguagesError,
+    isManagerOptionsError,
     languagesErrorMessage,
+    managerOptionsErrorMessage,
+    showManagerField,
     showToast,
   ]);
 
   const displayAvatarSrc = photoPreview || savedProfileImageUrl;
 
   const countryLabel = useMemo(
-    () => getCountryLabelByValue(country, countryOptions),
-    [country, countryOptions],
+    () => getCountryLabelByValue(country, countryOptions)
+      || (hasDisplayValue(profile?.countryLabel) ? profile.countryLabel : ''),
+    [country, countryOptions, profile?.countryLabel],
   );
 
   const languageLabel = useMemo(
     () => getLanguageLabelByValue(language, languageOptions),
     [language, languageOptions],
+  );
+
+  const managerLabel = useMemo(
+    () => getManagerLabelByValue(manager, managerOptions),
+    [manager, managerOptions],
   );
 
   const onCancel = () => {
@@ -246,6 +291,8 @@ const Profile = () => {
         language,
         about,
         profileImageFile: pendingImageFile,
+        ...(showManagerField ? { manager: formatManagerForProfileApi(manager, managerOptions) } : {}),
+        ...(showCompetencyRoleField ? { competencyRole: parseCompetencyRoleForApi(competencyRole) } : {}),
       });
 
       showToast({
@@ -264,7 +311,33 @@ const Profile = () => {
     }
   };
 
-  const profileDisplayName = fullName || profile?.fullName || profile?.name;
+  const onRequestAdminRole = async () => {
+    if (
+      !canRequestAdminRole
+      || !profile?.canRequestAdminRoleFromApi
+      || requestMutation.isPending
+    ) {
+      return;
+    }
+
+    try {
+      const result = await requestMutation.mutateAsync();
+      showToast({
+        title: formatMessage(messages.requestAdminRoleSuccessTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.requestAdminRoleSuccess),
+      });
+      await refetchProfile();
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.requestAdminRoleErrorTitle),
+        description: error?.message || formatMessage(messages.requestAdminRoleError),
+      });
+    }
+  };
+
+  const profileDisplayName = fullName || profile?.fullName;
 
   const countryTrigger = countryLabel ? (
     countryLabel
@@ -277,6 +350,14 @@ const Profile = () => {
   ) : (
     <span className="profile-page__placeholder">{formatMessage(messages.languagePlaceholder)}</span>
   );
+
+  const managerTrigger = managerLabel ? (
+    managerLabel
+  ) : (
+    <span className="profile-page__placeholder">{formatMessage(messages.managerPlaceholder)}</span>
+  );
+
+  const showRequestAdminRoleButton = canRequestAdminRole && profile?.canRequestAdminRoleFromApi;
 
   if (isPageLoading) {
     return (
@@ -405,6 +486,42 @@ const Profile = () => {
               />
             </div>
 
+            {showManagerField && (
+              <div className="profile-page__field profile-page__field--full">
+                <label className="profile-page__label" htmlFor="manager">
+                  {formatMessage(messages.manager)}
+                  {' '}
+                  <span className="profile-page__label-optional">
+                    {formatMessage(messages.managerOptional)}
+                  </span>
+                </label>
+                <SearchableDropdown
+                  value={manager}
+                  options={managerOptions}
+                  onChange={setManager}
+                  disabled={!canEdit || isSaveDisabled}
+                  triggerLabel={managerTrigger}
+                  searchPlaceholder={formatMessage(messages.managerSearchPlaceholder)}
+                  noOptionsText={formatMessage(messages.managerNoOptions)}
+                />
+              </div>
+            )}
+
+            {showCompetencyRoleField && (
+              <div className="profile-page__field profile-page__field--full">
+                <label className="profile-page__label" htmlFor="competencyRole">
+                  {formatMessage(messages.competencyRole)}
+                </label>
+                <CommaSeparatedInput
+                  value={competencyRole}
+                  onChange={setCompetencyRole}
+                  placeholder={formatMessage(messages.competencyRolePlaceholder)}
+                  helperText={formatMessage(messages.competencyRoleHelper)}
+                  disabled={!canEdit || isSaveDisabled}
+                />
+              </div>
+            )}
+
             <div className="profile-page__field profile-page__field--full">
               <label className="profile-page__label" htmlFor="about">
                 {formatMessage(messages.about)}
@@ -423,23 +540,38 @@ const Profile = () => {
           </div>
 
           <div className="profile-page__footer">
-            <button
-              type="button"
-              className="profile-page__outline-button"
-              onClick={onCancel}
-              disabled={isSaveDisabled}
-            >
-              {formatMessage(messages.cancel)}
-            </button>
-            <button
-              type="button"
-              className="profile-page__primary-button"
-              onClick={onSave}
-              disabled={isSaveDisabled}
-            >
-              <SaveIcon className="h-4 w-4" />
-              {formatMessage(messages.save)}
-            </button>
+            <div className="profile-page__footer-start">
+              {showRequestAdminRoleButton && (
+                <button
+                  type="button"
+                  className="profile-page__request-admin-button"
+                  onClick={onRequestAdminRole}
+                  disabled={requestMutation.isPending || isSaveDisabled}
+                >
+                  <FontAwesomeIcon icon={faUserShield} aria-hidden />
+                  {formatMessage(messages.requestAdminRole)}
+                </button>
+              )}
+            </div>
+            <div className="profile-page__footer-actions">
+              <button
+                type="button"
+                className="profile-page__outline-button"
+                onClick={onCancel}
+                disabled={isSaveDisabled}
+              >
+                {formatMessage(messages.cancel)}
+              </button>
+              <button
+                type="button"
+                className="profile-page__primary-button"
+                onClick={onSave}
+                disabled={isSaveDisabled}
+              >
+                <SaveIcon className="h-4 w-4" />
+                {formatMessage(messages.save)}
+              </button>
+            </div>
           </div>
         </div>
       </div>

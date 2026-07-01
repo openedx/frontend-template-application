@@ -108,6 +108,36 @@
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+
+    strong,
+    b {
+      font-weight: 700;
+    }
+
+    em,
+    i {
+      font-style: italic;
+    }
+
+    u {
+      text-decoration: underline;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: inherit;
+      font-weight: 600;
+      color: #2A3B8F;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    p {
+      margin: 0;
+    }
   }
 
   &__card-meta {

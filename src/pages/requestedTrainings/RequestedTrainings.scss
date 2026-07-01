@@ -212,6 +212,52 @@
     gap: .5rem;
   }
 
+  &__actions-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+
+  &__flag-button {
+    height: 36px;
+    border-radius: .375rem;
+    font-size: .875rem;
+    font-weight: 600;
+    padding: 0 1rem;
+    border: 2px solid #2A3B8F;
+    background: transparent;
+    color: #2A3B8F;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .25rem;
+
+    &--active {
+      border-color: rgb(225 29 72);
+      background-color: rgb(225 29 72);
+      color: #FFFFFF;
+      box-shadow: 0 4px 6px -1px rgb(16 24 40 / .10), 0 2px 4px -2px rgb(16 24 40 / .10);
+
+      &:hover:not(:disabled) {
+        background-color: rgb(190 18 60);
+        border-color: rgb(190 18 60);
+        box-shadow: 0 10px 15px -3px rgb(16 24 40 / .10), 0 4px 6px -4px rgb(16 24 40 / .10);
+      }
+    }
+
+    &:disabled {
+      opacity: .5;
+      pointer-events: none;
+    }
+  }
+
+  &__outline-button:disabled {
+    opacity: .5;
+    pointer-events: none;
+  }
+
   &__empty {
     flex: 1;
     min-height: 0;

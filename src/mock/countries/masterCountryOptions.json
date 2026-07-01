@@ -1,4 +1,5 @@
-[
+{
+  "results": [
   { "id": "mst-afghanistan", "value": "afghanistan", "label": "Afghanistan" },
   { "id": "mst-albania", "value": "albania", "label": "Albania" },
   { "id": "mst-algeria", "value": "algeria", "label": "Algeria" },
@@ -44,4 +45,9 @@
   { "id": "mst-united-kingdom", "value": "united-kingdom", "label": "United Kingdom" },
   { "id": "mst-united-states", "value": "united-states", "label": "United States" },
   { "id": "mst-viet-nam", "value": "viet-nam", "label": "Viet Nam" }
-]
+  ],
+  "count": 37,
+  "page": 1,
+  "page_size": 50,
+  "total_pages": 1
+}

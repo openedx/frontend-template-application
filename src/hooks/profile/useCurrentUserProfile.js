@@ -19,7 +19,12 @@ const useCurrentUserProfile = ({ enabled = true } = {}) => {
         throw new Error(result.message);
       }
 
-      return mapProfileResult(result.data);
+      const profile = mapProfileResult(result.data);
+      if (!profile) {
+        throw new Error(result.message || formatMessage(profileMessages.profileLoadError));
+      }
+
+      return profile;
     },
   });
 

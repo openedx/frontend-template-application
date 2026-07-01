@@ -70,6 +70,25 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
   - **Routes**: `/admin/competency-frameworks`, `/admin/competency-frameworks/new` → `src/pages/competencyFramework/CompetencyFramework.jsx`
 - **`accessActivities`**
   - **Route**: `/admin/activities-management` → `src/pages/activities/Activities.jsx`
+- **`accessMyTrainingCatalog`**
+  - **Routes**:
+    - `/admin/my-training-catalog` → `src/pages/myTrainingCatalog/MyTrainingCatalog.jsx`
+    - `/admin/my-training-catalog/new` → `src/pages/myTrainingCatalog/MyTrainingCatalogCreate.jsx`
+    - `/admin/my-training-catalog/:trainingId` → `src/pages/myTrainingCatalog/MyTrainingCatalogDetail.jsx`
+    - `/admin/my-training-catalog/:trainingId/feedback` → `src/pages/myTrainingCatalog/MyTrainingCatalogFeedback.jsx`
+  - **Role**: enabled for `training-provider` and `super-user`
+- **`accessNraSpecificTrainingCatalog`**
+  - **Routes** (reuse My Training Catalog pages/components):
+    - `/admin/nra-specific-training-catalog` → `src/pages/myTrainingCatalog/MyTrainingCatalog.jsx`
+    - `/admin/nra-specific-training-catalog/new` → `src/pages/myTrainingCatalog/MyTrainingCatalogCreate.jsx`
+    - `/admin/nra-specific-training-catalog/:trainingId` → `src/pages/myTrainingCatalog/MyTrainingCatalogDetail.jsx`
+    - `/admin/nra-specific-training-catalog/:trainingId/feedback` → `src/pages/myTrainingCatalog/MyTrainingCatalogFeedback.jsx`
+    - `/admin/nra-specific-training-catalog/providers/:providerSlug` → `src/pages/myTrainingCatalog/NraSpecificTrainingProvider.jsx`
+    - `/admin/nra-specific-training-catalog/providers/:providerSlug/catalog` → `src/pages/myTrainingCatalog/NraSpecificTrainingProviderCatalog.jsx`
+  - **Role**: enabled for `training-provider` and `super-user`
+- **`accessMyTraining`**
+  - **Route**: `/admin/my-training/` → `src/pages/myTraining/MyTraining.jsx`
+  - **Role**: enabled for `training-provider` and `super-user`
 - **`accessNrasManagement`**
   - **Route**: `/admin/nras` → `src/pages/nras/Nras.jsx`
 - **`accessCountries`**
@@ -84,6 +103,15 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
   - **Routes**:
     - `/admin/users` → `src/pages/users/Users.jsx`
     - `/admin/users/:userId` → `src/pages/users/UserDetailPage.jsx`
+- **`accessMyTeam`**
+  - **Route**: `/admin/my-team` → `src/pages/myTeam/MyTeam.jsx`
+  - **Role**: enabled for `super-user`, `training-provider`, and `secretariat`
+- **`accessRegulatoryPassport`**
+  - **Route**: `/admin/regulatory-passport` → `src/pages/regulatoryPassport/RegulatoryPassport.jsx`
+  - **Role**: enabled for `super-user` and `secretariat`
+- **`accessOrganizationProfile`**
+  - **Route**: `/admin/organization-profile` → `src/pages/organizationProfile/OrganizationProfile.jsx`
+  - **Role**: enabled for `training-provider`, `super-user`, and `secretariat`
 - **`accessRoles`**
   - **Route**: `/admin/roles` → `src/pages/roles/Roles.jsx`
 - **`accessReports`**
@@ -115,6 +143,26 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
 - **`showPendingRequests`**
   - **Controls**: renders "Pending requests" card on Dashboard
   - **Component**: `src/components/dashboardRequests/DashboardRequests.jsx` (`PendingRequestsCard`)
+- **`showTopTrainings`**
+  - **Controls**: renders "Our Top Trainings" table on Dashboard
+  - **Component**: `src/components/dashboardTopTrainings/DashboardTopTrainings.jsx`
+  - **Role**: enabled for `training-provider` and `super-user`
+- **`showRecentActivities`**
+  - **Controls**: renders "Recent Activities" card on Dashboard
+  - **Component**: `src/components/dashboardRecentActivities/DashboardRecentActivities.jsx`
+  - **Role**: enabled for `super-user` and `secretariat`
+- **`showPopularTrainings`**
+  - **Controls**: renders "Popular Trainings" card on Dashboard
+  - **Component**: `src/components/dashboardPopularTrainings/DashboardPopularTrainings.jsx`
+  - **Role**: enabled for `super-user` and `secretariat`
+- **`showQuickActions`**
+  - **Controls**: renders "Quick Actions" card on Dashboard
+  - **Component**: `src/components/dashboardQuickActions/DashboardQuickActions.jsx`
+  - **Role**: enabled for `super-user` and `training-provider`
+- **`showRecentTrainingCompletions`**
+  - **Controls**: renders "Recent Training Completions" card on Dashboard
+  - **Component**: `src/components/dashboardRecentTrainingCompletions/DashboardRecentTrainingCompletions.jsx`
+  - **Role**: enabled for `super-user` and `training-provider`
 
 ### Users (`componentAccess.users.*`)
 
@@ -141,6 +189,10 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
   - **Controls**: "Assign Training" button + assign trainings modal on About page
 - **`canRemoveAssignedTrainings`**
   - **Controls**: remove icon + confirm dialog for assigned trainings on About page
+- **`canViewAssignedTrainings`**
+  - **Controls**: shows/hides the Assigned Trainings section on About page (independent of assign/remove actions)
+- **`canViewMappedCompetencies`**
+  - **Controls**: shows/hides the Mapped Competencies section on About page
 - **`canViewRegulatoryPassport`**
   - **Controls**:
     - shows Regulatory Passport banner/CTA on About page
@@ -152,6 +204,15 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
     - `showManagerField`
     - `showCompetencyRoleField`
     - `showCountryField`
+
+### My Team (`componentAccess.myTeam.*`)
+
+**File**: `src/pages/myTeam/MyTeam.jsx`
+
+- **`canAddTeamMember`**
+  - **Controls**: "Add Team Member" button + add member modal
+- **`canRemoveTeamMember`**
+  - **Controls**: Action column + delete icon + remove confirmation dialog
 
 ### Competency Framework (`componentAccess.competencyFramework.*`)
 
@@ -193,13 +254,50 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
 ### SEARN Training Catalog (`componentAccess.searnTrainingCatalog.*`)
 
 **Files**:
-- `src/pages/searnTrainingCatalog/SearnTrainingCatalog.jsx`
-- `src/pages/searnTrainingCatalog/SearnTrainingDetail.jsx`
-- `src/pages/searnTrainingCatalog/SearnTrainingFeedback.jsx`
-- `src/pages/searnTrainingCatalog/SearnTrainingProvider.jsx`
-- `src/pages/searnTrainingCatalog/SearnTrainingProviderCatalog.jsx`
+- `src/components/searnTrainingCatalog/SearnTrainingCatalogListSection.jsx`
+- `src/components/searnTrainingCatalog/RequestTrainingModal.jsx`
 
-- **Note**: SEARN Training Catalog pages no longer use `componentAccess.searnTrainingCatalog.*` (UI is not component-permission-gated).
+- **`canRequestTraining`**
+  - **Controls**: "Request Training" button above the catalog table + request training modal
+- **`canRequestAccess`**
+  - **Controls**: Action column on catalog table with "Request Access" button or "Requested" badge per row + confirmation dialog before submit
+
+### My Training Catalog (`componentAccess.myTrainingCatalog.*`)
+
+**Files**:
+- `src/components/myTrainingCatalog/MyTrainingCatalogListSection.jsx`
+- `src/pages/myTrainingCatalog/MyTrainingCatalogCreate.jsx`
+
+- **`canCreateTraining`**
+  - **Controls**: "Create Training" button on list page + route access to `/admin/my-training-catalog/new`
+- **`canEditTraining`**
+  - **Controls**: edit icon button in table actions column + route access to `/admin/my-training-catalog/:trainingId/edit` and `/admin/nra-specific-training-catalog/:trainingId/edit` (reuses create form prefilled) (mock toast until edit API is connected)
+- **`canDeleteTraining`**
+  - **Controls**: delete icon button + confirmation dialog + local mock removal
+
+### NRA-Specific Training Catalog (`componentAccess.nraSpecificTrainingCatalog.*`)
+
+**Files** (shared with My Training Catalog):
+- `src/components/myTrainingCatalog/MyTrainingCatalogListSection.jsx`
+- `src/pages/myTrainingCatalog/MyTrainingCatalogCreate.jsx`
+
+- **`canCreateTraining`**
+  - **Controls**: "Create Training" button on list page + route access to `/admin/nra-specific-training-catalog/new`
+- **`canEditTraining`**
+  - **Controls**: edit icon button in table actions column + route access to `/admin/my-training-catalog/:trainingId/edit` and `/admin/nra-specific-training-catalog/:trainingId/edit` (reuses create form prefilled)
+- **`canDeleteTraining`**
+  - **Controls**: delete icon button + confirmation dialog + local mock removal
+- **`canViewProviderColumn`**
+  - **Controls**: Provider column in NRA-specific catalog table; provider name links to `/admin/nra-specific-training-catalog/providers/:providerSlug` (not SEARN catalog provider routes)
+- **`canRequestAccess`**
+  - **Controls**: Action column with "Request Access" button or "Requested" badge + confirmation dialog
+
+### My Training (`componentAccess.myTraining.*`)
+
+**File**: `src/pages/myTraining/MyTraining.jsx`
+
+- **`canUpdateTraining`**
+  - **Controls**: edit icon button in table actions column + update training status modal
 
 ### Countries
 
@@ -232,9 +330,16 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
 - **`canDeleteTrainingProvider`**
   - **Controls**: delete action/button + confirmation + toast
 
-### Profile
+### Profile (`componentAccess.profile.*`)
 
-- **Note**: Profile page no longer uses `componentAccess.profile.*` (UI is not component-permission-gated).
+**File**: `src/pages/profile/Profile.jsx`
+
+- **`showManagerField`**
+  - **Controls**: "My Manager" dropdown above About; options from `GET /api/v1/role-assignment/profile/manager-options/`; `manager` (option id, e.g. `manager-u2`) included in PATCH when saving
+- **`showCompetencyRoleField`**
+  - **Controls**: "Competency Role" input above About; `competency_role` sent as a string array in PATCH when saving
+- **`canRequestAdminRole`**
+  - **Controls**: "Request Admin Role" button in the page footer (hidden when GET `access_admin_status` is `true`)
 
 ### Settings
 
@@ -245,7 +350,21 @@ These routes are **always routable** (no `withAccess(...)` guard in `src/App.jsx
 - **`canEditPendingRequest`**
   - **Controls**: edit icon/action column visibility and the ability to click a row to open `PendingRequestDetail`
 
-### Requested Trainings
+### Requested Trainings (`componentAccess.requestedTrainings.*`)
 
-- **Note**: Requested Trainings page no longer uses `componentAccess.requestedTrainings.*` (UI is not component-permission-gated).
+**File**: `src/pages/requestedTrainings/RequestedTrainings.jsx`
+
+- **`showOpenCloseButton`**
+  - **Controls**: Close / Reopen buttons in the table actions column
+- **`showFlagButton`**
+  - **Controls**: Flag interest / Flagged toggle button in the table actions column (PATCH `action`: `flag` / `unflag`)
+
+### Organization Profile (`componentAccess.organizationProfile.*`)
+
+**File**: `src/pages/organizationProfile/OrganizationProfile.jsx`
+
+- **`canChangeOrganizationProfile`**
+  - **Controls**: enables/disables all form fields, logo upload, save button, and administrator add/edit/delete actions
+- **`showAdministratorsSection`**
+  - **Controls**: renders the Administrators card (list, add form); administrators are included in PATCH payload when saving
 

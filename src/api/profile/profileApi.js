@@ -1,13 +1,21 @@
 import { executeApiRequest } from '../apiRequest';
 import {
+  NRAS_MANAGEMENT_ADMIN_ROLE_REQUESTS,
   ROLE_ASSIGNMENT_LANGUAGES,
   ROLE_ASSIGNMENT_PROFILE,
+  ROLE_ASSIGNMENT_PROFILE_MANAGERS,
 } from '../endpoints';
 import { getApiBaseUrl, getHttpClient } from '../httpClient';
-import { buildProfilePatchFormData } from './profileUtils';
+import { isUploadableFile, patchMultipart } from '../multipartRequest';
 import profileMessages from '../../pages/profile/messages';
+import {
+  buildAdminRoleRequestBody,
+  buildProfilePatchBody,
+  buildProfilePatchFormData,
+} from './profileUtils';
 
 /**
+ * GET /api/v1/role-assignment/profile/
  * @param {{ formatMessage: Function }} params
  */
 export const fetchCurrentUserProfile = ({ formatMessage }) => executeApiRequest({
@@ -21,6 +29,7 @@ export const fetchCurrentUserProfile = ({ formatMessage }) => executeApiRequest(
 });
 
 /**
+ * GET /api/v1/role-assignment/languages/
  * @param {{ formatMessage: Function }} params
  */
 export const fetchProfileLanguages = ({ formatMessage }) => executeApiRequest({
@@ -34,12 +43,30 @@ export const fetchProfileLanguages = ({ formatMessage }) => executeApiRequest({
 });
 
 /**
+ * GET /api/v1/role-assignment/profile/managers/
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchProfileManagerOptions = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE_MANAGERS}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: profileMessages.managerOptionsLoadError,
+});
+
+/**
+ * PATCH /api/v1/role-assignment/profile/
+ * Payload keys: full_name, country, language, about, profile_image, manager, competency_role
  * @param {{
  *   formatMessage: Function,
- *   fullName: string,
- *   country: string,
- *   language: string,
- *   about: string,
+ *   fullName?: string,
+ *   country?: string,
+ *   language?: string,
+ *   about?: string,
+ *   manager?: string,
+ *   competencyRole?: string[]|string,
  *   profileImageFile?: File|null,
  * }} params
  */
@@ -49,32 +76,51 @@ export const patchCurrentUserProfile = ({
   country,
   language,
   about,
+  manager,
+  competencyRole,
   profileImageFile = null,
 }) => executeApiRequest({
   request: () => {
     const httpClient = getHttpClient();
     const url = `${getApiBaseUrl()}${ROLE_ASSIGNMENT_PROFILE}`;
-    const hasImageFile = profileImageFile instanceof File;
 
-    if (hasImageFile) {
+    if (isUploadableFile(profileImageFile)) {
       const formData = buildProfilePatchFormData({
         fullName,
         country,
         language,
         about,
+        manager,
+        competencyRole,
         profileImageFile,
       });
 
-      return httpClient.patch(url, formData);
+      return patchMultipart(httpClient, url, formData);
     }
 
-    return httpClient.patch(url, {
-      full_name: fullName.trim(),
-      country: String(country),
-      language: String(language),
-      about: about.trim(),
-    });
+    return httpClient.patch(url, buildProfilePatchBody({
+      fullName,
+      country,
+      language,
+      about,
+      manager,
+      competencyRole,
+    }));
   },
   formatMessage,
   fallbackMessage: profileMessages.profileSaveError,
+});
+
+/**
+ * POST /api/v1/nras-management/admin-role-requests/
+ * @param {{ formatMessage: Function }} params
+ */
+export const postAdminRoleRequest = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${NRAS_MANAGEMENT_ADMIN_ROLE_REQUESTS}`;
+    return httpClient.post(url, buildAdminRoleRequestBody());
+  },
+  formatMessage,
+  fallbackMessage: profileMessages.requestAdminRoleError,
 });

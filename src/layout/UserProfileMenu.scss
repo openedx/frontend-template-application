@@ -23,6 +23,18 @@
   flex-shrink: 0;
 }
 
+.admin-top-header__avatar:has(.user-profile-menu__avatar-icon) {
+  background: #F3F4F6;
+  color: #505B95;
+}
+
+.user-profile-menu__avatar-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+  color: #505B95;
+}
+
 .user-profile-menu__chevron {
   width: 12px;
   height: 12px;

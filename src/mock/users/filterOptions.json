@@ -1,6 +1,12 @@
-[
-  { "value": "all", "messageKey": "allModes" },
-  { "value": "Virtual", "label": "Virtual" },
-  { "value": "In-person", "label": "In-person" },
-  { "value": "Hybrid", "label": "Hybrid" }
-]
+{
+  "results": [
+    { "value": "all", "messageKey": "allModes" },
+    { "value": "Virtual", "label": "Virtual" },
+    { "value": "In-person", "label": "In-person" },
+    { "value": "Hybrid", "label": "Hybrid" }
+  ],
+  "count": 4,
+  "page": 1,
+  "page_size": 50,
+  "total_pages": 1
+}

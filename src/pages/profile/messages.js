@@ -126,6 +126,81 @@ const messages = defineMessages({
     defaultMessage: 'No languages found.',
     description: 'Empty state for language dropdown',
   },
+  manager: {
+    id: 'app.profile.fields.manager.label',
+    defaultMessage: 'My Manager',
+    description: 'Label for manager dropdown',
+  },
+  managerOptional: {
+    id: 'app.profile.fields.manager.optional',
+    defaultMessage: '(Optional)',
+    description: 'Optional suffix for manager field label',
+  },
+  managerPlaceholder: {
+    id: 'app.profile.fields.manager.placeholder',
+    defaultMessage: '— None —',
+    description: 'Placeholder for manager dropdown',
+  },
+  managerSearchPlaceholder: {
+    id: 'app.profile.fields.manager.search',
+    defaultMessage: 'Search managers...',
+    description: 'Search placeholder for manager dropdown',
+  },
+  managerNoOptions: {
+    id: 'app.profile.fields.manager.empty',
+    defaultMessage: 'No managers found.',
+    description: 'Empty state for manager dropdown',
+  },
+  managerOptionsLoadError: {
+    id: 'app.profile.managerOptions.loadError',
+    defaultMessage: 'Unable to load manager options. Please try again.',
+    description: 'Fallback when manager options API fails',
+  },
+  competencyRole: {
+    id: 'app.profile.fields.competencyRole.label',
+    defaultMessage: 'Competency Role',
+    description: 'Label for competency role field',
+  },
+  competencyRolePlaceholder: {
+    id: 'app.profile.fields.competencyRole.placeholder',
+    defaultMessage: 'e.g. Reviewer, Inspector, Laboratory Analyst',
+    description: 'Placeholder for competency role field',
+  },
+  competencyRoleHelper: {
+    id: 'app.profile.fields.competencyRole.helper',
+    defaultMessage: 'Enter one or more competency roles separated by commas.',
+    description: 'Helper text for competency role field',
+  },
+  requestAdminRole: {
+    id: 'app.profile.actions.requestAdminRole',
+    defaultMessage: 'Request Admin Role',
+    description: 'Button label to request administrator role',
+  },
+  requestAdminRoleSuccessTitle: {
+    id: 'app.profile.requestAdminRole.successTitle',
+    defaultMessage: 'Request submitted',
+    description: 'Toast title after admin role request succeeds',
+  },
+  requestAdminRoleSuccess: {
+    id: 'app.profile.requestAdminRole.success',
+    defaultMessage: 'Your administrator role request has been submitted.',
+    description: 'Toast description after admin role request succeeds',
+  },
+  requestAdminRoleErrorTitle: {
+    id: 'app.profile.requestAdminRole.errorTitle',
+    defaultMessage: 'Request failed',
+    description: 'Toast title when admin role request fails',
+  },
+  requestAdminRoleError: {
+    id: 'app.profile.requestAdminRole.error',
+    defaultMessage: 'Unable to submit your administrator role request. Please try again.',
+    description: 'Fallback when admin role request API fails',
+  },
+  requestAdminRoleAlreadyAdminError: {
+    id: 'app.profile.requestAdminRole.alreadyAdminError',
+    defaultMessage: 'You already have administrator access.',
+    description: 'Error when user already has admin role',
+  },
 });
 
 export default messages;

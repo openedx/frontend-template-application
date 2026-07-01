@@ -1,0 +1,86 @@
+.dashboard-top-trainings {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: .75rem;
+  box-shadow: 0 1px 2px 0 rgb(16 24 40 / .05);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: #2A3B8F;
+  }
+
+  &__table-wrap {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 560px;
+  }
+
+  &__head-row {
+    background: rgb(42 59 143 / .05);
+  }
+
+  &__th {
+    text-align: left;
+    padding: .75rem 1.5rem;
+    font-size: .75rem;
+    color: #6B7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  &__row {
+    border-top: 1px solid #E5E7EB;
+    transition: background-color .15s ease;
+
+    &:hover {
+      background: rgb(42 59 143 / .03);
+    }
+  }
+
+  &__td {
+    padding: 1rem 1.5rem;
+    font-size: .875rem;
+    color: #6B7280;
+    text-align: left;
+
+    &--primary {
+      font-weight: 600;
+      color: #2A3B8F;
+    }
+
+    &--muted {
+      color: #505B95;
+    }
+  }
+
+  &__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+  }
+
+  &__rating-icon {
+    color: #F59E0B;
+    font-size: .875rem;
+  }
+
+  &__empty {
+    padding: 1.5rem;
+    min-height: 120px;
+  }
+}
