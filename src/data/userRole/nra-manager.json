@@ -116,7 +116,7 @@
         },
         "searnTrainingCatalog": {
           "canRequestTraining": true,
-          "canRequestAccess": true
+          "canRequestAccess": false
         },
         "organizationProfile": {
           "canChangeOrganizationProfile": false,
