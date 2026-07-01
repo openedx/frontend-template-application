@@ -20,7 +20,7 @@
         "accessMyTeam": false,
         "accessRegulatoryPassport": true,
         "accessOrganizationProfile": true,
-        "accessRoles": true,
+        "accessRoles": false,
         "accessSettings": false,
         "accessReports": true
       },
