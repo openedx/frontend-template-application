@@ -1,142 +1,127 @@
-frontend-template-application
-#############################
+frontend-app-searn-administrator
+#################################
 
-|license-badge| |status-badge| |ci-badge| |codecov-badge|
-
-⚠️ Warning ⚠️
-***************
-
-This template uses a version of Paragon that includes `design tokens <https://github.com/openedx/paragon/?tab=readme-ov-file#design-tokens>`_ support. Support for design tokens is a breaking change, and more information is available in `the DEPR <https://github.com/openedx/brand-openedx/issues/23>`_.
-
-To use this template with a pre-design-tokens version of Paragon, you can utilize `the release/teak branch <https://github.com/openedx/frontend-template-application/tree/release/teak>`_.
+|license-badge| |status-badge|
 
 Purpose
 *******
 
-This repository is a template for Open edX micro-frontend applications. It is
-flagged as a Template Repository, meaning it can be used as a basis for new
-GitHub repositories by clicking the green "Use this template" button above.
-The rest of this document describes how to work with your new micro-frontend
-**after you've created a new repository from the template.**
+``frontend-app-searn-administrator`` is the **administrator portal** micro-frontend
+for the **SEARN** platform, a customized Open edX deployment used for
+regulatory and competency training by health authorities. It is built with
+`frontend-platform`_ and is served, authenticated, under the ``/admin`` route
+prefix (see ``src/App.jsx``).
+
+Unlike the public marketing site, this MFE is a single, role-aware
+application shared by every kind of back-office user on the platform:
+
+* **Secretariat** — SEARN staff who administer the whole
+  platform: competency frameworks, NRAs, training providers, countries,
+  roles, and reporting.
+* **Training Provider** users — manage their own training catalog, team,
+  and organization profile.
+* **NRA (National Regulatory Authority)** users — ``NRA Admin``,
+  ``NRA Manager``, and ``NRA Staff`` — manage their team, review the
+  regulatory passport, and consume NRA-specific training catalogs,
+  each with a narrower slice of permissions than the role above it.
+
+What any given user can *see* (sidebar/routes) and *do* (buttons, columns,
+modals) is driven entirely by the permission payload returned for their
+role — this is not a hard-coded, role-name ``if`` statement scattered
+through the UI.
+
+Key Modules
+===========
+
+* **Dashboard** — role-specific summary cards (top trainings, recent
+  activity, pending requests, quick actions, users per country, etc.)
+* **Competency Frameworks** — build/view/edit competency frameworks across
+  "Who", "SEARN", and "NRA" tabs, including a suggestions workflow.
+* **Activities Management** — manage the activity catalog frameworks are
+  built from.
+* **Training Catalogs** — three related but distinct catalogs:
+  SEARN Training Catalog (global), My Training Catalog (a provider's own
+  offerings), and NRA-Specific Training Catalog.
+* **NRAs Management / Training Providers / Countries** — SEARN-side
+  onboarding and maintenance of regulatory authorities, training
+  providers, and the supported country list.
+* **Users / My Team** — user directory and management, including
+  per-user assigned trainings and the Regulatory Passport.
+* **Organization Profile** — a Training Provider's or NRA's own org
+  profile and administrator list.
+* **Roles** — manage the custom RBAC roles available on the platform.
+* **Pending Requests / Requested Trainings** — onboarding request review
+  and demand-signal tracking for trainings.
+* **Profile / Settings** — the signed-in user's own profile and app
+  settings.
+* **Reports** — staff trained, training offers, competency coverage, and
+  related reports (currently placeholder pages pending backend support).
 
 Getting Started
-***************
-
-After copying the template repository, you'll want to do a find-and-replace to
-replace all instances of ``frontend-template-application`` with the name of
-your new repository.  Also edit index.html to replace "Application Template"
-with a friendly name for this application that users will see in their browser
-tab.
+****************
 
 Prerequisites
-=============
+==============
 
-`Tutor`_ is currently recommended as the development environment for your
-new MFE.  You can refer to the `relevant tutor-mfe documentation`_ to get started using it.
+`Tutor`_ is the recommended development environment. This MFE always
+requires an LMS to authenticate against and a custom-extensions 
+backend to serve the ``/api/v1/...`` endpoints it calls — it has no
+meaningful standalone/anonymous mode.
 
 .. _Tutor: https://github.com/overhangio/tutor
 
-.. _relevant tutor-mfe documentation: https://github.com/overhangio/tutor-mfe#mfe-development
 
-Cloning and Startup
-===================
+Installation
+============
 
-In the following steps, replace "[PLACEHOLDER]" with the name of the repo you
-created when copying this template above.
+The following Tutor plugin code can be used to install and configure this
+MFE in a Tutor environment.
 
-1. Clone your new repo:
+.. code-block:: python
 
-  ``git clone https://github.com/openedx/frontend-app-[PLACEHOLDER].git``
+    from tutormfe.hooks import MFE_APPS
+    from tutor import hooks
 
-2. Use the version of Node specified in the ``.nvmrc`` file.
+    @MFE_APPS.add()
+    def _add_searn_administrator_mfe(mfes):
+        mfes["searn-administrator"] = {
+            "repository": "https://github.com/TitanEd/frontend-app-searn-administrator.git",
+            "port": 2025,
+            "version": "master",
+        }
+        return mfes
+    searn_amdin_mfe_url = """
+    SEARN_ADMINISTRATOR_MICROFRONTEND_URL = "https://{{ MFE_HOST }}/searn-administrator"
+    """
 
-  The current version of the micro-frontend build scripts supports the version of Node found in ``.nvmrc``.
-  Using other major versions of node *may* work, but this is unsupported.  For
-  convenience, this repository includes an .nvmrc file to help in setting the
-  correct node version via `nvm <https://github.com/nvm-sh/nvm>`_.
+    searn_amdin_mfe_url_dev = """
+    SEARN_ADMINISTRATOR_MICROFRONTEND_URL = "http://{{ MFE_HOST }}:2025/searn-administrator"
+    """
 
-3. Install npm dependencies:
+    env_items = [
+        (
+            "openedx-common-settings",
+            searn_amdin_mfe_url,
+        ),
+        (
+            "openedx-lms-development-settings",
+            searn_amdin_mfe_url_dev,
+        ),
+    ]
 
-  ``cd frontend-app-[PLACEHOLDER] && npm install``
+    for item in env_items:
+        hooks.Filters.ENV_PATCHES.add_item(item)
 
-4. Update the application port to use for local development:
-
-   Default port is 8080. If this does not work for you, update the line
-   `PORT=8080` to your port in all .env.* files
-
-5. Start the dev server:
-
-  ``npm start``
-
-The dev server is running at `http://localhost:8080 <http://localhost:8080>`_
-or whatever port you setup.
-
-Making Your New Project's README File
-=====================================
-
-Move ``README-template-frontend-app.rst`` to your project's ``README.rst``
-file. Please fill out all the sections - this helps out all developers
-understand your MFE, how to install it, and how to use it.
-
-Developing
-**********
-
-This section concerns development of ``frontend-template-application`` itself,
-not the templated copy.
-
-It should be noted that one of the goals of this repository is for it to
-function correctly as an MFE (as in ``npm install && npm start``) even if no
-modifications are made.  This ensures that developers get a *practical* working
-example, not just a theoretical one.
-
-This also means, of course, that any committed code should be tested and
-subject to both CI and branch protection rules.
-
-Project Structure
-=================
-
-The source for this project is organized into nested submodules according to
-the `Feature-based Application Organization ADR`_.
-
-.. _Feature-based Application Organization ADR: https://github.com/openedx/frontend-template-application/blob/master/docs/decisions/0002-feature-based-application-organization.rst
-
-Build Process Notes
-===================
-
-**Production Build**
-
-The production build is created with ``npm run build``.
-
-Internationalization
-====================
-
-Please see refer to the `frontend-platform i18n howto`_ for documentation on
-internationalization.
-
-.. _frontend-platform i18n howto: https://github.com/openedx/frontend-platform/blob/master/docs/how_tos/i18n.rst
 
 Getting Help
-************
+*************
 
-If you're having trouble, we have discussion forums at
-https://discuss.openedx.org where you can connect with others in the community.
+For issues specific to SEARN customizations, open an issue against this
+repository: https://github.com/TitanEd/frontend-app-searn-administrator/issues
 
-Our real-time conversations are on Slack. You can request a `Slack
-invitation`_, then join our `community Slack workspace`_.  Because this is a
-frontend repository, the best place to discuss it would be in the `#wg-frontend
-channel`_.
-
-For anything non-trivial, the best path is to open an issue in this repository
-with as many details about the issue you are facing as you can provide.
-
-https://github.com/openedx/frontend-template-application/issues
-
-For more information about these options, see the `Getting Help`_ page.
-
-.. _Slack invitation: https://openedx.org/slack
-.. _community Slack workspace: https://openedx.slack.com/
-.. _#wg-frontend channel: https://openedx.slack.com/archives/C04BM6YC7A6
-.. _Getting Help: https://openedx.org/getting-help
+For general Open edX / frontend-platform questions, the community discussion
+forums at https://discuss.openedx.org and the ``#wg-frontend`` Slack channel
+are good starting points.
 
 License
 *******
@@ -146,51 +131,8 @@ noted.
 
 Please see `LICENSE <LICENSE>`_ for details.
 
-Contributing
-************
-
-Contributions are very welcome.  Please read `How To Contribute`_ for details.
-
-.. _How To Contribute: https://openedx.org/r/how-to-contribute
-
-This project is currently accepting all types of contributions, bug fixes,
-security fixes, maintenance work, or new features.  However, please make sure
-to have a discussion about your new feature idea with the maintainers prior to
-beginning development to maximize the chances of your change being accepted.
-You can start a conversation by creating a new issue on this repo summarizing
-your idea.
-
-The Open edX Code of Conduct
-****************************
-
-All community members are expected to follow the `Open edX Code of Conduct`_.
-
-.. _Open edX Code of Conduct: https://openedx.org/code-of-conduct/
-
-People
-******
-
-The assigned maintainers for this component and other project details may be
-found in `Backstage`_. Backstage pulls this data from the ``catalog-info.yaml``
-file in this repo.
-
-.. _Backstage: https://open-edx-backstage.herokuapp.com/catalog/default/component/frontend-template-application
-
-Reporting Security Issues
-*************************
-
-Please do not report security issues in public, and email security@openedx.org instead.
-
-.. |license-badge| image:: https://img.shields.io/github/license/openedx/frontend-template-application.svg
-    :target: https://github.com/openedx/frontend-template-application/blob/main/LICENSE
+.. |license-badge| image:: https://img.shields.io/github/license/TitanEd/frontend-app-searn-administrator.svg
+    :target: https://github.com/TitanEd/frontend-app-searn-administrator/blob/master/LICENSE
     :alt: License
 
 .. |status-badge| image:: https://img.shields.io/badge/Status-Maintained-brightgreen
-
-.. |ci-badge| image:: https://github.com/openedx/frontend-template-application/actions/workflows/ci.yml/badge.svg
-    :target: https://github.com/openedx/frontend-template-application/actions/workflows/ci.yml
-    :alt: Continuous Integration
-
-.. |codecov-badge| image:: https://codecov.io/github/openedx/frontend-template-application/coverage.svg?branch=main
-    :target: https://codecov.io/github/openedx/frontend-template-application?branch=main
-    :alt: Codecov
