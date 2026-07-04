@@ -95,7 +95,7 @@ button:disabled,
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 16px;
+  padding: 4px 16px;
   border-bottom: 1px solid #E0E6EB;
 }
 
@@ -112,6 +112,14 @@ button:disabled,
   font-weight: 700;
   color: #2A3B8F;
   white-space: nowrap;
+}
+
+.admin-sidebar__brand-img {
+  display: block;
+  height: 65px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
 }
 
 .admin-sidebar__section-label {

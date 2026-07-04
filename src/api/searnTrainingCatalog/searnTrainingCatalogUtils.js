@@ -39,6 +39,33 @@ export const mapSearnTrainingCatalogListResults = (results) => {
 };
 
 /**
+ * Coerce a field that may be a plain string/number or an option object
+ * (`{ id, value, label }`) into a renderable display string.
+ * @param {*} value
+ */
+const toDisplayText = (value) => {
+  if (value === null || value === undefined) {
+    return '';
+  }
+
+  if (typeof value === 'object') {
+    return value.label ?? value.value ?? value.name ?? '';
+  }
+
+  return value;
+};
+
+/**
+ * Map an array whose items may be strings or option objects to display strings.
+ * @param {*} values
+ */
+const toDisplayTextList = (values) => (
+  Array.isArray(values)
+    ? values.map(toDisplayText).filter(hasDisplayValue)
+    : []
+);
+
+/**
  * @param {object|null|undefined} data
  */
 export const unwrapSearnTrainingCatalogDetail = (data) => {
@@ -63,26 +90,22 @@ export const mapSearnTrainingCatalogDetail = (payload) => {
 
   return {
     id: payload.id != null ? String(payload.id) : '',
-    title: payload.title ?? '',
-    description: payload.description ?? '',
-    mode: payload.mode ?? '',
-    domain: payload.domain ?? '',
-    subDomain: payload.sub_domain ?? '',
-    provider: payload.provider ?? '',
+    title: toDisplayText(payload.title),
+    description: toDisplayText(payload.description),
+    mode: toDisplayText(payload.mode),
+    domain: toDisplayText(payload.domain),
+    subDomain: toDisplayText(payload.sub_domain),
+    provider: toDisplayText(payload.provider),
     providerSlug: payload.provider_slug ?? '',
-    language: payload.language ?? '',
-    duration: payload.duration ?? '',
-    cost: payload.cost ?? '',
-    approach: payload.approach ?? '',
-    evaluation: payload.evaluation ?? '',
-    outcome: payload.outcome ?? '',
-    nraGoals: Array.isArray(payload.nra_goals) ? payload.nra_goals.filter(hasDisplayValue) : [],
-    mappedCompetencies: Array.isArray(payload.mapped_competencies)
-      ? payload.mapped_competencies.filter(hasDisplayValue)
-      : [],
-    mappedActivities: Array.isArray(payload.mapped_activities)
-      ? payload.mapped_activities.filter(hasDisplayValue)
-      : [],
+    language: toDisplayText(payload.language),
+    duration: toDisplayText(payload.duration),
+    cost: toDisplayText(payload.cost),
+    approach: toDisplayText(payload.approach),
+    evaluation: toDisplayText(payload.evaluation),
+    outcome: toDisplayText(payload.outcome),
+    nraGoals: toDisplayTextList(payload.nra_goals),
+    mappedCompetencies: toDisplayTextList(payload.mapped_competencies),
+    mappedActivities: toDisplayTextList(payload.mapped_activities),
   };
 };
 

@@ -16,6 +16,11 @@ const layoutMessages = defineMessages({
     defaultMessage: 'SEARN Portal',
     description: 'Brand label displayed in the sidebar',
   },
+  sidebarBrandAlt: {
+    id: 'app.layout.sidebar.brand.alt',
+    defaultMessage: 'SEARN Portal',
+    description: 'Alternative text for the sidebar brand logo image',
+  },
   navDashboard: {
     id: 'app.layout.sidebar.nav.dashboard',
     defaultMessage: 'Dashboard',

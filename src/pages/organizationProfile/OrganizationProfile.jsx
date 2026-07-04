@@ -34,6 +34,12 @@ const OrganizationProfile = () => {
   const canAccessOrganizationProfile = Boolean(navbarAccess?.accessOrganizationProfile ?? false);
   const canChangeOrganizationProfile = Boolean(access.canChangeOrganizationProfile);
   const showAdministratorsSection = Boolean(access.showAdministratorsSection);
+  const canAddAdministrator = Boolean(access.canAddAdministrator);
+  const canEditAdministrator = Boolean(access.canEditAdministrator);
+  const canDeleteAdministrator = Boolean(access.canDeleteAdministrator);
+  const canManageAdministrators = canAddAdministrator
+    || canEditAdministrator
+    || canDeleteAdministrator;
 
   const fileRef = useRef(null);
 
@@ -63,7 +69,8 @@ const OrganizationProfile = () => {
   const [editingAdminEmail, setEditingAdminEmail] = useState('');
   const [pendingDeleteAdmin, setPendingDeleteAdmin] = useState(null);
 
-  const isSaveDisabled = !canChangeOrganizationProfile
+  const canSaveOrganizationProfile = canChangeOrganizationProfile || canManageAdministrators;
+  const isSaveDisabled = !canSaveOrganizationProfile
     || updateMutation.isPending
     || isLoading
     || isError;
@@ -140,7 +147,7 @@ const OrganizationProfile = () => {
   };
 
   const startEditAdmin = (admin) => {
-    if (!canChangeOrganizationProfile) {
+    if (!canEditAdministrator) {
       return;
     }
 
@@ -155,7 +162,7 @@ const OrganizationProfile = () => {
   };
 
   const confirmEditAdmin = () => {
-    if (!editingAdminId) {
+    if (!canEditAdministrator || !editingAdminId) {
       return;
     }
 
@@ -180,7 +187,7 @@ const OrganizationProfile = () => {
   };
 
   const handleAddAdmin = () => {
-    if (!canChangeOrganizationProfile) {
+    if (!canAddAdministrator) {
       return;
     }
 
@@ -208,7 +215,7 @@ const OrganizationProfile = () => {
   };
 
   const handleDeleteAdmin = () => {
-    if (!pendingDeleteAdmin) {
+    if (!canDeleteAdministrator || !pendingDeleteAdmin) {
       return;
     }
 
@@ -280,7 +287,9 @@ const OrganizationProfile = () => {
         overview,
         logoFile: pendingLogoFile,
         logoUrl: savedLogoUrl,
-        administrators,
+        administrators: canManageAdministrators
+          ? administrators
+          : (profile?.administrators ?? []),
         includeAdministrators: showAdministratorsSection,
       });
 
@@ -484,7 +493,7 @@ const OrganizationProfile = () => {
                               className="organization-profile-page__input"
                               value={editingAdminName}
                               placeholder={formatMessage(messages.adminEditNamePlaceholder)}
-                              disabled={!canChangeOrganizationProfile}
+                              disabled={!canEditAdministrator}
                               onChange={(e) => setEditingAdminName(e.target.value)}
                             />
                             <input
@@ -492,7 +501,7 @@ const OrganizationProfile = () => {
                               className="organization-profile-page__input"
                               value={editingAdminEmail}
                               placeholder={formatMessage(messages.adminEditEmailPlaceholder)}
-                              disabled={!canChangeOrganizationProfile}
+                              disabled={!canEditAdministrator}
                               onChange={(e) => setEditingAdminEmail(e.target.value)}
                             />
                           </div>
@@ -502,7 +511,7 @@ const OrganizationProfile = () => {
                               className="organization-profile-page__icon-button"
                               aria-label={formatMessage(messages.saveEditAdmin)}
                               title={formatMessage(messages.saveEditAdmin)}
-                              disabled={!canChangeOrganizationProfile}
+                              disabled={!canEditAdministrator}
                               onClick={confirmEditAdmin}
                             >
                               <FontAwesomeIcon icon={faCheck} />
@@ -512,7 +521,6 @@ const OrganizationProfile = () => {
                               className="organization-profile-page__icon-button"
                               aria-label={formatMessage(messages.cancelEditAdmin)}
                               title={formatMessage(messages.cancelEditAdmin)}
-                              disabled={!canChangeOrganizationProfile}
                               onClick={clearEditingAdmin}
                             >
                               <FontAwesomeIcon icon={faTimes} />
@@ -533,62 +541,67 @@ const OrganizationProfile = () => {
                           )}
                         </div>
                         <div className="organization-profile-page__admin-actions">
-                          <button
-                            type="button"
-                            className="organization-profile-page__icon-button"
-                            aria-label={formatMessage(messages.editAdmin)}
-                            title={formatMessage(messages.editAdmin)}
-                            disabled={!canChangeOrganizationProfile || Boolean(editingAdminId)}
-                            onClick={() => startEditAdmin(admin)}
-                          >
-                            <FontAwesomeIcon icon={faPen} />
-                          </button>
-                          <button
-                            type="button"
-                            className="organization-profile-page__icon-button organization-profile-page__icon-button--danger"
-                            aria-label={formatMessage(messages.deleteAdmin)}
-                            title={formatMessage(messages.deleteAdmin)}
-                            disabled={
-                              !canChangeOrganizationProfile
-                              || Boolean(editingAdminId)
-                              || updateMutation.isPending
-                            }
-                            onClick={() => setPendingDeleteAdmin(admin)}
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </button>
+                          {canEditAdministrator && (
+                            <button
+                              type="button"
+                              className="organization-profile-page__icon-button"
+                              aria-label={formatMessage(messages.editAdmin)}
+                              title={formatMessage(messages.editAdmin)}
+                              disabled={Boolean(editingAdminId)}
+                              onClick={() => startEditAdmin(admin)}
+                            >
+                              <FontAwesomeIcon icon={faPen} />
+                            </button>
+                          )}
+                          {canDeleteAdministrator && (
+                            <button
+                              type="button"
+                              className="organization-profile-page__icon-button organization-profile-page__icon-button--danger"
+                              aria-label={formatMessage(messages.deleteAdmin)}
+                              title={formatMessage(messages.deleteAdmin)}
+                              disabled={
+                                Boolean(editingAdminId)
+                                || updateMutation.isPending
+                              }
+                              onClick={() => setPendingDeleteAdmin(admin)}
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          )}
                         </div>
                       </div>
                     );
                   })}
                 </div>
 
-                <div className="organization-profile-page__admin-form">
-                  <input
-                    className="organization-profile-page__input"
-                    value={newAdminName}
-                    placeholder={formatMessage(messages.adminNamePlaceholder)}
-                    disabled={!canChangeOrganizationProfile || Boolean(editingAdminId)}
-                    onChange={(e) => setNewAdminName(e.target.value)}
-                  />
-                  <input
-                    type="email"
-                    className="organization-profile-page__input"
-                    value={newAdminEmail}
-                    placeholder={formatMessage(messages.adminEmailPlaceholder)}
-                    disabled={!canChangeOrganizationProfile || Boolean(editingAdminId)}
-                    onChange={(e) => setNewAdminEmail(e.target.value)}
-                  />
-                  <button
-                    type="button"
-                    className="organization-profile-page__outline-button"
-                    disabled={!canChangeOrganizationProfile || Boolean(editingAdminId)}
-                    onClick={handleAddAdmin}
-                  >
-                    <FontAwesomeIcon icon={faPlus} aria-hidden />
-                    {formatMessage(messages.addAdmin)}
-                  </button>
-                </div>
+                {canAddAdministrator && (
+                  <div className="organization-profile-page__admin-form">
+                    <input
+                      className="organization-profile-page__input"
+                      value={newAdminName}
+                      placeholder={formatMessage(messages.adminNamePlaceholder)}
+                      disabled={Boolean(editingAdminId)}
+                      onChange={(e) => setNewAdminName(e.target.value)}
+                    />
+                    <input
+                      type="email"
+                      className="organization-profile-page__input"
+                      value={newAdminEmail}
+                      placeholder={formatMessage(messages.adminEmailPlaceholder)}
+                      disabled={Boolean(editingAdminId)}
+                      onChange={(e) => setNewAdminEmail(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="organization-profile-page__outline-button"
+                      disabled={Boolean(editingAdminId)}
+                      onClick={handleAddAdmin}
+                    >
+                      <FontAwesomeIcon icon={faPlus} aria-hidden />
+                      {formatMessage(messages.addAdmin)}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

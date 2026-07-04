@@ -120,7 +120,10 @@
         },
         "organizationProfile": {
           "canChangeOrganizationProfile": false,
-          "showAdministratorsSection": true
+          "showAdministratorsSection": true,
+          "canAddAdministrator": false,
+          "canEditAdministrator": false,
+          "canDeleteAdministrator": false
         },
         "myTeam": {
           "canAddTeamMember": true,

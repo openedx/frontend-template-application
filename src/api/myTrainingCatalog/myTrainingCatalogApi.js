@@ -94,6 +94,20 @@ export const fetchMyTrainingCatalogDetail = ({ formatMessage, trainingId }) => e
 });
 
 /**
+ * NRA-specific training detail: GET /api/v1/trainings-catalog/{trainingId}/
+ * @param {{ formatMessage: Function, trainingId: string|number }} params
+ */
+export const fetchNraTrainingCatalogDetail = ({ formatMessage, trainingId }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${trainingsCatalogDetail(trainingId)}`;
+    return httpClient.get(url);
+  },
+  formatMessage,
+  fallbackMessage: myTrainingCatalogMessages.detailLoadError,
+});
+
+/**
  * @param {{ formatMessage: Function, trainingId: string|number }} params
  */
 export const fetchMyTrainingCatalogFeedback = ({ formatMessage, trainingId }) => executeApiRequest({

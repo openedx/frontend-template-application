@@ -27,6 +27,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useUserRole } from '../contexts/UserRoleContext';
 import { ADMIN_PATHS } from '../utils/adminPaths';
+import { HEADER_LOGO_FALLBACK, resolveHeaderLogoSrc } from '../utils/brandAssets';
 import { getNavigationItemsByRole } from './navigation';
 import layoutMessages from './messages';
 
@@ -78,9 +79,16 @@ const AppSidebar = ({
       <div className="admin-sidebar__top">
         <div className="admin-sidebar__brand">
           {!collapsed && (
-            <span className="admin-sidebar__brand-text">
-              {formatMessage(layoutMessages.sidebarBrand)}
-            </span>
+            <img
+              className="admin-sidebar__brand-img"
+              src={resolveHeaderLogoSrc()}
+              alt={formatMessage(layoutMessages.sidebarBrandAlt)}
+              onError={({ currentTarget }) => {
+                const image = currentTarget;
+                image.onerror = null;
+                image.src = HEADER_LOGO_FALLBACK;
+              }}
+            />
           )}
         </div>
       </div>
