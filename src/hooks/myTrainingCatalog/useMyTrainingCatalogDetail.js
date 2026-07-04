@@ -1,12 +1,13 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMyTrainingCatalogDetail } from '../../api/myTrainingCatalog/myTrainingCatalogApi';
-import { fetchSearnTrainingCatalogDetail } from '../../api/searnTrainingCatalog/searnTrainingCatalogApi';
+import {
+  fetchMyTrainingCatalogDetail,
+  fetchNraTrainingCatalogDetail,
+} from '../../api/myTrainingCatalog/myTrainingCatalogApi';
 import {
   mapMyTrainingCatalogDetail,
   unwrapMyTrainingCatalogDetail,
 } from '../../api/myTrainingCatalog/myTrainingCatalogUtils';
-import catalogMessages from '../../pages/searnTrainingCatalog/messages';
 import myTrainingCatalogMessages from '../../pages/myTrainingCatalog/messages';
 import { TRAINING_CATALOG_VARIANT_IDS } from '../../utils/trainingCatalogVariantConfig';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
@@ -28,29 +29,9 @@ const useMyTrainingCatalogDetail = ({ trainingId, enabled = true } = {}) => {
     queryKey: myTrainingCatalogDetailQueryKey(variant.id, trainingId),
     enabled: enabled && hasDisplayValue(trainingId),
     queryFn: async () => {
-      if (isNraVariant) {
-        const result = await fetchSearnTrainingCatalogDetail({
-          formatMessage,
-          trainingId,
-        });
-
-        if (!result.ok) {
-          throw new Error(result.message);
-        }
-
-        const detail = mapMyTrainingCatalogDetail(unwrapMyTrainingCatalogDetail(result.data));
-
-        if (!detail || !hasDisplayValue(detail.id)) {
-          throw new Error(result.message || formatMessage(catalogMessages.detailLoadError));
-        }
-
-        return detail;
-      }
-
-      const result = await fetchMyTrainingCatalogDetail({
-        formatMessage,
-        trainingId,
-      });
+      const result = isNraVariant
+        ? await fetchNraTrainingCatalogDetail({ formatMessage, trainingId })
+        : await fetchMyTrainingCatalogDetail({ formatMessage, trainingId });
 
       if (!result.ok) {
         throw new Error(result.message);
@@ -59,7 +40,7 @@ const useMyTrainingCatalogDetail = ({ trainingId, enabled = true } = {}) => {
       const detail = mapMyTrainingCatalogDetail(unwrapMyTrainingCatalogDetail(result.data));
 
       if (!detail || !hasDisplayValue(detail.id)) {
-        throw new Error(formatMessage(myTrainingCatalogMessages.detailNotFound));
+        throw new Error(result.message || formatMessage(myTrainingCatalogMessages.detailNotFound));
       }
 
       return detail;
@@ -70,11 +51,7 @@ const useMyTrainingCatalogDetail = ({ trainingId, enabled = true } = {}) => {
     training: query.data ?? null,
     isLoading: query.isLoading,
     isError: query.isError,
-    errorMessage: query.error?.message ?? (
-      isNraVariant
-        ? formatMessage(catalogMessages.detailLoadError)
-        : formatMessage(myTrainingCatalogMessages.detailLoadError)
-    ),
+    errorMessage: query.error?.message ?? formatMessage(myTrainingCatalogMessages.detailLoadError),
     refetch: query.refetch,
   };
 };
