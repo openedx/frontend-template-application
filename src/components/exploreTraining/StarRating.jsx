@@ -12,8 +12,8 @@ const STAR_POSITIONS = [0, 1, 2, 3, 4];
  * @param {{ value?: number, reviewCount?: number|null, showCount?: boolean }} props
  */
 const StarRating = ({ value = 0, reviewCount = null, showCount = false }) => (
-  <span className="explore-star-rating" aria-hidden>
-    <span className="explore-star-rating__stars">
+  <span className="explore-star-rating">
+    <span className="explore-star-rating__stars" aria-hidden="true">
       {STAR_POSITIONS.map((position) => {
         const fill = getStarFill(value, position);
 

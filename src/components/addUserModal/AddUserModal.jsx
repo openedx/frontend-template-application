@@ -42,9 +42,13 @@ const AddUserModal = ({
   const [roleSub, setRoleSub] = useState('');
   const [managerId, setManagerId] = useState('');
   const [competencyRole, setCompetencyRole] = useState('');
+  const [managerInitializedFor, setManagerInitializedFor] = useState(null);
+
+  const managerInitKey = mode === 'edit' ? userDetail?.id ?? null : 'add';
 
   useEffect(() => {
     if (!isOpen) {
+      setManagerInitializedFor(null);
       return;
     }
 
@@ -70,19 +74,21 @@ const AddUserModal = ({
   }, [isOpen, mode, userDetail]);
 
   useEffect(() => {
-    if (!isOpen || managerOptions.length === 0) {
+    if (!isOpen || managerOptions.length === 0 || managerInitializedFor === managerInitKey) {
       return;
     }
 
     if (mode === 'edit' && userDetail) {
       setManagerId(resolveManagerDropdownValue(userDetail.manager, managerOptions));
+      setManagerInitializedFor(managerInitKey);
       return;
     }
 
-    if (mode === 'add' && !hasDisplayValue(managerId)) {
+    if (mode === 'add') {
       setManagerId(resolveManagerDropdownValue('', managerOptions));
+      setManagerInitializedFor(managerInitKey);
     }
-  }, [isOpen, mode, userDetail, managerOptions, managerId]);
+  }, [isOpen, mode, userDetail, managerOptions, managerInitializedFor, managerInitKey]);
 
   const canShowRoleField = Boolean(componentAccess?.users?.userFormFields?.showRoleField ?? false);
   const canShowManagerField = Boolean(componentAccess?.users?.userFormFields?.showManagerField ?? false);

@@ -91,6 +91,8 @@ const ExploreTrainingRole = () => {
   const {
     detail: previewDetail,
     isLoading: isPreviewLoading,
+    isError: isPreviewError,
+    errorMessage: previewError,
   } = useExploreTrainingPreview({ trainingId: selectedTraining?.id ?? null });
 
   const currentRole = useMemo(
@@ -447,7 +449,13 @@ const ExploreTrainingRole = () => {
             {selectedTraining && isPreviewLoading && (
               <SkeletonScreen variant={SKELETON_VARIANTS.DETAIL} />
             )}
-            {selectedTraining && !isPreviewLoading && (
+            {selectedTraining && !isPreviewLoading && isPreviewError && (
+              <EmptyState
+                className="explore-column__empty"
+                message={previewError || formatMessage(messages.trainingDetailLoadError)}
+              />
+            )}
+            {selectedTraining && !isPreviewLoading && !isPreviewError && (
               <div className="explore-preview">
                 <div className="explore-preview__header">
                   {hasDisplayValue(selectedTraining.title) && (
