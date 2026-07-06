@@ -22,7 +22,10 @@ import TabFilter from '../../components/tabFilter/TabFilter';
 import StarRating from '../../components/exploreTraining/StarRating';
 import MultiSelectPopover from '../../components/exploreTraining/MultiSelectPopover';
 import RequestTrainingModal from '../../components/searnTrainingCatalog/RequestTrainingModal';
+import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
 import { useToast } from '../../components/toast/ToastProvider';
+import useTrainingCatalogRequestAccessMutation from '../../hooks/trainingCatalogRequestAccess/useTrainingCatalogRequestAccessMutation';
+import catalogMessages from '../searnTrainingCatalog/messages';
 import useExploreTrainingActivities from '../../hooks/exploreTraining/useExploreTrainingActivities';
 import useExploreTrainingFilterOptions from '../../hooks/exploreTraining/useExploreTrainingFilterOptions';
 import useExploreTrainingList from '../../hooks/exploreTraining/useExploreTrainingList';
@@ -51,6 +54,9 @@ const ExploreTrainingRole = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [selectedTraining, setSelectedTraining] = useState(null);
   const [requestModalOpen, setRequestModalOpen] = useState(false);
+  const [pendingRequestAccess, setPendingRequestAccess] = useState(null);
+
+  const requestAccessMutation = useTrainingCatalogRequestAccessMutation();
 
   const { roles } = useExploreTrainingRoles();
   const {
@@ -165,6 +171,31 @@ const ExploreTrainingRole = () => {
       showToast({
         title: formatMessage(messages.requestTrainingErrorTitle),
         description: error?.message || formatMessage(messages.requestTrainingError),
+      });
+    }
+  };
+
+  const handleConfirmRequestAccess = async () => {
+    if (!pendingRequestAccess?.id) {
+      return;
+    }
+
+    try {
+      const result = await requestAccessMutation.mutateAsync({
+        trainingId: pendingRequestAccess.id,
+      });
+
+      showToast({
+        title: formatMessage(catalogMessages.requestAccessSubmittedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(catalogMessages.requestAccessSubmittedDescription),
+      });
+      setPendingRequestAccess(null);
+    } catch (error) {
+      showToast({
+        title: formatMessage(catalogMessages.requestAccessCreateErrorTitle),
+        description: error?.message || formatMessage(catalogMessages.requestAccessCreateError),
       });
     }
   };
@@ -502,6 +533,17 @@ const ExploreTrainingRole = () => {
               </div>
             )}
           </div>
+          {selectedTraining?.id && (
+            <div className="explore-column__foot">
+              <button
+                type="button"
+                className="explore-explorer__request-button"
+                onClick={() => setPendingRequestAccess(selectedTraining)}
+              >
+                {formatMessage(catalogMessages.requestAccess)}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -510,6 +552,18 @@ const ExploreTrainingRole = () => {
         onClose={() => setRequestModalOpen(false)}
         onSubmit={handleRequestTrainingSubmit}
         isSubmitting={createMutation.isPending}
+      />
+
+      <ConfirmActionDialog
+        isOpen={Boolean(pendingRequestAccess)}
+        title={formatMessage(catalogMessages.requestAccessConfirmTitle)}
+        description={formatMessage(catalogMessages.requestAccessConfirmDescription, {
+          name: pendingRequestAccess?.title || '',
+        })}
+        cancelLabel={formatMessage(catalogMessages.requestAccessConfirmCancel)}
+        confirmLabel={formatMessage(catalogMessages.requestAccessConfirmSubmit)}
+        onCancel={() => setPendingRequestAccess(null)}
+        onConfirm={handleConfirmRequestAccess}
       />
     </section>
   );

@@ -18,6 +18,8 @@ const TrainingCatalogRequestAccessCell = ({
   row,
   statusOverrides = {},
   onRequestClick,
+  buttonClassName = 'searn-training-catalog-page__outline-button',
+  badgeClassName = 'searn-training-catalog-page__requested-badge',
 }) => {
   const { formatMessage } = useIntl();
   const requestStatus = resolveTrainingAccessRequestStatus(row, statusOverrides);
@@ -26,7 +28,7 @@ const TrainingCatalogRequestAccessCell = ({
     return (
       <button
         type="button"
-        className="searn-training-catalog-page__outline-button"
+        className={buttonClassName}
         onClick={(event) => {
           event.stopPropagation();
           onRequestClick(row);
@@ -43,7 +45,7 @@ const TrainingCatalogRequestAccessCell = ({
   }
 
   return (
-    <span className={`searn-training-catalog-page__requested-badge searn-training-catalog-page__requested-badge--${requestStatus}`}>
+    <span className={`${badgeClassName} ${badgeClassName}--${requestStatus}`}>
       {formatMessage(statusMessage)}
     </span>
   );
