@@ -9,7 +9,13 @@ import {
   formatRoleSubFieldLabel,
   roleOptionHasSubOptions,
 } from '../../api/users/usersUtils';
+import {
+  getManagerLabelByValue,
+  resolveManagerDropdownValue,
+  formatCompetencyRoleForInput,
+} from '../../api/profile/profileUtils';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import messages from '../../pages/users/messages';
 import './AddUserModal.scss';
 
@@ -23,6 +29,8 @@ const AddUserModal = ({
   roleOptionRows = [],
   countryOptions = [],
   isCountriesLoading = false,
+  managerOptions = [],
+  isManagersLoading = false,
   onSave,
 }) => {
   const { formatMessage } = useIntl();
@@ -34,9 +42,13 @@ const AddUserModal = ({
   const [roleSub, setRoleSub] = useState('');
   const [managerId, setManagerId] = useState('');
   const [competencyRole, setCompetencyRole] = useState('');
+  const [managerInitializedFor, setManagerInitializedFor] = useState(null);
+
+  const managerInitKey = mode === 'edit' ? userDetail?.id ?? null : 'add';
 
   useEffect(() => {
     if (!isOpen) {
+      setManagerInitializedFor(null);
       return;
     }
 
@@ -46,8 +58,7 @@ const AddUserModal = ({
       setCountry(userDetail.country || '');
       setRole(userDetail.role || '');
       setRoleSub(userDetail.roleSub || userDetail.provider || '');
-      setManagerId('');
-      setCompetencyRole('');
+      setCompetencyRole(formatCompetencyRoleForInput(userDetail.competencyRole));
       return;
     }
 
@@ -61,6 +72,23 @@ const AddUserModal = ({
       setCompetencyRole('');
     }
   }, [isOpen, mode, userDetail]);
+
+  useEffect(() => {
+    if (!isOpen || managerOptions.length === 0 || managerInitializedFor === managerInitKey) {
+      return;
+    }
+
+    if (mode === 'edit' && userDetail) {
+      setManagerId(resolveManagerDropdownValue(userDetail.manager, managerOptions));
+      setManagerInitializedFor(managerInitKey);
+      return;
+    }
+
+    if (mode === 'add') {
+      setManagerId(resolveManagerDropdownValue('', managerOptions));
+      setManagerInitializedFor(managerInitKey);
+    }
+  }, [isOpen, mode, userDetail, managerOptions, managerInitializedFor, managerInitKey]);
 
   const canShowRoleField = Boolean(componentAccess?.users?.userFormFields?.showRoleField ?? false);
   const canShowManagerField = Boolean(componentAccess?.users?.userFormFields?.showManagerField ?? false);
@@ -111,8 +139,20 @@ const AddUserModal = ({
       country,
       role,
       provider: needsSubRole ? roleSub : '',
+      manager: managerId,
+      managerOptions,
+      competencyRole,
+      fieldPermissions: {
+        showCountryField: canShowCountryField,
+        showRoleField: canShowRoleField,
+        showManagerField: canShowManagerField,
+        showCompetencyRoleField: canShowCompetencyRoleField,
+      },
     });
   };
+
+  const managerLabel = getManagerLabelByValue(managerId, managerOptions);
+  const managerTrigger = managerLabel || formatMessage(messages.addUserModalManagerPlaceholder);
 
   return (
     <PopupDialog
@@ -203,10 +243,10 @@ const AddUserModal = ({
             <label className="add-user-modal__label">{formatMessage(messages.addUserModalManager)}</label>
             <SearchableDropdown
               value={managerId}
-              options={[]}
+              options={managerOptions}
               onChange={setManagerId}
-              disabled={isLoadingDetail || isSaving}
-              triggerLabel={formatMessage(messages.addUserModalManagerPlaceholder)}
+              disabled={isLoadingDetail || isSaving || isManagersLoading}
+              triggerLabel={managerTrigger}
               searchPlaceholder={formatMessage(messages.dropdownSearchPlaceholder)}
               noOptionsText={formatMessage(messages.dropdownNoOptions)}
             />

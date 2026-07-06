@@ -1,4 +1,5 @@
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
+import { mapTrainingAccessRequestStatus } from '../trainingCatalogRequestAccess/trainingCatalogRequestAccessUtils';
 import { FILTER_ALL } from './trainingsCatalogOptionsUtils';
 
 /**
@@ -21,7 +22,7 @@ export const mapSearnTrainingCatalogListRow = (row) => {
     rating: Number.isNaN(rating) ? 0 : rating,
     reviewCount: Number(row.review_count) || 0,
     cost: row.cost ?? '',
-    isRequested: Boolean(row.is_requested),
+    requestStatus: mapTrainingAccessRequestStatus(row.is_requested),
   };
 };
 

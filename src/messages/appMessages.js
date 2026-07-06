@@ -71,6 +71,11 @@ const appMessages = defineMessages({
     defaultMessage: 'Activities',
     description: 'Top header title for activities management route',
   },
+  exploreTrainingTitle: {
+    id: 'app.layout.route.exploreTraining.title',
+    defaultMessage: 'Explore Training',
+    description: 'Top header title for explore training route',
+  },
   trainingCatalogTitle: {
     id: 'app.layout.route.trainingCatalog.title',
     defaultMessage: 'SEARN Training Catalog',

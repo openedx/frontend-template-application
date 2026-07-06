@@ -34,6 +34,7 @@ import {
 import useRoleOptions from '../../hooks/users/useRoleOptions';
 import useUserEditDetail, { userEditDetailQueryKey } from '../../hooks/users/useUserEditDetail';
 import useUserFormCountries from '../../hooks/users/useUserFormCountries';
+import useProfileManagerOptions from '../../hooks/profile/useProfileManagerOptions';
 import useUserMutations from '../../hooks/users/useUserMutations';
 import useUsersList from '../../hooks/users/useUsersList';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
@@ -69,6 +70,7 @@ const Users = () => {
   const canViewCompetencyRoleColumn = Boolean(componentAccess?.users?.canViewCompetencyRoleColumn ?? false);
   const showCountryField = Boolean(componentAccess?.users?.userFormFields?.showCountryField ?? false);
   const showRoleField = Boolean(componentAccess?.users?.userFormFields?.showRoleField ?? false);
+  const showManagerField = Boolean(componentAccess?.users?.userFormFields?.showManagerField ?? false);
 
   const canShowActions = canViewUserAbout || canEditUser || canDeleteUser;
   const canManageUsers = canAddUser || canEditUser;
@@ -79,6 +81,9 @@ const Users = () => {
     && (canAddUser || (canEditUser && isEditing));
   const needsUserFormRoleOptions = addUserOpen
     && showRoleField
+    && (canAddUser || (canEditUser && isEditing));
+  const needsUserFormManagerOptions = addUserOpen
+    && showManagerField
     && (canAddUser || (canEditUser && isEditing));
 
   const {
@@ -126,6 +131,13 @@ const Users = () => {
     isError: isCountriesError,
     errorMessage: countriesErrorMessage,
   } = useUserFormCountries({ enabled: needsUserFormCountries });
+
+  const {
+    dropdownOptions: managerOptions,
+    isLoading: isManagersLoading,
+    isError: isManagersError,
+    errorMessage: managerOptionsErrorMessage,
+  } = useProfileManagerOptions({ enabled: needsUserFormManagerOptions });
 
   const { createMutation, updateMutation, deleteMutation } = useUserMutations();
 
@@ -183,6 +195,17 @@ const Users = () => {
       description: countriesErrorMessage || formatMessage(messages.countriesLoadError),
     });
   }, [addUserOpen, countriesErrorMessage, formatMessage, isCountriesError, showToast]);
+
+  useEffect(() => {
+    if (!addUserOpen || !isManagersError) {
+      return;
+    }
+
+    showToast({
+      title: formatMessage(messages.managerOptionsErrorTitle),
+      description: managerOptionsErrorMessage || formatMessage(messages.managerOptionsLoadError),
+    });
+  }, [addUserOpen, formatMessage, isManagersError, managerOptionsErrorMessage, showToast]);
 
   const openAddUser = () => {
     setModalMode('add');
@@ -501,6 +524,8 @@ const Users = () => {
           roleOptionRows={roleOptions}
           countryOptions={countryOptions}
           isCountriesLoading={isCountriesLoading}
+          managerOptions={managerOptions}
+          isManagersLoading={isManagersLoading}
           onSave={handleSaveUser}
         />
       )}

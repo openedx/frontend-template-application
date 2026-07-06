@@ -179,6 +179,8 @@ export const TRAINING_PROVIDERS_ORGANIZATION_PROFILE = '/api/v1/training-provide
 
 export const ACTIVITIES_LIST = '/api/v1/activities/';
 
+export const EXPLORE_TRAININGS_ROLES = '/api/v1/options/explore-trainings/roles/';
+
 export const SEARN_TRAINING_CATALOG = '/api/v1/searn-training-catalog/';
 
 /** @param {string|number} trainingId */

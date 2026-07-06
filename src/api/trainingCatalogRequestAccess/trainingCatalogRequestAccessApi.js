@@ -17,11 +17,10 @@ export const requestTrainingCatalogAccess = ({
   request: () => {
     const httpClient = getHttpClient();
     const url = `${getApiBaseUrl()}${NRAS_MANAGEMENT_TRAINING_ACCESS_REQUESTS}`;
-    const catalogId = Number.parseInt(String(trainingId), 10);
 
     return httpClient.post(url, {
-      id: catalogId,
-      is_requested: true,
+      id: trainingId,
+      is_requested: 'pending',
     });
   },
   formatMessage,

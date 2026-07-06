@@ -22,6 +22,8 @@ import useMyTrainingCatalogList, {
 import useMyTrainingCatalogMutations from '../../hooks/myTrainingCatalog/useMyTrainingCatalogMutations';
 import useTrainingCatalogRequestAccessMutation from '../../hooks/trainingCatalogRequestAccess/useTrainingCatalogRequestAccessMutation';
 import useTrainingCatalogFilterOptions from '../../hooks/searnTrainingCatalog/useTrainingCatalogFilterOptions';
+import TrainingCatalogRequestAccessCell from '../searnTrainingCatalog/TrainingCatalogRequestAccessCell';
+import { TRAINING_ACCESS_REQUEST_STATUS } from '../../api/trainingCatalogRequestAccess/trainingCatalogRequestAccessUtils';
 import catalogMessages from '../../pages/searnTrainingCatalog/messages';
 import { getStarFill } from '../../pages/searnTrainingCatalog/starUtils';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
@@ -72,7 +74,7 @@ const MyTrainingCatalogListSection = ({
   const [page, setPage] = useState(1);
   const [pendingDelete, setPendingDelete] = useState(null);
   const [pendingRequestAccess, setPendingRequestAccess] = useState(null);
-  const [requestedTrainingIds, setRequestedTrainingIds] = useState([]);
+  const [requestStatusOverrides, setRequestStatusOverrides] = useState({});
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -199,10 +201,6 @@ const MyTrainingCatalogListSection = ({
   const showTable = !isError && visibleItems.length > 0;
   const safePage = Math.min(page, Math.max(1, totalPages));
 
-  const isTrainingRequested = (row) => (
-    Boolean(row.isRequested) || requestedTrainingIds.includes(row.id)
-  );
-
   const handleConfirmRequestAccess = async () => {
     if (!pendingRequestAccess?.id) {
       return;
@@ -213,11 +211,10 @@ const MyTrainingCatalogListSection = ({
         trainingId: pendingRequestAccess.id,
       });
 
-      setRequestedTrainingIds((current) => (
-        current.includes(pendingRequestAccess.id)
-          ? current
-          : [...current, pendingRequestAccess.id]
-      ));
+      setRequestStatusOverrides((current) => ({
+        ...current,
+        [pendingRequestAccess.id]: TRAINING_ACCESS_REQUEST_STATUS.PENDING,
+      }));
 
       await queryClient.invalidateQueries({
         queryKey: myTrainingCatalogListQueryKey({
@@ -516,22 +513,11 @@ const MyTrainingCatalogListSection = ({
                             </div>
                           )}
                           {canRequestAccess && (
-                            isTrainingRequested(row) ? (
-                              <span className="searn-training-catalog-page__requested-badge">
-                                {formatMessage(catalogMessages.requested)}
-                              </span>
-                            ) : (
-                              <button
-                                type="button"
-                                className="searn-training-catalog-page__outline-button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setPendingRequestAccess(row);
-                                }}
-                              >
-                                {formatMessage(catalogMessages.requestAccess)}
-                              </button>
-                            )
+                            <TrainingCatalogRequestAccessCell
+                              row={row}
+                              statusOverrides={requestStatusOverrides}
+                              onRequestClick={setPendingRequestAccess}
+                            />
                           )}
                         </div>
                       </td>

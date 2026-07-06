@@ -22,6 +22,7 @@ const useTrainingCatalogRequestAccessMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['searn-training-catalog', 'list'] });
       queryClient.invalidateQueries({ queryKey: ['training-catalog', 'list'] });
+      queryClient.invalidateQueries({ queryKey: ['explore-training', 'trainings'] });
     },
   });
 };
