@@ -86,6 +86,26 @@ const messages = defineMessages({
     defaultMessage: 'Requested',
     description: 'Badge when user has already requested access to a training',
   },
+  requestStatusPending: {
+    id: 'app.searnTrainingCatalog.badge.requestStatus.pending',
+    defaultMessage: 'Pending',
+    description: 'Label when training access request is pending approval',
+  },
+  requestStatusApproved: {
+    id: 'app.searnTrainingCatalog.badge.requestStatus.approved',
+    defaultMessage: 'Approved',
+    description: 'Label when training access request is approved',
+  },
+  requestStatusRejected: {
+    id: 'app.searnTrainingCatalog.badge.requestStatus.rejected',
+    defaultMessage: 'Rejected',
+    description: 'Label when training access request is rejected',
+  },
+  requestStatusClosed: {
+    id: 'app.searnTrainingCatalog.badge.requestStatus.closed',
+    defaultMessage: 'Closed',
+    description: 'Label when training access request is closed',
+  },
   requestTrainingModalTitle: {
     id: 'app.searnTrainingCatalog.requestTraining.modal.title',
     defaultMessage: 'Request Training',

@@ -1,5 +1,6 @@
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import { API_PAGE_SIZE, REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE } from '../endpoints';
+import { formatManagerForProfileApi, parseCompetencyRoleForApi } from '../profile/profileUtils';
 
 const OPTION_META_KEYS = new Set(['id', 'value', 'label']);
 
@@ -234,6 +235,7 @@ export const mapUserEditDetail = (payload) => {
     role: data.role ?? '',
     provider: data.provider != null ? String(data.provider) : '',
     roleSub: data.role_sub ?? data.roleSub ?? (data.provider != null ? String(data.provider) : ''),
+    manager: data.manager != null ? String(data.manager) : '',
     userProfileImage: data.user_profile_image ?? data.userProfileImage ?? '',
     competencyRole: data.competency_role ?? data.competencyRole ?? '',
   };
@@ -387,9 +389,18 @@ export const mergeUserIdentityIntoAboutDetail = (detail, userRow) => ({
  * @param {{
  *   name: string,
  *   email: string,
- *   country: string,
- *   role: string,
+ *   country?: string,
+ *   role?: string,
  *   provider?: string,
+ *   manager?: string,
+ *   managerOptions?: Array<{ value: string, optionId?: string }>,
+ *   competencyRole?: string,
+ *   fieldPermissions?: {
+ *     showCountryField?: boolean,
+ *     showRoleField?: boolean,
+ *     showManagerField?: boolean,
+ *     showCompetencyRoleField?: boolean,
+ *   },
  * }} params
  */
 export const buildUserWritePayload = ({
@@ -398,17 +409,42 @@ export const buildUserWritePayload = ({
   country,
   role,
   provider,
+  manager,
+  managerOptions,
+  competencyRole,
+  fieldPermissions = {},
 }) => {
+  const {
+    showCountryField = false,
+    showRoleField = false,
+    showManagerField = false,
+    showCompetencyRoleField = false,
+  } = fieldPermissions;
+
   const payload = {
     name: name.trim(),
     email: email.trim(),
-    country: String(country),
-    role,
   };
 
-  const parsedProvider = Number.parseInt(String(provider), 10);
-  if (Number.isInteger(parsedProvider) && parsedProvider > 0) {
-    payload.provider = parsedProvider;
+  if (showCountryField) {
+    payload.country = String(country ?? '');
+  }
+
+  if (showRoleField) {
+    payload.role = role;
+
+    const parsedProvider = Number.parseInt(String(provider), 10);
+    if (Number.isInteger(parsedProvider) && parsedProvider > 0) {
+      payload.provider = parsedProvider;
+    }
+  }
+
+  if (showManagerField) {
+    payload.manager = formatManagerForProfileApi(manager, managerOptions);
+  }
+
+  if (showCompetencyRoleField) {
+    payload.competency_role = parseCompetencyRoleForApi(competencyRole);
   }
 
   return payload;

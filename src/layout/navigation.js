@@ -11,6 +11,9 @@ const navigationItems = [
     key: 'activities', labelKey: 'navActivities', iconKey: 'activities', path: ADMIN_PATHS.activities,
   },
   {
+    key: 'exploreTraining', labelKey: 'navExploreTraining', iconKey: 'exploreTraining', path: ADMIN_PATHS.exploreTraining,
+  },
+  {
     key: 'myTraining', labelKey: 'navMyTraining', iconKey: 'myTraining', path: ADMIN_PATHS.myTraining,
   },
   {

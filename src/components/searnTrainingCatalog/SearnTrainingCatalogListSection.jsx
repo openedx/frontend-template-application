@@ -14,6 +14,8 @@ import SearchableDropdown from '../searchableDropdown/SearchableDropdown';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../skeleton';
 import { useToast } from '../toast/ToastProvider';
 import RequestTrainingModal from './RequestTrainingModal';
+import TrainingCatalogRequestAccessCell from './TrainingCatalogRequestAccessCell';
+import { TRAINING_ACCESS_REQUEST_STATUS } from '../../api/trainingCatalogRequestAccess/trainingCatalogRequestAccessUtils';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import useSearnTrainingCatalogList from '../../hooks/searnTrainingCatalog/useSearnTrainingCatalogList';
 import useTrainingCatalogFilterOptions from '../../hooks/searnTrainingCatalog/useTrainingCatalogFilterOptions';
@@ -47,7 +49,7 @@ const SearnTrainingCatalogListSection = ({
   const canRequestAccess = Boolean(access.canRequestAccess);
 
   const [requestTrainingModalOpen, setRequestTrainingModalOpen] = useState(false);
-  const [requestedTrainingIds, setRequestedTrainingIds] = useState([]);
+  const [requestStatusOverrides, setRequestStatusOverrides] = useState({});
   const [pendingRequestAccess, setPendingRequestAccess] = useState(null);
 
   const { createMutation } = useRequestedTrainingMutations();
@@ -154,10 +156,6 @@ const SearnTrainingCatalogListSection = ({
   const showTable = !isError && items.length > 0;
   const safePage = Math.min(page, Math.max(1, totalPages));
 
-  const isTrainingRequested = (row) => (
-    Boolean(row.isRequested) || requestedTrainingIds.includes(row.id)
-  );
-
   const handleRequestTrainingSubmit = async ({ activityId, description }) => {
     const parsedActivityId = Number(activityId);
     if (!Number.isFinite(parsedActivityId)) {
@@ -195,11 +193,10 @@ const SearnTrainingCatalogListSection = ({
         trainingId: pendingRequestAccess.id,
       });
 
-      setRequestedTrainingIds((current) => (
-        current.includes(pendingRequestAccess.id)
-          ? current
-          : [...current, pendingRequestAccess.id]
-      ));
+      setRequestStatusOverrides((current) => ({
+        ...current,
+        [pendingRequestAccess.id]: TRAINING_ACCESS_REQUEST_STATUS.PENDING,
+      }));
 
       showToast({
         title: formatMessage(messages.requestAccessSubmittedTitle),
@@ -463,22 +460,11 @@ const SearnTrainingCatalogListSection = ({
                     </td>
                     {canRequestAccess && (
                       <td className="searn-training-catalog-page__td searn-training-catalog-page__td--actions">
-                        {isTrainingRequested(row) ? (
-                          <span className="searn-training-catalog-page__requested-badge">
-                            {formatMessage(messages.requested)}
-                          </span>
-                        ) : (
-                          <button
-                            type="button"
-                            className="searn-training-catalog-page__outline-button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPendingRequestAccess(row);
-                            }}
-                          >
-                            {formatMessage(messages.requestAccess)}
-                          </button>
-                        )}
+                        <TrainingCatalogRequestAccessCell
+                          row={row}
+                          statusOverrides={requestStatusOverrides}
+                          onRequestClick={setPendingRequestAccess}
+                        />
                       </td>
                     )}
                   </tr>

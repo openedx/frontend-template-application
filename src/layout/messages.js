@@ -36,6 +36,11 @@ const layoutMessages = defineMessages({
     defaultMessage: 'Activities',
     description: 'Sidebar navigation label for activities',
   },
+  navExploreTraining: {
+    id: 'app.layout.sidebar.nav.exploreTraining',
+    defaultMessage: 'Explore Training',
+    description: 'Sidebar navigation label for explore training',
+  },
   navTrainingCatalog: {
     id: 'app.layout.sidebar.nav.trainingCatalog',
     defaultMessage: 'SEARN Training Catalog',

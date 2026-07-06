@@ -12,6 +12,8 @@ import AdminLayout from './layout/AdminLayout';
 import Dashboard from './pages/dashboard/Dashboard';
 import CompetencyFramework from './pages/competencyFramework/CompetencyFramework';
 import Activities from './pages/activities/Activities';
+import ExploreTraining from './pages/exploreTraining/ExploreTraining';
+import ExploreTrainingRole from './pages/exploreTraining/ExploreTrainingRole';
 import SearnTrainingCatalog from './pages/searnTrainingCatalog/SearnTrainingCatalog';
 import SearnTrainingDetail from './pages/searnTrainingCatalog/SearnTrainingDetail';
 import SearnTrainingFeedback from './pages/searnTrainingCatalog/SearnTrainingFeedback';
@@ -158,6 +160,12 @@ const getHeaderMeta = (pathname, formatMessage, userName) => {
     };
   }
 
+  if (pathname.startsWith('/admin/explore-training')) {
+    return {
+      title: formatMessage(appMessages.exploreTrainingTitle),
+    };
+  }
+
   if (pathname.startsWith('/admin/searn-training-catalog')) {
     return {
       title: formatMessage(appMessages.trainingCatalogTitle),
@@ -238,6 +246,9 @@ const hasNavbarAccessForPath = (pathname, navbarAccess) => {
   if (pathname.startsWith('/admin/activities-management')) {
     return Boolean(navbarAccess.accessActivities);
   }
+  if (pathname.startsWith('/admin/explore-training')) {
+    return true;
+  }
   if (pathname.startsWith('/admin/nra-specific-training-catalog')) {
     return Boolean(navbarAccess.accessNraSpecificTrainingCatalog);
   }
@@ -271,6 +282,8 @@ const RoutedLayout = () => {
         <Route path="/admin/competency-frameworks/:frameworkId/edit/" element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
         <Route path={ADMIN_PATHS.competencyFrameworks} element={withAccess(navbarAccess.accessCompetencyFramework, <CompetencyFramework />)} />
         <Route path={ADMIN_PATHS.activities} element={withAccess(navbarAccess.accessActivities, <Activities />)} />
+        <Route path="/admin/explore-training/:roleId/" element={<ExploreTrainingRole />} />
+        <Route path={ADMIN_PATHS.exploreTraining} element={<ExploreTraining />} />
         <Route path="/admin/searn-training-catalog/providers/:providerSlug/catalog/" element={<SearnTrainingProviderCatalog />} />
         <Route path="/admin/searn-training-catalog/providers/:providerSlug/" element={<SearnTrainingProvider />} />
         <Route path="/admin/searn-training-catalog/:trainingId/feedback/" element={<SearnTrainingFeedback />} />

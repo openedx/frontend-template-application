@@ -269,6 +269,16 @@ const usersPageMessages = defineMessages({
     defaultMessage: 'Failed to load countries',
     description: 'Toast title when countries API fails in user form',
   },
+  managerOptionsLoadError: {
+    id: 'app.users.managerOptions.loadError',
+    defaultMessage: 'Unable to load managers. Please try again.',
+    description: 'Fallback when manager options API fails in user form',
+  },
+  managerOptionsErrorTitle: {
+    id: 'app.users.managerOptions.errorToast.title',
+    defaultMessage: 'Failed to load managers',
+    description: 'Toast title when manager options API fails in user form',
+  },
   detailLoadError: {
     id: 'app.users.detail.loadError',
     defaultMessage: 'Unable to load user details. Please try again.',

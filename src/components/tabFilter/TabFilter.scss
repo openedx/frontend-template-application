@@ -1,0 +1,42 @@
+.tab-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: rgb(241 245 249 / 0.6);
+  border-radius: 0.5rem;
+
+  &--wrap {
+    flex-wrap: wrap;
+    row-gap: 0.375rem;
+  }
+
+  &__tab {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: #64748B;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      color: #1F2937;
+    }
+
+    &.is-active {
+      background: #FFFFFF;
+      color: #2A3B8F;
+      box-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
+    }
+  }
+
+  &--sm &__tab {
+    padding: 0.375rem 0.75rem;
+  }
+}

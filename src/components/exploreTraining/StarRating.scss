@@ -1,0 +1,50 @@
+.explore-star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  &__stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+  }
+
+  &__star {
+    width: 0.875rem;
+    height: 0.875rem;
+    font-size: 0.875rem;
+    color: rgb(148 163 184 / 0.45);
+  }
+
+  &__star--fill {
+    color: #F59E0B;
+  }
+
+  &__star-wrap {
+    position: relative;
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  &__star-wrap .explore-star-rating__star {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__star-half {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  &__star-half .explore-star-rating__star {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__count {
+    font-size: 0.75rem;
+    color: #64748B;
+  }
+}
