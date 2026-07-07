@@ -18,3 +18,15 @@ export const resolveHeaderLogoSrc = () => {
   const configured = normalizeConfigUrl(logoUrl);
   return configured || HEADER_LOGO_FALLBACK;
 };
+
+/** White logo from MFE config LOGO_WHITE_URL, else LOGO_URL, else local SEARN logo. */
+export const resolveWhiteLogoSrc = () => {
+  const { LOGO_WHITE_URL: whiteLogoUrl, LOGO_URL: logoUrl } = getConfig();
+  const configuredWhite = normalizeConfigUrl(whiteLogoUrl);
+  if (configuredWhite) {
+    return configuredWhite;
+  }
+
+  const configured = normalizeConfigUrl(logoUrl);
+  return configured || HEADER_LOGO_FALLBACK;
+};
