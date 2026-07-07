@@ -5,7 +5,7 @@ import RegulatoryPassportCompletedTrainings from './RegulatoryPassportCompletedT
 import RegulatoryPassportDomainCoverage from './RegulatoryPassportDomainCoverage';
 import RegulatoryPassportStats from './RegulatoryPassportStats';
 import { hasDisplayValue } from '../../../utils/hasDisplayValue';
-import { HEADER_LOGO_FALLBACK, resolveHeaderLogoSrc } from '../../../utils/brandAssets';
+import { HEADER_LOGO_FALLBACK, resolveWhiteLogoSrc } from '../../../utils/brandAssets';
 import messages from '../../../pages/users/regulatoryPassportMessages';
 
 const RegulatoryPassportView = ({
@@ -31,7 +31,7 @@ const RegulatoryPassportView = ({
           <div className="user-passport-page__brand">
             <img
               className="user-passport-page__brand-img"
-              src={resolveHeaderLogoSrc()}
+              src={resolveWhiteLogoSrc()}
               alt={formatMessage(messages.brandAlt)}
               onError={({ currentTarget }) => {
                 const image = currentTarget;
