@@ -4,6 +4,7 @@ import { Check } from '@openedx/paragon/icons';
 import { getAuthenticatedHttpClient, getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { getApiBodyMessage } from '../../api/apiMessage';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import feedbackMessages from './messages';
@@ -28,6 +29,13 @@ const FeedbackComponent = ({ isOpen, setIsOpen }) => {
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [statusMessage, setStatusMessage] = useState('');
+
+  const canSubmit = (
+    hasDisplayValue(formData.feedbackType)
+    && hasDisplayValue(formData.description)
+    && !isSubmitting
+  );
 
   const moods = [
     {
@@ -71,6 +79,7 @@ const FeedbackComponent = ({ isOpen, setIsOpen }) => {
     if (!isOpen) {
       setFormData(INITIAL_FORM_DATA);
       setSubmitStatus(null);
+      setStatusMessage('');
       setIsSubmitting(false);
     }
   }, [isOpen]);
@@ -117,8 +126,13 @@ const FeedbackComponent = ({ isOpen, setIsOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!canSubmit) {
+      return;
+    }
 
     setIsSubmitting(true);
+    setSubmitStatus(null);
+    setStatusMessage('');
     try {
       const httpClient = getAuthenticatedHttpClient();
       const apiUrl = `${getConfig().LMS_BASE_URL}/feedback/api/v1/submit-feedback/`;
@@ -138,20 +152,30 @@ const FeedbackComponent = ({ isOpen, setIsOpen }) => {
       };
 
       const response = await httpClient.post(apiUrl, payload);
-      if (response.status !== 200) throw new Error('API error');
+      if (response.status < 200 || response.status >= 300) {
+        throw Object.assign(new Error('API error'), { response });
+      }
 
+      setStatusMessage(
+        getApiBodyMessage(response.data)
+          || formatMessage(feedbackMessages.successMessage),
+      );
       setSubmitStatus('success');
       setTimeout(() => {
         setIsOpen(false);
       }, 3000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
+      setStatusMessage(
+        getApiBodyMessage(error?.response?.data)
+          || formatMessage(feedbackMessages.errorMessage),
+      );
       setSubmitStatus('error');
       setIsSubmitting(false);
-      setFormData(INITIAL_FORM_DATA);
       setTimeout(() => {
         setSubmitStatus(null);
-      }, 2000);
+        setStatusMessage('');
+      }, 3000);
     }
   };
 
@@ -176,11 +200,11 @@ const FeedbackComponent = ({ isOpen, setIsOpen }) => {
             {submitStatus === 'success' ? (
               <div className="success-message">
                 <Check className="check-icon" />
-                <p>{formatMessage(feedbackMessages.successMessage)}</p>
+                {hasDisplayValue(statusMessage) && <p>{statusMessage}</p>}
               </div>
             ) : submitStatus === 'error' ? (
               <div className="error-message">
-                <p>{formatMessage(feedbackMessages.errorMessage)}</p>
+                {hasDisplayValue(statusMessage) && <p>{statusMessage}</p>}
               </div>
             ) : (
               <>
@@ -248,7 +272,7 @@ const FeedbackComponent = ({ isOpen, setIsOpen }) => {
                   <button
                     type="submit"
                     className="submit-button"
-                    disabled={isSubmitting}
+                    disabled={!canSubmit}
                   >
                     {isSubmitting ? (
                       <>
