@@ -9,6 +9,7 @@ const buildRegulatoryPassportPdfLabels = (formatMessage) => ({
   competencyRoleLabel: formatMessage(regulatoryPassportMessages.competencyRoleLabel),
   domainCoverageTitle: formatMessage(regulatoryPassportMessages.domainCoverageTitle),
   completedTrainingTitle: formatMessage(regulatoryPassportMessages.completedTrainingTitle),
+  completedTrainingsEmpty: formatMessage(regulatoryPassportMessages.completedTrainingsEmpty),
   tableTraining: formatMessage(regulatoryPassportMessages.tableTraining),
   tableProvider: formatMessage(regulatoryPassportMessages.tableProvider),
   tableCompleted: formatMessage(regulatoryPassportMessages.tableCompleted),

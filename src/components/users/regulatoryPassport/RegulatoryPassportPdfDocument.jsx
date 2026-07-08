@@ -378,9 +378,11 @@ const RegulatoryPassportPdfDocument = ({
           )}
         </View>
 
-        {visibleTrainings.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{labels.completedTrainingTitle}</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{labels.completedTrainingTitle}</Text>
+          {visibleTrainings.length === 0 ? (
+            <Text style={styles.emptyText}>{labels.completedTrainingsEmpty}</Text>
+          ) : (
             <View style={styles.table}>
               <View style={styles.tableHeader}>
                 <Text style={styles.thTraining}>{labels.tableTraining}</Text>
@@ -411,8 +413,8 @@ const RegulatoryPassportPdfDocument = ({
                 </View>
               ))}
             </View>
-          </View>
-        )}
+          )}
+        </View>
       </Page>
     </Document>
   );
