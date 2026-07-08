@@ -16,6 +16,7 @@ const RegulatoryPassportView = ({
   completedTrainingsPage,
   onCompletedTrainingsPageChange = () => {},
   onDownloadClick = () => {},
+  isExporting = false,
   certificateLinkState = null,
 }) => {
   const { formatMessage } = useIntl();
@@ -103,8 +104,12 @@ const RegulatoryPassportView = ({
                 type="button"
                 className="user-passport-page__export-btn"
                 onClick={onDownloadClick}
+                disabled={isExporting}
+                aria-busy={isExporting}
               >
-                {formatMessage(messages.exportDownloadButton)}
+                {isExporting
+                  ? formatMessage(messages.exportDownloadGenerating)
+                  : formatMessage(messages.exportDownloadButton)}
               </button>
             </div>
           </div>

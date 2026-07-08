@@ -83,6 +83,31 @@ const regulatoryPassportMessages = defineMessages({
     defaultMessage: 'Download Regulatory Passport',
     description: 'Download button label on regulatory passport page',
   },
+  exportDownloadGenerating: {
+    id: 'app.users.regulatoryPassport.export.downloadGenerating',
+    defaultMessage: 'Generating PDF…',
+    description: 'Download button label while regulatory passport PDF is being generated',
+  },
+  exportDownloadSuccessTitle: {
+    id: 'app.users.regulatoryPassport.export.successTitle',
+    defaultMessage: 'Download started',
+    description: 'Toast title after regulatory passport PDF download is generated',
+  },
+  exportDownloadSuccessDescription: {
+    id: 'app.users.regulatoryPassport.export.successDescription',
+    defaultMessage: 'Your regulatory passport PDF has been downloaded.',
+    description: 'Toast description after regulatory passport PDF download is generated',
+  },
+  exportDownloadErrorTitle: {
+    id: 'app.users.regulatoryPassport.export.errorTitle',
+    defaultMessage: 'Download failed',
+    description: 'Toast title when regulatory passport PDF download fails',
+  },
+  exportDownloadError: {
+    id: 'app.users.regulatoryPassport.export.errorDescription',
+    defaultMessage: 'We could not generate your regulatory passport PDF. Please try again.',
+    description: 'Toast description when regulatory passport PDF download fails',
+  },
   exportDownloadUpcomingTitle: {
     id: 'app.users.regulatoryPassport.export.upcomingTitle',
     defaultMessage: 'Coming soon',

@@ -6,6 +6,7 @@ import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
 import AccessRestrictedPage from '../AccessRestrictedPage';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import useRegulatoryPassportPdfDownload from '../../hooks/users/useRegulatoryPassportPdfDownload';
 import useRegulatoryPassportCompletedTrainings from '../../hooks/users/useRegulatoryPassportCompletedTrainings';
 import useRegulatoryPassportDomainCoverage from '../../hooks/users/useRegulatoryPassportDomainCoverage';
 import useRegulatoryPassportDomainFilterOptions from '../../hooks/users/useRegulatoryPassportDomainFilterOptions';
@@ -63,6 +64,8 @@ const RegulatoryPassport = () => {
     page: completedPage,
     enabled: canAccessRegulatoryPassport && Boolean(detail),
   });
+
+  const { downloadPassport, isExporting } = useRegulatoryPassportPdfDownload();
 
   useEffect(() => {
     if (!isFilterOptionsError) {
@@ -134,12 +137,12 @@ const RegulatoryPassport = () => {
       domainCoverageProps={domainCoverageProps}
       completedTrainingsPage={completedTrainingsPage}
       onCompletedTrainingsPageChange={setCompletedPage}
-      onDownloadClick={() => {
-        showToast({
-          title: formatMessage(regulatoryPassportMessages.exportDownloadUpcomingTitle),
-          description: formatMessage(regulatoryPassportMessages.exportDownloadUpcomingDescription),
-        });
-      }}
+      onDownloadClick={() => downloadPassport({
+        detail,
+        profileImageUrl,
+        domainCoverage,
+      })}
+      isExporting={isExporting}
       certificateLinkState={{
         userId: detail.id,
         userProfileImage: profileImageUrl,
