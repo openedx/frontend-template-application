@@ -52,6 +52,7 @@ import { TRAINING_CATALOG_VARIANTS } from './utils/trainingCatalogVariantConfig'
 import { ADMIN_PATHS } from './utils/adminPaths';
 import { getAppBasename } from './utils/appBasename';
 import { isPublicAdminRoute } from './utils/publicRoutes';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 
 const queryClient = new QueryClient();
 
@@ -441,6 +442,7 @@ const App = () => (
         <TrailingSlashRedirect />
         <ToastProvider>
           <QueryClientProvider client={queryClient}>
+            <PluginSlot id="feedback_plugin_slot" />
             <Routes>
               <Route path="*" element={<RoutedLayout />} />
             </Routes>
