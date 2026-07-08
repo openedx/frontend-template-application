@@ -50,6 +50,7 @@ import TrailingSlashRedirect from './components/routing/TrailingSlashRedirect';
 import TrainingCatalogAccessRoute from './components/myTrainingCatalog/TrainingCatalogAccessRoute';
 import { TRAINING_CATALOG_VARIANTS } from './utils/trainingCatalogVariantConfig';
 import { ADMIN_PATHS } from './utils/adminPaths';
+import { getAppBasename } from './utils/appBasename';
 import { isPublicAdminRoute } from './utils/publicRoutes';
 
 const queryClient = new QueryClient();
@@ -434,7 +435,7 @@ const RoutedLayout = () => {
 };
 
 const App = () => (
-  <BrowserRouter>
+  <BrowserRouter basename={getAppBasename()}>
     <AppProvider wrapWithRouter={false}>
       <UserRoleProvider>
         <TrailingSlashRedirect />
