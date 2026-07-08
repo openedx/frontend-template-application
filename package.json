@@ -46,6 +46,7 @@
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "0.2.6",
+    "@openedx/frontend-plugin-framework": "^1.8.0",
     "@openedx/paragon": "^23.14.9",
     "@react-pdf/renderer": "^4.5.1",
     "@tanstack/react-query": "^5.90.5",

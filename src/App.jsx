@@ -50,7 +50,9 @@ import TrailingSlashRedirect from './components/routing/TrailingSlashRedirect';
 import TrainingCatalogAccessRoute from './components/myTrainingCatalog/TrainingCatalogAccessRoute';
 import { TRAINING_CATALOG_VARIANTS } from './utils/trainingCatalogVariantConfig';
 import { ADMIN_PATHS } from './utils/adminPaths';
+import { getAppBasename } from './utils/appBasename';
 import { isPublicAdminRoute } from './utils/publicRoutes';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 
 const queryClient = new QueryClient();
 
@@ -434,12 +436,13 @@ const RoutedLayout = () => {
 };
 
 const App = () => (
-  <BrowserRouter>
+  <BrowserRouter basename={getAppBasename()}>
     <AppProvider wrapWithRouter={false}>
       <UserRoleProvider>
         <TrailingSlashRedirect />
         <ToastProvider>
           <QueryClientProvider client={queryClient}>
+            <PluginSlot id="feedback_plugin_slot" />
             <Routes>
               <Route path="*" element={<RoutedLayout />} />
             </Routes>
