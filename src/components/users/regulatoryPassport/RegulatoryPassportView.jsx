@@ -14,9 +14,10 @@ const RegulatoryPassportView = ({
   domainCoverage = [],
   domainCoverageProps = {},
   completedTrainingsPage,
+  completedTrainingsProps = {},
   onCompletedTrainingsPageChange = () => {},
   onDownloadClick = () => {},
-  certificateLinkState = null,
+  isExporting = false,
 }) => {
   const { formatMessage } = useIntl();
 
@@ -88,7 +89,7 @@ const RegulatoryPassportView = ({
           page={completedTrainingsPage?.page}
           totalPages={completedTrainingsPage?.totalPages}
           onPageChange={onCompletedTrainingsPageChange}
-          certificateLinkState={certificateLinkState}
+          {...completedTrainingsProps}
         />
 
         <div className="user-passport-page__export">
@@ -103,8 +104,12 @@ const RegulatoryPassportView = ({
                 type="button"
                 className="user-passport-page__export-btn"
                 onClick={onDownloadClick}
+                disabled={isExporting}
+                aria-busy={isExporting}
               >
-                {formatMessage(messages.exportDownloadButton)}
+                {isExporting
+                  ? formatMessage(messages.exportDownloadGenerating)
+                  : formatMessage(messages.exportDownloadButton)}
               </button>
             </div>
           </div>

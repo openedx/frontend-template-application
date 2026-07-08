@@ -81,6 +81,36 @@ const messages = defineMessages({
     defaultMessage: 'Request Access',
     description: 'Button to request access to a training in catalog table',
   },
+  selfAssign: {
+    id: 'app.searnTrainingCatalog.actions.selfAssign',
+    defaultMessage: 'Self Assign',
+    description: 'Self assign button label in training catalog table',
+  },
+  selfAssignAssigned: {
+    id: 'app.searnTrainingCatalog.badge.selfAssignAssigned',
+    defaultMessage: 'Assigned',
+    description: 'Label shown when a training is already self-assigned',
+  },
+  selfAssignSubmittedTitle: {
+    id: 'app.searnTrainingCatalog.selfAssign.toast.submitted.title',
+    defaultMessage: 'Training assigned',
+    description: 'Toast title after self-assign succeeds',
+  },
+  selfAssignSubmittedDescription: {
+    id: 'app.searnTrainingCatalog.selfAssign.toast.submitted.description',
+    defaultMessage: 'The training has been added to your assigned trainings.',
+    description: 'Toast description after self-assign succeeds',
+  },
+  selfAssignError: {
+    id: 'app.searnTrainingCatalog.selfAssign.create.error',
+    defaultMessage: 'We could not assign this training. Please try again.',
+    description: 'Fallback when self-assign API fails',
+  },
+  selfAssignErrorTitle: {
+    id: 'app.searnTrainingCatalog.selfAssign.create.errorTitle',
+    defaultMessage: 'Self assign failed',
+    description: 'Toast title when self-assign API fails',
+  },
   requested: {
     id: 'app.searnTrainingCatalog.badge.requested',
     defaultMessage: 'Requested',

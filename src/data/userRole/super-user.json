@@ -105,7 +105,8 @@
           "canEditTraining": true,
           "canDeleteTraining": true,
           "canRequestAccess": true,
-          "canViewProviderColumn": true
+          "canViewProviderColumn": true,
+          "canSelfAssign": true
         },
         "myTraining": {
           "canUpdateTraining": true
@@ -116,7 +117,8 @@
         },
         "searnTrainingCatalog": {
           "canRequestTraining": true,
-          "canRequestAccess": true
+          "canRequestAccess": true,
+          "canSelfAssign": true
         },
         "organizationProfile": {
           "canChangeOrganizationProfile": true,

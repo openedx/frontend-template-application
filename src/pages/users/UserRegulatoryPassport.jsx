@@ -7,6 +7,7 @@ import { SkeletonScreen, SKELETON_VARIANTS } from '../../components/skeleton';
 import { useToast } from '../../components/toast/ToastProvider';
 import AccessRestrictedPage from '../AccessRestrictedPage';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import useRegulatoryPassportPdfDownload from '../../hooks/users/useRegulatoryPassportPdfDownload';
 import useRegulatoryPassportCompletedTrainings from '../../hooks/users/useRegulatoryPassportCompletedTrainings';
 import useRegulatoryPassportDomainCoverage from '../../hooks/users/useRegulatoryPassportDomainCoverage';
 import useRegulatoryPassportDomainFilterOptions from '../../hooks/users/useRegulatoryPassportDomainFilterOptions';
@@ -66,11 +67,15 @@ const UserRegulatoryPassport = () => {
   const {
     page: completedTrainingsPage,
     isLoading: isCompletedTrainingsLoading,
+    isError: isCompletedTrainingsError,
+    errorMessage: completedTrainingsErrorMessage,
   } = useRegulatoryPassportCompletedTrainings({
     userId,
     page: completedPage,
     enabled: canViewUserAbout && canViewRegulatoryPassport && Boolean(detail),
   });
+
+  const { downloadPassport, isExporting } = useRegulatoryPassportPdfDownload();
 
   useEffect(() => {
     if (!isFilterOptionsError) {
@@ -125,6 +130,16 @@ const UserRegulatoryPassport = () => {
     subDomainOptions,
   ]);
 
+  const completedTrainingsProps = useMemo(() => ({
+    isLoading: isCompletedTrainingsLoading,
+    isError: isCompletedTrainingsError,
+    errorMessage: completedTrainingsErrorMessage,
+  }), [
+    completedTrainingsErrorMessage,
+    isCompletedTrainingsError,
+    isCompletedTrainingsLoading,
+  ]);
+
   if (!canViewUserAbout || !canViewRegulatoryPassport) {
     return <AccessRestrictedPage />;
   }
@@ -149,18 +164,15 @@ const UserRegulatoryPassport = () => {
       domainCoverage={domainCoverage}
       domainCoverageProps={domainCoverageProps}
       completedTrainingsPage={completedTrainingsPage}
+      completedTrainingsProps={completedTrainingsProps}
       onCompletedTrainingsPageChange={setCompletedPage}
-      onDownloadClick={() => {
-        showToast({
-          title: formatMessage(regulatoryPassportMessages.exportDownloadUpcomingTitle),
-          description: formatMessage(regulatoryPassportMessages.exportDownloadUpcomingDescription),
-        });
-      }}
-      certificateLinkState={{
+      onDownloadClick={() => downloadPassport({
+        detail,
+        profileImageUrl,
+        domainCoverage,
         userId,
-        userProfileImage: profileImageUrl,
-        userListRow: location.state?.userListRow ?? null,
-      }}
+      })}
+      isExporting={isExporting}
     />
   );
 };

@@ -432,8 +432,13 @@
     color: #FFFFFF;
     box-shadow: 0 10px 15px -3px rgb(42 59 143 / .25);
 
-    &:hover {
+    &:hover:not(:disabled) {
       opacity: .92;
+    }
+
+    &:disabled {
+      opacity: .65;
+      cursor: not-allowed;
     }
   }
 }

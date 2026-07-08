@@ -17,6 +17,7 @@ import {
   REGULATORY_PASSPORT_SUBDOMAIN_OPTIONS,
   REGULATORY_PASSPORT_SUMMARY,
   REGULATORY_PASSPORT_TRAINING_COMPLETED,
+  REGULATORY_PASSPORT_WHITE_LOGO,
   ROLE_ASSIGNMENT_ROLE_OPTIONS,
   ROLE_ASSIGNMENT_USERS,
   roleAssignmentUserDetail,
@@ -220,6 +221,21 @@ export const fetchRegulatoryPassportSummary = ({ formatMessage, userId = null })
   },
   formatMessage,
   fallbackMessage: usersMessages.regulatoryPassportLoadError,
+});
+
+/**
+ * GET /api/v1/nras-management/regulatory-passport/white-logo/
+ * Returns the white brand logo as a binary image (used for PDF export).
+ * @param {{ formatMessage: Function }} params
+ */
+export const fetchRegulatoryPassportWhiteLogo = ({ formatMessage }) => executeApiRequest({
+  request: () => {
+    const httpClient = getHttpClient();
+    const url = `${getApiBaseUrl()}${REGULATORY_PASSPORT_WHITE_LOGO}`;
+    return httpClient.get(url, { responseType: 'blob' });
+  },
+  formatMessage,
+  fallbackMessage: regulatoryPassportMessages.whiteLogoLoadError,
 });
 
 /**
