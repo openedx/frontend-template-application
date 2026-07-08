@@ -60,6 +60,8 @@ const RegulatoryPassport = () => {
   const {
     page: completedTrainingsPage,
     isLoading: isCompletedTrainingsLoading,
+    isError: isCompletedTrainingsError,
+    errorMessage: completedTrainingsErrorMessage,
   } = useRegulatoryPassportCompletedTrainings({
     page: completedPage,
     enabled: canAccessRegulatoryPassport && Boolean(detail),
@@ -112,6 +114,16 @@ const RegulatoryPassport = () => {
     subDomainOptions,
   ]);
 
+  const completedTrainingsProps = useMemo(() => ({
+    isLoading: isCompletedTrainingsLoading,
+    isError: isCompletedTrainingsError,
+    errorMessage: completedTrainingsErrorMessage,
+  }), [
+    completedTrainingsErrorMessage,
+    isCompletedTrainingsError,
+    isCompletedTrainingsLoading,
+  ]);
+
   if (!canAccessRegulatoryPassport) {
     return <AccessRestrictedPage />;
   }
@@ -136,6 +148,7 @@ const RegulatoryPassport = () => {
       domainCoverage={domainCoverage}
       domainCoverageProps={domainCoverageProps}
       completedTrainingsPage={completedTrainingsPage}
+      completedTrainingsProps={completedTrainingsProps}
       onCompletedTrainingsPageChange={setCompletedPage}
       onDownloadClick={() => downloadPassport({
         detail,
@@ -143,11 +156,6 @@ const RegulatoryPassport = () => {
         domainCoverage,
       })}
       isExporting={isExporting}
-      certificateLinkState={{
-        userId: detail.id,
-        userProfileImage: profileImageUrl,
-        userListRow: null,
-      }}
     />
   );
 };

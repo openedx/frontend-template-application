@@ -1,22 +1,11 @@
 import { pdf } from '@react-pdf/renderer';
 import RegulatoryPassportPdfDocument from '../../components/users/regulatoryPassport/RegulatoryPassportPdfDocument';
-import { HEADER_LOGO_FALLBACK, resolveWhiteLogoSrc } from '../brandAssets';
 import { hasDisplayValue } from '../hasDisplayValue';
 import buildRegulatoryPassportPdfFilename from './buildRegulatoryPassportPdfFilename';
 import buildRegulatoryPassportPdfLabels from './buildRegulatoryPassportPdfLabels';
 import fetchAllRegulatoryPassportCompletedTrainings from './fetchAllRegulatoryPassportCompletedTrainings';
+import fetchRegulatoryPassportPdfLogo from './fetchRegulatoryPassportPdfLogo';
 import loadImageDataUrl from './loadImageDataUrl';
-
-const resolvePdfLogoSrc = async () => {
-  const configured = resolveWhiteLogoSrc();
-
-  if (typeof configured === 'string' && /^https?:\/\//i.test(configured)) {
-    const dataUrl = await loadImageDataUrl(configured);
-    return dataUrl || HEADER_LOGO_FALLBACK;
-  }
-
-  return configured || HEADER_LOGO_FALLBACK;
-};
 
 /**
  * @param {{
@@ -35,7 +24,7 @@ const downloadRegulatoryPassportPdf = async ({
   userId = null,
 }) => {
   const [logoSrc, profileImageSrc, completedTrainings] = await Promise.all([
-    resolvePdfLogoSrc(),
+    fetchRegulatoryPassportPdfLogo({ formatMessage }),
     hasDisplayValue(profileImageUrl) ? loadImageDataUrl(profileImageUrl) : Promise.resolve(null),
     fetchAllRegulatoryPassportCompletedTrainings({ formatMessage, userId }),
   ]);

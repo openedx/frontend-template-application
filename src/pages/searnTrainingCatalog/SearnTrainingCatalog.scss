@@ -256,6 +256,14 @@
     }
   }
 
+  &__action-group {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+
   &__requested-badge {
     display: inline-flex;
     align-items: center;

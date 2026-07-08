@@ -15,11 +15,13 @@ import { SkeletonScreen, SKELETON_VARIANTS } from '../skeleton';
 import { useToast } from '../toast/ToastProvider';
 import RequestTrainingModal from './RequestTrainingModal';
 import TrainingCatalogRequestAccessCell from './TrainingCatalogRequestAccessCell';
+import TrainingCatalogSelfAssignCell from './TrainingCatalogSelfAssignCell';
 import { TRAINING_ACCESS_REQUEST_STATUS } from '../../api/trainingCatalogRequestAccess/trainingCatalogRequestAccessUtils';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import useSearnTrainingCatalogList from '../../hooks/searnTrainingCatalog/useSearnTrainingCatalogList';
 import useTrainingCatalogFilterOptions from '../../hooks/searnTrainingCatalog/useTrainingCatalogFilterOptions';
 import useTrainingCatalogRequestAccessMutation from '../../hooks/trainingCatalogRequestAccess/useTrainingCatalogRequestAccessMutation';
+import useTrainingCatalogSelfAssignMutation from '../../hooks/trainingCatalogSelfAssign/useTrainingCatalogSelfAssignMutation';
 import messages from '../../pages/searnTrainingCatalog/messages';
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import { ADMIN_PATHS } from '../../utils/adminPaths';
@@ -47,13 +49,18 @@ const SearnTrainingCatalogListSection = ({
 
   const canRequestTraining = Boolean(access.canRequestTraining);
   const canRequestAccess = Boolean(access.canRequestAccess);
+  const canSelfAssign = Boolean(access.canSelfAssign);
+  const showActionColumn = canRequestAccess || canSelfAssign;
 
   const [requestTrainingModalOpen, setRequestTrainingModalOpen] = useState(false);
   const [requestStatusOverrides, setRequestStatusOverrides] = useState({});
+  const [haveAssignedOverrides, setHaveAssignedOverrides] = useState({});
   const [pendingRequestAccess, setPendingRequestAccess] = useState(null);
+  const [pendingSelfAssignId, setPendingSelfAssignId] = useState(null);
 
   const { createMutation } = useRequestedTrainingMutations();
   const requestAccessMutation = useTrainingCatalogRequestAccessMutation();
+  const selfAssignMutation = useTrainingCatalogSelfAssignMutation();
 
   const [searchText, setSearchText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -213,6 +220,39 @@ const SearnTrainingCatalogListSection = ({
     }
   };
 
+  const handleSelfAssign = async (row) => {
+    if (!row?.id) {
+      return;
+    }
+
+    setPendingSelfAssignId(row.id);
+
+    try {
+      const result = await selfAssignMutation.mutateAsync({
+        trainingId: row.id,
+      });
+
+      setHaveAssignedOverrides((current) => ({
+        ...current,
+        [row.id]: true,
+      }));
+
+      showToast({
+        title: formatMessage(messages.selfAssignSubmittedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(messages.selfAssignSubmittedDescription),
+      });
+    } catch (error) {
+      showToast({
+        title: formatMessage(messages.selfAssignErrorTitle),
+        description: error?.message || formatMessage(messages.selfAssignError),
+      });
+    } finally {
+      setPendingSelfAssignId(null);
+    }
+  };
+
   const lockedProviderOptions = hasDisplayValue(lockedProviderLabel)
     ? [{ value: providerFilter, label: lockedProviderLabel }]
     : providerOptions.filter((option) => option.value === providerFilter);
@@ -365,7 +405,7 @@ const SearnTrainingCatalogListSection = ({
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnProvider)}</th>
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnSatisfaction)}</th>
                   <th className="searn-training-catalog-page__th">{formatMessage(messages.columnCost)}</th>
-                  {canRequestAccess && (
+                  {showActionColumn && (
                     <th className="searn-training-catalog-page__th searn-training-catalog-page__th--right">
                       {formatMessage(messages.columnAction)}
                     </th>
@@ -458,13 +498,25 @@ const SearnTrainingCatalogListSection = ({
                     <td className="searn-training-catalog-page__td" style={{ fontWeight: 600 }}>
                       {hasDisplayValue(row.cost) && row.cost}
                     </td>
-                    {canRequestAccess && (
+                    {showActionColumn && (
                       <td className="searn-training-catalog-page__td searn-training-catalog-page__td--actions">
-                        <TrainingCatalogRequestAccessCell
-                          row={row}
-                          statusOverrides={requestStatusOverrides}
-                          onRequestClick={setPendingRequestAccess}
-                        />
+                        <div className="searn-training-catalog-page__action-group">
+                          {canRequestAccess && (
+                            <TrainingCatalogRequestAccessCell
+                              row={row}
+                              statusOverrides={requestStatusOverrides}
+                              onRequestClick={setPendingRequestAccess}
+                            />
+                          )}
+                          {canSelfAssign && (
+                            <TrainingCatalogSelfAssignCell
+                              row={row}
+                              assignedOverrides={haveAssignedOverrides}
+                              onSelfAssignClick={handleSelfAssign}
+                              isSubmitting={pendingSelfAssignId === row.id && selfAssignMutation.isPending}
+                            />
+                          )}
+                        </div>
                       </td>
                     )}
                   </tr>

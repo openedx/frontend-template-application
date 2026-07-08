@@ -14,10 +14,10 @@ const RegulatoryPassportView = ({
   domainCoverage = [],
   domainCoverageProps = {},
   completedTrainingsPage,
+  completedTrainingsProps = {},
   onCompletedTrainingsPageChange = () => {},
   onDownloadClick = () => {},
   isExporting = false,
-  certificateLinkState = null,
 }) => {
   const { formatMessage } = useIntl();
 
@@ -89,7 +89,7 @@ const RegulatoryPassportView = ({
           page={completedTrainingsPage?.page}
           totalPages={completedTrainingsPage?.totalPages}
           onPageChange={onCompletedTrainingsPageChange}
-          certificateLinkState={certificateLinkState}
+          {...completedTrainingsProps}
         />
 
         <div className="user-passport-page__export">

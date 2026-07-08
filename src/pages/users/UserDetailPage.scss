@@ -421,8 +421,11 @@
     color: #FFFFFF;
     text-decoration: none;
 
-    &:hover {
-      opacity: .92;
+    &:hover,
+    &:focus,
+    &:visited {
+      background: #2A3B8F;
+      color: #FFFFFF;
       text-decoration: none;
     }
   }

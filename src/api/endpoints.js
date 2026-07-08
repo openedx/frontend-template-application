@@ -37,6 +37,9 @@ export const NRAS_MANAGEMENT_MY_TRAININGS = '/api/v1/nras-management/my-training
 export const NRAS_MANAGEMENT_MY_TRAININGS_FORM_OPTIONS = (
   '/api/v1/nras-management/my-trainings/form-options/'
 );
+export const NRAS_MANAGEMENT_MY_TRAININGS_SELF_ENROLL = (
+  '/api/v1/nras-management/my-trainings/self-enroll/'
+);
 /** Default `page_size` for NRA My Trainings list (backend default). */
 export const MY_TRAINING_PAGE_SIZE = 8;
 
@@ -170,6 +173,7 @@ export const REGULATORY_PASSPORT_SUBDOMAIN_OPTIONS = '/api/v1/nras-management/re
 export const REGULATORY_PASSPORT_PRODUCT_TYPE_OPTIONS = '/api/v1/nras-management/regulatory-passport/producttype/';
 export const REGULATORY_PASSPORT_LEVEL_OPTIONS = '/api/v1/nras-management/regulatory-passport/level/';
 export const REGULATORY_PASSPORT_TRAINING_COMPLETED = '/api/v1/nras-management/regulatory-passport/training-completed/';
+export const REGULATORY_PASSPORT_WHITE_LOGO = '/api/v1/nras-management/regulatory-passport/white-logo/';
 
 /** Default `page_size` for regulatory passport domain coverage. */
 export const REGULATORY_PASSPORT_DOMAIN_COVERAGE_PAGE_SIZE = 10;

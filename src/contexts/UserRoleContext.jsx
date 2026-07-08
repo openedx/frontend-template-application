@@ -112,6 +112,7 @@ const DEFAULT_COMPONENT_ACCESS = {
     canDeleteTraining: false,
     canRequestAccess: false,
     canViewProviderColumn: false,
+    canSelfAssign: false,
   },
   myTraining: {
     canUpdateTraining: false,
@@ -119,6 +120,7 @@ const DEFAULT_COMPONENT_ACCESS = {
   searnTrainingCatalog: {
     canRequestTraining: false,
     canRequestAccess: false,
+    canSelfAssign: false,
   },
   requestedTrainings: {
     showOpenCloseButton: false,

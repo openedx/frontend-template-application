@@ -1,5 +1,6 @@
 import { hasDisplayValue } from '../../utils/hasDisplayValue';
 import { mapTrainingAccessRequestStatus } from '../trainingCatalogRequestAccess/trainingCatalogRequestAccessUtils';
+import { mapHaveAssigned } from '../trainingCatalogSelfAssign/trainingCatalogSelfAssignUtils';
 import { FILTER_ALL } from './trainingsCatalogOptionsUtils';
 
 /**
@@ -23,6 +24,7 @@ export const mapSearnTrainingCatalogListRow = (row) => {
     reviewCount: Number(row.review_count) || 0,
     cost: row.cost ?? '',
     requestStatus: mapTrainingAccessRequestStatus(row.is_requested),
+    haveAssigned: mapHaveAssigned(row.have_assigned),
   };
 };
 
