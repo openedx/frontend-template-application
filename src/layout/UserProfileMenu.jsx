@@ -8,6 +8,7 @@ import UserAvatar from '../components/users/UserAvatar';
 import { signOutAndRedirectToLogin } from '../auth/signOut';
 import { useUserRole } from '../contexts/UserRoleContext';
 import { ADMIN_PATHS } from '../utils/adminPaths';
+import { hasDisplayValue } from '../utils/hasDisplayValue';
 import layoutMessages from './messages';
 import './UserProfileMenu.scss';
 
@@ -78,6 +79,9 @@ const UserProfileMenu = () => {
           imageUrl={userProfileImage}
           imgProps={{ referrerPolicy: 'no-referrer' }}
         />
+        {hasDisplayValue(userName) && (
+          <span className="user-profile-menu__name">{userName}</span>
+        )}
         <FontAwesomeIcon
           icon={faChevronDown}
           className={`user-profile-menu__chevron ${open ? 'is-open' : ''}`}

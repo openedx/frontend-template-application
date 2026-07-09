@@ -13,6 +13,16 @@
   background: transparent;
 }
 
+.user-profile-menu__name {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: .875rem;
+  font-weight: 600;
+  color: #2A398D;
+}
+
 .user-profile-menu__trigger:focus-visible {
   outline: 2px solid #2A3B8F;
   outline-offset: 2px;
@@ -81,7 +91,7 @@
 .user-profile-menu__item--nav {
   gap: 12px;
   height: 32px;
-  padding: 10px 16px;
+  padding: 8px;
   border-radius: .75rem;
   font-size: 14px;
   line-height: 1.25rem;
@@ -140,6 +150,10 @@
 }
 
 @media (width <= 767px) {
+  .user-profile-menu__name {
+    display: none;
+  }
+
   .user-profile-menu__dropdown {
     right: 0;
     left: auto;

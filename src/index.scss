@@ -53,6 +53,21 @@ button:disabled,
   cursor: not-allowed !important;
 }
 
+/* Global hover for custom outline buttons */
+button[class*="__outline-button"]:hover:not(:disabled),
+button[class*="__outline-button"]:focus-visible:not(:disabled) {
+  background: #2A3B8F;
+  border-color: #2A3B8F;
+  color: #FFFFFF;
+}
+
+button[class*="__outline-button"]:hover:not(:disabled) svg,
+button[class*="__outline-button"]:focus-visible:not(:disabled) svg,
+button[class*="__outline-button"]:hover:not(:disabled) .svg-inline--fa,
+button[class*="__outline-button"]:focus-visible:not(:disabled) .svg-inline--fa {
+  color: currentcolor;
+}
+
 #root {
   min-height: 100vh;
 }
