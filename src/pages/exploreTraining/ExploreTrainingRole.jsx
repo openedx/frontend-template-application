@@ -628,6 +628,8 @@ const ExploreTrainingRole = () => {
         onClose={() => setRequestModalOpen(false)}
         onSubmit={handleRequestTrainingSubmit}
         isSubmitting={createMutation.isPending}
+        lockedActivityId={selectedActivity?.id}
+        lockedActivityLabel={selectedActivity?.title}
       />
 
       <ConfirmActionDialog

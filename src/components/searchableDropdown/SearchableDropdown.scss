@@ -8,6 +8,12 @@
     pointer-events: none;
   }
 
+  &.is-readonly {
+    .searchable-dropdown__trigger {
+      cursor: not-allowed;
+    }
+  }
+
   &__trigger {
     width: 100%;
     height: 44px;

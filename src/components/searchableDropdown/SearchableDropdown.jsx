@@ -20,8 +20,10 @@ const SearchableDropdown = ({
   searchPlaceholder,
   noOptionsText,
   disabled = false,
+  readOnly = false,
 }) => {
   const [open, setOpen] = useState(false);
+  const isInteractive = !disabled && !readOnly;
   const [searchTerm, setSearchTerm] = useState('');
   const [openUpward, setOpenUpward] = useState(false);
   const [menuMaxHeight, setMenuMaxHeight] = useState(null);
@@ -94,23 +96,31 @@ const SearchableDropdown = ({
   }, [open, updateMenuPlacement]);
 
   return (
-    <div className={`searchable-dropdown ${disabled ? 'is-disabled' : ''}`} ref={wrapperRef}>
+    <div
+      className={[
+        'searchable-dropdown',
+        disabled ? 'is-disabled' : '',
+        readOnly ? 'is-readonly' : '',
+      ].filter(Boolean).join(' ')}
+      ref={wrapperRef}
+    >
       <button
         type="button"
         className="searchable-dropdown__trigger"
         onClick={() => {
-          if (!disabled) {
-            setOpen(prev => !prev);
+          if (isInteractive) {
+            setOpen((prev) => !prev);
           }
         }}
-        aria-expanded={open}
+        aria-expanded={isInteractive ? open : false}
+        aria-readonly={readOnly || undefined}
         disabled={disabled}
       >
         <span className="searchable-dropdown__trigger-label">{displayContent}</span>
         <FontAwesomeIcon className="searchable-dropdown__icon" icon={faChevronDown} />
       </button>
 
-      {open && !disabled && (
+      {open && isInteractive && (
         <div
           className={`searchable-dropdown__menu ${openUpward ? 'is-open-upward' : ''}`}
           ref={menuRef}

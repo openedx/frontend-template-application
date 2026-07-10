@@ -2,7 +2,7 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PopupDialog from '../popupDialog/PopupDialog';
 import SearchableDropdown from '../searchableDropdown/SearchableDropdown';
 import { SkeletonScreen, SKELETON_VARIANTS } from '../skeleton';
@@ -16,38 +16,89 @@ const RequestTrainingModal = ({
   onClose,
   onSubmit,
   isSubmitting = false,
+  lockedActivityId = '',
+  lockedActivityLabel = '',
 }) => {
   const { formatMessage } = useIntl();
   const [selectedActivityId, setSelectedActivityId] = useState('');
   const [description, setDescription] = useState('');
+  const isActivityLocked = hasDisplayValue(lockedActivityId);
 
   const {
     dropdownOptions,
     isLoading,
     isError,
     errorMessage,
-  } = useRequestTrainingActivities({ enabled: isOpen });
+  } = useRequestTrainingActivities({ enabled: isOpen && !isActivityLocked });
 
   useEffect(() => {
     if (!isOpen) {
       setSelectedActivityId('');
       setDescription('');
+      return;
     }
-  }, [isOpen]);
 
-  const activityTrigger = selectedActivityId
-    ? dropdownOptions.find((option) => option.value === selectedActivityId)?.label
-    : (
-      <span className="request-training-modal__placeholder">
-        {formatMessage(messages.requestTrainingActivityPlaceholder)}
-      </span>
+    if (isActivityLocked) {
+      setSelectedActivityId(String(lockedActivityId));
+    }
+  }, [isOpen, isActivityLocked, lockedActivityId]);
+
+  const activityOptions = useMemo(() => {
+    if (!isActivityLocked) {
+      return dropdownOptions;
+    }
+
+    const lockedValue = String(lockedActivityId);
+    const exists = dropdownOptions.some((option) => String(option.value) === lockedValue);
+
+    if (exists || !hasDisplayValue(lockedActivityLabel)) {
+      return dropdownOptions;
+    }
+
+    return [
+      { value: lockedValue, label: lockedActivityLabel },
+      ...dropdownOptions,
+    ];
+  }, [dropdownOptions, isActivityLocked, lockedActivityId, lockedActivityLabel]);
+
+  const resolvedActivityLabel = useMemo(() => {
+    if (!hasDisplayValue(selectedActivityId)) {
+      return '';
+    }
+
+    const match = activityOptions.find(
+      (option) => String(option.value) === String(selectedActivityId),
     );
+
+    if (match?.label) {
+      return match.label;
+    }
+
+    if (isActivityLocked && String(selectedActivityId) === String(lockedActivityId)) {
+      return lockedActivityLabel;
+    }
+
+    return '';
+  }, [
+    activityOptions,
+    isActivityLocked,
+    lockedActivityId,
+    lockedActivityLabel,
+    selectedActivityId,
+  ]);
+
+  const activityTrigger = hasDisplayValue(resolvedActivityLabel) ? (
+    resolvedActivityLabel
+  ) : (
+    <span className="request-training-modal__placeholder">
+      {formatMessage(messages.requestTrainingActivityPlaceholder)}
+    </span>
+  );
 
   const canSubmit = hasDisplayValue(selectedActivityId)
     && hasDisplayValue(description.trim())
     && !isSubmitting
-    && !isLoading
-    && !isError;
+    && (isActivityLocked || (!isLoading && !isError));
 
   const handleSubmit = () => {
     if (!canSubmit) {
@@ -71,15 +122,15 @@ const RequestTrainingModal = ({
         {formatMessage(messages.requestTrainingModalDescription)}
       </p>
 
-      {isError && (
+      {isError && !isActivityLocked && (
         <p className="request-training-modal__error" role="alert">
           {errorMessage || formatMessage(messages.activityOptionsLoadError)}
         </p>
       )}
 
-      {isLoading ? (
+      {isLoading && !isActivityLocked ? (
         <SkeletonScreen variant={SKELETON_VARIANTS.card} />
-      ) : !isError && (
+      ) : (!isError || isActivityLocked) && (
         <>
           <div className="request-training-modal__field">
             <label className="request-training-modal__label" htmlFor="searn-request-training-activity">
@@ -88,11 +139,12 @@ const RequestTrainingModal = ({
             </label>
             <SearchableDropdown
               value={selectedActivityId}
-              options={dropdownOptions}
+              options={activityOptions}
               onChange={setSelectedActivityId}
               triggerLabel={activityTrigger}
               searchPlaceholder={formatMessage(messages.requestTrainingActivityPlaceholder)}
               noOptionsText={formatMessage(messages.dropdownNoOptions)}
+              readOnly={isActivityLocked}
             />
           </div>
 
