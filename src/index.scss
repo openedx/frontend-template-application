@@ -119,8 +119,8 @@ button[class*="__outline-button"]:focus-visible:not(:disabled) .svg-inline--fa {
 }
 
 .admin-sidebar {
-  width: 255px;
-  max-width: 255px;
+  width: 280px;
+  max-width: 280px;
   background: #FFFFFF;
   border: 0;
   border-right: 1px solid #E0E6EB;
@@ -220,6 +220,11 @@ button[class*="__outline-button"]:focus-visible:not(:disabled) .svg-inline--fa {
 .admin-sidebar__subitem {
   text-decoration: none;
   color: #505B95;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 .admin-sidebar__item {
@@ -252,6 +257,11 @@ button[class*="__outline-button"]:focus-visible:not(:disabled) .svg-inline--fa {
   background: transparent;
   text-align: left;
   cursor: pointer;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 .admin-sidebar__item-icon {
@@ -342,8 +352,8 @@ button[class*="__outline-button"]:focus-visible:not(:disabled) .svg-inline--fa {
 }
 
 .admin-main {
-  margin-left: 255px;
-  width: calc(100% - 255px);
+  margin-left: 280px;
+  width: calc(100% - 280px);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
