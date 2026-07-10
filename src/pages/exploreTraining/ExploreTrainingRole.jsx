@@ -22,9 +22,14 @@ import TabFilter from '../../components/tabFilter/TabFilter';
 import StarRating from '../../components/exploreTraining/StarRating';
 import MultiSelectPopover from '../../components/exploreTraining/MultiSelectPopover';
 import RequestTrainingModal from '../../components/searnTrainingCatalog/RequestTrainingModal';
+import TrainingCatalogRequestAccessCell from '../../components/searnTrainingCatalog/TrainingCatalogRequestAccessCell';
+import TrainingCatalogSelfAssignCell from '../../components/searnTrainingCatalog/TrainingCatalogSelfAssignCell';
 import ConfirmActionDialog from '../../components/confirmActionDialog/ConfirmActionDialog';
 import { useToast } from '../../components/toast/ToastProvider';
+import { useUserRole } from '../../contexts/UserRoleContext';
 import useTrainingCatalogRequestAccessMutation from '../../hooks/trainingCatalogRequestAccess/useTrainingCatalogRequestAccessMutation';
+import useTrainingCatalogSelfAssignMutation from '../../hooks/trainingCatalogSelfAssign/useTrainingCatalogSelfAssignMutation';
+import { TRAINING_ACCESS_REQUEST_STATUS } from '../../api/trainingCatalogRequestAccess/trainingCatalogRequestAccessUtils';
 import catalogMessages from '../searnTrainingCatalog/messages';
 import useExploreTrainingActivities from '../../hooks/exploreTraining/useExploreTrainingActivities';
 import useExploreTrainingFilterOptions from '../../hooks/exploreTraining/useExploreTrainingFilterOptions';
@@ -43,6 +48,11 @@ const ExploreTrainingRole = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const { roleId } = useParams();
+  const { componentAccess } = useUserRole();
+  const catalogAccess = componentAccess?.searnTrainingCatalog ?? {};
+  const canRequestAccess = Boolean(catalogAccess.canRequestAccess);
+  const canSelfAssign = Boolean(catalogAccess.canSelfAssign);
+  const showPreviewActions = canRequestAccess || canSelfAssign;
 
   const [searchText, setSearchText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -55,8 +65,12 @@ const ExploreTrainingRole = () => {
   const [selectedTraining, setSelectedTraining] = useState(null);
   const [requestModalOpen, setRequestModalOpen] = useState(false);
   const [pendingRequestAccess, setPendingRequestAccess] = useState(null);
+  const [requestStatusOverrides, setRequestStatusOverrides] = useState({});
+  const [haveAssignedOverrides, setHaveAssignedOverrides] = useState({});
+  const [pendingSelfAssignId, setPendingSelfAssignId] = useState(null);
 
   const requestAccessMutation = useTrainingCatalogRequestAccessMutation();
+  const selfAssignMutation = useTrainingCatalogSelfAssignMutation();
 
   const { roles } = useExploreTrainingRoles();
   const {
@@ -126,6 +140,9 @@ const ExploreTrainingRole = () => {
   useEffect(() => {
     setSelectedActivity(null);
     setSelectedTraining(null);
+    setRequestStatusOverrides({});
+    setHaveAssignedOverrides({});
+    setPendingRequestAccess(null);
   }, [roleId, searchQuery, productType, domain, subDomain, objectivesParam, profile]);
 
   useEffect(() => {
@@ -185,6 +202,11 @@ const ExploreTrainingRole = () => {
         trainingId: pendingRequestAccess.id,
       });
 
+      setRequestStatusOverrides((current) => ({
+        ...current,
+        [pendingRequestAccess.id]: TRAINING_ACCESS_REQUEST_STATUS.PENDING,
+      }));
+
       showToast({
         title: formatMessage(catalogMessages.requestAccessSubmittedTitle),
         description: hasDisplayValue(result.message)
@@ -200,7 +222,41 @@ const ExploreTrainingRole = () => {
     }
   };
 
+  const handleSelfAssign = async (row) => {
+    if (!row?.id) {
+      return;
+    }
+
+    setPendingSelfAssignId(row.id);
+
+    try {
+      const result = await selfAssignMutation.mutateAsync({
+        trainingId: row.id,
+      });
+
+      setHaveAssignedOverrides((current) => ({
+        ...current,
+        [row.id]: true,
+      }));
+
+      showToast({
+        title: formatMessage(catalogMessages.selfAssignSubmittedTitle),
+        description: hasDisplayValue(result.message)
+          ? result.message
+          : formatMessage(catalogMessages.selfAssignSubmittedDescription),
+      });
+    } catch (error) {
+      showToast({
+        title: formatMessage(catalogMessages.selfAssignErrorTitle),
+        description: error?.message || formatMessage(catalogMessages.selfAssignError),
+      });
+    } finally {
+      setPendingSelfAssignId(null);
+    }
+  };
+
   const previewProvider = previewDetail?.provider || selectedTraining?.provider || '';
+  const previewActionRow = previewDetail ?? selectedTraining;
 
   const previewFields = previewDetail ? [
     { label: formatMessage(messages.previewMode), value: previewDetail.mode },
@@ -533,15 +589,35 @@ const ExploreTrainingRole = () => {
               </div>
             )}
           </div>
-          {selectedTraining?.id && (
+          {selectedTraining?.id
+            && showPreviewActions
+            && !isPreviewLoading
+            && !isPreviewError
+            && previewActionRow?.id && (
             <div className="explore-column__foot">
-              <button
-                type="button"
-                className="explore-explorer__request-button"
-                onClick={() => setPendingRequestAccess(selectedTraining)}
-              >
-                {formatMessage(catalogMessages.requestAccess)}
-              </button>
+              <div className="explore-explorer__action-group">
+                {canRequestAccess && (
+                  <TrainingCatalogRequestAccessCell
+                    row={previewActionRow}
+                    statusOverrides={requestStatusOverrides}
+                    onRequestClick={setPendingRequestAccess}
+                    buttonClassName="explore-explorer__outline-button"
+                    badgeClassName="explore-explorer__status-badge"
+                  />
+                )}
+                {canSelfAssign && (
+                  <TrainingCatalogSelfAssignCell
+                    row={previewActionRow}
+                    assignedOverrides={haveAssignedOverrides}
+                    onSelfAssignClick={handleSelfAssign}
+                    isSubmitting={
+                      pendingSelfAssignId === previewActionRow.id && selfAssignMutation.isPending
+                    }
+                    buttonClassName="explore-explorer__outline-button"
+                    badgeClassName="explore-explorer__status-badge"
+                  />
+                )}
+              </div>
             </div>
           )}
         </div>

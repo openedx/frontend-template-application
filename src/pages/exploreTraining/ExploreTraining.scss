@@ -276,6 +276,63 @@
       height: 0.875rem;
     }
   }
+
+  &__action-group {
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  &__outline-button {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 0;
+    height: 36px;
+    border-radius: 0.375rem;
+    border: 2px solid #2A3B8F;
+    background: transparent;
+    color: #2A3B8F;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      background: #2A3B8F;
+      border-color: #2A3B8F;
+      color: #FFFFFF;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 0;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background: #F3F4F6;
+    color: #374151;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.375rem 0.625rem;
+  }
 }
 
 /* ---------- Columns ---------- */
