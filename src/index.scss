@@ -53,6 +53,61 @@ button:disabled,
   cursor: not-allowed !important;
 }
 
+/* Global hover for custom outline buttons */
+button[class*="__outline-button"]:hover:not(:disabled),
+button[class*="__outline-button"]:focus-visible:not(:disabled) {
+  background: #2A3B8F;
+  border-color: #2A3B8F;
+  color: #FFFFFF;
+}
+
+button[class*="__outline-button"]:hover:not(:disabled) svg,
+button[class*="__outline-button"]:focus-visible:not(:disabled) svg,
+button[class*="__outline-button"]:hover:not(:disabled) .svg-inline--fa,
+button[class*="__outline-button"]:focus-visible:not(:disabled) .svg-inline--fa {
+  color: currentcolor;
+}
+
+/* Thin scrollbars for dropdown menus/options across the app */
+.searchable-dropdown__options,
+.searchable-dropdown__menu,
+.multi-select-input__options,
+.user-profile-menu__dropdown,
+[role='listbox'],
+[role='menu'] {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(42 59 143 / .35) transparent;
+}
+
+.searchable-dropdown__options::-webkit-scrollbar,
+.searchable-dropdown__menu::-webkit-scrollbar,
+.multi-select-input__options::-webkit-scrollbar,
+.user-profile-menu__dropdown::-webkit-scrollbar,
+[role='listbox']::-webkit-scrollbar,
+[role='menu']::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.searchable-dropdown__options::-webkit-scrollbar-thumb,
+.searchable-dropdown__menu::-webkit-scrollbar-thumb,
+.multi-select-input__options::-webkit-scrollbar-thumb,
+.user-profile-menu__dropdown::-webkit-scrollbar-thumb,
+[role='listbox']::-webkit-scrollbar-thumb,
+[role='menu']::-webkit-scrollbar-thumb {
+  background-color: rgb(42 59 143 / .35);
+  border-radius: 9999px;
+}
+
+.searchable-dropdown__options::-webkit-scrollbar-track,
+.searchable-dropdown__menu::-webkit-scrollbar-track,
+.multi-select-input__options::-webkit-scrollbar-track,
+.user-profile-menu__dropdown::-webkit-scrollbar-track,
+[role='listbox']::-webkit-scrollbar-track,
+[role='menu']::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 #root {
   min-height: 100vh;
 }

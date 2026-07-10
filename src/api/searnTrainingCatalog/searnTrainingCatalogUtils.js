@@ -109,6 +109,8 @@ export const mapSearnTrainingCatalogDetail = (payload) => {
     nraGoals: toDisplayTextList(payload.nra_goals),
     mappedCompetencies: toDisplayTextList(payload.mapped_competencies),
     mappedActivities: toDisplayTextList(payload.mapped_activities),
+    requestStatus: mapTrainingAccessRequestStatus(payload.is_requested),
+    haveAssigned: mapHaveAssigned(payload.have_assigned),
   };
 };
 
