@@ -10,7 +10,7 @@ import ConfirmActionDialog from '../../confirmActionDialog/ConfirmActionDialog';
 import SearchableDropdown from '../../searchableDropdown/SearchableDropdown';
 import { useToast } from '../../toast/ToastProvider';
 
-const createActivityEntry = () => ({ id: `${Date.now()}-${Math.random()}`, text: '' });
+const createActivityEntry = () => ({ id: `${Date.now()}-${Math.random()}`, entryId: null, text: '' });
 const createActivityLevelBlock = () => ({
   id: `${Date.now()}-${Math.random()}`,
   proficiencyLevel: '',

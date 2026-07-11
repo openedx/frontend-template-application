@@ -23,13 +23,17 @@ export const unwrapRoleSpecificResultsPayload = (data) => {
  */
 const mapTextEntriesToForm = (entries, idPrefix) => {
   if (!Array.isArray(entries) || entries.length === 0) {
-    return [{ id: `${idPrefix}-${Date.now()}-${Math.random()}`, text: '' }];
+    return [{ id: `${idPrefix}-${Date.now()}-${Math.random()}`, entryId: null, text: '' }];
   }
 
   return entries.map((entry, index) => ({
     id: hasDisplayValue(entry.id)
       ? `${idPrefix}-${entry.id}`
       : `${idPrefix}-${index}-${Date.now()}`,
+    // Server-assigned id, kept separate from the React `id` key so the sync payload can
+    // reference it directly and the backend can update the row in place instead of
+    // deleting and recreating it.
+    entryId: hasDisplayValue(entry.id) ? entry.id : null,
     text: entry.text ?? '',
   }));
 };
@@ -152,13 +156,15 @@ const parseSubDomainId = (subDomainValue, requireSubDomain) => {
 };
 
 /**
- * @param {Array<{ text?: string }>} entries
+ * @param {Array<{ entryId?: number|null, text?: string }>} entries
  */
 const buildTextPayload = (entries) => (entries ?? [])
   .filter((entry) => hasDisplayValue(entry.text?.trim()))
-  .map((entry) => ({
-    text: entry.text.trim(),
-  }));
+  .map((entry) => (
+    hasDisplayValue(entry.entryId)
+      ? { id: entry.entryId, text: entry.text.trim() }
+      : { text: entry.text.trim() }
+  ));
 
 /**
  * @param {object} domain
