@@ -27,6 +27,8 @@ jobs:
       run: npm run test
     - name: Build
       run: npm run build
+    - name: Build (CI)
+      run: npm run build:ci
     - name: i18n_extract
       run: npm run i18n_extract
     - name: Coverage

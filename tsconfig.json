@@ -1,11 +1,18 @@
 {
-  "extends": "@edx/typescript-config",
+  "extends": "@openedx/frontend-base/tools/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./src",
+    "rootDir": ".",
+    "outDir": "dist",
     "paths": {
-      "*": ["*"]
+      "@src/*": ["./src/*"]
     }
   },
-  "include": ["*.js", ".eslintrc.js", "src/**/*", "plugins/**/*", "jest.config.ts"],
-  "exclude": ["dist", "node_modules"],
+  "include": [
+    "src/**/*",
+    "app.d.ts",
+    "babel.config.js",
+    "eslint.config.js",
+    "jest.config.js",
+    "site.config.*.tsx",
+  ],
 }
