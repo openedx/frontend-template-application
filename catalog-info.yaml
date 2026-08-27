@@ -7,7 +7,7 @@ metadata:
   name: "frontend-template-application"
   description: "A template for Open edX micro-frontend applications."
   links:
-    - url: "https://github.com/openedx/frontend-template-application/blob/master/README.rst"
+    - url: "https://github.com/openedx/frontend-template-application/blob/main/README.rst"
       title: "README"
       icon: "Article"
   annotations:

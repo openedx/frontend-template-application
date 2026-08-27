@@ -3,26 +3,22 @@ frontend-template-application
 
 |license-badge| |status-badge| |ci-badge| |codecov-badge|
 
-⚠️ Warning ⚠️
-***************
-
-This template produces a `frontend-base`_ application: a library that plugs
-into the Open edX frontend shell, rather than a standalone micro-frontend
-bundled with its own webpack build. If you are looking for the legacy
-standalone MFE template (pre-``frontend-base``), see `the master branch`_.
-
-.. _frontend-base: https://github.com/openedx/frontend-base
-.. _the master branch: https://github.com/openedx/frontend-template-application/tree/master
-
 Purpose
 *******
 
 This repository is a template for Open edX frontend applications built on
-``frontend-base``. It is flagged as a Template Repository, meaning it can be
-used as a basis for new GitHub repositories by clicking the green "Use this
-template" button above. The rest of this document describes how to work with
-your new frontend application **after you've created a new repository from
-the template.**
+`frontend-base`_: a library that plugs into the Open edX frontend shell,
+rather than a standalone micro-frontend bundled with its own webpack build.
+It is flagged as a Template Repository, meaning it can be used as a basis for
+new GitHub repositories by clicking the green "Use this template" button
+above. The rest of this document describes how to work with your new frontend
+application **after you've created a new repository from the template.**
+
+The legacy standalone MFE template (pre-``frontend-base``) lives on `the
+legacy-mfe branch`_.
+
+.. _frontend-base: https://github.com/openedx/frontend-base
+.. _the legacy-mfe branch: https://github.com/openedx/frontend-template-application/tree/legacy-mfe
 
 Getting Started
 ***************
