@@ -95,6 +95,32 @@ Move ``README-template-frontend-app.rst`` to your project's ``README.rst``
 file. Please fill out all the sections - this helps other developers
 understand your app, how to install it, and how to use it.
 
+Repository Setup
+================
+
+A repository created from a template inherits its files, but not its GitHub
+settings. Once your new repository exists, set up the following by hand:
+
+1. **Branch protection** on ``main``, requiring the ``Default CI`` and
+   ``Lockfile Version check`` jobs. Leave room for a maintainer to push
+   ``stable`` non-fast-forward, which is how a major graduates.
+
+2. **Secrets.** ``CODECOV_TOKEN`` for coverage uploads, and publishing
+   credentials for ``semantic-release``. Both ``.releaserc`` and the
+   ``Release CI`` workflow ship ready to use; the workflow publishes from any
+   repository other than this template.
+
+3. **``catalog-info.yaml``**, so the component appears in Backstage with the
+   right name, description, owner and links. See `OEP-55`_.
+
+4. **A ``stable`` branch**, cut from ``main`` when the app is first ready for
+   production use. Until then ``main`` publishes alphas and there is nothing
+   on the ``latest`` dist-tag. The branch layout is described in your new
+   repository's README, and settled in `OEP-10 ADR 0002`_.
+
+.. _OEP-55: https://docs.openedx.org/projects/openedx-proposals/en/latest/processes/oep-0055-proc-project-maintainers.html
+.. _OEP-10 ADR 0002: https://docs.openedx.org/projects/openedx-proposals/en/latest/processes/oep-0010/decisions/0002-frontend-stable-branches.html
+
 Developing
 **********
 
@@ -108,6 +134,13 @@ working example, not just a theoretical one.
 
 This also means, of course, that any committed code should be tested and
 subject to both CI and branch protection rules.
+
+The same goes for the release setup: ``.releaserc`` and the ``Release CI``
+workflow are here so that copies get a working, `OEP-10 ADR 0002`_-conformant
+one without editing anything. This repository is not itself published, so the
+workflow's job is gated on the repository name and never runs here. Keep both
+in sync with the ADR rather than with whatever any one app repository happens
+to be doing.
 
 Project Structure
 =================

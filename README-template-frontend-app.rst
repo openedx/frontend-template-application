@@ -110,6 +110,36 @@ Configuration
 
 .. _feature and waffle flags: https://docs.openedx.org/projects/openedx-proposals/en/latest/best-practices/oep-0017-bp-feature-toggles.html
 
+Branches and Releases
+=====================
+
+This app is published to NPM by ``semantic-release``, and its branches follow
+`OEP-10 ADR 0002`_:
+
+``main``
+  Unstable.  Every merge publishes a prerelease on the ``alpha`` dist-tag.
+  Breaking changes land here with no DEPR process and no warning, so it is
+  not supported in production.  All changes, including bug fixes, should
+  target this branch first.
+
+``stable``
+  Carries the newest stable major and owns the ``latest`` dist-tag.  Changes
+  arrive here as backports from ``main``, and no breaking change lands after
+  publication.
+
+``n.x`` and ``n.m.x``
+  Maintenance branches for majors and minors that ``stable`` has moved past.
+  Each owns the dist-tag matching its own name, so consumers select a
+  maintained line by semver range, e.g. ``"1.x"``.
+
+Cut ``stable`` from ``main`` when the app is first ready for production use;
+until then, ``main`` and its alphas are all there is.  Both ``.releaserc`` and
+the ``Release CI`` workflow already know the whole layout, including the
+maintenance branch patterns, so a new line starts publishing as soon as it is
+pushed.
+
+.. _OEP-10 ADR 0002: https://docs.openedx.org/projects/openedx-proposals/en/latest/processes/oep-0010/decisions/0002-frontend-stable-branches.html
+
 Slots
 =====
 
