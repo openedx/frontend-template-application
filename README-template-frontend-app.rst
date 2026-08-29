@@ -91,6 +91,33 @@ bind-mount it as an npm workspace:
 Configuration
 -------------
 
+``getAppConfig`` resolves three sources, in order of increasing
+precedence: the app's bundled ``defaultConfig``, the site's
+``commonAppConfig``, and the app's ``config``.  The first is yours, set
+in ``src/app.ts`` at build time.  The other two are the operator's, the
+second applying to every app on the site and the third to this app
+alone; in edx-platform they arrive as ``MFE_CONFIG`` and
+``MFE_CONFIG_OVERRIDES['<app>']``.
+
+Put shipped defaults in ``defaultConfig`` and leave ``config`` to the
+operator, because every key an app declares in ``config`` is a key the
+operator's site-wide configuration can never supply.  Not every default
+belongs there: some are better handled at the point of use.  Bundle the
+ones that are product decisions the app owns and an operator should be
+able to override, such as a default logo.  See `ADR 0017`_.
+
+Because a bundled default lives in its own field, overriding one value
+no longer means spreading the app's existing config back in::
+
+    {
+      ...myApp,
+      config: {
+        SOME_KEY: true,
+      },
+    }
+
+.. _ADR 0017: https://github.com/openedx/frontend-base/blob/main/docs/decisions/0017-bundled-app-config-defaults.rst
+
 .. note::
 
    [TODO]
@@ -98,8 +125,9 @@ Configuration
    Explicitly list anything that this app requires to function correctly.
    This includes:
 
-   * A list of required and optional ``site.config.*.tsx`` fields and
-     per-app ``config`` values, and how each affects behaviour
+   * A list of required and optional ``site.config.*.tsx`` fields, the
+     defaults the app bundles in ``defaultConfig``, and the ``config``
+     values an operator can set, and how each affects behaviour
 
    * A list of edx-platform `feature and waffle flags`_ that are either
      required to enable use of this app, or affect the behaviour of the
