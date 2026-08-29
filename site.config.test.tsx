@@ -11,7 +11,6 @@ const siteConfig: SiteConfig = {
   environment: EnvironmentTypes?.TEST ?? 'test',
   apps: [{
     appId: 'org.openedx.frontend.app.template',
-    config: {},
   }],
 };
 

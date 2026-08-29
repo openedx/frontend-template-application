@@ -73,7 +73,7 @@
     "turbo": "^2.9.2"
   },
   "peerDependencies": {
-    "@openedx/frontend-base": "^1.0.0 || 0.0.0-dev",
+    "@openedx/frontend-base": "^2.0.0-alpha || 0.0.0-dev",
     "@openedx/paragon": "^23",
     "@tanstack/react-query": "^5",
     "react": "^18",
