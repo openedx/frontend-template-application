@@ -1,4 +1,4 @@
-TURBO = TURBO_TELEMETRY_DISABLED=1 turbo --dangerously-disable-package-manager-check
+TURBO = TURBO_TELEMETRY_DISABLED=1 turbo
 i18n = ./src/i18n
 
 precommit:
